@@ -1,0 +1,13 @@
+body {
+  width: 960px;
+  margin: auto;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  color: limegreen;
+}
+
+ul {
+  list-style: none;
+}

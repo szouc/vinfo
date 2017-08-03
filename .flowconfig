@@ -1,0 +1,12 @@
+[ignore]
+.*/node_modules/eslint-plugin-jsx-a11y/.*
+.*/node_modules/draft-js/.*
+<PROJECT_ROOT>/dist/.*
+<PROJECT_ROOT>/lib/.*
+.*/__tests__/.*
+
+[options]
+suppress_comment= \\(.\\|\n\\)*\\flow-disable-next-line
+
+[libs]
+.*/flow-typed/.*

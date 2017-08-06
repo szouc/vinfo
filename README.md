@@ -9,22 +9,6 @@
 
 - "dev:wds": "webpack-dev-server --progress",
 
-```js
-import express from 'express'
-import { getData, postData, getDataByLastName } from './controllers/data-controller'
-
-const router = express.Router()
-
-router.route('/data')
-  .get(getData)
-  .post(postData)
-
-router.route('/data/:lastName')
-  .get(getDataByLastName)
-
-export default router
-```
-
 ## delete dist files & directories and rebuild
 
 - "prod:build": "rimraf lib dist && babel src -d lib --ignore .test.js && cross-env NODE_ENV=production webpack -p --progress",

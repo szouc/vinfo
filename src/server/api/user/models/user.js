@@ -13,8 +13,15 @@ const genders = [MALE, FEMALE]
 
 /*
 * baseUser Types
+* password property set in passport-local-mongoose
 */
 const baseUser = {
+  username: {
+    type: String,
+    trim: true,
+    unique: true,
+    required: true
+  },
   fullname: {
     type: String,
     trim: true,

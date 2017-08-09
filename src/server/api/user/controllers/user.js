@@ -1,31 +1,55 @@
 // @ flow
 
-import {
-  generateDeleteData,
-  generateGetData,
-  generatePostData
-} from '../../shared/generator'
-
 import User from '../models/user'
 
 const getAllUser = (req, res) => {
-  generateGetData(req, res)(User)({})
+  User.find({})
+    .then((document) => {
+      res.json({data: document})
+    })
+    .catch((e) => {
+      res.status(500).send('Couldnt run the query smart guy')
+    })
 }
 
 const getOwnUser = (req, res) => {
-  generateGetData(req, res)(User)({username: req.user.username})
+  User.find({username: req.user.username})
+    .then((document) => {
+      res.json({data: document})
+    })
+    .catch((e) => {
+      res.status(500).send('Couldnt run the query smart guy')
+    })
 }
 
 const deleteUserByUsername = (req, res) => {
-  generateDeleteData(req, res)(User)({username: req.params.username})
+  User.remove({username: req.params.username})
+    .then(() => {
+      res.status(200).send(`You have removed a user.`)
+    })
+    .catch((e) => {
+      res.status(500).send(`Couldnt remove the user at this time`)
+    })
 }
 
 const createUser = (req, res) => {
-  generatePostData(req, res)(User)(req.body)
+  User.create(req.body)
+    .then(() => {
+      res.status(200).send(`You have added a new user.`)
+    })
+    .catch((e) => {
+      res.status(500).send(`Couldnt save the user at this time`)
+    })
 }
 
 const getUserByUsername = (req, res) => {
-  generateGetData(req, res)(User)({username: req.params.username})
+  User.find({username: req.params.username})
+    .then((document) => {
+      res.json({data: document})
+    })
+    .catch((e) => {
+      res.status(500).send('Couldnt run the query smart guy')
+    })
 }
 
 export { getAllUser, deleteUserByUsername, createUser, getUserByUsername, getOwnUser }

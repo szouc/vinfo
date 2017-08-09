@@ -1,19 +1,16 @@
-import { clientRoute, registerUser, userLogout } from './auth'
+import { clientRoute, userLogin, userLogout, userRegister } from './auth'
 
 import express from 'express'
-import passport from 'passport'
 
 const authRouter = express.Router()
 
 authRouter.route('/register')
-  .post(registerUser)
+  .post(userRegister)
+
 authRouter.route('/login')
   .get(clientRoute)
-  .post(passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/auth/login',
-    failureFlash: true
-  }))
+  .post(userLogin)
+
 authRouter.route('/logout')
   .get(userLogout)
 

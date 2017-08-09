@@ -2,19 +2,20 @@
 
 import 'babel-polyfill'
 
+import { applyMiddleware, combineReducers, createStore } from 'redux'
+
+import { APP_CONTAINER_SELECTOR } from '../shared/config'
+import App from './App'
+import { AppContainer } from 'react-hot-loader'
+import { BrowserRouter } from 'react-router-dom'
+import Immutable from 'immutable'
+import { Provider } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
-import { Provider } from 'react-redux'
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import createSagaMiddleware from 'redux-saga/lib/internal/middleware'
-import { BrowserRouter } from 'react-router-dom'
 import { createLogger } from 'redux-logger'
-import Immutable from 'immutable'
-
-import App from './App'
+import createSagaMiddleware from 'redux-saga/lib/internal/middleware'
+import { reducer as formReducer } from 'redux-form'
 import helloReducer from './reducer/hello'
-import { APP_CONTAINER_SELECTOR } from '../shared/config'
 import { isProd } from '../shared/utils'
 import watchRequestHello from './saga/hello'
 
@@ -37,8 +38,13 @@ const logger = createLogger({
   }
 })
 
+const rootReducer = combineReducers({
+  hello: helloReducer,
+  form: formReducer
+})
+
 const store = createStore(
-  combineReducers({ hello: helloReducer }),
+  rootReducer,
   // eslint-disable-next-line no-underscore-dangle
   isProd
     ? undefined

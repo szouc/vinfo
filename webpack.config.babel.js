@@ -1,17 +1,16 @@
 // @flow
 
-import path from 'path'
-import webpack from 'webpack'
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 import AssetsPlugin from 'assets-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
-import eslintFormatter from 'eslint-friendly-formatter'
-import nodeExternals from 'webpack-node-externals'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import cssNext from 'postcss-cssnext'
-
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 import { WDS_PORT } from './src/shared/config'
+import cssNext from 'postcss-cssnext'
+import eslintFormatter from 'eslint-friendly-formatter'
 import { isProd } from './src/shared/utils'
+import nodeExternals from 'webpack-node-externals'
+import path from 'path'
+import webpack from 'webpack'
 
 const srcPath = path.resolve(__dirname, './src')
 const clientPath = path.resolve(__dirname, './src/client')
@@ -97,7 +96,6 @@ const clientConfig = {
       ? [
         'babel-polyfill',
         clientPath
-        // './src/client'
       ]
       : [
         'babel-polyfill',
@@ -105,16 +103,7 @@ const clientConfig = {
         `webpack-dev-server/client?http://localhost:${WDS_PORT}`,
         'webpack/hot/only-dev-server',
         clientPath
-        // './src/client'
       ]
-    // vendor: [
-    //   'react',
-    //   'react-redux',
-    //   'react-router',
-    //   'redux',
-    //   'immutable',
-    //   'react-dom'
-    // ]
   },
 
   output: {
@@ -304,6 +293,7 @@ const clientConfig = {
     }),
 
     // https://webpack.js.org/plugins/commons-chunk-plugin/
+    // Common Chunk from node_modules
     new webpack.optimize.CommonsChunkPlugin({
       names: 'vendor',
       minChunks: module => /node_modules/.test(module.resource)
@@ -314,6 +304,7 @@ const clientConfig = {
       // )
     }),
 
+    // Common Chunk from the lazy import modules
     new webpack.optimize.CommonsChunkPlugin({
       name: 'bundle',
       children: true,
@@ -326,6 +317,7 @@ const clientConfig = {
       )
     }),
 
+    // Common Chunk from the lazy modules
     new webpack.optimize.CommonsChunkPlugin({
       name: 'bundle',
       children: true,
@@ -341,7 +333,7 @@ const clientConfig = {
     }),
 
     new ExtractTextPlugin({
-      filename: isProd ? 'css/[contenthash].css' : 'css/style.css',
+      filename: isProd ? 'css/[name].[contenthash].css' : 'css/[name].css',
       allChunks: true
     }),
 

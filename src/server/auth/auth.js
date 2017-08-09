@@ -1,9 +1,10 @@
 import { User } from '../api/shared/models'
 import debugCreator from 'debug'
+import passport from 'passport'
 
 const debug = debugCreator('auth')
 
-const registerUser = (req, res, next) => {
+const userRegister = (req, res, next) => {
   debug('begin register')
   User.register(req.body, req.body.password, (err, user) => {
     if (err) {
@@ -21,23 +22,11 @@ const registerUser = (req, res, next) => {
   })
 }
 
-// Use passport.authenticate('local') instead of
-
-// export const userLogin = (req, res, next) => {
-//   debug('begin login')
-//   User.authenticate()(req.body.username, req.body.password, (err, user) => {
-//     if (err) {
-//       return next(err)
-//     }
-//     req.login(user, (err) => {
-//       if (err) {
-//         return next(err)
-//       }
-//       debug('login finish ' + req.user)
-//       res.json(req.user)
-//     })
-//   })
-// }
+const userLogin = passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/auth/login',
+  failureFlash: true
+})
 
 const userLogout = (req, res) => {
   debug('begin logout')
@@ -59,4 +48,4 @@ const isAuthenticated = (req, res, next) => {
   }
 }
 
-export { registerUser, userLogout, clientRoute, isAuthenticated }
+export { userRegister, userLogin, userLogout, clientRoute, isAuthenticated }

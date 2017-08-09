@@ -1,8 +1,13 @@
 import {
+  GET_USER_BY_USERNAME_ROUTE,
+  USER_RESET_PASSWORD_ROUTE
+} from '../../../shared/routes'
+import {
   createUser,
   deleteUserByUsername,
   getAllUser,
-  getUserByUsername
+  getUserByUsername,
+  resetPassword
 } from './controllers/user'
 import permit, { isOwner } from '../shared/permissions'
 
@@ -16,9 +21,13 @@ userRouter.route('/')
   .get(getAllUser)
   .post(createUser)
 
-userRouter.route('/:username')
+userRouter.route(GET_USER_BY_USERNAME_ROUTE)
   .all(isOwner)
   .get(getUserByUsername)
   .delete(deleteUserByUsername)
+
+userRouter.route(USER_RESET_PASSWORD_ROUTE)
+  .all(isOwner)
+  .post(resetPassword)
 
 export default userRouter

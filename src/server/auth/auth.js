@@ -22,6 +22,29 @@ const userRegister = (req, res, next) => {
   })
 }
 
+const resetPassword = (req, res, next) => {
+  debug('begin reset password')
+  User.findByUsername(req.body.username, (err, user) => {
+    if (err) {
+      return next(err)
+    }
+    if (user) {
+      user.setPassword(req.body.password, (err, user) => {
+        if (err) {
+          return next(err)
+        }
+        user.save()
+          .then((user) => {
+            res.json(user)
+          })
+          .catch((e) => {
+            res.status(500).send('Couldnt reset the password at this time')
+          })
+      })
+    }
+  })
+}
+
 const userLogin = passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/auth/login',
@@ -48,4 +71,11 @@ const isAuthenticated = (req, res, next) => {
   }
 }
 
-export { userRegister, userLogin, userLogout, clientRoute, isAuthenticated }
+export {
+  userRegister,
+  resetPassword,
+  userLogin,
+  userLogout,
+  clientRoute,
+  isAuthenticated
+}

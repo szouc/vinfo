@@ -1,50 +1,21 @@
-// @flow
+import React, { Component } from 'react'
 
-import React from 'react'
-import Loadable from 'react-loadable'
-import { Switch } from 'react-router'
-import { Route } from 'react-router-dom'
+import ContactForm from './component/ContactForm'
 
-import { APP_NAME } from '../shared/config'
-import Nav from './component/nav'
-import HomePage from './component/page/home'
-// import HelloPage from './component/page/hello'
-// import HelloAsyncPage from './component/page/hello-async'
-import NotFoundPage from './component/page/not-found'
-// import RegisterPage from './component/page/register'
-import {
-  HOME_PAGE_ROUTE,
-  HELLO_PAGE_ROUTE,
-  HELLO_ASYNC_PAGE_ROUTE,
-  USER_REGISTER_ROUTE
-} from '../shared/routes'
-import Loading from './component/Loading'
+class App extends Component {
+  constructor (props) {
+    super(props)
+    this.submit = this.submit.bind(this)
+  }
 
-let LoadableHelloAsyncPage = Loadable({
-  loader: () => import(/* webpackChunkName: "HelloAsync" */ './component/page/hello-async'),
-  loading: Loading
-})
+  submit = (values) => {
+    console.log(values)
+  }
+  render () {
+    return (
+      <ContactForm onSubmit={this.submit} />
+    )
+  }
+}
 
-let LoadableHelloPage = Loadable({
-  loader: () => import(/* webpackChunkName: "Hello" */ './component/page/hello'),
-  loading: Loading
-})
-
-let LoadableRegisterPage = Loadable({
-  loader: () => import(/* webpackChunkName: "Register" */ './component/page/register'),
-  loading: Loading
-})
-
-const App = () =>
-  <div>
-    <h1>{APP_NAME}</h1>
-    <Nav />
-    <Switch>
-      <Route exact path={HOME_PAGE_ROUTE} render={() => <HomePage />} />
-      <Route path={HELLO_PAGE_ROUTE} render={() => <LoadableHelloPage />} />
-      <Route path={HELLO_ASYNC_PAGE_ROUTE} render={() => <LoadableHelloAsyncPage />} />
-      <Route path={USER_REGISTER_ROUTE} render={() => <LoadableRegisterPage />} />
-      <Route component={NotFoundPage} />
-    </Switch>
-  </div>
 export default App

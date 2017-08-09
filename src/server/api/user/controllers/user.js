@@ -52,4 +52,26 @@ const getUserByUsername = (req, res) => {
     })
 }
 
-export { getAllUser, deleteUserByUsername, createUser, getUserByUsername, getOwnUser }
+const resetPassword = (req, res, next) => {
+  User.findByUsername(req.body.username, (err, user) => {
+    if (err) {
+      return next(err)
+    }
+    if (user) {
+      user.setPassword(req.body.password, (err, user) => {
+        if (err) {
+          return next(err)
+        }
+        user.save()
+          .then((user) => {
+            res.json(user)
+          })
+          .catch((e) => {
+            res.status(500).send('Couldnt reset the password at this time')
+          })
+      })
+    }
+  })
+}
+
+export { getAllUser, deleteUserByUsername, createUser, getUserByUsername, getOwnUser, resetPassword }

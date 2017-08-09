@@ -15,9 +15,7 @@ import ReactDOM from 'react-dom'
 import { createLogger } from 'redux-logger'
 import createSagaMiddleware from 'redux-saga/lib/internal/middleware'
 import { reducer as formReducer } from 'redux-form'
-import helloReducer from './reducer/hello'
 import { isProd } from '../shared/utils'
-import watchRequestHello from './saga/hello'
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -39,7 +37,6 @@ const logger = createLogger({
 })
 
 const rootReducer = combineReducers({
-  hello: helloReducer,
   form: formReducer
 })
 
@@ -52,7 +49,7 @@ const store = createStore(
   applyMiddleware(sagaMiddleware, logger)
 )
 
-sagaMiddleware.run(watchRequestHello)
+// sagaMiddleware.run(watchRequestHello)
 
 const rootEl = document.querySelector(APP_CONTAINER_SELECTOR)
 

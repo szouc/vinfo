@@ -1,5 +1,10 @@
 // @flow
 
+import {
+  API_ROOT_ROUTE,
+  AUTH_ROOT_ROUTE,
+  helloEndpointRoute
+} from '../shared/routes'
 import { APP_NAME, STATIC_PATH } from '../shared/config'
 
 import LocalStrategy from 'passport-local'
@@ -13,7 +18,6 @@ import compression from 'compression'
 import debugCreator from 'debug'
 import express from 'express'
 import flash from 'connect-flash'
-import { helloEndpointRoute } from '../shared/routes'
 import { isAuthenticated } from './auth/auth'
 import { isProd } from '../shared/utils'
 import logger from 'morgan'
@@ -31,6 +35,7 @@ app.use(compression())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+// Session configurations
 app.use(session({
   store: new RedisStore({host: '127.0.0.1', port: 6379}),
   secret: SESSION_SECRET_KEY,
@@ -41,35 +46,32 @@ app.use(session({
     maxAge: 3600000
   }
 }))
-
 app.use(flash())
 
 // Configurations for passport
 app.use(passport.initialize())
 app.use(passport.session())
-
 passport.use(new LocalStrategy(User.authenticate()))
 // use static serialize and deserialize of model for passport session support
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
+// Static path
 app.use(STATIC_PATH, express.static('dist'))
 app.use(STATIC_PATH, express.static('public'))
 
 // Log request to console
 app.use(logger('dev'))
 
+// Routes
 app.get('/', (req, res) => {
   res.send(renderApp(APP_NAME))
 })
-
 app.get(helloEndpointRoute(), (req, res) => {
   res.json({ serverMessage: `Hello from the server! (received ${req.params.num})` })
 })
-
-app.use('/auth', auth)
-
-app.use('/api', isAuthenticated, api)
+app.use(AUTH_ROOT_ROUTE, auth)
+app.use(API_ROOT_ROUTE, isAuthenticated, api)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

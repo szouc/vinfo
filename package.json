@@ -22,7 +22,7 @@
     "test": "yarn lint && flow && jest --coverage",
     "jest": "jest",
     "precommit": "yarn test",
-    "prepush": "yarn test && yarn prod:build"
+    "prepush": "yarn prod:build"
   },
   "dependencies": {
     "antd": "^2.12.2",

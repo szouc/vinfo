@@ -351,7 +351,11 @@ const clientConfig = {
           },
           comments: false
         }),
-        new BundleAnalyzerPlugin()
+
+        // new BundleAnalyzerPlugin(),
+        new HtmlWebpackPlugin({
+          template: './index.html'
+        })
       ]
       : [
         new webpack.DllReferencePlugin({

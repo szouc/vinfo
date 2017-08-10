@@ -1,4 +1,4 @@
-import { User } from '../../api/shared/models'
+import User from '../../api/user/models/user'
 import app from '../../app'
 import mongoose from 'mongoose'
 import request from 'supertest'

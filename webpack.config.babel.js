@@ -3,6 +3,7 @@
 import AssetsPlugin from 'assets-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 import { WDS_PORT } from './src/shared/config'
 import cssNext from 'postcss-cssnext'
@@ -286,60 +287,61 @@ const clientConfig = {
       prettyPrint: true
     }),
 
-    new webpack.HashedModuleIdsPlugin({
-      hashFunction: 'sha256',
-      hashDigest: 'hex',
-      hashDigestLength: 20
-    }),
-
-    // https://webpack.js.org/plugins/commons-chunk-plugin/
-    // Common Chunk from node_modules
-    new webpack.optimize.CommonsChunkPlugin({
-      names: 'vendor',
-      minChunks: module => /node_modules/.test(module.resource)
-      // minChunks: ({ resource }) => (
-      //   resource &&
-      //   resource.indexOf('node_modules') >= 0 &&
-      //   resource.match(/\.js$/)
-      // )
-    }),
-
-    // Common Chunk from the lazy import modules
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'bundle',
-      children: true,
-      async: 'common-in-lazy',
-      // minChunks: module => /node_modules/.test(module.resource)
-      minChunks: ({ resource }) => (
-        resource &&
-        resource.includes('node_modules') &&
-        /antd/.test(resource)
-      )
-    }),
-
-    // Common Chunk from the lazy modules
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'bundle',
-      children: true,
-      async: 'many-used',
-      minChunks: (module, count) => (
-        count >= 2
-      )
-    }),
-
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      minChunks: Infinity
-    }),
-
     new ExtractTextPlugin({
       filename: isProd ? 'css/[name].[contenthash].css' : 'css/[name].css',
       allChunks: true
     }),
 
-    // https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
     ...isProd
       ? [
+        // https://webpack.js.org/plugins/hashed-module-ids-plugin/
+        new webpack.HashedModuleIdsPlugin({
+          hashFunction: 'sha256',
+          hashDigest: 'hex',
+          hashDigestLength: 20
+        }),
+
+        // https://webpack.js.org/plugins/commons-chunk-plugin/
+        // Common Chunk from node_modules
+        new webpack.optimize.CommonsChunkPlugin({
+          names: 'vendor',
+          minChunks: module => /node_modules/.test(module.resource)
+          // minChunks: ({ resource }) => (
+          //   resource &&
+          //   resource.indexOf('node_modules') >= 0 &&
+          //   resource.match(/\.js$/)
+          // )
+        }),
+
+        // Common Chunk from the lazy import modules
+        new webpack.optimize.CommonsChunkPlugin({
+          name: 'bundle',
+          children: true,
+          async: 'common-in-lazy',
+          // minChunks: module => /node_modules/.test(module.resource)
+          minChunks: ({ resource }) => (
+            resource &&
+            resource.includes('node_modules') &&
+            /antd/.test(resource)
+          )
+        }),
+
+        // Common Chunk from the lazy modules
+        new webpack.optimize.CommonsChunkPlugin({
+          name: 'bundle',
+          children: true,
+          async: 'many-used',
+          minChunks: (module, count) => (
+            count >= 2
+          )
+        }),
+
+        new webpack.optimize.CommonsChunkPlugin({
+          name: 'manifest',
+          minChunks: Infinity
+        }),
+
+        // https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
         new UglifyJsPlugin({
           sourceMap: true,
           compress: {
@@ -348,19 +350,28 @@ const clientConfig = {
             dead_code: true
           },
           comments: false
-        })
+        }),
+        new BundleAnalyzerPlugin()
       ]
-      : [],
+      : [
+        new webpack.DllReferencePlugin({
+          context: __dirname,
+          // flow-disable-next-line
+          manifest: require('./dist/vender-manifest.json'),
+          sourceType: 'commonsjs2'
+        }),
 
-    ...isProd ? [] : [new webpack.HotModuleReplacementPlugin()],
-    ...isProd ? [] : [new webpack.NamedModulesPlugin()],
-
-    // https://webpack.js.org/plugins/no-emit-on-errors-plugin/
-    ...isProd ? [] : [new webpack.NoEmitOnErrorsPlugin()],
-
-    // https://github.com/th0r/webpack-bundle-analyzer
-    // default host : 127.0.0.1 , port : 8888
-    ...isProd ? [] : [new BundleAnalyzerPlugin()]
+        new HtmlWebpackPlugin({
+          template: './index.html'
+        }),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin(),
+        // https://webpack.js.org/plugins/no-emit-on-errors-plugin/
+        new webpack.NoEmitOnErrorsPlugin(),
+        // https://github.com/th0r/webpack-bundle-analyzer
+        // default host : 127.0.0.1 , port : 8888
+        new BundleAnalyzerPlugin()
+      ]
   ]
 }
 

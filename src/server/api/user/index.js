@@ -1,6 +1,7 @@
 import {
-  GET_USER_BY_USERNAME_ROUTE,
-  USER_RESET_PASSWORD_ROUTE
+  RELATIVE_GET_USER_BY_USERNAME_ROUTE,
+  RELATIVE_ROOT_ROUTE,
+  RELATIVE_USER_RESET_PASSWORD_ROUTE
 } from '../../../shared/routes'
 import {
   createUser,
@@ -16,17 +17,17 @@ import express from 'express'
 
 const userRouter = express.Router()
 
-userRouter.route('/')
+userRouter.route(RELATIVE_ROOT_ROUTE)
   .all(permit(DRIVER_PERMISSIONS))
   .get(getAllUser)
   .post(createUser)
 
-userRouter.route(GET_USER_BY_USERNAME_ROUTE)
+userRouter.route(RELATIVE_GET_USER_BY_USERNAME_ROUTE)
   .all(isOwner)
   .get(getUserByUsername)
   .delete(deleteUserByUsername)
 
-userRouter.route(USER_RESET_PASSWORD_ROUTE)
+userRouter.route(RELATIVE_USER_RESET_PASSWORD_ROUTE)
   .all(isOwner)
   .post(resetPassword)
 

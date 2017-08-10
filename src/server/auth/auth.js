@@ -1,4 +1,4 @@
-import { User } from '../api/shared/models'
+import User from '../api/user/models/user'
 import debugCreator from 'debug'
 import passport from 'passport'
 

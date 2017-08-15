@@ -50,7 +50,7 @@ describe('Authenticate', () => {
     const res = await request(app)
       .post('/auth/login')
       .send({'username': 'szouc', 'password': '123'})
-    expect(res.statusCode).toBe(302)
+    expect(res.statusCode).toBe(200)
   })
 
   test('user login failure', async () => {
@@ -60,7 +60,7 @@ describe('Authenticate', () => {
     const res = await request(app)
       .post('/auth/login')
       .send({'username': 'szouc', 'password': '1234'})
-    expect(res.statusCode).toBe(302)
+    expect(res.statusCode).toBe(401)
   })
 
   afterEach(() => {

@@ -19,13 +19,19 @@ const nodeModulesPath = path.resolve(__dirname, './node_modules')
 
 const dllConfig = {
   entry: {
-    vender: [
+    vendors: [
+      'babel-polyfill',
+      'lodash.indexof',
       'debug',
       'react',
       'react-dom',
       'react-router',
       'react-router-dom',
+      'react-router-redux',
+      'react-loadable',
       'redux',
+      'redux-actions',
+      'redux-saga',
       'react-redux',
       'reselect',
       'redux-form',

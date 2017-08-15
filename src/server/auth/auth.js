@@ -45,16 +45,33 @@ const resetPassword = (req, res, next) => {
   })
 }
 
-const userLogin = passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/auth/login',
-  failureFlash: true
-})
+const userLogin = (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return next(err)
+    }
+    if (!user) {
+      res.status(401).send('Couldnt find the user')
+    }
+    req.login(user, (err) => {
+      if (err) {
+        return next(err)
+      }
+      res.status(200).send('user.username logged in')
+    })
+  })(req, res, next)
+}
+
+// const userLogin = passport.authenticate('local', {
+//   successRedirect: '/',
+//   failureRedirect: '/auth/login',
+//   failureFlash: true
+// })
 
 const userLogout = (req, res) => {
   debug('begin logout')
   req.logout()
-  res.redirect('/auth/login')
+  res.status(200).send('user logged out')
 }
 
 // for debug
@@ -67,7 +84,7 @@ const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     next()
   } else {
-    res.redirect('/auth/login')
+    res.status(401).send('user unauthorized')
   }
 }
 

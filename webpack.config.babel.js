@@ -1,11 +1,12 @@
 // @flow
 
+import { STATIC_PATH, WDS_PORT } from './src/shared/config'
+
 import AssetsPlugin from 'assets-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
-import { WDS_PORT } from './src/shared/config'
 import cssNext from 'postcss-cssnext'
 import eslintFormatter from 'eslint-friendly-formatter'
 import { isProd } from './src/shared/utils'
@@ -112,7 +113,7 @@ const clientConfig = {
     filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
     sourceMapFilename: isProd ? 'js/[name].[chunkhash].map' : 'js/[name].map',
     chunkFilename: isProd ? 'js/[name].[chunkhash].chunk.js' : 'js/[name].chunk.js',
-    publicPath: isProd ? '/static/' : `http://localhost:${WDS_PORT}/`
+    publicPath: isProd ? STATIC_PATH : `http://localhost:${WDS_PORT}/`
   },
 
   resolve: {
@@ -140,7 +141,6 @@ const clientConfig = {
         exclude: [
           nodeModulesPath
         ]
-
         // include: [
         //   path.resolve(__dirname, './src')
         // ]
@@ -175,10 +175,14 @@ const clientConfig = {
                 //   libraryDirectory: 'lib',
                 //   style: 'css'
                 // }],
-                ...isProd ? [] : ['flow-react-proptypes'],
-                ...isProd ? [] : ['react-hot-loader/babel'],
-                ...isProd ? [] : ['transform-react-jsx-source'],
-                ...isProd ? [] : ['transform-react-jsx-self']
+                ...isProd
+                  ? []
+                  : [
+                    'flow-react-proptypes',
+                    'react-hot-loader/babel',
+                    'transform-react-jsx-source',
+                    'transform-react-jsx-self'
+                  ]
               ]
             }
           }
@@ -262,6 +266,7 @@ const clientConfig = {
   devServer: {
     historyApiFallback: true,
     contentBase: outputPath,
+    publicPath: isProd ? STATIC_PATH : `http://localhost:${WDS_PORT}/`,
     port: WDS_PORT,
     hot: true,
     stats: {
@@ -292,6 +297,41 @@ const clientConfig = {
       allChunks: true
     }),
 
+    // https://webpack.js.org/plugins/commons-chunk-plugin/
+    // Common Chunk from node_modules
+    new webpack.optimize.CommonsChunkPlugin({
+      names: 'vendor',
+      minChunks: module => /node_modules/.test(module.resource)
+    }),
+
+    // Common Chunk from the lazy import modules
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'bundle',
+      children: true,
+      async: 'common-in-lazy',
+      // minChunks: module => /node_modules/.test(module.resource)
+      minChunks: ({ resource }) => (
+        resource &&
+        resource.includes('node_modules') &&
+        /antd/.test(resource)
+      )
+    }),
+
+    // Common Chunk from the lazy modules
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'bundle',
+      children: true,
+      async: 'many-used',
+      minChunks: (module, count) => (
+        count >= 2
+      )
+    }),
+
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity
+    }),
+
     ...isProd
       ? [
         // https://webpack.js.org/plugins/hashed-module-ids-plugin/
@@ -301,45 +341,45 @@ const clientConfig = {
           hashDigestLength: 20
         }),
 
-        // https://webpack.js.org/plugins/commons-chunk-plugin/
-        // Common Chunk from node_modules
-        new webpack.optimize.CommonsChunkPlugin({
-          names: 'vendor',
-          minChunks: module => /node_modules/.test(module.resource)
-          // minChunks: ({ resource }) => (
-          //   resource &&
-          //   resource.indexOf('node_modules') >= 0 &&
-          //   resource.match(/\.js$/)
-          // )
-        }),
+        // // https://webpack.js.org/plugins/commons-chunk-plugin/
+        // // Common Chunk from node_modules
+        // new webpack.optimize.CommonsChunkPlugin({
+        //   names: 'vendor',
+        //   minChunks: module => /node_modules/.test(module.resource)
+        //   // minChunks: ({ resource }) => (
+        //   //   resource &&
+        //   //   resource.indexOf('node_modules') >= 0 &&
+        //   //   resource.match(/\.js$/)
+        //   // )
+        // }),
 
-        // Common Chunk from the lazy import modules
-        new webpack.optimize.CommonsChunkPlugin({
-          name: 'bundle',
-          children: true,
-          async: 'common-in-lazy',
-          // minChunks: module => /node_modules/.test(module.resource)
-          minChunks: ({ resource }) => (
-            resource &&
-            resource.includes('node_modules') &&
-            /antd/.test(resource)
-          )
-        }),
+        // // Common Chunk from the lazy import modules
+        // new webpack.optimize.CommonsChunkPlugin({
+        //   name: 'bundle',
+        //   children: true,
+        //   async: 'common-in-lazy',
+        //   // minChunks: module => /node_modules/.test(module.resource)
+        //   minChunks: ({ resource }) => (
+        //     resource &&
+        //     resource.includes('node_modules') &&
+        //     /antd/.test(resource)
+        //   )
+        // }),
 
-        // Common Chunk from the lazy modules
-        new webpack.optimize.CommonsChunkPlugin({
-          name: 'bundle',
-          children: true,
-          async: 'many-used',
-          minChunks: (module, count) => (
-            count >= 2
-          )
-        }),
+        // // Common Chunk from the lazy modules
+        // new webpack.optimize.CommonsChunkPlugin({
+        //   name: 'bundle',
+        //   children: true,
+        //   async: 'many-used',
+        //   minChunks: (module, count) => (
+        //     count >= 2
+        //   )
+        // }),
 
-        new webpack.optimize.CommonsChunkPlugin({
-          name: 'manifest',
-          minChunks: Infinity
-        }),
+        // new webpack.optimize.CommonsChunkPlugin({
+        //   name: 'manifest',
+        //   minChunks: Infinity
+        // }),
 
         // https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
         new UglifyJsPlugin({
@@ -354,20 +394,21 @@ const clientConfig = {
 
         // new BundleAnalyzerPlugin(),
         new HtmlWebpackPlugin({
-          template: './index.html'
+          template: './index.prod.html'
         })
       ]
       : [
         new webpack.DllReferencePlugin({
           context: __dirname,
           // flow-disable-next-line
-          manifest: require('./dist/vender-manifest.json'),
+          manifest: require('./dist/vendors-manifest.json'),
           sourceType: 'commonsjs2'
         }),
 
         new HtmlWebpackPlugin({
           template: './index.html'
         }),
+
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NamedModulesPlugin(),
         // https://webpack.js.org/plugins/no-emit-on-errors-plugin/

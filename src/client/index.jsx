@@ -1,66 +1,27 @@
 // @flow
 
-import 'babel-polyfill'
-
-import { applyMiddleware, combineReducers, createStore } from 'redux'
-
 import { APP_CONTAINER_SELECTOR } from '../shared/config'
 import App from './App'
 import { AppContainer } from 'react-hot-loader'
-import { BrowserRouter } from 'react-router-dom'
-import Immutable from 'immutable'
+import { ConnectedRouter } from 'react-router-redux'
 import { Provider } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createLogger } from 'redux-logger'
-import createSagaMiddleware from 'redux-saga/lib/internal/middleware'
-import { reducer as formReducer } from 'redux-form'
-import { isProd } from '../shared/utils'
+import createHistory from 'history/createBrowserHistory'
+import store from './redux/store'
 
-const sagaMiddleware = createSagaMiddleware()
-
-const logger = createLogger({
-  stateTransformer: (state) => {
-    let newState = {}
-
-    for (var i of Object.keys(state)) {
-      // flow-disable-next-line
-      if (Immutable.Iterable.isIterable(state[i])) {
-        newState[i] = state[i].toJS()
-      } else {
-        newState[i] = state[i]
-      }
-    };
-
-    return newState
-  }
-})
-
-const rootReducer = combineReducers({
-  form: formReducer
-})
-
-const store = createStore(
-  rootReducer,
-  // eslint-disable-next-line no-underscore-dangle
-  isProd
-    ? undefined
-    : window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-  applyMiddleware(sagaMiddleware, logger)
-)
-
-// sagaMiddleware.run(watchRequestHello)
+const history = createHistory()
 
 const rootEl = document.querySelector(APP_CONTAINER_SELECTOR)
 
 const render = (Component, reduxStore) =>
   ReactDOM.render(
     <Provider store={reduxStore}>
-      <BrowserRouter>
+      <ConnectedRouter history={history}>
         <AppContainer>
           <Component />
         </AppContainer>
-      </BrowserRouter>
+      </ConnectedRouter>
     </Provider>,
     rootEl
   )

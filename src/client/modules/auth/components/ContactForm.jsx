@@ -1,6 +1,13 @@
 import { Field, reduxForm } from 'redux-form'
+import { Link, Route } from 'react-router-dom'
 
 import React from 'react'
+import Loadable from 'react-loadable'
+
+let LoadableHome = Loadable({
+  loader: () => import(/* webpackChunkName: "HomeComponent" */ './Home.jsx'),
+  loading: () => null
+})
 
 let ContactForm = props => {
   const { handleSubmit } = props
@@ -19,6 +26,10 @@ let ContactForm = props => {
         <Field name='email' component='input' type='email' />
       </div>
       <button type='submit'>Submit</button>
+      <div>
+        <Link to='/home'>Home</Link>
+        <Route path='/home' render={() => (<LoadableHome />)} />
+      </div>
     </form>
   )
 }

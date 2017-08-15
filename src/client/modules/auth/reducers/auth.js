@@ -4,24 +4,24 @@ import {
   USER_LOGIN_FAILURE,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS
-} from '../action/auth'
+} from '../actions/auth'
 
 import type { fromJS as Immut } from 'immutable'
 import Immutable from 'immutable'
 
 const initialState = Immutable.fromJS({
-  message: 'Initial reducer message',
-  messageAsync: 'Initial reducer message for async call'
+  logged: false,
+  username: ''
 })
 
 const authReducer = (state: Immut = initialState, action: { type: string, payload: any }) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
-      return state.set('messageAsync', 'Loading...')
+      return state.set('auth', 'Loading...')
     case USER_LOGIN_SUCCESS:
-      return state.set('messageAsync', action.payload)
+      return state.set('username', action.payload.username)
     case USER_LOGIN_FAILURE:
-      return state.set('messageAsync', 'No message received, please check your connection')
+      return state.set('logged', false)
     default:
       return state
   }

@@ -49,7 +49,7 @@ describe('Authenticate', () => {
       .send(user)
     const res = await request(app)
       .post('/auth/login')
-      .send({'username': 'szouc', 'password': '123'})
+      .send({'username': 'test', 'password': '123'})
     expect(res.statusCode).toBe(200)
   })
 
@@ -59,7 +59,7 @@ describe('Authenticate', () => {
       .send(user)
     const res = await request(app)
       .post('/auth/login')
-      .send({'username': 'szouc', 'password': '1234'})
+      .send({'username': 'test', 'password': '1234'})
     expect(res.statusCode).toBe(401)
   })
 

@@ -1,12 +1,11 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
-import authReducer from '../modules/auth/reducers/auth'
 import { reducer as formReducer } from 'redux-form/immutable'
+import { reducer as authReducer } from '../modules/auth'
 
 const rootReducer = combineReducers({
   router: routerReducer,
-  form: formReducer,
-  auth: authReducer
+  auth: authReducer,
+  form: formReducer
 })
-
 export default rootReducer

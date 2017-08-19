@@ -24,10 +24,18 @@ import logger from 'morgan'
 import passport from 'passport'
 import renderApp from './render-app'
 import session from 'express-session'
+import cors from 'cors'
 
 const debug = debugCreator('app')
 const app = express()
 const RedisStore = Redis(session)
+
+if (!isProd) {
+  app.use(cors({
+    'origin': 'http://localhost:7000',
+    credentials: true
+  }))
+}
 
 app.use(compression())
 

@@ -5,7 +5,7 @@ import User from '../models/user'
 const getAllUser = (req, res) => {
   User.find({})
     .then((document) => {
-      res.json({data: document})
+      res.status(200).json({data: document})
     })
     .catch((e) => {
       res.status(500).send('Couldnt run the query smart guy')
@@ -45,7 +45,7 @@ const createUser = (req, res) => {
 const getUserByUsername = (req, res) => {
   User.find({username: req.params.username})
     .then((document) => {
-      res.json({data: document})
+      res.status(200).json({user: document})
     })
     .catch((e) => {
       res.status(500).send('Couldnt run the query smart guy')
@@ -64,7 +64,7 @@ const resetPassword = (req, res, next) => {
         }
         user.save()
           .then((user) => {
-            res.json(user)
+            res.status(200).json(user)
           })
           .catch((e) => {
             res.status(500).send('Couldnt reset the password at this time')

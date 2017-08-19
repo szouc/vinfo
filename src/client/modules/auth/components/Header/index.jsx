@@ -4,43 +4,61 @@ import Layout from 'antd/es/layout'
 import Menu from 'antd/es/menu'
 import Row from 'antd/es/row'
 import Col from 'antd/es/col'
+import Dropdown from 'antd/es/dropdown'
+import Icon from 'antd/es/icon'
+import Avatar from 'antd/es/avatar'
 import 'antd/es/layout/style/css'
+import 'antd/es/icon/style/css'
+import 'antd/es/avatar/style/css'
+import 'antd/es/dropdown/style/css'
 import 'antd/es/menu/style/css'
 import 'antd/es/row/style/css'
 import 'antd/es/col/style/css'
-import { Link } from 'react-router-dom'
 
 const { Header } = Layout
 
-const authHeader = () => {
+const authHeader = (props) => {
+  const {fullname, handleLogout} = props
+  let username = fullname
+  const userMenu = (
+    <Menu
+      theme='dark'
+      mode='horizontal'
+      style={{ lineHeight: '64px' }}
+    >
+      <Menu.Item key='username' disabled>
+        {username}
+      </Menu.Item>
+      <Menu.Item key='profile'>
+        <a onClick={handleLogout}>
+          详细信息
+        </a>
+      </Menu.Item>
+      <Menu.Item key='logout'>
+        <a onClick={handleLogout}>
+          注销
+        </a>
+      </Menu.Item>
+    </Menu>
+  )
+
   return (
-    <Row>
-      <Header className='header'>
-        <Col span={8}>
-          <div className='logo' />
+    <Header>
+      <Row type='flex' justify='end'>
+        <Col span={18} offset={3}>
+          <div className='logo'>
+            Company LOGO
+          </div>
         </Col>
-        <Col span={8} offset={8}>
-          <Row type='flex' justify='end'>
-            <Menu
-              theme='dark'
-              mode='horizontal'
-              style={{ lineHeight: '64px' }}
-            >
-              <Menu.Item key='signup'>
-                <Link to='/logout'>
-                  注册
-                </Link>
-              </Menu.Item>
-              <Menu.Item key='signin'>
-                <Link to='/login'>
-                  登录
-                </Link>
-              </Menu.Item>
-            </Menu>
-          </Row>
+        <Col span={3}>
+          <Dropdown overlay={userMenu}>
+            <a className='ant-dropdown-link' href='#'>
+              <Avatar style={{ verticalAlign: 'middle', backgroundColor: '#7265e6' }} icon='user' /> <Icon type='down' />
+            </a>
+          </Dropdown>
         </Col>
-      </Header>
-    </Row>
+      </Row>
+    </Header>
   )
 }
 

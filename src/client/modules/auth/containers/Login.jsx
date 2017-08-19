@@ -1,20 +1,19 @@
 import Login from '../components/Login'
 import {
-  userLoginRequest
-} from '../actions/auth'
+  loginRequest
+} from '../actions'
 
 import { connect } from 'react-redux'
 
 const mapStateToProps = (state) => {
-  return {
-    state
-  }
+  const {auth} = state
+  return { loggedIn: auth.get('loggedIn') }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleSubmit: (values) => {
-      dispatch(userLoginRequest(values))
+    onSubmit: (values) => {
+      dispatch(loginRequest(values))
     }
   }
 }
@@ -23,26 +22,5 @@ const LoginContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Login)
-
-// import React, { Component } from 'react'
-
-// class LoginContainer extends Component {
-//   constructor (props) {
-//     super(props)
-//     this.showValues = this.showValues.bind(this)
-//   }
-
-//   showValues = (values) => {
-//     console.log(JSON.stringify(values))
-//   }
-
-//   render () {
-//     return (
-//       <div>
-//         <Login onSubmit={this.showValues} />
-//       </div>
-//     )
-//   }
-// }
 
 export default LoginContainer

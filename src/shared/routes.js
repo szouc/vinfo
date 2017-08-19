@@ -1,7 +1,5 @@
 // @flow
 
-import path from 'path'
-
 // example
 export const HOME_PAGE_ROUTE = '/'
 export const HELLO_PAGE_ROUTE = '/hello'
@@ -50,7 +48,7 @@ export const helloEndpointRoute = (num: ?number) => `/ajax/hello/${num || ':num'
 // }
 
 const createRootRoute = (rootPath: string) => (...relativePath: Array<string>): ?string => {
-  return path.join(rootPath, ...relativePath)
+  return rootPath + relativePath.reduce((pre, cur) => pre + cur)
 }
 
 export const RELATIVE_ROOT_ROUTE = '/'

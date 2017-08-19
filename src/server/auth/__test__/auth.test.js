@@ -40,7 +40,6 @@ describe('Authenticate', () => {
       .post('/auth/register')
       .send(user)
     expect(res.statusCode).toBe(200)
-    expect(res.body.username).toBe(user.username)
   })
 
   test('user login success', async () => {

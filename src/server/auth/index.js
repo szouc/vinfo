@@ -5,7 +5,6 @@ import {
   RELATIVE_AUTH_RESET_PASSWORD_ROUTE
 } from '../../shared/routes'
 import {
-  clientRoute,
   resetPassword,
   userLogin,
   userLogout,
@@ -26,7 +25,6 @@ authRouter.route(RELATIVE_AUTH_RESET_PASSWORD_ROUTE)
   .post(resetPassword)
 
 authRouter.route(RELATIVE_AUTH_LOGIN_ROUTE)
-  .get(clientRoute)
   .post(userLogin)
 
 authRouter.route(RELATIVE_AUTH_LOGOUT_ROUTE)

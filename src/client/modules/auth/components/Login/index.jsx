@@ -8,6 +8,7 @@ import Row from 'antd/es/row'
 import Col from 'antd/es/col'
 import 'antd/es/row/style/css'
 import 'antd/es/col/style/css'
+import { Redirect } from 'react-router-dom'
 
 const validate = values => {
   const errors = {}
@@ -32,47 +33,53 @@ const warn = values => {
 }
 
 const login = (props) => {
-  const { handleSubmit, pristine, reset, submitting } = props
+  const { handleSubmit, pristine, reset, submitting, loggedIn } = props
   return (
-    <Row type='flex' justify='center'>
-      <form onSubmit={handleSubmit} className={style.register_input}>
-        <Row>
-          <Field
-            name='username'
-            component={Input}
-            label='工号'
-          />
+    loggedIn
+      ? (
+        <Redirect to='/' />
+      )
+      : (
+        <Row type='flex' justify='center'>
+          <form onSubmit={handleSubmit} className={style.register_input}>
+            <Row>
+              <Field
+                name='username'
+                component={Input}
+                label='工号'
+              />
+            </Row>
+            <Row>
+              <Field
+                name='password'
+                component={Input}
+                label='密码'
+                type='password'
+              />
+            </Row>
+            <Row type='flex' justify='space-around'>
+              <Col span={8}>
+                <Button
+                  size='large'
+                  type='primary'
+                  htmlType='submit'
+                  disabled={pristine || submitting}>
+                  确定
+                </Button>
+              </Col>
+              <Col span={8}>
+                <Button
+                  size='large'
+                  type='default'
+                  disabled={pristine || submitting}
+                  onClick={reset}>
+                  取消
+                </Button>
+              </Col>
+            </Row>
+          </form>
         </Row>
-        <Row>
-          <Field
-            name='password'
-            component={Input}
-            label='密码'
-            type='password'
-          />
-        </Row>
-        <Row type='flex' justify='space-around'>
-          <Col span={8}>
-            <Button
-              size='large'
-              type='primary'
-              htmlType='submit'
-              disabled={pristine || submitting}>
-              确定
-            </Button>
-          </Col>
-          <Col span={8}>
-            <Button
-              size='large'
-              type='default'
-              disabled={pristine || submitting}
-              onClick={reset}>
-              取消
-            </Button>
-          </Col>
-        </Row>
-      </form>
-    </Row>
+      )
   )
 }
 

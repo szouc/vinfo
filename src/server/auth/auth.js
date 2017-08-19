@@ -17,7 +17,7 @@ const userRegister = (req, res, next) => {
         return next(err)
       }
       debug('user login')
-      res.json(req.user)
+      res.status(200).send('user registered ok')
     })
   })
 }
@@ -35,7 +35,7 @@ const resetPassword = (req, res, next) => {
         }
         user.save()
           .then((user) => {
-            res.json(user)
+            res.status(200).send('password reset ok')
           })
           .catch((e) => {
             res.status(500).send('Couldnt reset the password at this time')
@@ -46,6 +46,8 @@ const resetPassword = (req, res, next) => {
 }
 
 const userLogin = (req, res, next) => {
+  debug('login begin')
+  debug(req.body)
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       return next(err)
@@ -57,7 +59,7 @@ const userLogin = (req, res, next) => {
       if (err) {
         return next(err)
       }
-      res.status(200).send('user.username logged in')
+      res.status(200).send('user logged in')
     })
   })(req, res, next)
 }
@@ -74,11 +76,6 @@ const userLogout = (req, res) => {
   res.status(200).send('user logged out')
 }
 
-// for debug
-const clientRoute = (req, res) => {
-  res.send(`Client will render the Login page. ${req.flash('error')}`)
-}
-
 // middleware for determining authenticated
 const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -93,6 +90,5 @@ export {
   resetPassword,
   userLogin,
   userLogout,
-  clientRoute,
   isAuthenticated
 }

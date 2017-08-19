@@ -1,46 +1,53 @@
-import path from 'path'
-import { createAction } from 'redux-actions'
+// import { createAction } from 'redux-actions'
+import Immutable from 'immutable'
 
-export const USER_LOGIN_REQUEST = 'USER_LOGIN_REQUEST'
-export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS'
-export const USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE'
-export const USER_REGISTER_REQUEST = 'USER_REGISTER_REQUEST'
-export const USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS_REQUEST'
-export const USER_REGISTER_FAILURE = 'USER_REGISTER_FAILURE'
-export const USER_LOGOUT_REQUEST = 'USER_LOGOUT_REQUEST'
-export const USER_LOGOUT_SUCCESS = 'USER_LOGOUT_SUCCESS'
-export const USER_LOGOUT_FAILURE = 'USER_LOGOUT_FAILURE'
+const loginData = Immutable.fromJS({
+  username: 'szouc',
+  password: '123'
+})
 
-export const userRegisterRequest = createAction(USER_REGISTER_REQUEST)
-export const userRegisterSuccess = createAction(USER_REGISTER_SUCCESS)
-export const userRegisterFailure = createAction(USER_REGISTER_FAILURE)
+const {username, password} = loginData.toJS()
 
-export const userLoginRequest = createAction(USER_LOGIN_REQUEST)
-export const userLoginSuccess = createAction(USER_LOGIN_SUCCESS)
-export const userLoginFailure = createAction(USER_LOGIN_FAILURE)
-
-export const userLogoutRequest = createAction(USER_LOGOUT_REQUEST)
-export const userLogoutSuccess = createAction(USER_LOGOUT_SUCCESS)
-export const userLogoutFailure = createAction(USER_LOGOUT_FAILURE)
-
-const createAsyncStatus = (Action) => {
-  const request = createAction(`${Action}_REQUEST`)
-  const success = createAction(`${Action}_SUCCESS`)
-  const failure = createAction(`${Action}_FAILURE`)
-
-  return ({ request, success, failure })
-}
-
-const USER_LOGIN = 'USER_LOGIN'
-const userLoginRequest1 = createAsyncStatus(USER_LOGIN).request
-const userLoginSuccess1 = createAsyncStatus(USER_LOGIN).success
-const userLoginFailure1 = createAsyncStatus(USER_LOGIN).failure
-
-console.log(userLoginRequest1({username: 'szouc', password: '123'}))
-console.log(userLoginSuccess1({username: 'szouc', password: '123'}))
-console.log(userLoginFailure1({username: 'szouc', password: '123'}))
+console.log(username + password)
 
 const AUTH_ROUTE = '/auth/login'
 const WEB_ADDR = 'http://127.0.0.1'
 
 console.log(`${WEB_ADDR}${AUTH_ROUTE}`)
+
+const createRootRoute = (rootPath) => (...relativePath) => {
+  return rootPath + relativePath.reduce((pre, cur) => pre + cur)
+}
+
+export const RELATIVE_ROOT_ROUTE = '/'
+
+// AUTH PATH
+export const AUTH_ROOT_ROUTE = '/auth'
+const createAuthRoute = createRootRoute(AUTH_ROOT_ROUTE)
+
+export const RELATIVE_AUTH_REGISTER_ROUTE = '/register'
+export const RELATIVE_AUTH_LOGIN_ROUTE = '/login'
+export const RELATIVE_AUTH_LOGOUT_ROUTE = '/logout'
+export const RELATIVE_AUTH_RESET_PASSWORD_ROUTE = '/reset_password' // Only Manager Permissions
+export const AUTH_REGISTER_ROUTE = createAuthRoute(RELATIVE_AUTH_REGISTER_ROUTE)
+export const AUTH_LOGIN_ROUTE = createAuthRoute(RELATIVE_AUTH_LOGIN_ROUTE)
+export const AUTH_LOGOUT_ROUTE = createAuthRoute(RELATIVE_AUTH_LOGOUT_ROUTE)
+export const AUTH_RESET_PASSWORD_ROUTE = createAuthRoute(RELATIVE_AUTH_RESET_PASSWORD_ROUTE) // Only Manager Permissions
+
+// API ROOT PATH - '/'
+export const API_ROOT_ROUTE = '/api'
+const createApiRoute = createRootRoute(API_ROOT_ROUTE)
+
+export const RELATIVE_API_USER_ROOT_ROUTE = '/user'
+export const API_USER_ROOT_ROUTE = createApiRoute(RELATIVE_API_USER_ROOT_ROUTE)
+
+export const RELATIVE_USER_RESET_PASSWORD_ROUTE = '/:username/reset_password' // Only Owner Permissions
+export const RELATIVE_GET_USER_BY_USERNAME_ROUTE = '/:username'
+export const USER_RESET_PASSWORD_ROUTE = createApiRoute(RELATIVE_API_USER_ROOT_ROUTE, RELATIVE_USER_RESET_PASSWORD_ROUTE) // Only Owner Permissions
+export const GET_USER_BY_USERNAME_ROUTE = createApiRoute(RELATIVE_API_USER_ROOT_ROUTE, RELATIVE_GET_USER_BY_USERNAME_ROUTE)
+
+console.log(API_ROOT_ROUTE + RELATIVE_API_USER_ROOT_ROUTE)
+console.log(API_USER_ROOT_ROUTE)
+const user = 'szouc'
+console.log(GET_USER_BY_USERNAME_ROUTE.replace(/:username/, user))
+console.log(AUTH_LOGOUT_ROUTE)

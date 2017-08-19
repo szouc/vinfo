@@ -9,6 +9,7 @@ import { createLogger } from 'redux-logger'
 import createSagaMiddleware from 'redux-saga/lib/internal/middleware'
 import { isProd } from '../../shared/utils'
 import rootReducer from './reducer'
+import rootSagas from './saga'
 
 const history = createHistory()
 const browserRouterMiddleware = routerMiddleware(history)
@@ -42,4 +43,4 @@ export default createStore(
   applyMiddleware(...middleware)
 )
 
-// sagaMiddleware.run(watchRequestHello)
+sagaMiddleware.run(rootSagas)

@@ -2,7 +2,7 @@
 
 import { Field, reduxForm } from 'redux-form'
 
-import { Input, Select } from '../../shared/forms/index'
+import { Input, Select } from '../../modules/shared/forms/index'
 import React from 'react'
 import style from './style.css'
 

@@ -1,13 +1,14 @@
+import { connect } from 'react-redux'
+
 import Login from '../components/Login'
 import {
   loginRequest
 } from '../actions'
 
-import { connect } from 'react-redux'
-
 const mapStateToProps = (state) => {
   const {auth} = state
-  return { loggedIn: auth.get('loggedIn') }
+  const errorMessage = auth.get('error')
+  return { errorMessage }
 }
 
 const mapDispatchToProps = (dispatch) => {

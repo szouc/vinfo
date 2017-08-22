@@ -1,20 +1,21 @@
 import Header from '../components/Header'
 import { connect } from 'react-redux'
 import {
-  userLogoutRequest
+  logoutRequest
 } from '../actions'
 
 const mapStateToProps = (state) => {
   const {auth} = state
-  if (auth.get('fullname')) {
-    return { fullname: auth.get('fullname') }
+  const user = auth.get('user')
+  if (user.username) {
+    return { username: user.username }
   }
-  return { fullname: null }
+  return { username: null }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleLogout: () => dispatch(userLogoutRequest())
+    handleLogout: () => dispatch(logoutRequest())
   }
 }
 

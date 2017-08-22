@@ -1,4 +1,4 @@
 import reducer from './reducers'
 import saga from './sagas'
-
-export { reducer, saga }
+import authHOC from './utils/auth'
+export { reducer, saga, authHOC }

@@ -43,9 +43,9 @@ const createUser = (req, res) => {
 }
 
 const getUserByUsername = (req, res) => {
-  User.find({username: req.params.username})
-    .then((document) => {
-      res.status(200).json({user: document})
+  User.findOne({username: req.params.username})
+    .then((user) => {
+      res.status(200).json(user)
     })
     .catch((e) => {
       res.status(500).send('Couldnt run the query smart guy')

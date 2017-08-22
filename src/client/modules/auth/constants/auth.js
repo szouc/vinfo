@@ -1,11 +1,20 @@
-import { defineAction } from 'redux-define'
 import { MODULE_NAME } from '../settings/config'
-import { PENDING, SUCCESS, ERROR } from '../constants/asynState'
+
+const defineModule = (module) => (...constant) => {
+  const SEPARATOR = '/'
+  return [module, ...constant].join(SEPARATOR)
+}
+
+const defineConstant = defineModule(MODULE_NAME)
 
 /**
  * Generating async request suffix
  */
-export const LOGIN_REQUEST = defineAction('LOGIN_REQUEST', [ PENDING, SUCCESS, ERROR ], MODULE_NAME)
-export const LOGOUT_REQUEST = defineAction('LOGOUT_REQUEST', [ PENDING, SUCCESS, ERROR ], MODULE_NAME)
-export const REGISTER_REQUEST = defineAction('REGISTER_REQUEST', [ PENDING, SUCCESS, ERROR ], MODULE_NAME)
-export const FETCH_PROFILE_REQUEST = defineAction('FETCH_PROFILE_REQUEST', [ PENDING, SUCCESS, ERROR ], MODULE_NAME)
+export const SET_LOADING = defineConstant('SET_LOADING')
+export const SET_AUTH = defineConstant('SET_AUTH')
+export const REQUEST_ERROR = defineConstant('REQUEST_ERROR')
+export const LOGIN_REQUEST = defineConstant('LOGIN_REQUEST')
+export const LOGOUT_REQUEST = defineConstant('LOGOUT_REQUEST')
+export const REGISTER_REQUEST = defineConstant('REGISTER_REQUEST')
+export const FETCH_PROFILE_REQUEST = defineConstant('FETCH_PROFILE_REQUEST')
+export const FETCH_PROFILE_SUCCESS = defineConstant('FETCH_PROFILE_SUCCESS')

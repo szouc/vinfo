@@ -11,7 +11,7 @@ import { isProd } from '../../shared/utils'
 import rootReducer from './reducer'
 import rootSagas from './saga'
 
-const history = createHistory()
+export const history = createHistory()
 const browserRouterMiddleware = routerMiddleware(history)
 const sagaMiddleware = createSagaMiddleware()
 

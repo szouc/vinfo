@@ -1,14 +1,17 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form/immutable'
-import { Input } from '../../../../shared/forms/index'
-import style from './style.css'
 import Button from 'antd/es/button'
-import 'antd/es/button/style/css'
 import Row from 'antd/es/row'
 import Col from 'antd/es/col'
+import Alert from 'antd/es/alert'
+
+import { Input } from '../../../shared/forms/index'
+
+import style from './style.css'
+import 'antd/es/button/style/css'
 import 'antd/es/row/style/css'
 import 'antd/es/col/style/css'
-import { Redirect } from 'react-router-dom'
+import 'antd/es/alert/style/css'
 
 const validate = values => {
   const errors = {}
@@ -33,53 +36,54 @@ const warn = values => {
 }
 
 const login = (props) => {
-  const { handleSubmit, pristine, reset, submitting, loggedIn } = props
+  const { handleSubmit, pristine, reset, submitting, errorMessage } = props
   return (
-    loggedIn
-      ? (
-        <Redirect to='/' />
-      )
-      : (
-        <Row type='flex' justify='center'>
-          <form onSubmit={handleSubmit} className={style.register_input}>
-            <Row>
-              <Field
-                name='username'
-                component={Input}
-                label='工号'
-              />
+    <Row type='flex' justify='center'>
+      <form onSubmit={handleSubmit} className={style.register_input}>
+        {
+          errorMessage
+            ? <Row>
+              <Alert message={errorMessage} type='error' banner />
             </Row>
-            <Row>
-              <Field
-                name='password'
-                component={Input}
-                label='密码'
-                type='password'
-              />
-            </Row>
-            <Row type='flex' justify='space-around'>
-              <Col span={8}>
-                <Button
-                  size='large'
-                  type='primary'
-                  htmlType='submit'
-                  disabled={pristine || submitting}>
-                  确定
-                </Button>
-              </Col>
-              <Col span={8}>
-                <Button
-                  size='large'
-                  type='default'
-                  disabled={pristine || submitting}
-                  onClick={reset}>
-                  取消
-                </Button>
-              </Col>
-            </Row>
-          </form>
+            : null
+        }
+        <Row>
+          <Field
+            name='username'
+            component={Input}
+            label='工号'
+          />
         </Row>
-      )
+        <Row>
+          <Field
+            name='password'
+            component={Input}
+            label='密码'
+            type='password'
+          />
+        </Row>
+        <Row type='flex' justify='space-around'>
+          <Col span={8}>
+            <Button
+              size='large'
+              type='primary'
+              htmlType='submit'
+              disabled={pristine || submitting}>
+                确定
+            </Button>
+          </Col>
+          <Col span={8}>
+            <Button
+              size='large'
+              type='default'
+              disabled={pristine || submitting}
+              onClick={reset}>
+                取消
+            </Button>
+          </Col>
+        </Row>
+      </form>
+    </Row>
   )
 }
 

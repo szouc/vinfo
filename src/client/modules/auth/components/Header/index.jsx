@@ -18,8 +18,7 @@ import 'antd/es/col/style/css'
 const { Header } = Layout
 
 const authHeader = (props) => {
-  const {fullname, handleLogout} = props
-  let username = fullname
+  const {username, handleLogout} = props
   const userMenu = (
     <Menu
       theme='dark'

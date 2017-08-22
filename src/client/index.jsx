@@ -7,10 +7,7 @@ import { ConnectedRouter } from 'react-router-redux'
 import { Provider } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import createHistory from 'history/createBrowserHistory'
-import store from './redux/store'
-
-const history = createHistory()
+import store, { history } from './redux/store'
 
 const rootEl = document.querySelector(APP_CONTAINER_SELECTOR)
 

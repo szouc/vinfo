@@ -6974,10 +6974,6 @@ redux-actions@^2.2.1:
     lodash-es "^4.17.4"
     reduce-reducers "^0.1.0"
 
-redux-define@^1.1.1:
-  version "1.1.1"
-  resolved "http://registry.npm.taobao.org/redux-define/download/redux-define-1.1.1.tgz#98f97bfa45219a1d646a76b8512f421a96c289bf"
-
 redux-form-antd@^0.0.13:
   version "0.0.13"
   resolved "http://registry.npm.taobao.org/redux-form-antd/download/redux-form-antd-0.0.13.tgz#b20ebba3b0177a534777da2e43a90a6ea8052a4a"

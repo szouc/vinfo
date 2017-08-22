@@ -2,13 +2,17 @@
 import Immutable from 'immutable'
 
 const loginData = Immutable.fromJS({
+  user: {},
   username: 'szouc',
   password: '123'
 })
 
-const {username, password} = loginData.toJS()
+const output = loginData.set('user', {username: 'test', password: 'test'})
 
-console.log(username + password)
+const data = output.toJS()
+
+console.log(data)
+console.log(data.username + data.password)
 
 const AUTH_ROUTE = '/auth/login'
 const WEB_ADDR = 'http://127.0.0.1'
@@ -51,3 +55,24 @@ console.log(API_USER_ROOT_ROUTE)
 const user = 'szouc'
 console.log(GET_USER_BY_USERNAME_ROUTE.replace(/:username/, user))
 console.log(AUTH_LOGOUT_ROUTE)
+
+const defineModule = (module) => (...constant) => {
+  const SEPARATOR = '/'
+  return [module, ...constant].join(SEPARATOR)
+}
+
+const defineConstant = defineModule('auth')
+
+/**
+ * Generating async request suffix
+ */
+export const SET_LOADING = defineConstant('SET_LOADING')
+export const SET_AUTH = defineConstant('SET_AUTH')
+export const REQUEST_ERROR = defineConstant('REQUEST_ERROR')
+export const LOGIN_REQUEST = defineConstant('LOGIN_REQUEST')
+export const LOGOUT_REQUEST = defineConstant('LOGOUT_REQUEST')
+export const REGISTER_REQUEST = defineConstant('REGISTER_REQUEST')
+export const FETCH_PROFILE_REQUEST = defineConstant('FETCH_PROFILE_REQUEST')
+
+console.log(SET_LOADING)
+console.log(FETCH_PROFILE_REQUEST)

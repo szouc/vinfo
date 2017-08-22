@@ -4,9 +4,9 @@ import {
   LOGOUT_REQUEST,
   REGISTER_REQUEST,
   FETCH_PROFILE_REQUEST
-} from '../constants/login'
+} from '../constants'
 
-export const loginRequest = createAction(LOGIN_REQUEST.ACTION)
-export const logoutRequest = createAction(LOGOUT_REQUEST.ACTION)
-export const registerRequest = createAction(REGISTER_REQUEST.ACTION)
-export const fetchProfileRequest = createAction(FETCH_PROFILE_REQUEST.ACTION)
+export const loginRequest = createAction(LOGIN_REQUEST)
+export const logoutRequest = createAction(LOGOUT_REQUEST)
+export const registerRequest = createAction(REGISTER_REQUEST)
+export const fetchProfileRequest = createAction(FETCH_PROFILE_REQUEST)

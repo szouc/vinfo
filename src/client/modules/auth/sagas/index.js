@@ -1,5 +1,2 @@
-// import saga from './login'
-
-export default function * authSagas () {
-  yield []
-}
+import authSagas from './auth'
+export default authSagas

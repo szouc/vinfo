@@ -1,7 +1,7 @@
-import { combineReducers } from 'redux'
-import { routerReducer } from 'react-router-redux'
+import { combineReducers } from 'redux-immutable'
 import { reducer as formReducer } from 'redux-form/immutable'
 import { reducer as authReducer } from '../modules/auth'
+import routerReducer from '../route/reducer'
 
 const rootReducer = combineReducers({
   router: routerReducer,

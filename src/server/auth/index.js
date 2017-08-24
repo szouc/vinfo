@@ -1,33 +1,41 @@
+import express from 'express'
+
 import {
-  RELATIVE_AUTH_LOGIN_ROUTE,
-  RELATIVE_AUTH_LOGOUT_ROUTE,
-  RELATIVE_AUTH_REGISTER_ROUTE,
-  RELATIVE_AUTH_RESET_PASSWORD_ROUTE
-} from '../../shared/routes'
+  LOGIN_ROUTE,
+  LOGOUT_ROUTE,
+  REGISTER_ROUTE,
+  RESET_PASSWORD_ROUTE
+} from './routes'
+
 import {
   resetPassword,
   userLogin,
   userLogout,
   userRegister
-} from './auth'
+} from './controllers'
 
-import { MANAGER_PERMISSIONS } from '../api/shared/config'
-import express from 'express'
-import permit from '../api/shared/permissions'
+import { permitManager } from './permissions'
 
 const authRouter = express.Router()
 
-authRouter.route(RELATIVE_AUTH_REGISTER_ROUTE)
+authRouter.route(REGISTER_ROUTE)
   .post(userRegister)
 
-authRouter.route(RELATIVE_AUTH_RESET_PASSWORD_ROUTE)
-  .all(permit(MANAGER_PERMISSIONS))
+authRouter.route(RESET_PASSWORD_ROUTE)
+  .all(permitManager)
   .post(resetPassword)
 
-authRouter.route(RELATIVE_AUTH_LOGIN_ROUTE)
+authRouter.route(LOGIN_ROUTE)
   .post(userLogin)
 
-authRouter.route(RELATIVE_AUTH_LOGOUT_ROUTE)
+authRouter.route(LOGOUT_ROUTE)
   .get(userLogout)
+
+export {
+  LOGIN_ROUTE,
+  LOGOUT_ROUTE,
+  REGISTER_ROUTE,
+  RESET_PASSWORD_ROUTE
+} 
 
 export default authRouter

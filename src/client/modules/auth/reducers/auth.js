@@ -18,17 +18,21 @@ const initialState = Immutable.fromJS({
   error: ''
 })
 
-const authReducer = (state: Immut = initialState, action: { type: string, payload: any }) => {
+const authReducer = (
+  state: Immut = initialState,
+  action: { type: string, payload: any }
+) => {
   const { type, payload } = action
   switch (type) {
     case SET_LOADING:
-      return state.set([`${payload.scope}Loading`], payload.loading)
+      return state.set(`${payload.scope}Loading`, payload.loading)
     case SET_AUTH:
       return state.set('loggedIn', payload)
     case REQUEST_ERROR:
       return state.set('error', payload)
     case FETCH_PROFILE_SUCCESS:
-      return state.set('user', payload)
+      const user = Immutable.fromJS(payload)
+      return state.set('user', user)
     default:
       return state
   }

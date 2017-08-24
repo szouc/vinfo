@@ -11,7 +11,7 @@ const RadioButton = Radio.Button
 const getEmptyArr = () => {}
 
 const withOptions = (OptionType, getType) => Component =>
-  class extends React.PureComponent {
+  class withOptionsComponent extends React.PureComponent {
     static defaultProps = {
       valueKey: 'value',
       labelKey: 'label',

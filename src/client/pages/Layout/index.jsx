@@ -15,7 +15,7 @@ const baseLayout = ({ match }) => {
       <Header />
       <Content>
         <Switch>
-          <Route exact path='/' render={() => <Carousel />} />
+          <Route exact path={match.url} render={() => <Carousel />} />
           <Route render={() => <NotFound />} />
         </Switch>
       </Content>

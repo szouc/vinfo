@@ -4,14 +4,13 @@ import localforage from 'localforage'
 import fetch from '../../shared/settings/fetch'
 import { WEB_ADDR } from '../../shared/settings/config'
 import {
-  AUTH_LOGIN_ROUTE,
-  AUTH_LOGOUT_ROUTE,
-  GET_USER_BY_USERNAME_ROUTE
+  LOGIN_API,
+  LOGOUT_API,
+  GET_USER_BY_USERNAME_API
 } from './routes'
 
 // response status
 const TRUE = true
-const FALSE = false
 const STATUS_OK = 200
 
 // This will force localStorage as the storage
@@ -25,20 +24,15 @@ localforage.config({
 /**
  * Checks if a user is logged in at the localStorage
  */
-async function isLoggedIn () {
-  let loggedIn: ?string = await localforage.getItem('loggedIn')
-  let user: ?string = await localforage.getItem('user')
-  if (loggedIn && user) {
-    return TRUE
-  }
-  return FALSE
-}
+const getLocalLoggedIn = () => localforage.getItem('loggedIn')
+
+const getLocalUser = () => localforage.getItem('user')
 
 /**
  * Set log info to the localStorage
  * @param {string} username - The username of the user
  */
-async function setLogin (username: string) {
+async function setLocalLogin(username: string) {
   await localforage.setItem('loggedIn', true)
   await localforage.setItem('user', username)
 }
@@ -46,7 +40,7 @@ async function setLogin (username: string) {
 /**
  * Remove log info in the localStorage
  */
-async function setLogout () {
+async function setLocalLogout() {
   await localforage.removeItem('loggedIn')
   await localforage.removeItem('user')
 }
@@ -58,15 +52,15 @@ async function setLogout () {
  * @param {{username: string, password: string}} payload - The username and password of the user
  * @returns
  */
-async function login (payload: {username: string, password: string}) {
+async function login(payload: { username: string, password: string }) {
   // Gets log info from localStorage
-  let loggedIn = await isLoggedIn()
+  let loggedIn = await getLocalLoggedIn()
   if (loggedIn) {
     return TRUE
   }
 
   // Fetch options
-  let url = WEB_ADDR + AUTH_LOGIN_ROUTE
+  let url = WEB_ADDR + LOGIN_API
   let options = {
     method: 'post',
     body: JSON.stringify(payload),
@@ -75,32 +69,32 @@ async function login (payload: {username: string, password: string}) {
   // Logs a user in from the server API
   let response = await fetch(url, options)
   if (response.status === STATUS_OK) {
-    await setLogin(payload.username)
+    await setLocalLogin(payload.username)
     return TRUE
   }
   if (response.status === 401) {
-    await setLogout()
-    throw new Error('没有这个用户')
+    await setLocalLogout()
+    throw new Error('用户名和密码有误')
   }
-  await setLogout()
-  throw new Error('Something Wrong')
+  await setLocalLogout()
+  throw new Error('Something Wrong at Login Process')
 }
 
 /**
  * Logs the current user out
  */
-async function logout () {
+async function logout() {
   // Fetch url & options
-  let url: string = WEB_ADDR + AUTH_LOGOUT_ROUTE
-  let options: {method: string} = {method: 'get'}
+  let url: string = WEB_ADDR + LOGOUT_API
+  let options: { method: string } = { method: 'get' }
 
   // Logs a user out from the server API
   let response = await fetch(url, options)
   if (response.status === STATUS_OK) {
-    await setLogout()
+    await setLocalLogout()
     return TRUE
   }
-  throw new Error('Something Wrong')
+  throw new Error('Something Wrong at Logout Process')
 }
 
 /**
@@ -108,10 +102,11 @@ async function logout () {
  * @param {string} username - The username of the user
  * @return user - The info of the user
  */
-async function fetchProfile (username: string) {
+async function fetchProfile(username: string) {
   // Fetch url & options
-  let url: string = WEB_ADDR + GET_USER_BY_USERNAME_ROUTE.replace(/:username/, username)
-  let options: {method: string} = { method: 'get' }
+  let url: string =
+    WEB_ADDR + GET_USER_BY_USERNAME_API.replace(/:username/, username)
+  let options: { method: string } = { method: 'get' }
 
   // Fetch a user info from the server API
   let response = await fetch(url, options)
@@ -119,8 +114,8 @@ async function fetchProfile (username: string) {
     let user = await response.json()
     return user
   }
-  await setLogout()
-  throw new Error('Something Wrong')
+  await setLocalLogout()
+  throw new Error('Something Wrong at FetchProfile Process')
 }
 
-export { isLoggedIn, login, logout, fetchProfile }
+export { getLocalLoggedIn, getLocalUser, login, logout, fetchProfile }

@@ -1,11 +1,21 @@
-import {ACCOUNT, ADMIN, CAPTAIN, DRIVER, FEMALE, MALE, MANAGER, STAFF} from '../../shared/config'
-
-import conn from '../../../config/conn'
+import conn from '../../settings/db'
 import mongoose from 'mongoose'
 import passportLocalMongoose from 'passport-local-mongoose'
 
+import {
+  STAFF,
+  DRIVER,
+  CAPTAIN,
+  ACCOUNT,
+  MANAGER,
+  ADMIN,
+  MALE,
+  FEMALE
+} from './constants'
+
 const db = conn.getConnection()
 const Schema = mongoose.Schema
+
 
 // User Role Enum
 const roles = [STAFF, DRIVER, CAPTAIN, ACCOUNT, MANAGER, ADMIN]
@@ -49,7 +59,7 @@ const baseUser = {
 
 /*
 * vinfoUser Types extended from the baseUser Types,
-* add some properties about your project.
+* add some properties relating to your project.
 */
 const vinfoUser = {
   ...baseUser,
@@ -84,4 +94,4 @@ const plmOptions = {
 UserSchema.plugin(passportLocalMongoose, plmOptions)
 
 const User = db.model('User', UserSchema)
-export default User
+export { User }

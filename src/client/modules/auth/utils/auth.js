@@ -2,43 +2,100 @@ import React, { Component } from 'react'
 import { replace } from 'react-router-redux'
 import { connect } from 'react-redux'
 
-import { isLoggedIn } from '../api'
+import { getLocalLoggedIn, getLocalUser } from '../api'
+import { fetchProfileRequest } from '../actions'
 
-async function validate (location, stateLoggedIn, redirectToLogin) {
-  let loggedIn = await isLoggedIn()
+/**
+ * validate whether login or not according to the localStorage 'loggedIn'
+ * @param {any} location - the location of the history
+ * @param {any} stateLoggedIn - the loggedIn value in the state
+ * @param {any} redirectToLogin - dispatch a redirect action
+ */
+async function validateLogged(location, stateLoggedIn, redirectToLogin) {
+  const loggedIn = await getLocalLoggedIn()
   if ((!loggedIn || !stateLoggedIn) && location.pathname !== '/login') {
     redirectToLogin()
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    loggedIn: state.auth.get('loggedIn')
+/**
+ * validate whether had user profile or not according to the localStorage 'user'
+ * @param {*} stateUser - the user in the state
+ * @param {*} location - the location of the history
+ * @param {*} fetchProfile - fetch user profile from the server api
+ * @param {*} redirectToLogin - dispath a redirect action
+ */
+async function validateUser(
+  stateUser,
+  location,
+  fetchProfile,
+  redirectToLogin
+) {
+  const localUser = await getLocalUser()
+  if (!localUser && location.pathname !== '/login') {
+    redirectToLogin()
+  }
+  if (localUser && stateUser !== localUser) {
+    fetchProfile(localUser)
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+async function validate(
+  location,
+  stateLoggedIn,
+  stateUsername,
+  fetchProfile,
+  redirectToLogin
+) {
+  await validateLogged(location, stateLoggedIn, redirectToLogin)
+  await validateUser(stateUsername, location, fetchProfile, redirectToLogin)
+}
+
+const mapStateToProps = state => {
+  return {
+    stateloggedIn: state.getIn(['auth', 'loggedIn']),
+    stateUsername: state.getIn(['auth', 'user', 'username'])
+  }
+}
+
+const mapDispatchToProps = dispatch => {
   return {
     redirectToLogin: () => {
       dispatch(replace('/login'))
+    },
+    fetchProfile: value => {
+      dispatch(fetchProfileRequest(value))
     }
   }
 }
 
-export default function authHOC (BaseComponent) {
+export default function authHOC(BaseComponent) {
   class CheckedComponent extends Component {
-    componentWillMount () {
-      this.checkAuthentication(this.props.location, this.props.loggedIn, this.props.redirectToLogin)
+    componentWillMount() {
+      this.checkAuthentication(this.props)
     }
-    componentWillReceiveProps (nextProps) {
+    componentWillReceiveProps(nextProps) {
       if (nextProps.location !== this.props.location) {
-        this.checkAuthentication(nextProps.location, nextProps.loggedIn, nextProps.redirectToLogin)
+        this.checkAuthentication(nextProps)
       }
     }
-    checkAuthentication (location, loggedIn, redirectToLogin) {
-      validate(location, loggedIn, redirectToLogin)
+    checkAuthentication(props) {
+      const {
+        location,
+        stateloggedIn,
+        stateUsername,
+        fetchProfile,
+        redirectToLogin
+      } = props
+      validate(
+        location,
+        stateloggedIn,
+        stateUsername,
+        fetchProfile,
+        redirectToLogin
+      )
     }
-    render () {
+    render() {
       return <BaseComponent {...this.props} />
     }
   }

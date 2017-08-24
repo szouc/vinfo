@@ -1,6 +1,6 @@
 import { MODULE_NAME } from '../settings/config'
 
-const defineModule = (module) => (...constant) => {
+const defineModule = module => (...constant) => {
   const SEPARATOR = '/'
   return [module, ...constant].join(SEPARATOR)
 }

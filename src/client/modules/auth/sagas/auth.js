@@ -1,4 +1,3 @@
-
 // @flow
 
 import {
@@ -23,27 +22,31 @@ import * as Api from '../api'
  * Log in saga
  * @export
  */
-export function * loginFlow (): any {
+export function* loginFlow(): any {
   while (true) {
-    let action: {type: string, payload: Immut} = yield take(LOGIN_REQUEST)
-    const payload: {username: string, password: string} = action.payload.toJS()
+    const action: { type: string, payload: Immut } = yield take(LOGIN_REQUEST)
+    const username: string = action.payload.get('username')
+    const password: string = action.payload.get('password')
     // load pending page
-    yield put({type: SET_LOADING, payload: {scope: 'login', loading: true}})
+    yield put({ type: SET_LOADING, payload: { scope: 'login', loading: true } })
     try {
-      let isAuth: ?boolean = yield call(Api.login, payload)
+      let isAuth: ?boolean = yield call(Api.login, { username, password })
       if (isAuth) {
-        yield put({type: SET_AUTH, payload: true})
-        yield put({type: FETCH_PROFILE_REQUEST, payload: payload.username})
+        yield put({ type: SET_AUTH, payload: true })
+        yield put({ type: FETCH_PROFILE_REQUEST, payload: username })
         yield put(push('/')) // Redirect to the root
       }
     } catch (error) {
-      yield put({type: REQUEST_ERROR, payload: error.message})
+      yield put({ type: REQUEST_ERROR, payload: error.message })
       yield put(replace('/login')) // Redirect to the login page
     } finally {
       // unload pending page
-      yield put({type: SET_LOADING, payload: {scope: 'login', loading: false}})
+      yield put({
+        type: SET_LOADING,
+        payload: { scope: 'login', loading: false }
+      })
       yield delay(2000)
-      yield put({type: REQUEST_ERROR, payload: ''})
+      yield put({ type: REQUEST_ERROR, payload: '' })
     }
   }
 }
@@ -54,20 +57,29 @@ export function * loginFlow (): any {
  * @export
  * @returns {*}
  */
-export function * fetchProfileFlow (): any {
+export function* fetchProfileFlow(): any {
   while (true) {
-    let action: {type: string, payload: string} = yield take(FETCH_PROFILE_REQUEST)
-    yield put({type: SET_LOADING, payload: {scope: 'fetchProfile', loading: true}})
+    const action: { type: string, payload: string } = yield take(
+      FETCH_PROFILE_REQUEST
+    )
+    const username = action.payload
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'fetchProfile', loading: true }
+    })
     try {
-      let user = yield call(Api.fetchProfile, action.payload)
-      yield put({type: FETCH_PROFILE_SUCCESS, payload: user})
+      let user = yield call(Api.fetchProfile, username)
+      yield put({ type: FETCH_PROFILE_SUCCESS, payload: user })
     } catch (error) {
-      yield put({type: REQUEST_ERROR, payload: error.message})
+      yield put({ type: REQUEST_ERROR, payload: error.message })
       yield put(replace('/login')) // Redirect to the login page
     } finally {
-      yield put({type: SET_LOADING, payload: {scope: 'fetchProfile', loading: false}})
+      yield put({
+        type: SET_LOADING,
+        payload: { scope: 'fetchProfile', loading: false }
+      })
       yield delay(2000)
-      yield put({type: REQUEST_ERROR, payload: ''})
+      yield put({ type: REQUEST_ERROR, payload: '' })
     }
   }
 }
@@ -77,25 +89,25 @@ export function * fetchProfileFlow (): any {
  *
  * @export
  */
-export function * logoutFlow (): any {
+export function* logoutFlow(): any {
   while (true) {
     yield take(LOGOUT_REQUEST)
     try {
       let isLogout: ?boolean = yield call(Api.logout)
       if (isLogout) {
-        yield put({type: SET_AUTH, payload: false})
+        yield put({ type: SET_AUTH, payload: false })
         yield put(replace('/login')) // Redirect to the login page
       }
     } catch (error) {
-      yield put({type: REQUEST_ERROR, payload: error.message})
+      yield put({ type: REQUEST_ERROR, payload: error.message })
     } finally {
       yield delay(2000)
-      yield put({type: REQUEST_ERROR, payload: ''})
+      yield put({ type: REQUEST_ERROR, payload: '' })
     }
   }
 }
 
-export default function * rootSagas (): any {
+export default function* rootSagas(): any {
   yield fork(loginFlow)
   yield fork(logoutFlow)
   yield fork(fetchProfileFlow)

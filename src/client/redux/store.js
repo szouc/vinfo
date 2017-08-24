@@ -10,36 +10,27 @@ import createSagaMiddleware from 'redux-saga/lib/internal/middleware'
 import { isProd } from '../../shared/utils'
 import rootReducer from './reducer'
 import rootSagas from './saga'
+import type { fromJS as Immut } from 'immutable'
 
 export const history = createHistory()
 const browserRouterMiddleware = routerMiddleware(history)
 const sagaMiddleware = createSagaMiddleware()
 
 const logger = createLogger({
-  stateTransformer: (state) => {
-    let newState = {}
-
-    for (var i of Object.keys(state)) {
-      // flow-disable-next-line
-      if (Immutable.Iterable.isIterable(state[i])) {
-        newState[i] = state[i].toJS()
-      } else {
-        newState[i] = state[i]
-      }
-    };
-
-    return newState
-  }
+  stateTransformer: state => ({ ...state.toJS() })
 })
 
-const middleware = [ sagaMiddleware, browserRouterMiddleware, logger ]
+const middleware = [sagaMiddleware, browserRouterMiddleware, logger]
+
+const devtool = isProd
+  ? undefined
+  : window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+
+const initialState: Immut = Immutable.fromJS(devtool)
 
 export default createStore(
   rootReducer,
-  // eslint-disable-next-line no-underscore-dangle
-  isProd
-    ? undefined
-    : window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  initialState,
   applyMiddleware(...middleware)
 )
 

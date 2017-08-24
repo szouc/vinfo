@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { DB_URI } from './settings'
+import { DB_URI } from './constants'
 
 mongoose.Promise = global.Promise
 

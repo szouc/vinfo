@@ -8,10 +8,13 @@
     "jest": true
   },
   "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true
-    },
-    "sourceType": "module"
+      "jsx": true,
+      "classes": true,
+      "defaultParams": true
+    }
   },
   "settings": {
     "polyfills": ["fetch"]
@@ -19,15 +22,15 @@
   "extends": [
     "standard",
     "standard-jsx",
-    "plugin:flowtype/recommended"
+    "plugin:flowtype/recommended",
+    "plugin:react/recommended",
+    "prettier"
   ],
-  "plugins": [
-    "flowtype",
-    "compat"
-  ],
+  "plugins": ["flowtype", "react", "prettier", "compat"],
   "rules": {
+    "quotes": ["error", "single"],
     "semi": ["error", "never"],
-    "no-unexpected-multiline":"error",
+    "no-unexpected-multiline": "error",
     "compat/compat": "error",
     "no-const-assign": "warn",
     "no-this-before-super": "warn",
@@ -35,6 +38,9 @@
     "no-unreachable": "warn",
     "no-unused-vars": "warn",
     "constructor-super": "warn",
-    "valid-typeof": "warn"
+    "valid-typeof": "warn",
+    "react/prop-types": "off",
+    "react/no-render-return-value": "off",
+    "react/no-string-refs": "off"
   }
 }

@@ -1,4 +1,4 @@
-import User from '../api/user/models/user'
+import { User } from '../modules/user/models'
 import debugCreator from 'debug'
 import passport from 'passport'
 
@@ -12,7 +12,7 @@ const userRegister = (req, res, next) => {
       return next(err)
     }
     debug('user registered' + user)
-    req.login(user, (err) => {
+    req.login(user, err => {
       if (err) {
         return next(err)
       }
@@ -34,10 +34,10 @@ const resetPassword = (req, res, next) => {
           return next(err)
         }
         user.save()
-          .then((user) => {
-            res.status(200).send('password reset ok')
+          .then(user => {
+            res.status(200).json(user)
           })
-          .catch((e) => {
+          .catch(() => {
             res.status(500).send('Couldnt reset the password at this time')
           })
       })
@@ -53,14 +53,17 @@ const userLogin = (req, res, next) => {
       return next(err)
     }
     if (!user) {
-      res.status(401).send('Couldnt find the user')
+      // res.status(401).send('Couldnt find the user')
+      res.status(401).json(info)
     }
-    req.login(user, (err) => {
-      if (err) {
-        return next(err)
-      }
-      res.status(200).send('user logged in')
-    })
+    if (user) {
+      req.login(user, err => {
+        if (err) {
+          return next(err)
+        }
+        res.status(200).send('user logged in')
+      })
+    }
   })(req, res, next)
 }
 
@@ -81,14 +84,8 @@ const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     next()
   } else {
-    res.status(401).send('user unauthorized')
+    res.status(401).send('请登录')
   }
 }
 
-export {
-  userRegister,
-  resetPassword,
-  userLogin,
-  userLogout,
-  isAuthenticated
-}
+export { userRegister, resetPassword, userLogin, userLogout, isAuthenticated }

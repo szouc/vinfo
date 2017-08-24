@@ -2,7 +2,7 @@
 
 import { WEB_PORT } from '../shared/config'
 import app from './app'
-import conn from './config/conn'
+import db from './settings/db' 
 import http from 'http'
 import { isProd } from '../shared/utils'
 
@@ -24,14 +24,13 @@ const server = http.createServer(app)
  *  connect to the database
  */
 
-conn.getConnection()
-  .once('open', serverListen)
+db.getConnection().once('open', serverListen)
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-function serverListen () {
+function serverListen() {
   server.listen(port)
   server.on('error', onError)
   server.on('listening', onListening)
@@ -41,7 +40,7 @@ function serverListen () {
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort (val) {
+function normalizePort(val) {
   let port = parseInt(val, 10)
 
   if (isNaN(port)) {
@@ -61,14 +60,12 @@ function normalizePort (val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError (error) {
+function onError(error) {
   if (error.syscall !== 'listen') {
     throw error
   }
 
-  let bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port
+  let bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -87,12 +84,13 @@ function onError (error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening () {
+function onListening() {
   var addr = server.address()
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
 
-  console.log(`Server running on port ${bind} ${isProd ? '(production)'
-    : '(development).\nKeep "yarn dev:wds" running in an other terminal'}.`)
+  console.log(
+    `Server running on port ${bind} ${isProd
+      ? '(production)'
+      : '(development).\nKeep "yarn dev:wds" running in an other terminal'}.`
+  )
 }

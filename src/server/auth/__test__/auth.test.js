@@ -1,4 +1,4 @@
-import User from '../../api/user/models/user'
+import { User } from '../../modules/user/models'
 import app from '../../app'
 import mongoose from 'mongoose'
 import request from 'supertest'
@@ -11,7 +11,7 @@ const user = {
   'fullname': 'test test',
   'role': 'driver',
   'gender': 'male',
-  'active': true,
+  'active': false,
   'driver': {
     'license': 'ADBDE12345',
     'cert': {

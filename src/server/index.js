@@ -2,7 +2,7 @@
 
 import { WEB_PORT } from '../shared/config'
 import app from './app'
-import db from './settings/db' 
+import db from './settings/db'
 import http from 'http'
 import { isProd } from '../shared/utils'
 

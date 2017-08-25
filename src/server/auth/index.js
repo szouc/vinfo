@@ -36,6 +36,6 @@ export {
   LOGOUT_ROUTE,
   REGISTER_ROUTE,
   RESET_PASSWORD_ROUTE
-} 
+}
 
 export default authRouter

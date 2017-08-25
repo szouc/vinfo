@@ -14,7 +14,6 @@ export const FETCH_COMPANY_SUCCESS = defineConstant('FETCH_COMPANY_SUCCESS')
 export const FETCH_VEHICLE_REQUEST = defineConstant('FETCH_VEHICLE_REQUEST')
 export const FETCH_VEHICLE_SUCCESS = defineConstant('FETCH_VEHICLE_SUCCESS')
 
-
 export const FETCH_ORDER_REQUEST = defineConstant('FETCH_ORDER_REQUEST')
 export const FETCH_ORDER_SUCCESS = defineConstant('FETCH_ORDER_SUCCESS')
 export const ACCEPT_ORDER_REQUEST = defineConstant('ACCEPT_ORDER_REQUEST')

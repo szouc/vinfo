@@ -1,13 +1,13 @@
 // @flow
 
 import localforage from 'localforage'
-import fetch from '../../shared/settings/fetch'
-import { WEB_ADDR } from '../../shared/settings/config'
+import fetch from '../../../utils/fetch'
+import { WEB_ADDR } from '../../../settings/config'
 import {
   LOGIN_API,
   LOGOUT_API,
   GET_USER_BY_USERNAME_API
-} from './routes'
+} from './api'
 
 // response status
 const TRUE = true
@@ -52,7 +52,7 @@ async function setLocalLogout() {
  * @param {{username: string, password: string}} payload - The username and password of the user
  * @returns
  */
-async function login(payload: { username: string, password: string }) {
+async function login(payload: { username: string, password: string }): Promise<boolean> {
   // Gets log info from localStorage
   let loggedIn = await getLocalLoggedIn()
   if (loggedIn) {

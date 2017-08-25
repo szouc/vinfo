@@ -15,10 +15,7 @@ import 'antd/es/alert/style/css'
 
 const validate = values => {
   const errors = {}
-  const requiredFields = [
-    'username',
-    'password'
-  ]
+  const requiredFields = ['username', 'password']
   requiredFields.forEach(field => {
     if (!values.get(field)) {
       errors[field] = '必填'
@@ -35,32 +32,21 @@ const warn = values => {
   return warnings
 }
 
-const login = (props) => {
+const login = props => {
   const { handleSubmit, pristine, reset, submitting, errorMessage } = props
   return (
     <Row type='flex' justify='center'>
       <form onSubmit={handleSubmit} className={style.register_input}>
-        {
-          errorMessage
-            ? <Row>
-              <Alert message={errorMessage} type='error' banner />
-            </Row>
-            : null
-        }
+        {errorMessage
+          ? <Row>
+            <Alert message={errorMessage} type='error' banner />
+          </Row>
+          : null}
         <Row>
-          <Field
-            name='username'
-            component={Input}
-            label='工号'
-          />
+          <Field name='username' component={Input} label='工号' />
         </Row>
         <Row>
-          <Field
-            name='password'
-            component={Input}
-            label='密码'
-            type='password'
-          />
+          <Field name='password' component={Input} label='密码' type='password' />
         </Row>
         <Row type='flex' justify='space-around'>
           <Col span={8}>
@@ -68,8 +54,9 @@ const login = (props) => {
               size='large'
               type='primary'
               htmlType='submit'
-              disabled={pristine || submitting}>
-                确定
+              disabled={pristine || submitting}
+            >
+              确定
             </Button>
           </Col>
           <Col span={8}>
@@ -77,8 +64,9 @@ const login = (props) => {
               size='large'
               type='default'
               disabled={pristine || submitting}
-              onClick={reset}>
-                取消
+              onClick={reset}
+            >
+              取消
             </Button>
           </Col>
         </Row>

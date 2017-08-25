@@ -14,17 +14,7 @@ export default class Connection {
 
   static _createConnection () {
     const options = {
-      db: {
-        // Use ES6 Promise Library Class
-        promiseLibrary: global.Promise
-      },
-      server: {
-        socketOptions: {
-          autoReconnect: true, // Reconnect on error
-          keepAlive: 120// TCP KeepAlive on the socket
-        }
-      },
-      promiseLibrary: global.Promise// Use ES6 Promise Library Class
+      useMongoClient: true
     }
     const db = mongoose.createConnection(DB_URI, options)
     db.on('error', console.error.bind(console, 'connection error:'))

@@ -42,18 +42,18 @@ const NotFoundPage = () => {
     <div>
       <p>Page not found</p>
       <div className={style.register_input}>
-        <Field name="username" component={Input} label="工号" />
+        <Field name='username' component={Input} label='工号' />
       </div>
       <div className={style.register_input}>
-        <Field name="password" component={Input} label="密码" type="password" />
+        <Field name='password' component={Input} label='密码' type='password' />
       </div>
       <div className={style.register_input}>
         <Field
-          name="roles"
+          name='roles'
           component={Select}
-          label="角色"
+          label='角色'
           options={options}
-          mode="default"
+          mode='default'
         />
       </div>
     </div>

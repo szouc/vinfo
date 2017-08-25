@@ -20,15 +20,13 @@
     "polyfills": ["fetch"]
   },
   "extends": [
+    "prettier",
     "standard",
     "standard-jsx",
-    "plugin:flowtype/recommended",
-    "plugin:react/recommended",
-    "prettier"
+    "plugin:flowtype/recommended"
   ],
-  "plugins": ["flowtype", "react", "prettier", "compat"],
+  "plugins": ["flowtype", "prettier", "compat"],
   "rules": {
-    "quotes": ["error", "single"],
     "semi": ["error", "never"],
     "no-unexpected-multiline": "error",
     "compat/compat": "error",
@@ -39,8 +37,6 @@
     "no-unused-vars": "warn",
     "constructor-super": "warn",
     "valid-typeof": "warn",
-    "react/prop-types": "off",
-    "react/no-render-return-value": "off",
-    "react/no-string-refs": "off"
+    "space-before-function-paren": "off"
   }
 }

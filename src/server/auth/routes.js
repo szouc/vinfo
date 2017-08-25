@@ -16,4 +16,3 @@ export const REGISTER_API = createAuthRoute(REGISTER_ROUTE)
 export const LOGIN_API = createAuthRoute(LOGIN_ROUTE)
 export const LOGOUT_API = createAuthRoute(LOGOUT_ROUTE)
 export const RESET_PASSWORD_API = createAuthRoute(RESET_PASSWORD_ROUTE) // Only Manager Permissions
-

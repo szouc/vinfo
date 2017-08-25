@@ -16,7 +16,6 @@ import {
 const db = conn.getConnection()
 const Schema = mongoose.Schema
 
-
 // User Role Enum
 const roles = [STAFF, DRIVER, CAPTAIN, ACCOUNT, MANAGER, ADMIN]
 const genders = [MALE, FEMALE]

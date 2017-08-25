@@ -22,7 +22,7 @@ import * as Api from '../api'
  * Log in saga
  * @export
  */
-export function* loginFlow(): any {
+export function * loginFlow(): any {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(LOGIN_REQUEST)
     const username: string = action.payload.get('username')
@@ -57,7 +57,7 @@ export function* loginFlow(): any {
  * @export
  * @returns {*}
  */
-export function* fetchProfileFlow(): any {
+export function * fetchProfileFlow(): any {
   while (true) {
     const action: { type: string, payload: string } = yield take(
       FETCH_PROFILE_REQUEST
@@ -89,7 +89,7 @@ export function* fetchProfileFlow(): any {
  *
  * @export
  */
-export function* logoutFlow(): any {
+export function * logoutFlow(): any {
   while (true) {
     yield take(LOGOUT_REQUEST)
     try {
@@ -107,7 +107,7 @@ export function* logoutFlow(): any {
   }
 }
 
-export default function* rootSagas(): any {
+export default function * rootSagas(): any {
   yield fork(loginFlow)
   yield fork(logoutFlow)
   yield fork(fetchProfileFlow)

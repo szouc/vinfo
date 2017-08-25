@@ -25,7 +25,7 @@ const user = {
 
 describe('Authenticate', () => {
   beforeAll(() => {
-    mongoose.connect('mongodb://test:test@localhost:27017/test')
+    mongoose.connect('mongodb://test:test@localhost:27017/test', {useMongoClient: true})
   })
 
   afterAll(() => {

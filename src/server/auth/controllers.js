@@ -56,14 +56,14 @@ const userLogin = (req, res, next) => {
       // res.status(401).send('Couldnt find the user')
       res.status(401).json(info)
     }
-    if (user) {
-      req.login(user, err => {
-        if (err) {
-          return next(err)
-        }
-        res.status(200).send('user logged in')
-      })
-    }
+    // if (user) {
+    req.login(user, err => {
+      if (err) {
+        return next(err)
+      }
+      res.status(200).send('user logged in')
+    })
+    // }
   })(req, res, next)
 }
 

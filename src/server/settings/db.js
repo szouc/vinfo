@@ -14,7 +14,12 @@ export default class Connection {
 
   static _createConnection () {
     const options = {
-      useMongoClient: true
+      useMongoClient: true,
+      autoReconnect: true,
+      keepAlive: true,
+      socketTimeoutMS: 0,
+      reconnectTries: 30,
+      promiseLibrary: global.Promise
     }
     const db = mongoose.createConnection(DB_URI, options)
     db.on('error', console.error.bind(console, 'connection error:'))

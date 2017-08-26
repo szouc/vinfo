@@ -19,8 +19,8 @@
     "prod:start": "cross-env NODE_ENV=production pm2 start lib/server && pm2 logs",
     "prod:stop": "pm2 delete server",
     "lint": "eslint src webpack.config.babel.js webpack.dll.config.babel.js --ext .js,.jsx",
-    "test": "yarn lint && flow && jest --coverage",
-    "jest": "jest",
+    "test": "yarn lint && jest --coverage --forceExit",
+    "jest": "jest --forceExit",
     "precommit": "yarn test",
     "prepush": "yarn prod:build"
   },
@@ -145,5 +145,8 @@
     "env": [
       "jest"
     ]
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

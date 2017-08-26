@@ -14,7 +14,6 @@ import {
 } from './constants'
 
 const db = conn.getConnection()
-const Schema = mongoose.Schema
 
 // User Role Enum
 const roles = [STAFF, DRIVER, CAPTAIN, ACCOUNT, MANAGER, ADMIN]
@@ -85,7 +84,7 @@ const vinfoUser = {
   }
 }
 
-const UserSchema = new Schema(vinfoUser)
+const UserSchema = new mongoose.Schema(vinfoUser)
 
 const plmOptions = {
   limitAttempts: true

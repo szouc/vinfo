@@ -7222,7 +7222,7 @@ redux-persist-immutable@^4.3.0:
     redux-persist "^4.0.0"
     redux-persist-transform-immutable "^4.1.0"
 
-redux-persist-transform-immutable@^4.1.0, redux-persist-transform-immutable@^4.3.0:
+redux-persist-transform-immutable@^4.1.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/redux-persist-transform-immutable/-/redux-persist-transform-immutable-4.3.0.tgz#24720c99f0707dd99e920b95f851ae3d1baa6ed8"
   dependencies:

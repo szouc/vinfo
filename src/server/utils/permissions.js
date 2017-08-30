@@ -1,5 +1,3 @@
-import indexOf from 'lodash.indexof'
-
 import {
   DRIVER,
   CAPTAIN,
@@ -29,7 +27,7 @@ const isOwner = (req, res, next) => {
 
 // middleware for doing role-based permissions
 const permit = allowedArray => {
-  let isAllowed = role => indexOf(allowedArray, role) > -1
+  let isAllowed = (role) => allowedArray.includes(role)
 
   return (req, res, next) => {
     if (req.user && req.user.active && isAllowed(req.user.role)) {

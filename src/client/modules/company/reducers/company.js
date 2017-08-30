@@ -18,7 +18,7 @@ const InitialState = Immutable.fromJS({
   updateLoading: false,
   deleteLoading: false,
   error: '',
-  company: [],
+  company: '',
   current: {}
 })
 

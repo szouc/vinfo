@@ -2,7 +2,7 @@
 
 import { WEB_PORT } from '../shared/config'
 import app from './app'
-import { db } from './settings/db'
+import db from './settings/db'
 import http from 'http'
 import { isProd } from '../shared/utils'
 
@@ -23,20 +23,19 @@ const server = http.createServer(app)
 /**
  *  connect to the database
  */
-db.on('error', console.error.bind(console, 'connection error:'))
-db.once('open', function() {
-  serverListen()
-  console.log('Database connected successfully!')
-})
+
+db.getConnection().once('open', serverListen)
 
 /**
  * Listen on provided port, on all network interfaces.
  */
+
 function serverListen() {
   server.listen(port)
   server.on('error', onError)
   server.on('listening', onListening)
 }
+
 /**
  * Normalize a port into a number, string, or false.
  */

@@ -1,29 +1,21 @@
 import { User } from '../modules/user/models'
-import debugCreator from 'debug'
 import passport from 'passport'
 
-const debug = debugCreator('auth')
-
 const userRegister = (req, res, next) => {
-  debug('begin register')
   User.register(req.body, req.body.password, (err, user) => {
     if (err) {
-      debug('error register')
       return next(err)
     }
-    debug('user registered' + user)
     req.login(user, err => {
       if (err) {
         return next(err)
       }
-      debug('user login')
       res.status(200).send('user registered ok')
     })
   })
 }
 
 const resetPassword = (req, res, next) => {
-  debug('begin reset password')
   User.findByUsername(req.body.username, (err, user) => {
     if (err) {
       return next(err)
@@ -33,7 +25,8 @@ const resetPassword = (req, res, next) => {
         if (err) {
           return next(err)
         }
-        user.save()
+        user
+          .save()
           .then(user => {
             res.status(200).json(user)
           })
@@ -46,8 +39,6 @@ const resetPassword = (req, res, next) => {
 }
 
 const userLogin = (req, res, next) => {
-  debug('login begin')
-  debug(req.body)
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       return next(err)
@@ -67,14 +58,7 @@ const userLogin = (req, res, next) => {
   })(req, res, next)
 }
 
-// const userLogin = passport.authenticate('local', {
-//   successRedirect: '/',
-//   failureRedirect: '/auth/login',
-//   failureFlash: true
-// })
-
 const userLogout = (req, res) => {
-  debug('begin logout')
   req.logout()
   res.status(200).send('user logged out')
 }
@@ -88,4 +72,19 @@ const isAuthenticated = (req, res, next) => {
   }
 }
 
-export { userRegister, resetPassword, userLogin, userLogout, isAuthenticated }
+const isLoggedIn = (req, res) => {
+  if (req.isAuthenticated()) {
+    res.status(200).send('User loggedIn')
+  } else {
+    res.status(401).send('Please Log in')
+  }
+}
+
+export {
+  userRegister,
+  resetPassword,
+  userLogin,
+  userLogout,
+  isAuthenticated,
+  isLoggedIn
+}

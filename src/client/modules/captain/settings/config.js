@@ -1,1 +1,1 @@
-export const MODULE_NAME = 'driver'
+export const MODULE_NAME = 'captain'

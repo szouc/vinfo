@@ -1,1 +1,1 @@
-export { isOwner, permitDriver } from '../../utils/permissions'
+export { isOwner, permitManager } from '../../utils/permissions'

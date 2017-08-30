@@ -1,6 +1,7 @@
-import {db} from '../../settings/db'
+import conn from '../../settings/db'
 import mongoose from 'mongoose'
 
+const db = conn.getConnection()
 const Schema = mongoose.Schema
 
 const baseCompany = {

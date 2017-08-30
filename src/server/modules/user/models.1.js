@@ -1,5 +1,5 @@
+import conn from '../../settings/db'
 import mongoose from 'mongoose'
-import {db} from '../../settings/db'
 import passportLocalMongoose from 'passport-local-mongoose'
 
 import {
@@ -13,6 +13,7 @@ import {
   FEMALE
 } from './constants'
 
+const db = conn.getConnection()
 const Schema = mongoose.Schema
 
 // User Role Enum

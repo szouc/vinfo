@@ -13,12 +13,12 @@ import {
   resetPassword
 } from './controllers'
 
-import { permitDriver, isOwner } from './permissions'
+import { permitManager, isOwner } from './permissions'
 
 const userRouter = express.Router()
 
 userRouter.route('/')
-  .all(permitDriver)
+  .all(permitManager)
   .get(getAllUser)
   .post(createUser)
 

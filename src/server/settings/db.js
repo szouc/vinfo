@@ -1,31 +1,28 @@
+// Import the mongoose module
 import mongoose from 'mongoose'
-import { DB_URI } from './constants'
+import { DB_URI, TEST_URI } from './constants'
+import { isProd, isTest } from '../../shared/utils'
 
 mongoose.Promise = global.Promise
 
-export default class Connection {
-  static _conn = null;
-  static getConnection () {
-    if (Connection._conn === null) {
-      Connection._conn = Connection._createConnection()
+// Set up default mongoose connection
+const options = isTest
+  ? {
+    useMongoClient: true
+  }
+  : {
+    useMongoClient: true,
+    autoReconnect: true,
+    keepAlive: true,
+    socketTimeoutMS: 0,
+    reconnectTries: 30,
+    config: {
+      autoIndex: !isProd
     }
-    return Connection._conn
   }
 
-  static _createConnection () {
-    const options = {
-      useMongoClient: true,
-      autoReconnect: true,
-      keepAlive: true,
-      socketTimeoutMS: 0,
-      reconnectTries: 30,
-      promiseLibrary: global.Promise
-    }
-    const db = mongoose.createConnection(DB_URI, options)
-    db.on('error', console.error.bind(console, 'connection error:'))
-    db.once('open', function () {
-      console.log('Database connected successfully!')
-    })
-    return db
-  }
-}
+const URI = isTest ? TEST_URI : DB_URI
+
+const db = mongoose.createConnection(URI, options)
+
+export { db }

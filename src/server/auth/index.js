@@ -11,12 +11,16 @@ import {
   resetPassword,
   userLogin,
   userLogout,
-  userRegister
+  userRegister,
+  isLoggedIn
 } from './controllers'
 
 import { permitManager } from './permissions'
 
 const authRouter = express.Router()
+
+authRouter.route('/')
+  .get(isLoggedIn)
 
 authRouter.route(REGISTER_ROUTE)
   .post(userRegister)
@@ -30,12 +34,5 @@ authRouter.route(LOGIN_ROUTE)
 
 authRouter.route(LOGOUT_ROUTE)
   .get(userLogout)
-
-export {
-  LOGIN_ROUTE,
-  LOGOUT_ROUTE,
-  REGISTER_ROUTE,
-  RESET_PASSWORD_ROUTE
-}
 
 export default authRouter

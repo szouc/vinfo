@@ -84,6 +84,7 @@ app.get('/', (req, res) => {
 
 app.use(AUTH_ROOT_ROUTE, auth)
 app.use(API_ROOT_ROUTE, isAuthenticated, api)
+// app.use(API_ROOT_ROUTE, api)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,6 +1,6 @@
 // @flow
 
-import { applyMiddleware, createStore } from 'redux'
+import { compose, applyMiddleware, createStore } from 'redux'
 import { routerMiddleware } from 'react-router-redux'
 
 import Immutable from 'immutable'
@@ -11,6 +11,8 @@ import { isProd } from '../../shared/utils'
 import rootReducer from './reducer'
 import rootSagas from './saga'
 import type { fromJS as Immut } from 'immutable'
+import { persistStore, autoRehydrate } from 'redux-persist-immutable'
+import localforge from 'localforage'
 
 export const history = createHistory()
 const browserRouterMiddleware = routerMiddleware(history)
@@ -28,10 +30,15 @@ const devtool = isProd
 
 const initialState: Immut = Immutable.fromJS(devtool)
 
-export default createStore(
+const store = createStore(
   rootReducer,
   initialState,
-  applyMiddleware(...middleware)
+  compose(applyMiddleware(...middleware), autoRehydrate())
 )
 
 sagaMiddleware.run(rootSagas)
+persistStore(store, {
+  storage: localforge
+})
+
+export default store

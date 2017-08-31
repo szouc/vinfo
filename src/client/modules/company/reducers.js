@@ -3,23 +3,24 @@
 import {
   SET_LOADING,
   REQUEST_ERROR,
-  // CREATE_COMPANY_SUCCESS,
-  // UPDATE_COMPANY_SUCCESS,
+  CREATE_COMPANY_SUCCESS,
+  UPDATE_COMPANY_SUCCESS,
   // DELETE_COMPANY_SUCCESS,
   FETCH_LIST_SUCCESS
-} from '../constants'
+} from './actionTypess'
 
 import type { fromJS as Immut } from 'immutable'
-import Immutable from 'immutable'
+import { fromJS } from 'immutable'
 
-const InitialState = Immutable.fromJS({
+const InitialState = fromJS({
   fetchListLoading: false,
   createLoading: false,
   updateLoading: false,
   deleteLoading: false,
   error: '',
-  company: '',
-  current: {}
+  company: [],
+  current: '',
+  edit: ''
 })
 
 const companyReducer = (
@@ -33,8 +34,13 @@ const companyReducer = (
     case REQUEST_ERROR:
       return state.set('error', payload)
     case FETCH_LIST_SUCCESS:
-      const company = Immutable.fromJS(payload)
-      return state.get('company').push(company)
+      const company = fromJS(payload)
+      return state.get('company').clear().concat(company)
+    case CREATE_COMPANY_SUCCESS:
+      const newCompany = fromJS(payload)
+      return state.get('company').push(newCompany)
+    case UPDATE_COMPANY_SUCCESS:
+      return state.get('company')
     default:
       return state
   }

@@ -4,7 +4,7 @@ import {
   UPDATE_COMPANY_REQUEST,
   DELETE_COMPANY_REQUEST,
   FETCH_LIST_REQUEST
-} from '../constants'
+} from './actionTypes'
 
 export const fetchListRequest = createAction(FETCH_LIST_REQUEST)
 export const createCompanyRequest = createAction(CREATE_COMPANY_REQUEST)

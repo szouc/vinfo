@@ -1,4 +1,4 @@
-import { MODULE_NAME } from '../settings/config'
+import { MODULE_NAME } from './'
 
 const defineModule = module => (...constant) => {
   const SEPARATOR = '/'

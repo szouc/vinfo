@@ -1,6 +1,6 @@
 // @flow
 
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm } from 'redux-form/es/immutable'
 
 import { Input, Select } from '../../modules/shared/forms/index'
 import React from 'react'

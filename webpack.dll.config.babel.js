@@ -20,9 +20,9 @@ const nodeModulesPath = path.resolve(__dirname, './node_modules')
 const dllConfig = {
   entry: {
     vendors: [
+      'antd/es',
       'babel-polyfill',
-      'lodash.indexof',
-      'debug',
+      'localforage',
       'react',
       'react-dom',
       'history',
@@ -33,10 +33,14 @@ const dllConfig = {
       'redux',
       'redux-immutable',
       'redux-actions',
-      'redux-saga',
+      'redux-saga/lib',
+      'redux-saga/es',
       'react-redux',
+      'redux-persist-immutable',
+      'normalizr',
       'reselect',
-      'redux-form',
+      'redux-form/es',
+      'redux-form/lib',
       'redux-logger',
       'immutable'
     ]

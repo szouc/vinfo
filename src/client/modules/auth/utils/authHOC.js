@@ -51,24 +51,6 @@ async function validate(
   await validateUser(stateUsername, location, fetchProfile, redirectToLogin)
 }
 
-const mapStateToProps = state => {
-  return {
-    stateloggedIn: state.getIn(['auth', 'loggedIn']),
-    stateUsername: state.getIn(['auth', 'user', 'username'])
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    redirectToLogin: () => {
-      dispatch(replace('/login'))
-    },
-    fetchProfile: value => {
-      dispatch(fetchProfileRequest(value))
-    }
-  }
-}
-
 export default function authHOC(BaseComponent) {
   class CheckedComponent extends Component {
     componentWillMount() {
@@ -97,6 +79,24 @@ export default function authHOC(BaseComponent) {
     }
     render() {
       return <BaseComponent {...this.props} />
+    }
+  }
+
+  const mapStateToProps = state => {
+    return {
+      stateloggedIn: state.getIn(['auth', 'loggedIn']),
+      stateUsername: state.getIn(['auth', 'user', 'username'])
+    }
+  }
+
+  const mapDispatchToProps = dispatch => {
+    return {
+      redirectToLogin: () => {
+        dispatch(replace('/login'))
+      },
+      fetchProfile: value => {
+        dispatch(fetchProfileRequest(value))
+      }
     }
   }
 

@@ -8,7 +8,7 @@ import {
   LOGOUT_REQUEST,
   FETCH_PROFILE_REQUEST,
   FETCH_PROFILE_SUCCESS
-} from '../constants'
+} from './actionTypes'
 
 import { push, replace } from 'react-router-redux'
 import { call, put, take, fork } from 'redux-saga/effects'
@@ -16,7 +16,7 @@ import { delay } from 'redux-saga'
 // Use for redux-form/immutable
 import type { fromJS as Immut } from 'immutable'
 
-import * as Api from '../api'
+import * as Api from './api'
 
 /**
  * Log in saga

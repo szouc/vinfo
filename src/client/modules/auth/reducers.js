@@ -5,7 +5,7 @@ import {
   SET_AUTH,
   REQUEST_ERROR,
   FETCH_PROFILE_SUCCESS
-} from '../constants'
+} from './actionTypes'
 
 import type { fromJS as Immut } from 'immutable'
 import Immutable from 'immutable'

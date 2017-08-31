@@ -4,7 +4,7 @@ import {
   LOGOUT_REQUEST,
   REGISTER_REQUEST,
   FETCH_PROFILE_REQUEST
-} from '../constants'
+} from './actionTypes'
 
 export const loginRequest = createAction(LOGIN_REQUEST)
 export const logoutRequest = createAction(LOGOUT_REQUEST)

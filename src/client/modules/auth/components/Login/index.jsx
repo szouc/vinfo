@@ -1,11 +1,11 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form/immutable'
+import { Field, reduxForm } from 'redux-form/es/immutable'
 import Button from 'antd/es/button'
 import Row from 'antd/es/row'
 import Col from 'antd/es/col'
 import Alert from 'antd/es/alert'
 
-import { Input } from '../../../shared/forms/index'
+import { Input } from '../../../shared/forms'
 
 import style from './style.css'
 import 'antd/es/button/style/css'

@@ -12,7 +12,7 @@ import rootReducer from './reducer'
 import rootSagas from './saga'
 import type { fromJS as Immut } from 'immutable'
 import { persistStore, autoRehydrate } from 'redux-persist-immutable'
-import localforge from 'localforage'
+import localforage from 'localforage'
 
 export const history = createHistory()
 const browserRouterMiddleware = routerMiddleware(history)
@@ -38,7 +38,7 @@ const store = createStore(
 
 sagaMiddleware.run(rootSagas)
 persistStore(store, {
-  storage: localforge
+  storage: localforage
 })
 
 export default store

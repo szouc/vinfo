@@ -1,4 +1,4 @@
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm } from 'redux-form/es/immutable'
 import { Link, Route } from 'react-router-dom'
 
 import React from 'react'

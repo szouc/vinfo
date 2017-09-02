@@ -32,7 +32,7 @@ const warn = values => {
   return warnings
 }
 
-const login = props => {
+const Login = props => {
   const { handleSubmit, pristine, reset, submitting, errorMessage } = props
   return (
     <Row type='flex' justify='center'>
@@ -79,4 +79,4 @@ export default reduxForm({
   form: 'registerForm',
   validate,
   warn
-})(login)
+})(Login)

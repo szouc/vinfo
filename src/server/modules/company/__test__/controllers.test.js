@@ -54,9 +54,10 @@ describe('Company Basic Operations', () => {
   })
 
   test('Should create a company', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const res = await agent.post(COMPANY_ROOT_API).send(company)
     expect(res.statusCode).toBe(200)
+    expect(res.body.name).toBe(company.name)
   })
 
   test('Should not create a company', async () => {

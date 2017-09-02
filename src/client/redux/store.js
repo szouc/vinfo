@@ -29,11 +29,12 @@ const devtool = isProd
   : window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 
 const initialState: Immut = Immutable.fromJS(devtool)
+const enhancer = compose(applyMiddleware(...middleware), autoRehydrate())
 
 const store = createStore(
   rootReducer,
   initialState,
-  compose(applyMiddleware(...middleware), autoRehydrate())
+  enhancer
 )
 
 sagaMiddleware.run(rootSagas)

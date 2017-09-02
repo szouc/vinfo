@@ -1,4 +1,4 @@
-import {db} from '../../settings/db'
+import { db } from '../../settings/db'
 import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
@@ -7,7 +7,6 @@ const baseCompany = {
   name: {
     type: String,
     trim: true,
-    unique: true,
     required: true
   },
   addr: {
@@ -26,6 +25,8 @@ const baseCompany = {
 }
 
 const CompanySchema = new Schema(baseCompany)
+
+CompanySchema.index({ name: 1, addr: 1 }, { unique: true })
 
 const Company = db.model('Company', CompanySchema)
 

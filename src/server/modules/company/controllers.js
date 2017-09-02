@@ -2,8 +2,8 @@ import { Company } from './models'
 
 function createCompany(req, res) {
   Company.create(req.body)
-    .then(() => {
-      res.status(200).send('You have added a new company')
+    .then((doc) => {
+      res.status(200).json(doc)
     })
     .catch((e) => {
       res.status(500).send('Couldnt save the company at this time')
@@ -61,7 +61,7 @@ function deleteCompanyById(req, res) {
   Company.findByIdAndUpdate(req.params.id, { active: false }, { new: true })
     .then(doc => {
       if (doc) {
-        res.status(200).json(doc)
+        res.status(200).send('Delete a company By Id')
       } else {
         res.status(400).send('Fault to deleted a company')
       }

@@ -61,7 +61,7 @@ function deleteCompanyById(req, res) {
   Company.findByIdAndUpdate(req.params.id, { active: false }, { new: true })
     .then(doc => {
       if (doc) {
-        res.status(200).send('Delete a company By Id')
+        res.status(200).json(doc)
       } else {
         res.status(400).send('Fault to deleted a company')
       }

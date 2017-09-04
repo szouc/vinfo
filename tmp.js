@@ -79,18 +79,21 @@ const obj3 = [obj2]
 
 const normalizeDate = normalize(tmpObj, obj3)
 const normalizeCompany = fromJS(normalizeDate.entities)
-console.log(normalizeDate)
+console.log(normalizeCompany)
+console.log(JSON.stringify(normalizeCompany))
 
-const createCompany = normalize(tmpObj3, obj2)
-const normalizeNewCompany = fromJS(createCompany.entities)
+// const createCompany = normalize(tmpObj3, obj2)
+// const normalizeNewCompany = fromJS(createCompany.entities)
 
-const semifinalCompany = normalizeCompany.mergeDeep(normalizeNewCompany)
+// const semifinalCompany = normalizeCompany.mergeDeep(normalizeNewCompany)
 
-const finalCompany = semifinalCompany.deleteIn(['friend', '3'])
+// const finalCompany = semifinalCompany.deleteIn(['friend', '3'])
 
-console.log(normalizeCompany.toJS())
+// console.log(fromJS([...normalizeCompany.get('company').values()]).toJS())
+// console.log(normalizeCompany.get('company').valueSeq())
+// console.log(normalizeCompany.get('company').toJS())
 
-console.log(finalCompany.getIn(['company', '2', 'friends']).toJS())
+// console.log(finalCompany.getIn(['company', '2', 'friends']).toJS())
 
-const denormalizeDate = denormalize([1, 2, 3], [obj2], finalCompany.toJS())
-console.log(denormalizeDate)
+// const denormalizeDate = denormalize([1, 2, 3], [obj2], finalCompany.toJS())
+// console.log(denormalizeDate)

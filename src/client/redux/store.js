@@ -11,8 +11,8 @@ import { isProd } from '../../shared/utils'
 import rootReducer from './reducer'
 import rootSagas from './saga'
 import type { fromJS as Immut } from 'immutable'
-import { persistStore, autoRehydrate } from 'redux-persist-immutable'
-import localforage from 'localforage'
+// import { persistStore, autoRehydrate } from 'redux-persist-immutable'
+// import localforage from 'localforage'
 
 export const history = createHistory()
 const browserRouterMiddleware = routerMiddleware(history)
@@ -29,7 +29,8 @@ const devtool = isProd
   : window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 
 const initialState: Immut = Immutable.fromJS(devtool)
-const enhancer = compose(applyMiddleware(...middleware), autoRehydrate())
+// const enhancer = compose(applyMiddleware(...middleware), autoRehydrate())
+const enhancer = compose(applyMiddleware(...middleware))
 
 const store = createStore(
   rootReducer,
@@ -38,8 +39,8 @@ const store = createStore(
 )
 
 sagaMiddleware.run(rootSagas)
-persistStore(store, {
-  storage: localforage
-})
+// persistStore(store, {
+//   storage: localforage
+// })
 
 export default store

@@ -2,8 +2,8 @@ import { Product } from './models'
 
 function createProduct(req, res) {
   Product.create(req.body)
-    .then(() => {
-      res.status(200).send('You have added a new product')
+    .then((doc) => {
+      res.status(200).json(doc)
     })
     .catch(e => {
       res.status(500).send('Couldnt save the product at this time')

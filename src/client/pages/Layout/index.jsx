@@ -5,8 +5,7 @@ import React from 'react'
 import Header from '../../modules/auth/containers/Header'
 import { Route, Switch } from 'react-router-dom'
 // import Carousel from '../Carousel'
-// import CompanyTable from '../Table'
-import CompanyCreateForm from '../../modules/company/containers/CompanyCreateForm'
+import Company from '../Company'
 import NotFound from '../NotFound'
 
 const { Content, Footer } = Layout
@@ -17,7 +16,7 @@ const baseLayout = ({ match }) => {
       <Header />
       <Content>
         <Switch>
-          <Route exact path={match.url} render={() => <CompanyCreateForm />} />
+          <Route exact path={match.url} render={() => <Company />} />
           <Route render={() => <NotFound />} />
         </Switch>
       </Content>

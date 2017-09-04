@@ -13,10 +13,9 @@ import {
 
 import fetch from '../../../utils/fetch'
 
-const TRUE = true
 const STATUS_OK = 200
 
-async function createCompany(payload: { name: string, addr: string }): ?Immut {
+async function createCompany(payload: Immut): ?Immut {
   const options = {
     method: 'post',
     body: JSON.stringify(payload),
@@ -59,7 +58,7 @@ async function getCompanyById(id: string): ?Immut {
 
 async function updateCompanyById(
   id: string,
-  payload: { name?: string, addr?: string }
+  payload: Immut
 ): ?Immut {
   const options = {
     method: 'put',
@@ -80,17 +79,17 @@ async function deleteCompanyById(id: string) {
   }
   const response = await fetch(COMPANY_ID_API.replace(/:id/, id), options)
   if (response.status === STATUS_OK) {
-    return TRUE
+    const data = await response.json()
+    const company = normalize(data, companySchema)
+    return fromJS(company)
   }
   throw new Error('Something wrong at deleteCompanyById Process')
 }
 
 const selectCompany = (state: Object, id: string) => denormalize(id, companySchema, state)
-const selectCompanies = (state: Object, ...id: Array<string>) => denormalize(id, [companySchema], state)
 
 export {
   selectCompany,
-  selectCompanies,
   createCompany,
   getAllCompanies,
   getCompanyById,

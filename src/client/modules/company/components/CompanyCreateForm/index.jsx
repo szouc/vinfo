@@ -46,7 +46,7 @@ const CompanyCreateForm = props => {
             htmlType='submit'
             disabled={pristine || submitting}
           >
-            确定
+            添加
           </Button>
           <Button
             size='large'
@@ -54,7 +54,7 @@ const CompanyCreateForm = props => {
             disabled={pristine || submitting}
             onClick={reset}
           >
-            取消
+            清空
           </Button>
         </Col>
       </Row>

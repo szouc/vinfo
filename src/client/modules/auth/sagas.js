@@ -33,7 +33,7 @@ export function * loginFlow(): any {
       let isAuth: ?boolean = yield call(Api.login, { username, password })
       if (isAuth) {
         yield put({ type: SET_AUTH, payload: true })
-        yield put({ type: FETCH_PROFILE_REQUEST, payload: username })
+        // yield put({ type: FETCH_PROFILE_REQUEST, payload: username })
         yield put(push('/')) // Redirect to the root
       }
     } catch (error) {

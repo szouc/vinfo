@@ -21,6 +21,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const CompanyListTableContainer = connect(mapStateToProps, mapDispatchToProps)(CompanyListTable)
-
-export default CompanyListTableContainer
+export default connect(mapStateToProps, mapDispatchToProps)(CompanyListTable)

@@ -16,6 +16,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const CompanyCreateFormContainer = connect(mapStateToProps, mapDispatchToProps)(CompanyCreateForm)
-
-export default CompanyCreateFormContainer
+export default connect(mapStateToProps, mapDispatchToProps)(CompanyCreateForm)

@@ -1,4 +1,6 @@
 import React from 'react'
+import BaseComponent from '../../../shared/BaseComponent'
+
 import { Field, reduxForm } from 'redux-form/es/immutable'
 import Button from 'antd/es/button'
 import Row from 'antd/es/row'
@@ -32,49 +34,61 @@ const warn = values => {
   return warnings
 }
 
-const Login = props => {
-  const { handleSubmit, pristine, reset, submitting, errorMessage } = props
-  return (
-    <Row type='flex' justify='center'>
-      <form onSubmit={handleSubmit} className={style.register_input}>
-        {errorMessage
-          ? <Row>
-            <Alert message={errorMessage} type='error' banner />
+class Login extends BaseComponent {
+  render() {
+    const {
+      handleSubmit,
+      pristine,
+      reset,
+      submitting,
+      errorMessage
+    } = this.props
+    return (
+      <Row type='flex' justify='center'>
+        <form onSubmit={handleSubmit} className={style.register_input}>
+          {errorMessage
+            ? <Row>
+              <Alert message={errorMessage} type='error' banner />
+            </Row>
+            : null}
+          <Row>
+            <Field name='username' component={Input} label='工号' />
           </Row>
-          : null}
-        <Row>
-          <Field name='username' component={Input} label='工号' />
-        </Row>
-        <Row>
-          <Field name='password' component={Input} label='密码' type='password' />
-        </Row>
-        <Row type='flex' justify='space-around'>
-          <Col span={8}>
-            <Button
-              size='large'
-              type='primary'
-              htmlType='submit'
-              disabled={pristine || submitting}
-            >
-              确定
-            </Button>
-          </Col>
-          <Col span={8}>
-            <Button
-              size='large'
-              type='default'
-              disabled={pristine || submitting}
-              onClick={reset}
-            >
-              取消
-            </Button>
-          </Col>
-        </Row>
-      </form>
-    </Row>
-  )
+          <Row>
+            <Field
+              name='password'
+              component={Input}
+              label='密码'
+              type='password'
+            />
+          </Row>
+          <Row type='flex' justify='space-around'>
+            <Col span={8}>
+              <Button
+                size='large'
+                type='primary'
+                htmlType='submit'
+                disabled={pristine || submitting}
+              >
+                确定
+              </Button>
+            </Col>
+            <Col span={8}>
+              <Button
+                size='large'
+                type='default'
+                disabled={pristine || submitting}
+                onClick={reset}
+              >
+                取消
+              </Button>
+            </Col>
+          </Row>
+        </form>
+      </Row>
+    )
+  }
 }
-
 export default reduxForm({
   form: 'registerForm',
   validate,

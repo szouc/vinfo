@@ -1,30 +1,32 @@
-import React, { Component } from 'react'
+import React from 'react'
+import BaseComponent from '../../../shared/BaseComponent'
+
 import Table from 'antd/es/table'
 import Icon from 'antd/es/icon'
 import 'antd/es/table/style/css'
 import 'antd/es/icon/style/css'
 
-class CompanyListTable extends Component {
+class CompanyListTable extends BaseComponent {
+  constructor(props) {
+    super(props)
+  }
+
   componentDidMount() {
     this.props.getAllCompanies()
   }
   render() {
     const { companies } = this.props
-    const data = companies.valueSeq().toJS()
+    const data = companies.toArray()
     const columns = [
       {
         title: '公司名称',
-        dataIndex: 'name',
         key: 'name',
-        render: text =>
-          <a href='#'>
-            {text}
-          </a>
+        render: (text, record) => record.get('name')
       },
       {
         title: '公司地址',
-        dataIndex: 'addr',
-        key: 'addr'
+        key: 'addr',
+        render: (text, record) => record.get('addr')
       },
       {
         title: '相关操作',
@@ -32,10 +34,12 @@ class CompanyListTable extends Component {
         render: (text, record) =>
           <span>
             <a href='#'>
-              Action 一 {record._id}
+              Action 一 {record.get('_id')}
             </a>
             <span className='ant-divider' />
-            <button onClick={() => this.props.deleteCompanyById(record._id)}>Delete</button>
+            <button onClick={() => this.props.deleteCompanyById(record.get('_id'))}>
+              Delete
+            </button>
             <span className='ant-divider' />
             <a href='#' className='ant-dropdown-link'>
               More actions <Icon type='down' />
@@ -43,27 +47,6 @@ class CompanyListTable extends Component {
           </span>
       }
     ]
-
-    // const data = [
-    //   {
-    //     key: '1',
-    //     name: 'John Brown',
-    //     age: 32,
-    //     addr: 'New York No. 1 Lake Park'
-    //   },
-    //   {
-    //     key: '2',
-    //     name: 'Jim Green',
-    //     age: 42,
-    //     addr: 'London No. 1 Lake Park'
-    //   },
-    //   {
-    //     key: '3',
-    //     name: 'Joe Black',
-    //     age: 32,
-    //     addr: 'Sidney No. 1 Lake Park'
-    //   }
-    // ]
 
     return <Table columns={columns} dataSource={data} />
   }

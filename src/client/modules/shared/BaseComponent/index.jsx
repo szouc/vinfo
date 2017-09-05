@@ -2,6 +2,10 @@ import React from 'react'
 import { is } from 'immutable'
 
 class BaseComponent extends React.Component {
+  constructor(props, context, updater) {
+    super(props, context, updater)
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const thisProps = this.props || {}
     const thisState = this.state || {}

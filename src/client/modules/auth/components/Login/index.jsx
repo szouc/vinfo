@@ -35,6 +35,10 @@ const warn = values => {
 }
 
 class Login extends BaseComponent {
+  constructor (props) {
+    super(props)
+  }
+
   render() {
     const {
       handleSubmit,
@@ -89,6 +93,7 @@ class Login extends BaseComponent {
     )
   }
 }
+
 export default reduxForm({
   form: 'registerForm',
   validate,

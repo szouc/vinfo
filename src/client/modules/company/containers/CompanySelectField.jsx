@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import CompanySelectField from '../components/CompanySelectField'
+import { CompanySelectField } from '../components'
 
 const mapStateToProps = state => {
   return {
@@ -8,4 +8,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(CompanySelectField)
+export default connect(mapStateToProps, null)(CompanySelectField)

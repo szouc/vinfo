@@ -1,7 +1,6 @@
-
 import { connect } from 'react-redux'
 
-import CompanyListTable from '../components/CompanyListTable'
+import { CompanyListTable } from '../components'
 import { deleteCompanyRequest, fetchCompanyListRequest } from '../actions'
 
 const mapStateToProps = state => {

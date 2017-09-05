@@ -1,9 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react'
+import BaseComponent from '../../../shared/BaseComponent'
+
 import { Field } from 'redux-form/es/immutable'
 
 import { Select } from '../../../shared/forms/index'
 
-class CompanySelectField extends Component() {
+class CompanySelectField extends BaseComponent {
+  constructor(props) {
+    super(props)
+  }
+
   render() {
     const { name, label } = this.props
     const options = this.props.options.valueSeq().toJS()
@@ -14,6 +20,8 @@ class CompanySelectField extends Component() {
         label={label}
         options={options}
         mode='default'
+        valueKey='name'
+        labelKey='name'
       />
     )
   }

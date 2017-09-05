@@ -6,6 +6,7 @@ import Col from 'antd/es/col'
 import Alert from 'antd/es/alert'
 
 import { Input } from '../../../shared/forms'
+import BaseComponent from '../../../shared/BaseComponent'
 
 import 'antd/es/button/style/css'
 import 'antd/es/row/style/css'
@@ -23,43 +24,49 @@ const validate = values => {
   return errors
 }
 
-const CompanyCreateForm = props => {
-  const { handleSubmit, pristine, reset, submitting, errorMessage } = props
-  return (
-    <form onSubmit={handleSubmit}>
-      {errorMessage
-        ? <Row>
-          <Alert message={errorMessage} type='error' banner />
+class CompanyCreateForm extends BaseComponent {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    const { handleSubmit, pristine, reset, submitting, errorMessage } = this.props
+    return (
+      <form onSubmit={handleSubmit}>
+        {errorMessage
+          ? <Row>
+            <Alert message={errorMessage} type='error' banner />
+          </Row>
+          : null}
+        <Row type='flex' justify='space-between'>
+          <Col span={8}>
+            <Field name='name' component={Input} placeholder='公司名称' />
+          </Col>
+          <Col span={12}>
+            <Field name='addr' component={Input} placeholder='公司地址' />
+          </Col>
+          <Col span={4}>
+            <Button
+              size='large'
+              type='primary'
+              htmlType='submit'
+              disabled={pristine || submitting}
+            >
+              添加
+            </Button>
+            <Button
+              size='large'
+              type='default'
+              disabled={pristine || submitting}
+              onClick={reset}
+            >
+              清空
+            </Button>
+          </Col>
         </Row>
-        : null}
-      <Row type='flex' justify='space-between'>
-        <Col span={8}>
-          <Field name='name' component={Input} placeholder='公司名称' />
-        </Col>
-        <Col span={12}>
-          <Field name='addr' component={Input} placeholder='公司地址' />
-        </Col>
-        <Col span={4}>
-          <Button
-            size='large'
-            type='primary'
-            htmlType='submit'
-            disabled={pristine || submitting}
-          >
-            添加
-          </Button>
-          <Button
-            size='large'
-            type='default'
-            disabled={pristine || submitting}
-            onClick={reset}
-          >
-            清空
-          </Button>
-        </Col>
-      </Row>
-    </form>
-  )
+      </form>
+    )
+  }
 }
 
 export default reduxForm({

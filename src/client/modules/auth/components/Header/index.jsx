@@ -19,6 +19,10 @@ import 'antd/es/col/style/css'
 const { Header } = Layout
 
 class AuthHeader extends BaseComponent {
+  constructor (props) {
+    super(props)
+  }
+
   render() {
     const { username, handleLogout } = this.props
     const userMenu = (

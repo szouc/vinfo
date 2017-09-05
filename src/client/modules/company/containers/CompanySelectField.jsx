@@ -2,10 +2,20 @@ import { connect } from 'react-redux'
 
 import { CompanySelectField } from '../components'
 
+import { fetchCompanyListRequest } from '../actions'
+
 const mapStateToProps = state => {
   return {
-    options: state.getIn(['company', 'companyEntity'])
+    nameOptions: state.getIn(['company', 'companyEntity'])
   }
 }
 
-export default connect(mapStateToProps, null)(CompanySelectField)
+const mapDispatchToProps = dispatch => {
+  return {
+    getAllCompanies: () => {
+      dispatch(fetchCompanyListRequest())
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompanySelectField)

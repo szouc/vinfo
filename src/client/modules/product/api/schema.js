@@ -9,7 +9,7 @@ export const priceHistorySchema = new schema.Entity(
 export const productSchema = new schema.Entity(
   'products',
   {
-    price_history: priceHistorySchema
+    price_history: [priceHistorySchema]
   },
   { idAttribute: '_id' }
 )

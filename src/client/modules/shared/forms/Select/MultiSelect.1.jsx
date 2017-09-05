@@ -16,8 +16,8 @@ const withOptions = (OptionType, getType) => Component =>
       valueKey: 'value',
       labelKey: 'label',
       optionsKey: 'options'
-    }
-    render() {
+    };
+    render () {
       const props = this.props
 
       if (getType) {
@@ -26,16 +26,17 @@ const withOptions = (OptionType, getType) => Component =>
       const valueKey = props.valueKey
       const labelKey = props.labelKey
       const optionsKey = props.optionsKey
-      const options = props[optionsKey].toArray() || getEmptyArr()
+      const options = props[optionsKey] || getEmptyArr()
 
       return (
         <div>
           <div ref='container' />
           <Component getPopupContainer={() => this.refs.container} {...props}>
-            {options.map(record =>
-              <OptionType key={record.get('_id')} value={record.get(valueKey)}>
-                {record.get(labelKey)}
-              </OptionType>
+            {options.map(
+              ({[valueKey]: value, [labelKey]: label, ...rest}, key) =>
+                <OptionType {...rest} key={key} value={String(value)}>
+                  {label}
+                </OptionType>
             )}
           </Component>
         </div>
@@ -45,6 +46,6 @@ const withOptions = (OptionType, getType) => Component =>
 
 export const RadioField = withOptions(
   null,
-  ({ button }) => (button ? RadioButton : Radio)
+  ({button}) => (button ? RadioButton : Radio)
 )(RadioGroup)
 export const SelectField = withOptions(Option)(Select)

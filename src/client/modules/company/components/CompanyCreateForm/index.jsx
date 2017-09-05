@@ -7,6 +7,7 @@ import Alert from 'antd/es/alert'
 
 import { Input } from '../../../shared/forms'
 import BaseComponent from '../../../shared/BaseComponent'
+import { CompanySelectField } from '../../containers'
 
 import 'antd/es/button/style/css'
 import 'antd/es/row/style/css'
@@ -30,7 +31,13 @@ class CompanyCreateForm extends BaseComponent {
   }
 
   render() {
-    const { handleSubmit, pristine, reset, submitting, errorMessage } = this.props
+    const {
+      handleSubmit,
+      pristine,
+      reset,
+      submitting,
+      errorMessage
+    } = this.props
     return (
       <form onSubmit={handleSubmit}>
         {errorMessage
@@ -64,6 +71,7 @@ class CompanyCreateForm extends BaseComponent {
             </Button>
           </Col>
         </Row>
+        <CompanySelectField nameKey='fromName' addrKey='fromAddr' />
       </form>
     )
   }

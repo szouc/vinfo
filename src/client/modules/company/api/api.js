@@ -11,7 +11,7 @@ import {
   COMPANY_ROOT_API
 } from './apiRoutes'
 
-import fetch from '../../../utils/fetch'
+import fetch from '@clientUtils/fetch'
 
 const STATUS_OK = 200
 

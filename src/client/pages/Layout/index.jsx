@@ -2,10 +2,11 @@ import 'antd/es/layout/style/css'
 
 import Layout from 'antd/es/layout'
 import React from 'react'
-import Header from '../../modules/auth/containers/Header'
+import Header from '@clientModules/auth/containers/Header'
 import { Route, Switch } from 'react-router-dom'
 // import Carousel from '../Carousel'
-import Company from '../Company'
+// import Company from '../Company'
+import Product from '../Product'
 import NotFound from '../NotFound'
 
 const { Content, Footer } = Layout
@@ -16,7 +17,7 @@ const baseLayout = ({ match }) => {
       <Header />
       <Content>
         <Switch>
-          <Route exact path={match.url} render={() => <Company />} />
+          <Route exact path={match.url} render={() => <Product />} />
           <Route render={() => <NotFound />} />
         </Switch>
       </Content>

@@ -4,8 +4,7 @@ import Login from '../components/Login'
 import { loginRequest } from '../actions'
 
 const mapStateToProps = state => {
-  const auth = state.get('auth')
-  const errorMessage = auth.get('error')
+  const errorMessage = state.getIn(['auth', 'error'])
   return { errorMessage }
 }
 

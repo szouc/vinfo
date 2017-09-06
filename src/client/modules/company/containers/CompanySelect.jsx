@@ -1,12 +1,13 @@
 import { connect } from 'react-redux'
 
-import { CompanySelectField } from '../components'
+import CompanySelect from '../components/CompanySelect'
 
 import { fetchCompanyListRequest } from '../actions'
 
 const mapStateToProps = state => {
+  const companyEntity = state.getIn(['company', 'companyEntity'])
   return {
-    nameOptions: state.getIn(['company', 'companyEntity'])
+    companyEntity
   }
 }
 
@@ -18,4 +19,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompanySelectField)
+export default connect(mapStateToProps, mapDispatchToProps)(CompanySelect)

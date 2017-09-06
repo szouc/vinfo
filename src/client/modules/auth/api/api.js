@@ -1,8 +1,7 @@
 // @flow
 
 import localforage from 'localforage'
-import fetch from '../../../utils/fetch'
-import { WEB_ADDR } from '../../../settings/config'
+import fetch from '@clientUtils/fetch'
 import { LOGIN_API, LOGOUT_API, GET_USER_BY_USERNAME_API } from './apiRoutes'
 
 // response status
@@ -63,7 +62,7 @@ async function login(payload: {
   }
 
   // Fetch options
-  let url = WEB_ADDR + LOGIN_API
+  let url = LOGIN_API
   let options = {
     method: 'post',
     body: JSON.stringify(payload),
@@ -88,7 +87,7 @@ async function login(payload: {
  */
 async function logout() {
   // Fetch url & options
-  let url: string = WEB_ADDR + LOGOUT_API
+  let url: string = LOGOUT_API
   let options: { method: string } = { method: 'get' }
 
   // Logs a user out from the server API
@@ -107,8 +106,7 @@ async function logout() {
  */
 async function fetchProfile(username: string) {
   // Fetch url & options
-  let url: string =
-    WEB_ADDR + GET_USER_BY_USERNAME_API.replace(/:username/, username)
+  let url: string = GET_USER_BY_USERNAME_API.replace(/:username/, username)
   let options: { method: string } = { method: 'get' }
 
   // Fetch a user info from the server API

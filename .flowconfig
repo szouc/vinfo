@@ -7,6 +7,12 @@
 
 [options]
 suppress_comment= \\(.\\|\n\\)*\\flow-disable-next-line
+module.name_mapper='^@client' ->'<PROJECT_ROOT>/src/client'
+module.name_mapper='^@server' ->'<PROJECT_ROOT>/src/server'
+module.name_mapper='^@shared' ->'<PROJECT_ROOT>/src/shared'
+module.name_mapper='^@clientModulesShared' ->'<PROJECT_ROOT>/src/client/modules/shared'
+module.name_mapper='^@clientModules' ->'<PROJECT_ROOT>/src/client/modules'
+module.name_mapper='^@clientUtils' ->'<PROJECT_ROOT>/src/client/utils'
 
 [libs]
 .*/flow-typed/.*

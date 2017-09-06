@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import { CompanyCreateForm } from '../components'
+import CompanyCreateForm from '../components/CompanyCreateForm'
 import { createCompanyRequest } from '../actions'
 
 const mapStateToProps = state => {

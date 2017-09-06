@@ -1,5 +1,3 @@
-// @flow
-
 import { STATIC_PATH, WDS_PORT } from './src/shared/config'
 
 import AssetsPlugin from 'assets-webpack-plugin'
@@ -20,6 +18,9 @@ const serverPath = path.resolve(__dirname, './src/server')
 const sharedPath = path.resolve(__dirname, './src/shared')
 const outputPath = path.resolve(__dirname, './dist')
 const nodeModulesPath = path.resolve(__dirname, './node_modules')
+const clientUtilsPath = path.resolve(__dirname, './src/client/utils')
+const clientModulesPath = path.resolve(__dirname, './src/client/modules')
+const clientModulesSharedPath = path.resolve(__dirname, './src/client/modules/shared')
 
 //
 //
@@ -121,7 +122,15 @@ const clientConfig = {
     modules: [
       srcPath,
       nodeModulesPath
-    ]
+    ],
+    alias: {
+      '@server': serverPath,
+      '@client': clientPath,
+      '@shared': sharedPath,
+      '@clientModules': clientModulesPath,
+      '@clientModulesShared': clientModulesSharedPath,
+      '@clientUtils': clientUtilsPath
+    }
   },
 
   module: {

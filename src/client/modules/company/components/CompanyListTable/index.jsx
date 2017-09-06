@@ -1,5 +1,5 @@
 import React from 'react'
-import BaseComponent from '../../../shared/BaseComponent'
+import BaseComponent from '@clientModulesShared/BaseComponent'
 
 import Table from 'antd/es/table'
 import Icon from 'antd/es/icon'

@@ -1,19 +1,22 @@
 import React from 'react'
-import BaseComponent from '../../../shared/BaseComponent'
+import BaseComponent from '@clientModulesShared/BaseComponent'
+import formItemHOC from '@clientModulesShared/formItemHOC'
 
 import { Field, reduxForm } from 'redux-form/es/immutable'
 import Button from 'antd/es/button'
 import Row from 'antd/es/row'
 import Col from 'antd/es/col'
 import Alert from 'antd/es/alert'
-
-import { Input } from '../../../shared/forms'
+import Input from 'antd/es/input'
 
 import style from './style.css'
+import 'antd/es/input/style/css'
 import 'antd/es/button/style/css'
 import 'antd/es/row/style/css'
 import 'antd/es/col/style/css'
 import 'antd/es/alert/style/css'
+
+const AntInput = formItemHOC(Input)
 
 const validate = values => {
   const errors = {}
@@ -56,12 +59,12 @@ class Login extends BaseComponent {
             </Row>
             : null}
           <Row>
-            <Field name='username' component={Input} label='工号' />
+            <Field name='username' component={AntInput} label='工号' />
           </Row>
           <Row>
             <Field
               name='password'
-              component={Input}
+              component={AntInput}
               label='密码'
               type='password'
             />

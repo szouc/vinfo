@@ -1,5 +1,5 @@
 import React from 'react'
-import BaseComponent from '../../../shared/BaseComponent'
+import BaseComponent from '@clientModulesShared/BaseComponent'
 
 import Layout from 'antd/es/layout'
 import Menu from 'antd/es/menu'

@@ -1,27 +1,6 @@
 import Immutable, { fromJS } from 'immutable'
 import moment from 'moment'
 import { normalize, schema, denormalize } from 'normalizr'
-import * as Routes from './src/server/exports/api'
-
-const { company } = Routes
-console.log(company)
-const fullRoutes = Object.values(company).map(k => 'http://127.0.0.1:8000' + k)
-console.log(fullRoutes)
-
-const jsList = [1, 2, 3, 4]
-
-const immList = Immutable.fromJS(jsList)
-
-const result = immList.push(fromJS({ a: 1 }), fromJS({ B: 2 }))
-const again = immList.push(fromJS({arr: [6, 8]}))
-
-const final = result.concat(fromJS([2, 9]))
-
-console.log(result)
-console.log(result.get(5).get('B'))
-console.log(again)
-console.log(again.getIn(['4', 'arr']).toJS())
-console.log(final)
 
 const tmpObj1 = {
   id: '1',
@@ -80,7 +59,6 @@ const obj3 = [obj2]
 const normalizeDate = normalize(tmpObj, obj3)
 const normalizeCompany = fromJS(normalizeDate.entities)
 console.log(normalizeCompany)
-console.log(JSON.stringify(normalizeCompany))
 
 const createCompany = normalize(tmpObj3, obj2)
 const normalizeNewCompany = fromJS(createCompany.entities)
@@ -89,11 +67,9 @@ const semifinalCompany = normalizeCompany.mergeDeep(normalizeNewCompany)
 
 const finalCompany = semifinalCompany.deleteIn(['friend', '3'])
 
-console.log(fromJS([...normalizeCompany.get('company').values()]).toJS())
-console.log(normalizeCompany.get('company').toArray())
 console.log(normalizeCompany.get('company').toJS())
 
-console.log(finalCompany.getIn(['company', '2', 'friends']).toJS())
-
-const denormalizeDate = denormalize([1, 2, 3], [obj2], finalCompany.toJS())
+const denormalizeDate = denormalize([1, 2, 3], [obj2], finalCompany)
+const denormalizeImmut = denormalize(1, obj2, finalCompany)
 console.log(denormalizeDate)
+console.log(denormalizeImmut)

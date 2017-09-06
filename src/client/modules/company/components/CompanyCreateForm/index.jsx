@@ -4,15 +4,18 @@ import Button from 'antd/es/button'
 import Row from 'antd/es/row'
 import Col from 'antd/es/col'
 import Alert from 'antd/es/alert'
+import Input from 'antd/es/input'
 
-import { Input } from '../../../shared/forms'
-import BaseComponent from '../../../shared/BaseComponent'
-import { CompanySelectField } from '../../containers'
+import formItemHOC from '@clientModulesShared/formItemHOC'
+import BaseComponent from '@clientModulesShared/BaseComponent'
 
 import 'antd/es/button/style/css'
 import 'antd/es/row/style/css'
 import 'antd/es/col/style/css'
 import 'antd/es/alert/style/css'
+import 'antd/es/input/style/css'
+
+const AntInput = formItemHOC(Input)
 
 const validate = values => {
   const errors = {}
@@ -47,10 +50,10 @@ class CompanyCreateForm extends BaseComponent {
           : null}
         <Row type='flex' justify='space-between'>
           <Col span={8}>
-            <Field name='name' component={Input} placeholder='公司名称' />
+            <Field name='name' component={AntInput} placeholder='公司名称' />
           </Col>
           <Col span={12}>
-            <Field name='addr' component={Input} placeholder='公司地址' />
+            <Field name='addr' component={AntInput} placeholder='公司地址' />
           </Col>
           <Col span={4}>
             <Button
@@ -71,7 +74,6 @@ class CompanyCreateForm extends BaseComponent {
             </Button>
           </Col>
         </Row>
-        <CompanySelectField nameKey='fromName' addrKey='fromAddr' />
       </form>
     )
   }

@@ -1,5 +1,5 @@
-import { product } from '../../../../server/exports/api'
-import addHostAddr from '../../../utils/addHostAddr'
+import { product } from '@server/exports/api'
+import addHostAddr from '@clientUtils/addHostAddr'
 
 export const PRODUCT_ROOT_API = addHostAddr(product.PRODUCT_ROOT_API)
 export const PRODUCT_ID_API = addHostAddr(product.PRODUCT_ID_API)

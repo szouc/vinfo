@@ -1,5 +1,3 @@
-import CompanyCreateForm from './CompanyCreateForm'
-import CompanyListTable from './CompanyListTable'
-import CompanySelectField from './CompanySelectField'
-
-export { CompanyCreateForm, CompanyListTable, CompanySelectField }
+export CompanyCreateForm from './CompanyCreateForm'
+export CompanyListTable from './CompanyListTable'
+export CompanySelect from './CompanySelect'

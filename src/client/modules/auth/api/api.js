@@ -8,14 +8,6 @@ import { LOGIN_API, LOGOUT_API, GET_USER_BY_USERNAME_API } from './apiRoutes'
 const TRUE = true
 const STATUS_OK = 200
 
-// This will force localStorage as the storage
-// driver even if another is available. You can
-// use this instead of `setDriver()`.
-localforage.config({
-  driver: localforage.LOCALSTORAGE,
-  name: 'auth'
-})
-
 /**
  * Checks if a user is logged in at the localStorage
  */

@@ -21,12 +21,6 @@ const manager = {
   active: true
 }
 
-const product = {
-  name: '硫酸',
-  specs: '98%',
-  pricing: 200
-}
-
 const singlePriceHistory = [
   {
     price: 180,
@@ -47,6 +41,13 @@ const multiPriceHistory = [
     end: moment('04/22/2017', 'MM/DD/YYYY', true)
   }
 ]
+
+const product = {
+  name: '硫酸',
+  specs: '98%',
+  pricing: '200',
+  price_history: [...multiPriceHistory]
+}
 
 const modifiedProduct = {
   specs: '95%',

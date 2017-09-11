@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { logoutRequest } from '../actions'
 
 const mapStateToProps = state => {
-  const username = state.getIn(['auth', 'user', 'username'])
-  return { username: username }
+  const user = state.getIn(['auth', 'user'])
+  return { user }
 }
 
 const mapDispatchToProps = dispatch => {

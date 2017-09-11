@@ -3,14 +3,18 @@
 import {
   SET_LOADING,
   REQUEST_ERROR,
-  // FETCH_PRODUCT_LIST_REQUEST,
-  // FETCH_PRODUCT_LIST_SUCCESS,
-  // DELETE_PRODUCT_REQUEST,
-  // DELETE_PRODUCT_SUCCESS,
+  FETCH_PRODUCT_LIST_REQUEST,
+  FETCH_PRODUCT_LIST_SUCCESS,
+  DELETE_PRODUCT_REQUEST,
+  DELETE_PRODUCT_SUCCESS,
   // UPDATE_PRODUCT_REQUEST,
   // UPDATE_PRODUCT_SUCCESS,
   CREATE_PRODUCT_REQUEST,
-  CREATE_PRODUCT_SUCCESS
+  CREATE_PRODUCT_SUCCESS,
+  DELETE_PRICE_HISTORY_REQUEST,
+  DELETE_PRICE_HISTORY_SUCCESS,
+  CREATE_PRICE_HISTORY_REQUEST,
+  CREATE_PRICE_HISTORY_SUCCESS
 } from './actionTypes'
 
 import { call, put, take, fork } from 'redux-saga/effects'
@@ -19,7 +23,15 @@ import { delay } from 'redux-saga'
 import type { fromJS as Immut } from 'immutable'
 
 import * as Api from './api'
-import { saga as priceHistorySagas } from './priceHistory'
+
+function * clearLoadingAndError(scope) {
+  yield put({
+    type: SET_LOADING,
+    payload: { scope: scope, loading: false }
+  })
+  yield delay(2000)
+  yield put({ type: REQUEST_ERROR, payload: '' })
+}
 
 function * createProductFlow() {
   while (true) {
@@ -38,74 +50,109 @@ function * createProductFlow() {
     } catch (error) {
       yield put({ type: REQUEST_ERROR, payload: error.message })
     } finally {
-      yield put({
-        type: SET_LOADING,
-        payload: { scope: 'create', loading: false }
-      })
-      yield delay(2000)
-      yield put({ type: REQUEST_ERROR, payload: '' })
+      yield fork(clearLoadingAndError, 'create')
     }
   }
 }
 
-// function * fetchAllCompaniesFlow() {
-//   while (true) {
-//     yield take(FETCH_COMPANY_LIST_REQUEST)
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'fetchList', loading: true }
-//     })
-//     try {
-//       const company = yield call(Api.getAllCompanies)
-//       if (company) {
-//         yield put({ type: FETCH_COMPANY_LIST_SUCCESS, payload: company })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield put({
-//         type: SET_LOADING,
-//         payload: { scope: 'fetchList', loading: false }
-//       })
-//       yield delay(2000)
-//       yield put({ type: REQUEST_ERROR, payload: '' })
-//     }
-//   }
-// }
+function * fetchAllProductsFlow() {
+  while (true) {
+    yield take(FETCH_PRODUCT_LIST_REQUEST)
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'fetchList', loading: true }
+    })
+    try {
+      const product = yield call(Api.getAllProducts)
+      if (product) {
+        yield put({ type: FETCH_PRODUCT_LIST_SUCCESS, payload: product })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'fetchList')
+    }
+  }
+}
 
-// function * deleteCompanyByIdFlow() {
-//   while (true) {
-//     const action: { type: string, payload: string } = yield take(
-//       DELETE_COMPANY_REQUEST
-//     )
-//     const { payload } = action
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'delete', loading: true }
-//     })
-//     try {
-//       const company = yield call(Api.deleteCompanyById, payload)
-//       if (company) {
-//         yield put({
-//           type: DELETE_COMPANY_SUCCESS,
-//           payload: company.get('result')
-//         })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield put({
-//         type: SET_LOADING,
-//         payload: { scope: 'delete', loading: false }
-//       })
-//       yield delay(2000)
-//       yield put({ type: REQUEST_ERROR, payload: '' })
-//     }
-//   }
-// }
+function * deleteProductByIdFlow() {
+  while (true) {
+    const action: { type: string, payload: string } = yield take(
+      DELETE_PRODUCT_REQUEST
+    )
+    const { payload } = action
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'delete', loading: true }
+    })
+    try {
+      const productId = yield call(Api.deleteProductById, payload)
+      if (productId) {
+        yield put({
+          type: DELETE_PRODUCT_SUCCESS,
+          payload: productId
+        })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'delete')
+    }
+  }
+}
+
+function * createPriceHistoryFlow() {
+  while (true) {
+    const action: { type: string, payload: Immut } = yield take(
+      CREATE_PRICE_HISTORY_REQUEST
+    )
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'createPH', loading: true }
+    })
+    try {
+      const product = yield call(Api.createPriceHistory, action.payload)
+      if (product) {
+        yield put({ type: CREATE_PRICE_HISTORY_SUCCESS, payload: product })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'createPH')
+    }
+  }
+}
+
+function * deletePriceHistoryByIdFlow() {
+  while (true) {
+    const action: { type: string, payload: any } = yield take(
+      DELETE_PRICE_HISTORY_REQUEST
+    )
+    const { payload } = action
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'deletePH', loading: true }
+    })
+    try {
+      const product = yield call(Api.deletePriceHistoryById, payload)
+      if (product) {
+        yield put({
+          type: DELETE_PRICE_HISTORY_SUCCESS,
+          payload: product
+        })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'deletePH')
+    }
+  }
+}
 
 export default function * rootSagas(): any {
   yield fork(createProductFlow)
-  yield fork(priceHistorySagas)
-  // yield fork(deleteCompanyByIdFlow)
+  yield fork(fetchAllProductsFlow)
+  yield fork(createPriceHistoryFlow)
+  yield fork(deleteProductByIdFlow)
+  yield fork(deletePriceHistoryByIdFlow)
 }

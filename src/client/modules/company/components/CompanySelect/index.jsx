@@ -15,8 +15,8 @@ class CompanySelect extends BaseComponent {
   }
 
   render() {
-    const { companyEntity, ...rest } = this.props
-    const options = companyEntity.toArray()
+    const { companies, ...rest } = this.props
+    const options = companies.toArray()
     const optionsList = options.map(company =>
       <Option value={company.get('_id')}>
         {company.get('name')}({company.get('addr')})

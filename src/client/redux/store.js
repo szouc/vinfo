@@ -18,9 +18,10 @@ export const history = createHistory()
 const browserRouterMiddleware = routerMiddleware(history)
 const sagaMiddleware = createSagaMiddleware()
 
-const logger = createLogger({
-  stateTransformer: state => ({ ...state.toJS() })
-})
+const logger = createLogger()
+// const logger = createLogger({
+//   stateTransformer: state => ({ ...state.toJS() })
+// })
 
 const middleware = [sagaMiddleware, browserRouterMiddleware, logger]
 

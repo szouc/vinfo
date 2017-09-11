@@ -19,32 +19,34 @@ const InitialState = fromJS({
   createLoading: false,
   updateLoading: false,
   deleteLoading: false,
-  error: '',
-  current: '',
-  isCreating: false
+  error: undefined,
+  current: undefined,
+  all: []
 })
 
 const companyEntity = (
-  state: Immut = immutable.Map(),
+  state: Immut = immutable.Map({}),
   action: { type: string, payload: any }
 ) => {
   const { type, payload } = action
   switch (type) {
     case FETCH_COMPANY_LIST_SUCCESS:
-      if (payload.getIn(['entities', 'companies'])) {
-        const company = payload.getIn(['entities', 'companies'])
-        return state.merge(company)
+      if (payload.get('entities')) {
+        return payload.get('entities')
       }
       return state
     case CREATE_COMPANY_SUCCESS:
-      const newCompany = payload.getIn(['entities', 'companies'])
-      return state.merge(newCompany)
+      return state.mergeIn(
+        ['companies'],
+        payload.getIn(['entities', 'companies'])
+      )
     case DELETE_COMPANY_SUCCESS:
-      const deleteCompanyId = payload
-      return state.delete(deleteCompanyId)
+      return state.deleteIn(['companies', payload])
     case UPDATE_COMPANY_SUCCESS:
-      const updateCompany = payload.getIn(['entities', 'companies'])
-      return state.merge(updateCompany)
+      return state.mergeIn(
+        ['companies'],
+        payload.getIn(['entities', 'companies'])
+      )
     default:
       return state
   }
@@ -60,8 +62,14 @@ const companyStatus = (
       return state.set(`${payload.scope}Loading`, payload.loading)
     case REQUEST_ERROR:
       return state.set('error', payload)
+    case FETCH_COMPANY_LIST_SUCCESS:
+      return state.set('all', payload.get('result'))
     case CREATE_COMPANY_SUCCESS:
-      return state.set('current', payload.get('result'))
+      const pushToAll = state.get('all').push(payload.get('result'))
+      return state.set('current', payload.get('result')).set('all', pushToAll)
+    case DELETE_COMPANY_SUCCESS:
+      const popFromAll = state.get('all').pop(payload)
+      return state.set('all', popFromAll)
     default:
       return state
   }

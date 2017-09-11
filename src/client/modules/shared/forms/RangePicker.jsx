@@ -1,7 +1,6 @@
 import formItemHOC from '@clientModulesShared/formItemHOC'
 
-import DatePicker from 'antd/es/date-picker'
-import 'antd/es/date-picker/style/css'
+import { DatePicker } from 'antd'
 
 const { RangePicker } = DatePicker
 const AntRangePicker = formItemHOC(RangePicker)

@@ -179,11 +179,11 @@ const clientConfig = {
                 // https://babeljs.io/docs/plugins
                 ['syntax-dynamic-import'],
                 // ['transform-runtime'],
-                // ['import', {
-                //   libraryName: 'antd',
-                //   libraryDirectory: 'lib',
-                //   style: 'css'
-                // }],
+                ['import', {
+                  libraryName: 'antd',
+                  libraryDirectory: 'es',
+                  style: 'css'
+                }],
                 ...isProd
                   ? []
                   : [

@@ -2,7 +2,7 @@ import { Product } from './models'
 
 function createProduct(req, res) {
   Product.create(req.body)
-    .then((doc) => {
+    .then(doc => {
       res.status(200).json(doc)
     })
     .catch(e => {
@@ -70,8 +70,8 @@ function deleteProductPriceHistory(req, res) {
         res.status(400).send('Couldnt find the product by id')
       }
     })
-    .then(() => {
-      res.status(200).send('Delete price history by id')
+    .then((doc) => {
+      res.status(200).json(doc)
     })
     .catch(() => {
       res.status(500).send('Couldnt delete price history by id')
@@ -102,7 +102,7 @@ function deleteProductPriceHistory(req, res) {
 // }
 
 function updateProductById(req, res) {
-  Product.findOneAndUpdate(req.param.id, { $set: req.body }, { new: true })
+  Product.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
     .then(doc => {
       if (doc) {
         res.status(200).json(doc)
@@ -116,7 +116,7 @@ function updateProductById(req, res) {
 }
 
 function deleteProductById(req, res) {
-  Product.findOneAndRemove(req.param.id)
+  Product.findByIdAndRemove(req.params.id)
     .then(doc => {
       if (doc) {
         res.status(200).json(doc)

@@ -1,7 +1,6 @@
 import formItemHOC from '@clientModulesShared/formItemHOC'
 
-import InputNumber from 'antd/es/input-number'
-import 'antd/es/input-number/style/css'
+import { InputNumber } from 'antd'
 
 const AntInputNumber = formItemHOC(InputNumber)
 

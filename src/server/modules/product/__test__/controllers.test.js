@@ -45,8 +45,7 @@ const multiPriceHistory = [
 const product = {
   name: '硫酸',
   specs: '98%',
-  pricing: '200',
-  price_history: [...multiPriceHistory]
+  pricing: '200'
 }
 
 const modifiedProduct = {
@@ -102,16 +101,17 @@ describe('Product Base Operations', () => {
   })
 
   test('Should update product by id', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const res = await agent
       .put(PRODUCT_ID_API.replace(/:id/, productId))
       .send(modifiedProduct)
     expect(res.statusCode).toBe(200)
+    expect(res.body.pricing).toBe(500)
   })
 
   test('Should add single price history to a specific product', async () => {
     expect.assertions(2)
-    await agent.get(PRODUCT_ID_API.replace(/:id/, productId))
+    // await agent.get(PRODUCT_ID_API.replace(/:id/, productId))
     const res = await agent
       .post(PRODUCT_PRICE_HISTORY_API.replace(/:id/, productId))
       .send(singlePriceHistory)
@@ -121,7 +121,7 @@ describe('Product Base Operations', () => {
 
   test('Should add multi price histories to a specific product document', async () => {
     expect.assertions(2)
-    await agent.get(PRODUCT_ID_API.replace(/:id/, productId))
+    // await agent.get(PRODUCT_ID_API.replace(/:id/, productId))
     const res = await agent
       .post(PRODUCT_PRICE_HISTORY_API.replace(/:id/, productId))
       .send(multiPriceHistory)

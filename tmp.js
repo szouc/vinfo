@@ -1,75 +1,70 @@
 import Immutable, { fromJS } from 'immutable'
 import moment from 'moment'
-import { normalize, schema, denormalize } from 'normalizr'
+import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
 
-const tmpObj1 = {
-  id: '1',
-  name: 'hl',
-  addr: 'qd sb hl',
-  active: true,
-  friends: [
-    {
-      id: '2',
-      name: 'hisdf'
-    },
-    {
-      id: '3',
-      name: 'dhisdf'
-    }
-  ],
-  createdAt: moment('2016-12-08', 'YYYY-MM-DD', true)
-}
+let state,
+  list1Selector,
+  list2Selector,
+  keywordSelector,
+  filteredList2Selector,
+  createImmutableSelector
 
-const tmpObj2 = {
-  id: '2',
-  name: 'hisdf',
-  addr: 'qd sbera hl',
-  active: true,
-  friends: [
-    {
-      id: '3',
-      name: 'dhisdf'
-    }
-  ],
-  createdAt: moment('2016-11-08', 'YYYY-MM-DD', true)
-}
-
-const tmpObj3 = {
-  id: '3',
-  name: 'dhisdf',
-  addr: 'qd sbera hl',
-  active: true,
-  friends: [
-    {
-      id: '1',
-      name: 'hl'
-    }
-  ],
-  createdAt: moment('2016-11-09', 'YYYY-MM-DD', true)
-}
-
-const tmpObj = [tmpObj1, tmpObj2]
-
-const obj = new schema.Entity('friend')
-const obj2 = new schema.Entity('company', {
-  friends: [obj]
+// state for reducer a:
+state = Immutable.Map({
+  list1: Immutable.List(),
+  list2: Immutable.List(['hello goodbye', 'hello hello']),
+  keyword: ''
 })
-const obj3 = [obj2]
 
-const normalizeDate = normalize(tmpObj, obj3)
-const normalizeCompany = fromJS(normalizeDate.entities)
-console.log(normalizeCompany)
+list1Selector = state => state.get('list1')
+list2Selector = state => state.get('list2')
+keywordSelector = state => state.get('keyword')
 
-const createCompany = normalize(tmpObj3, obj2)
-const normalizeNewCompany = fromJS(createCompany.entities)
+filteredList2Selector = createSelector(
+  [list2Selector, keywordSelector],
+  (list2, keyword) => {
+    return list2.filter(x => {
+      return x.indexOf(keyword) !== -1
+    })
+  }
+)
 
-const semifinalCompany = normalizeCompany.mergeDeep(normalizeNewCompany)
+const somethingExpensive1Selector = createSelector(
+  [list1Selector, filteredList2Selector],
+  (list1, filteredList2) => {
+    console.log('EXPENSIVE COMPUTATION TRIGGERED! Generating for ===...')
+    return Math.random()
+  }
+)
 
-const finalCompany = semifinalCompany.deleteIn(['friend', '3'])
+createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is)
 
-console.log(normalizeCompany.get('company').toJS())
+const somethingExpensive2Selector = createImmutableSelector(
+  [list1Selector, filteredList2Selector],
+  (list1, filteredList2) => {
+    console.log(
+      'EXPENSIVE COMPUTATION TRIGGERED! Generating for Immutable.is()...'
+    )
+    return Math.random()
+  }
+)
 
-const denormalizeDate = denormalize([1, 2, 3], [obj2], finalCompany)
-const denormalizeImmut = denormalize(1, obj2, finalCompany)
-console.log(denormalizeDate)
-console.log(denormalizeImmut)
+state = state.set('keyword', '')
+console.log('expensive1(state)', somethingExpensive1Selector(state))
+state = state.set('keyword', 'he')
+console.log('expensive1(state)', somethingExpensive1Selector(state))
+state = state.set('keyword', 'hell')
+console.log('expensive1(state)', somethingExpensive1Selector(state))
+state = state.set('keyword', 'helldsfs')
+console.log('expensive1(state)', somethingExpensive1Selector(state))
+console.log('')
+console.log('====================================')
+console.log('')
+state = state.set('keyword', '')
+console.log('expensive2(state)', somethingExpensive2Selector(state))
+state = state.set('keyword', 'he')
+console.log('expensive2(state)', somethingExpensive2Selector(state))
+state = state.set('keyword', 'hell')
+console.log('expensive2(state)', somethingExpensive2Selector(state))
+state = state.set('keyword', 'helldsfs')
+console.log('expensive2(state)', somethingExpensive2Selector(state))

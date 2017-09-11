@@ -44,7 +44,7 @@ function getCompanyById(req, res) {
  * Update a company document and return altered document
  */
 function updateCompanyById(req, res) {
-  Company.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  Company.findByIdAndUpdate(req.params.id, {$set: req.body}, { new: true })
     .then(doc => {
       if (doc) {
         res.status(200).json(doc)

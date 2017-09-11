@@ -1,10 +1,9 @@
 // @flow
 
-import { normalize, denormalize } from 'normalizr'
 import type { fromJS as Immut } from 'immutable'
 import { fromJS } from 'immutable'
+import { companyNormalize, companyArrayNormalize } from '../schema'
 
-import { companySchema } from './schema'
 import {
   COMPANY_ID_API,
   // COMPANY_QUESRY_API,
@@ -24,7 +23,7 @@ async function createCompany(payload: Immut): ?Immut {
   const response = await fetch(COMPANY_ROOT_API, options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
-    const company = normalize(data, companySchema)
+    const company = companyNormalize(data)
     return fromJS(company)
   }
   throw new Error('Couldnt create a new company')
@@ -37,7 +36,7 @@ async function getAllCompanies(): ?Immut {
   const response = await fetch(COMPANY_ROOT_API, options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
-    const companies = normalize(data, [companySchema])
+    const companies = companyArrayNormalize(data)
     return fromJS(companies)
   }
   throw new Error('Something wrong at getAllCompanies Process')
@@ -50,16 +49,13 @@ async function getCompanyById(id: string): ?Immut {
   const response = await fetch(COMPANY_ID_API.replace(/:id/, id), options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
-    const company = normalize(data, companySchema)
+    const company = companyNormalize(data)
     return fromJS(company)
   }
   throw new Error('Something wrong at getCompanyById Process')
 }
 
-async function updateCompanyById(
-  id: string,
-  payload: Immut
-): ?Immut {
+async function updateCompanyById(id: string, payload: Immut): ?Immut {
   const options = {
     method: 'put',
     body: JSON.stringify(payload)
@@ -67,7 +63,7 @@ async function updateCompanyById(
   const response = await fetch(COMPANY_ID_API.replace(/:id/, id), options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
-    const company = normalize(data, companySchema)
+    const company = companyNormalize(data)
     return fromJS(company)
   }
   throw new Error('Something wrong at updateCompanyById Process')
@@ -80,16 +76,13 @@ async function deleteCompanyById(id: string) {
   const response = await fetch(COMPANY_ID_API.replace(/:id/, id), options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
-    const company = normalize(data, companySchema)
+    const company = companyNormalize(data)
     return fromJS(company)
   }
   throw new Error('Something wrong at deleteCompanyById Process')
 }
 
-const selectCompany = (state: Object, id: string) => denormalize(id, companySchema, state)
-
 export {
-  selectCompany,
   createCompany,
   getAllCompanies,
   getCompanyById,

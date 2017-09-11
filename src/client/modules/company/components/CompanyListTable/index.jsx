@@ -38,7 +38,7 @@ class CompanyListTable extends BaseComponent {
             </a>
             <span className='ant-divider' />
             <button onClick={() => this.props.deleteCompanyById(record.get('_id'))}>
-              Delete
+              删除
             </button>
             <span className='ant-divider' />
             <a href='#' className='ant-dropdown-link'>

@@ -7,7 +7,7 @@ import BaseComponent from './BaseComponent'
 import FormItem from 'antd/es/form/FormItem'
 import 'antd/es/form/style/css'
 
-function formItemHOC(Component) {
+function formItemHOC(Component, ownProps) {
   const getValidateStatus = (error, warning, valid, asyncValidating) => {
     if (error) return 'error'
     if (warning) return 'warning'
@@ -68,7 +68,7 @@ function formItemHOC(Component) {
           validateStatus={validateStatus}
           colon={colon}
         >
-          <Component {...rest} />
+          <Component {...rest} {...ownProps} />
         </FormItem>
       )
     }

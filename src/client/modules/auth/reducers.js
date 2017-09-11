@@ -31,8 +31,7 @@ const authReducer = (
     case REQUEST_ERROR:
       return state.set('error', payload)
     case FETCH_PROFILE_SUCCESS:
-      const user = Immutable.fromJS(payload)
-      return state.set('user', user)
+      return state.set('user', payload)
     default:
       return state
   }

@@ -2,6 +2,7 @@
 
 import localforage from 'localforage'
 import fetch from '@clientUtils/fetch'
+import { fromJS } from 'immutable'
 import { LOGIN_API, LOGOUT_API, GET_USER_BY_USERNAME_API } from './apiRoutes'
 
 // response status
@@ -105,7 +106,7 @@ async function fetchProfile(username: string) {
   let response = await fetch(url, options)
   if (response.status === STATUS_OK) {
     let user = await response.json()
-    return user
+    return fromJS(user)
   }
   await setLocalLogout()
   throw new Error('Something Wrong at FetchProfile Process')

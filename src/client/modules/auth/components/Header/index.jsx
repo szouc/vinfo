@@ -24,11 +24,11 @@ class AuthHeader extends BaseComponent {
   }
 
   render() {
-    const { username, handleLogout } = this.props
+    const { user, handleLogout } = this.props
     const userMenu = (
       <Menu theme='dark' mode='horizontal' style={{ lineHeight: '64px' }}>
         <Menu.Item key='username' disabled>
-          {username}
+          {user.get('username')}
         </Menu.Item>
         <Menu.Item key='profile'>
           <a onClick={handleLogout}>详细信息</a>

@@ -1,13 +1,16 @@
 import { connect } from 'react-redux'
 
 import CompanySelect from '../components/CompanySelect'
-
+import { companyArraySelector } from '../selectors'
 import { fetchCompanyListRequest } from '../actions'
 
 const mapStateToProps = state => {
-  const companyEntity = state.getIn(['company', 'companyEntity'])
+  const companies = companyArraySelector(
+    state.getIn(['company', 'companyEntity']),
+    state.getIn(['company', 'companyStatus', 'all'])
+  )
   return {
-    companyEntity
+    companies
   }
 }
 

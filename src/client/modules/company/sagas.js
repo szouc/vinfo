@@ -18,6 +18,15 @@ import type { fromJS as Immut } from 'immutable'
 
 import * as Api from './api'
 
+function * clearLoadingAndError(scope) {
+  yield put({
+    type: SET_LOADING,
+    payload: { scope: scope, loading: false }
+  })
+  yield delay(2000)
+  yield put({ type: REQUEST_ERROR, payload: '' })
+}
+
 function * createCompanyFlow() {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(
@@ -35,12 +44,7 @@ function * createCompanyFlow() {
     } catch (error) {
       yield put({ type: REQUEST_ERROR, payload: error.message })
     } finally {
-      yield put({
-        type: SET_LOADING,
-        payload: { scope: 'create', loading: false }
-      })
-      yield delay(2000)
-      yield put({ type: REQUEST_ERROR, payload: '' })
+      yield fork(clearLoadingAndError, 'create')
     }
   }
 }
@@ -60,12 +64,7 @@ function * fetchAllCompaniesFlow() {
     } catch (error) {
       yield put({ type: REQUEST_ERROR, payload: error.message })
     } finally {
-      yield put({
-        type: SET_LOADING,
-        payload: { scope: 'fetchList', loading: false }
-      })
-      yield delay(2000)
-      yield put({ type: REQUEST_ERROR, payload: '' })
+      yield fork(clearLoadingAndError, 'fetchList')
     }
   }
 }
@@ -83,17 +82,15 @@ function * deleteCompanyByIdFlow() {
     try {
       const company = yield call(Api.deleteCompanyById, payload)
       if (company) {
-        yield put({ type: DELETE_COMPANY_SUCCESS, payload: company.get('result') })
+        yield put({
+          type: DELETE_COMPANY_SUCCESS,
+          payload: company.get('result')
+        })
       }
     } catch (error) {
       yield put({ type: REQUEST_ERROR, payload: error.message })
     } finally {
-      yield put({
-        type: SET_LOADING,
-        payload: { scope: 'delete', loading: false }
-      })
-      yield delay(2000)
-      yield put({ type: REQUEST_ERROR, payload: '' })
+      yield fork(clearLoadingAndError, 'delete')
     }
   }
 }

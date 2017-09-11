@@ -1,17 +1,19 @@
 import React from 'react'
 import {
-  ProductCreateForm
+  ProductCreateForm,
+  ProductListTable
 } from '@clientModules/product/containers'
-import Row from 'antd/es/row'
+import { Row } from 'antd'
 // import Col from 'antd/es/col'
-import 'antd/es/row/style/css'
-// import 'antd/es/col/style/css'
 
 const Product = () => {
   return (
     <div>
       <Row>
         <ProductCreateForm />
+      </Row>
+      <Row>
+        <ProductListTable />
       </Row>
     </div>
   )

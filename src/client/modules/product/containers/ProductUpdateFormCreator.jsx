@@ -1,14 +1,16 @@
 import { connect } from 'react-redux'
 import { updateProductRequest } from '../actions'
+import { fromJS } from 'immutable'
 
 import ProductUpdateFormCreator from '../components/ProductUpdateFormCreator'
+import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = (state, ownProps) => {
   const errorMessage = state.getIn(['product', 'productStatus', 'error'])
   const initialValues = {
-    name: ownProps.product.get('name'),
-    specs: ownProps.product.get('specs'),
-    pricing: ownProps.product.get('pricing')
+    name: ownProps.product.name,
+    specs: ownProps.product.specs,
+    pricing: ownProps.product.pricing
   }
 
   return { errorMessage, initialValues }
@@ -18,7 +20,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSubmit: values => {
       dispatch(
-        updateProductRequest({ productId: ownProps.product.get('_id'), values })
+        updateProductRequest(
+          fromJS({ productId: ownProps.product._id, values })
+        )
       )
     }
   }
@@ -26,5 +30,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 export default productId =>
   connect(mapStateToProps, mapDispatchToProps)(
-    ProductUpdateFormCreator(productId)
+    immutPropsToJS(ProductUpdateFormCreator(productId))
   )

@@ -8,6 +8,7 @@ import {
   deletePriceHistoryRequest
 } from '../actions'
 import { productArraySelector } from '../selectors'
+import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
   const errorMessage = state.getIn(['product', 'productStatus', 'error'])
@@ -32,4 +33,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductListTable)
+export default connect(mapStateToProps, mapDispatchToProps)(immutPropsToJS(ProductListTable))

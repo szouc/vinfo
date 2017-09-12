@@ -1,25 +1,12 @@
 import React from 'react'
 import BaseComponent from '@clientModulesShared/BaseComponent'
 
-import Layout from 'antd/es/layout'
-import Menu from 'antd/es/menu'
-import Row from 'antd/es/row'
-import Col from 'antd/es/col'
-import Dropdown from 'antd/es/dropdown'
-import Icon from 'antd/es/icon'
-import Avatar from 'antd/es/avatar'
-import 'antd/es/layout/style/css'
-import 'antd/es/icon/style/css'
-import 'antd/es/avatar/style/css'
-import 'antd/es/dropdown/style/css'
-import 'antd/es/menu/style/css'
-import 'antd/es/row/style/css'
-import 'antd/es/col/style/css'
+import { Layout, Menu, Row, Col, Dropdown, Icon, Avatar } from 'antd'
 
 const { Header } = Layout
 
 class AuthHeader extends BaseComponent {
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
 

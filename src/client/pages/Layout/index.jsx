@@ -1,6 +1,4 @@
-import 'antd/es/layout/style/css'
-
-import Layout from 'antd/es/layout'
+import { Layout } from 'antd'
 import React from 'react'
 import Header from '@clientModules/auth/containers/Header'
 import { Route, Switch } from 'react-router-dom'

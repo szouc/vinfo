@@ -93,10 +93,26 @@ async function deletePriceHistoryById(payload: Immut) {
   throw new Error('Something wrong at deletePriceHistoryById Process')
 }
 
+async function updateProductById(payload: Immut) {
+  const options = {
+    method: 'put',
+    body: JSON.stringify(payload.get('values')),
+    headers: { 'Content-Type': 'application/json' }
+  }
+  const response = await fetch(PRODUCT_ID_API.replace(/:id/, payload.get('productId')), options)
+  if (response) {
+    const data = await response.json()
+    const product = productNormalize(data)
+    return fromJS(product)
+  }
+  throw new Error('Couldnt update a product by Id')
+}
+
 export {
   createProduct,
   getAllProducts,
   createPriceHistory,
   deleteProductById,
-  deletePriceHistoryById
+  deletePriceHistoryById,
+  updateProductById
 }

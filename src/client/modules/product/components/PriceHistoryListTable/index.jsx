@@ -13,22 +13,22 @@ class PriceHistoryListTable extends BaseComponent {
 
   render() {
     const { product, deletePriceHistoryById } = this.props
-    const data = product.get('price_history').toArray()
+    const data = product.price_history
     const columns = [
       {
         title: '开始日期',
         key: 'name',
-        render: (text, record) => moment(record.get('start')).format('LL')
+        render: (text, record) => moment(record.start).format('LL')
       },
       {
         title: '结束日期',
         key: 'specs',
-        render: (text, record) => moment(record.get('end')).format('LL')
+        render: (text, record) => moment(record.end).format('LL')
       },
       {
         title: '价格',
         key: 'price',
-        render: (text, record) => record.get('price')
+        render: (text, record) => record.price
       },
       {
         title: '相关操作',
@@ -38,7 +38,7 @@ class PriceHistoryListTable extends BaseComponent {
             <Button
               size='small'
               onClick={() =>
-                deletePriceHistoryById(product.get('_id'), record.get('_id'))}
+                deletePriceHistoryById(product._id, record._id)}
             >
               删除
             </Button>
@@ -47,8 +47,8 @@ class PriceHistoryListTable extends BaseComponent {
       }
     ]
 
-    const ProductUpdateFormById = ProductUpdateFormCreator(product.get('_id'))
-    const PriceHistoryCreateFormById = PriceHistoryCreateFormCreator(product.get('_id'))
+    const ProductUpdateFormById = ProductUpdateFormCreator(product._id)
+    const PriceHistoryCreateFormById = PriceHistoryCreateFormCreator(product._id)
 
     return (
       <div>
@@ -56,7 +56,7 @@ class PriceHistoryListTable extends BaseComponent {
         <Table
           columns={columns}
           dataSource={data}
-          rowKey={record => record.get('_id')}
+          rowKey={record => record._id}
           pagination={false}
         />
         <PriceHistoryCreateFormById product={product} />

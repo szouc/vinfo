@@ -15,22 +15,22 @@ class ProductListTable extends BaseComponent {
 
   render() {
     const { products, deleteProductById, deletePriceHistoryById } = this.props
-    const data = products.toArray()
+    const data = products
     const columns = [
       {
         title: '物品名称',
         key: 'name',
-        render: (text, record) => record.get('name')
+        render: (text, record) => record.name
       },
       {
         title: '物品规格',
         key: 'specs',
-        render: (text, record) => record.get('specs')
+        render: (text, record) => record.specs
       },
       {
         title: '当前价格',
         key: 'pricing',
-        render: (text, record) => record.get('pricing')
+        render: (text, record) => record.pricing
       },
       {
         title: '相关操作',
@@ -40,7 +40,7 @@ class ProductListTable extends BaseComponent {
             <Button
               type='danger'
               size='small'
-              onClick={() => deleteProductById(record.get('_id'))}
+              onClick={() => deleteProductById(record._id)}
             >
               删除
             </Button>
@@ -57,7 +57,7 @@ class ProductListTable extends BaseComponent {
             deletePriceHistoryById={deletePriceHistoryById}
           />}
         dataSource={data}
-        rowKey={record => record.get('_id')}
+        rowKey={record => record._id}
       />
     )
   }

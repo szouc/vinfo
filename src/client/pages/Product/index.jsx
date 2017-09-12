@@ -4,7 +4,6 @@ import {
   ProductListTable
 } from '@clientModules/product/containers'
 import { Row } from 'antd'
-// import Col from 'antd/es/col'
 
 const Product = () => {
   return (

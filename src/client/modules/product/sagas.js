@@ -7,8 +7,8 @@ import {
   FETCH_PRODUCT_LIST_SUCCESS,
   DELETE_PRODUCT_REQUEST,
   DELETE_PRODUCT_SUCCESS,
-  // UPDATE_PRODUCT_REQUEST,
-  // UPDATE_PRODUCT_SUCCESS,
+  UPDATE_PRODUCT_REQUEST,
+  UPDATE_PRODUCT_SUCCESS,
   CREATE_PRODUCT_REQUEST,
   CREATE_PRODUCT_SUCCESS,
   DELETE_PRICE_HISTORY_REQUEST,
@@ -149,10 +149,37 @@ function * deletePriceHistoryByIdFlow() {
   }
 }
 
+function * updateProductByIdFlow() {
+  while (true) {
+    const action: { type: string, payload: any } = yield take(
+      UPDATE_PRODUCT_REQUEST
+    )
+    const { payload } = action
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'update', loading: true }
+    })
+    try {
+      const product = yield call(Api.updateProductById, payload)
+      if (product) {
+        yield put({
+          type: UPDATE_PRODUCT_SUCCESS,
+          payload: product
+        })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'update')
+    }
+  }
+}
+
 export default function * rootSagas(): any {
   yield fork(createProductFlow)
   yield fork(fetchAllProductsFlow)
   yield fork(createPriceHistoryFlow)
   yield fork(deleteProductByIdFlow)
   yield fork(deletePriceHistoryByIdFlow)
+  yield fork(updateProductByIdFlow)
 }

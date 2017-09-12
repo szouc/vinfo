@@ -1,18 +1,9 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form/es/immutable'
-import Button from 'antd/es/button'
-import Row from 'antd/es/row'
-import Col from 'antd/es/col'
-import Alert from 'antd/es/alert'
-import Input from '@clientModulesShared/forms/Input'
+import { Button, Row, Col, Alert } from 'antd'
+import { Input } from '@clientModulesShared/forms'
 
 import BaseComponent from '@clientModulesShared/BaseComponent'
-
-import 'antd/es/button/style/css'
-import 'antd/es/row/style/css'
-import 'antd/es/col/style/css'
-import 'antd/es/alert/style/css'
-import 'antd/es/input/style/css'
 
 const validate = values => {
   const errors = {}
@@ -40,11 +31,11 @@ class CompanyCreateForm extends BaseComponent {
     } = this.props
     return (
       <form onSubmit={handleSubmit}>
-        {errorMessage
-          ? <Row>
+        {errorMessage ? (
+          <Row>
             <Alert message={errorMessage} type='error' banner />
           </Row>
-          : null}
+        ) : null}
         <Row type='flex' justify='space-between'>
           <Col span={8}>
             <Field name='name' component={Input} placeholder='公司名称' />

@@ -4,10 +4,7 @@ import {
   CompanyListTable,
   CompanySelect
 } from '@clientModules/company/containers'
-import Row from 'antd/es/row'
-// import Col from 'antd/es/col'
-import 'antd/es/row/style/css'
-// import 'antd/es/col/style/css'
+import { Row } from 'antd'
 
 const Company = () => {
   return (

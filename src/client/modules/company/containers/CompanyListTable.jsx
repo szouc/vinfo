@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import CompanyListTable from '../components/CompanyListTable'
 import { deleteCompanyRequest, fetchCompanyListRequest } from '../actions'
 import { companyArraySelector } from '../selectors'
+import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
   const errorMessage = state.getIn(['company', 'companyStatus', 'error'])
@@ -24,4 +25,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompanyListTable)
+export default connect(mapStateToProps, mapDispatchToProps)(immutPropsToJS(CompanyListTable))

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import CompanySelect from '../components/CompanySelect'
 import { companyArraySelector } from '../selectors'
 import { fetchCompanyListRequest } from '../actions'
+import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
   const companies = companyArraySelector(
@@ -22,4 +23,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompanySelect)
+export default connect(mapStateToProps, mapDispatchToProps)(immutPropsToJS(CompanySelect))

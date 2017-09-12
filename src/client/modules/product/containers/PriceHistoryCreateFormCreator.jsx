@@ -3,6 +3,7 @@ import { fromJS } from 'immutable'
 
 import PriceHistoryCreateFormCreator from '../components/PriceHistoryCreateFormCreator'
 import { createPriceHistoryRequest } from '../actions'
+import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
   const errorMessage = state.getIn(['product', 'productStatus', 'error'])
@@ -15,7 +16,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(
         createPriceHistoryRequest(
           fromJS({
-            productId: ownProps.product.get('_id'),
+            productId: ownProps.product._id,
             values
           })
         )
@@ -26,5 +27,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 export default productId =>
   connect(mapStateToProps, mapDispatchToProps)(
-    PriceHistoryCreateFormCreator(productId)
+    immutPropsToJS(PriceHistoryCreateFormCreator(productId))
   )

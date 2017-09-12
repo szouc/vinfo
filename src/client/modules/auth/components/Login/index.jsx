@@ -1,22 +1,11 @@
 import React from 'react'
 import BaseComponent from '@clientModulesShared/BaseComponent'
-import formItemHOC from '@clientModulesShared/formItemHOC'
 
 import { Field, reduxForm } from 'redux-form/es/immutable'
-import Button from 'antd/es/button'
-import Row from 'antd/es/row'
-import Col from 'antd/es/col'
-import Alert from 'antd/es/alert'
-import Input from 'antd/es/input'
+import { Button, Row, Col, Alert } from 'antd'
+import { Input } from '@clientModulesShared/forms'
 
 import style from './style.css'
-import 'antd/es/input/style/css'
-import 'antd/es/button/style/css'
-import 'antd/es/row/style/css'
-import 'antd/es/col/style/css'
-import 'antd/es/alert/style/css'
-
-const AntInput = formItemHOC(Input)
 
 const validate = values => {
   const errors = {}
@@ -38,7 +27,7 @@ const warn = values => {
 }
 
 class Login extends BaseComponent {
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
 
@@ -53,18 +42,18 @@ class Login extends BaseComponent {
     return (
       <Row type='flex' justify='center'>
         <form onSubmit={handleSubmit} className={style.register_input}>
-          {errorMessage
-            ? <Row>
+          {errorMessage ? (
+            <Row>
               <Alert message={errorMessage} type='error' banner />
             </Row>
-            : null}
+          ) : null}
           <Row>
-            <Field name='username' component={AntInput} label='工号' />
+            <Field name='username' component={Input} label='工号' />
           </Row>
           <Row>
             <Field
               name='password'
-              component={AntInput}
+              component={Input}
               label='密码'
               type='password'
             />

@@ -4,21 +4,21 @@ import { Select } from 'antd'
 
 const Option = Select.Option
 
-class CompanySelect extends BaseComponent {
+class ProductSelect extends BaseComponent {
   constructor(props) {
     super(props)
   }
 
   componentDidMount() {
-    this.props.getAllCompanies()
+    this.props.getAllProducts()
   }
 
   render() {
-    const { companies, ...rest } = this.props
-    const options = companies
-    const optionsList = options.map(company => (
-      <Option value={company._id}>
-        {company.name}({company.addr})
+    const { products, ...rest } = this.props
+    const options = products
+    const optionsList = options.map(product => (
+      <Option value={product._id}>
+        {product.name}({product.specs})
       </Option>
     ))
 
@@ -30,4 +30,4 @@ class CompanySelect extends BaseComponent {
   }
 }
 
-export default CompanySelect
+export default ProductSelect

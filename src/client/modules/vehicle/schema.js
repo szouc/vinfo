@@ -41,17 +41,17 @@ export const vehicleSchema = new schema.Entity(
   { idAttribute: '_id' }
 )
 
-const productNormalize = data => normalize(data, productSchema)
-const productArrayNormalize = data => normalize(data, [productSchema])
+// const productNormalize = data => normalize(data, productSchema)
+// const productArrayNormalize = data => normalize(data, [productSchema])
 
-const denormalizeProduct = (entities, id) =>
-  denormalize(id, productSchema, entities)
-const denormalizeProductArray = (entities, id) =>
-  denormalize(id, [productSchema], entities)
+// const denormalizeProduct = (entities, id) =>
+//   denormalize(id, productSchema, entities)
+// const denormalizeProductArray = (entities, id) =>
+//   denormalize(id, [productSchema], entities)
 
-export {
-  productNormalize,
-  productArrayNormalize,
-  denormalizeProduct,
-  denormalizeProductArray
-}
+// export {
+//   productNormalize,
+//   productArrayNormalize,
+//   denormalizeProduct,
+//   denormalizeProductArray
+// }

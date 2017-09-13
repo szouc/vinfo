@@ -1,114 +1,43 @@
-import { db } from '../../settings/db'
-import mongoose from 'mongoose'
+// @flow
 
-const Schema = mongoose.Schema
+import { createApiRoute } from '../routes'
 
-const baseVehicle = {
-  plate: {
-    type: String,
-    trim: true,
-    required: true
-  },
-  model: {
-    type: String,
-    trim: true
-  },
-  purchase_date: {
-    type: Date
-  },
-  init_mile: {
-    type: Number,
-    default: 0
-  },
-  active: {
-    type: Boolean,
-    default: true
-  },
-  created: {
-    type: Date,
-    default: Date.now()
-  }
-}
+export const VEHICLE_ROOT_ROUTE = '/vehicle'
+export const VEHICLE_ID_ROUTE = '/:id'
+export const VEHICLE_DRIVER_ROUTE = '/:id/driver'
+export const VEHICLE_DRIVER_ID_ROUTE = '/:id/driver/:childId'
+export const VEHICLE_FUEL_ROUTE = '/:id/fuel'
+export const VEHICLE_FUEL_ID_ROUTE = '/:id/fuel/:childId'
+export const VEHICLE_MAINTAIN_ROUTE = '/:id/maintenance'
+export const VEHICLE_MAINTAIN_ID_ROUTE = '/:id/maintenance/:childId'
 
-const baseFuel = {
-  applicant: {
-    username: {
-      type: String,
-      required: true
-    },
-    fullname: {
-      type: String
-    }
-  },
-  litre: {
-    type: Number,
-    required: true
-  },
-  cost: {
-    type: Number,
-    required: true
-  },
-  mile: {
-    type: Number
-  },
-  date: {
-    type: Date,
-    default: Date.now()
-  },
-  check: {
-    type: Boolean,
-    defalut: false
-  },
-  info: {
-    type: String
-  }
-}
-
-const FuelSchema = new Schema(baseFuel)
-
-const baseMaintain = {
-  applicant: {
-    username: {
-      type: String,
-      required: true
-    },
-    fullname: {
-      type: String
-    }
-  },
-  reason: {
-    type: String,
-    required: true
-  },
-  cost: {
-    type: Number,
-    default: 0
-  },
-  mile: {
-    type: Number
-  },
-  date: {
-    type: Date,
-    default: Date.now()
-  },
-  detail: {
-    type: String
-  },
-  check: {
-    type: Boolean,
-    defalut: false
-  },
-  info: {
-    type: String
-  }
-}
-
-const MaintainSchema = new Schema(baseMaintain)
-
-const VehicleSchema = new Schema(baseVehicle)
-
-VehicleSchema.index({ name: 1, addr: 1 }, { unique: true })
-
-const Vehicle = db.model('Company', VehicleSchema)
-
-export { Vehicle }
+// Exposing to API
+export const VEHICLE_ROOT_API = createApiRoute(VEHICLE_ROOT_ROUTE)
+export const VEHICLE_ID_API = createApiRoute(
+  VEHICLE_ROOT_ROUTE,
+  VEHICLE_ID_ROUTE
+)
+export const VEHICLE_DRIVER_API = createApiRoute(
+  VEHICLE_ROOT_ROUTE,
+  VEHICLE_DRIVER_ROUTE
+)
+export const VEHICLE_FUEL_API = createApiRoute(
+  VEHICLE_ROOT_ROUTE,
+  VEHICLE_FUEL_ROUTE
+)
+export const VEHICLE_MAINTAIN_API = createApiRoute(
+  VEHICLE_ROOT_ROUTE,
+  VEHICLE_MAINTAIN_ROUTE
+)
+export const VEHICLE_DRIVER_ID_API = createApiRoute(
+  VEHICLE_ROOT_ROUTE,
+  VEHICLE_DRIVER_ID_ROUTE
+)
+export const VEHICLE_FUEL_ID_API = createApiRoute(
+  VEHICLE_ROOT_ROUTE,
+  VEHICLE_FUEL_ID_ROUTE
+)
+export const VEHICLE_MAINTAIN_ID_API = createApiRoute(
+  VEHICLE_ROOT_ROUTE,
+  VEHICLE_MAINTAIN_ID_ROUTE
+)

@@ -37,8 +37,7 @@ class PriceHistoryListTable extends BaseComponent {
           <span>
             <Button
               size='small'
-              onClick={() =>
-                deletePriceHistoryById(product._id, record._id)}
+              onClick={deletePriceHistoryById(product._id, record._id)}
             >
               删除
             </Button>
@@ -48,7 +47,9 @@ class PriceHistoryListTable extends BaseComponent {
     ]
 
     const ProductUpdateFormById = ProductUpdateFormCreator(product._id)
-    const PriceHistoryCreateFormById = PriceHistoryCreateFormCreator(product._id)
+    const PriceHistoryCreateFormById = PriceHistoryCreateFormCreator(
+      product._id
+    )
 
     return (
       <div>

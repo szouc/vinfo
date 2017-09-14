@@ -117,8 +117,8 @@ const productStatus = (
       const pushToAll = state.get('all').push(payload.get('result'))
       return state.set('current', payload.get('result')).set('all', pushToAll)
     case DELETE_PRODUCT_SUCCESS:
-      const popFromAll = state.get('all').pop(payload)
-      return state.set('all', popFromAll)
+      const productPosition = state.get('all').indexOf(payload)
+      return state.deleteIn(['all', productPosition])
     default:
       return state
   }

@@ -24,10 +24,10 @@ const mapDispatchToProps = dispatch => {
     getAllProducts: () => {
       dispatch(fetchProductListRequest())
     },
-    deleteProductById: id => {
+    deleteProductById: id => () => {
       dispatch(deleteProductRequest(id))
     },
-    deletePriceHistoryById: (productId, priceHistoryId) => {
+    deletePriceHistoryById: (productId, priceHistoryId) => () => {
       dispatch(deletePriceHistoryRequest(fromJS({ productId, priceHistoryId })))
     }
   }

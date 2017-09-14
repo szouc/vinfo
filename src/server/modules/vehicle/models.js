@@ -60,18 +60,13 @@ const maintain = {
 
 const MaintainSchema = new Schema(maintain)
 
-const driver = {
-  principal: { type: Schema.Types.ObjectId, ref: 'User' },
-  secondary: { type: Schema.Types.ObjectId, ref: 'User' },
-  is_default: { type: Boolean, default: false }
-}
-
-const DriverSchema = new Schema(driver)
-
 const baseVehicle = {
   plate: {
     type: String,
-    trim: true,
+    required: true
+  },
+  engine: {
+    type: String,
     required: true
   },
   model: {
@@ -85,6 +80,10 @@ const baseVehicle = {
     type: Number,
     default: 0
   },
+  drivers: {
+    principal: { type: Schema.Types.ObjectId, ref: 'User' },
+    secondary: { type: Schema.Types.ObjectId, ref: 'User' }
+  },
   active: {
     type: Boolean,
     default: true
@@ -93,12 +92,13 @@ const baseVehicle = {
     type: Date,
     default: Date.now()
   },
-  drivers: [DriverSchema],
   fuels: [FuelSchema],
   maintenance: [MaintainSchema]
 }
 
 const VehicleSchema = new Schema(baseVehicle)
+
+VehicleSchema.index({ plate: 1, engine: 1 }, { unique: true })
 
 const Vehicle = db.model('Vehicle', VehicleSchema)
 

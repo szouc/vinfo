@@ -40,7 +40,7 @@ class ProductListTable extends BaseComponent {
             <Button
               type='danger'
               size='small'
-              onClick={() => deleteProductById(record._id)}
+              onClick={deleteProductById(record._id)}
             >
               删除
             </Button>

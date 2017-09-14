@@ -45,7 +45,7 @@ class PriceHistoryCreateFieldItem extends BaseComponent {
             />
           </Col>
           <Col span={4}>
-            <Button type='danger' onClick={() => removeItem(index)}>
+            <Button type='danger' onClick={removeItem(index)}>
               删除
             </Button>
           </Col>

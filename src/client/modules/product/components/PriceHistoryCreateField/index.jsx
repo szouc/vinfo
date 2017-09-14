@@ -11,7 +11,7 @@ class PriceHistoryCreateField extends BaseComponent {
   }
 
   pushItem = () => this.props.fields.push(fromJS({}))
-  removeItem = index => this.props.fields.remove(index)
+  removeItem = index => () => this.props.fields.remove(index)
 
   render() {
     const { fields } = this.props

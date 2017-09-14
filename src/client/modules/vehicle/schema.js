@@ -1,10 +1,6 @@
 // import { schema, normalize, denormalize } from 'normalizr'
 
-// export const userSchema = new schema.Entity(
-//   'user',
-//   {},
-//   { idAttribute: '_id' }
-// )
+// export const userSchema = new schema.Entity('user', {}, { idAttribute: '_id' })
 
 // export const driverSchema = new schema.Entity(
 //   'drivers',
@@ -35,8 +31,8 @@
 //   'vehicles',
 //   {
 //     drivers: driverSchema,
-//     fuels: fuelSchema,
-//     maintenance: maintainSchema
+//     fuels: [fuelSchema],
+//     maintenance: [maintainSchema]
 //   },
 //   { idAttribute: '_id' }
 // )

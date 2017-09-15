@@ -1,0 +1,5 @@
+export const ASSIGN = 'assign'
+export const ACCEPT = 'accept'
+export const SUBMIT = 'submit'
+export const PASS = 'pass'
+export const DENY = 'deny'

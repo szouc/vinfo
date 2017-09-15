@@ -41,6 +41,7 @@ function formItemHOC(Component, ownProps) {
   }
 
   return class fieldComponent extends BaseComponent {
+    static displayName = `Redux-form-ANTD_${Component.name}`
     render() {
       const {
         label,
@@ -73,7 +74,6 @@ function formItemHOC(Component, ownProps) {
       )
     }
   }
-
   // fieldComponent.displayName = `Redux-form-ANTD${Component.name}`
 }
 

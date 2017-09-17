@@ -12,6 +12,10 @@ function createVehicle(req, res) {
 
 function getAllVehicles(req, res) {
   Vehicle.find({ active: true })
+    .populate('drivers.principal')
+    .populate('drivers.secondary')
+    .populate('fuels.applicant')
+    .populate('maintenance.applicant')
     .lean()
     .then(docs => {
       if (docs) {
@@ -27,6 +31,10 @@ function getAllVehicles(req, res) {
 
 function getVehicleById(req, res) {
   Vehicle.findById(req.params.id)
+    .populate('drivers.principal')
+    .populate('drivers.secondary')
+    .populate('fuels.applicant')
+    .populate('maintenance.applicant')
     .lean()
     .then(doc => {
       if (doc) {
@@ -46,6 +54,10 @@ function deleteVehicleById(req, res) {
     { $set: { active: false } },
     { new: true }
   )
+    .populate('drivers.principal')
+    .populate('drivers.secondary')
+    .populate('fuels.applicant')
+    .populate('maintenance.applicant')
     .then(doc => {
       if (doc) {
         res.status(200).json(doc)
@@ -60,6 +72,10 @@ function deleteVehicleById(req, res) {
 
 function updateVehicleById(req, res) {
   Vehicle.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+    .populate('drivers.principal')
+    .populate('drivers.secondary')
+    .populate('fuels.applicant')
+    .populate('maintenance.applicant')
     .then(doc => {
       if (doc) {
         res.status(200).json(doc)
@@ -80,6 +96,10 @@ function addVehicleFuel(req, res) {
     },
     { new: true }
   )
+    .populate('drivers.principal')
+    .populate('drivers.secondary')
+    .populate('fuels.applicant')
+    .populate('maintenance.applicant')
     .then(doc => {
       if (doc) {
         res.status(200).json(doc)
@@ -100,6 +120,10 @@ function addVehicleMaintain(req, res) {
     },
     { new: true }
   )
+    .populate('drivers.principal')
+    .populate('drivers.secondary')
+    .populate('fuels.applicant')
+    .populate('maintenance.applicant')
     .then(doc => {
       if (doc) {
         res.status(200).json(doc)
@@ -114,6 +138,10 @@ function addVehicleMaintain(req, res) {
 
 function deleteVehicleFuel(req, res) {
   Vehicle.findById(req.params.id)
+    .populate('drivers.principal')
+    .populate('drivers.secondary')
+    .populate('fuels.applicant')
+    .populate('maintenance.applicant')
     .then(doc => {
       if (doc) {
         doc.fuels.id(req.params.childId).remove()
@@ -132,6 +160,10 @@ function deleteVehicleFuel(req, res) {
 
 function deleteVehicleMaintain(req, res) {
   Vehicle.findById(req.params.id)
+    .populate('drivers.principal')
+    .populate('drivers.secondary')
+    .populate('fuels.applicant')
+    .populate('maintenance.applicant')
     .then(doc => {
       if (doc) {
         doc.maintenance.id(req.params.childId).remove()

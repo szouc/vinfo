@@ -1,16 +1,16 @@
 import {
   DRIVER,
   CAPTAIN,
-  ACCOUNT,
+  ACCOUNTANT,
   MANAGER,
   ADMIN
 } from '../modules/user/constants'
 
-const DRIVER_PERMISSIONS = [DRIVER, CAPTAIN, ACCOUNT, MANAGER, ADMIN]
+const DRIVER_PERMISSIONS = [DRIVER, CAPTAIN, ACCOUNTANT, MANAGER, ADMIN]
 // const DRIVER_ACCOUNT_PERMISSIONS = [DRIVER, ACCOUNT, MANAGER, ADMIN]
 // const DRIVER_CAPTAIN_PERMISSIONS = [DRIVER, CAPTAIN, MANAGER, ADMIN]
 const CAPTAIN_PERMISSIONS = [CAPTAIN, MANAGER, ADMIN]
-const ACCOUNT_PERMISSIONS = [ACCOUNT, MANAGER, ADMIN]
+const ACCOUNTANT_PERMISSIONS = [ACCOUNTANT, MANAGER, ADMIN]
 const MANAGER_PERMISSIONS = [MANAGER, ADMIN]
 
 const isOwner = (req, res, next) => {
@@ -41,6 +41,6 @@ const permit = allowedArray => {
 const permitManager = permit(MANAGER_PERMISSIONS)
 const permitDriver = permit(DRIVER_PERMISSIONS)
 const permitCaptain = permit(CAPTAIN_PERMISSIONS)
-const permitAccount = permit(ACCOUNT_PERMISSIONS)
+const permitAccountant = permit(ACCOUNTANT_PERMISSIONS)
 
-export { permitManager, permitDriver, permitCaptain, permitAccount, isOwner }
+export { permitManager, permitDriver, permitCaptain, permitAccountant, isOwner }

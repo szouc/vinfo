@@ -4,11 +4,7 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const fuel = {
-  applicant: {
-    _id: { type: Schema.Types.ObjectId, required: true },
-    username: { type: String, required: true },
-    fullname: { type: String, required: true }
-  },
+  applicant: { type: Schema.Types.ObjectId, ref: 'User' },
   litre: {
     type: Number,
     required: true
@@ -35,11 +31,7 @@ const fuel = {
 const FuelSchema = new Schema(fuel)
 
 const maintain = {
-  applicant: {
-    _id: { type: Schema.Types.ObjectId, required: true },
-    username: { type: String, required: true },
-    fullname: { type: String, required: true }
-  },
+  applicant: { type: Schema.Types.ObjectId, ref: 'User' },
   reason: {
     type: String,
     required: true
@@ -89,18 +81,9 @@ const baseVehicle = {
     default: 0
   },
   drivers: {
-    principal: {
-      _id: { type: Schema.Types.ObjectId, required: true },
-      username: { type: String, required: true },
-      fullname: { type: String, required: true }
-    },
-    secondary: {
-      _id: { type: Schema.Types.ObjectId, required: true },
-      username: { type: String, required: true },
-      fullname: { type: String, required: true }
-    }
+    principal: { type: Schema.Types.ObjectId, ref: 'User' },
+    secondary: { type: Schema.Types.ObjectId, ref: 'User' }
   },
-  assigned: { type: Boolean, default: false },
   active: {
     type: Boolean,
     default: true

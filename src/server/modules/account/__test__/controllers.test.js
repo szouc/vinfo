@@ -1,6 +1,6 @@
 import moment from 'moment'
 import mongoose from 'mongoose'
-import { Transport } from '../models'
+import { Transport } from '../../transport/models'
 import { User } from '../../user/models'
 import { Vehicle } from '../../vehicle/models'
 import { Company } from '../../company/models'
@@ -8,11 +8,7 @@ import { Product } from '../../product/models'
 import app from '../../../app'
 import request from 'supertest'
 // import { replaceAll } from '../../../utils/replaceAll'
-import {
-  TRANSPORT_ID_API,
-  TRANSPORT_STATUS_API,
-  TRANSPORT_ROOT_API
-} from '../routes'
+import { ACCOUNT_ID_API, ACCOUNT_STATUS_API, ACCOUNT_ROOT_API } from '../routes'
 
 const manager = {
   username: 'manager_vehicle',
@@ -209,9 +205,8 @@ const modifiedDrivers = {
   }
 }
 
-let num
-let transportId
-let transportId2
+let accountId
+let accountId2
 describe('Transport Base Operations', () => {
   const agent = request.agent(app)
   beforeAll(async () => {
@@ -223,6 +218,8 @@ describe('Transport Base Operations', () => {
     await agent.post('/api/vehicle').send(vehicle1)
     await agent.post('/api/company').send(company1)
     await agent.post('/api/company').send(company2)
+    await agent.post('/api/transport').send(transport)
+    await agent.post('/api/transport').send(transport2)
   })
 
   afterAll(async () => {
@@ -233,78 +230,43 @@ describe('Transport Base Operations', () => {
     await Transport.remove()
   })
 
-  test('Should create a transport', async () => {
-    expect.assertions(3)
-    const res = await agent.post(TRANSPORT_ROOT_API).send(transport)
-    num = res.body[0].num
-    expect(res.statusCode).toBe(200)
-    expect(res.body[0].drivers.principal._id).toBe('59acecec3884881aa833aa10')
-    expect(res.body[1].assigned).toBeTruthy()
-  })
-
-  test('Should create another transport', async () => {
-    expect.assertions(2)
-    const res = await agent.post(TRANSPORT_ROOT_API).send(transport2)
-    const re = num + 1
-    expect(res.statusCode).toBe(200)
-    expect(res.body[0].num).toEqual(re)
-  })
-
-  test('Should not create a transport', async () => {
-    expect.assertions(2)
-    const res = await agent.post(TRANSPORT_ROOT_API).send(transport2)
-    expect(res.statusCode).toBe(400)
-    expect(res.text).toEqual('车辆已分配！')
-  })
-
-  test('Should fecth all transports', async () => {
+  test('Should fecth all accounts', async () => {
     expect.assertions(1)
-    const res = await agent.get(TRANSPORT_ROOT_API)
-    transportId = res.body[1]._id
-    transportId2 = res.body[0]._id
+    const res = await agent.get(ACCOUNT_ROOT_API)
+    accountId = res.body[1]._id
+    accountId2 = res.body[0]._id
     expect(res.body).toHaveLength(2)
   })
 
-  test('Should fetch a transport by id', async () => {
+  test('Should fetch a account by id', async () => {
     expect.assertions(2)
-    const res = await agent.get(TRANSPORT_ID_API.replace(/:id/, transportId))
+    const res = await agent.get(ACCOUNT_ID_API.replace(/:id/, accountId))
     expect(res.statusCode).toBe(200)
     expect(res.body.status).toEqual('assign')
   })
 
-  test('Should change the transport status by id', async () => {
-    expect.assertions(3)
-    const res = await agent
-      .put(TRANSPORT_STATUS_API.replace(/:id/, transportId))
-      .send({ status: 'submit' })
-    expect(res.statusCode).toBe(200)
-    expect(res.body[0].status).toBe('submit')
-    expect(res.body[1].assigned).toBeFalsy()
-  })
-
-  test('Should update transport by id', async () => {
+  test('Should update account by id', async () => {
     expect.assertions(2)
     const res = await agent
-      .put(TRANSPORT_ID_API.replace(/:id/, transportId))
+      .put(ACCOUNT_ID_API.replace(/:id/, accountId))
       .send(modifiedDrivers)
     expect(res.statusCode).toBe(200)
     expect(res.body.drivers.principal.username).toBe('driver2_vehicle')
   })
 
-  test('Should delete transport by id', async () => {
+  test('Should delete account by id', async () => {
     expect.assertions(2)
-    const res = await agent.delete(TRANSPORT_ID_API.replace(/:id/, transportId))
+    const res = await agent.delete(ACCOUNT_ID_API.replace(/:id/, accountId))
     expect(res.statusCode).toBe(200)
-    expect(res.body[1].assigned).toBeFalsy()
+    expect(res.body.active).toBeFalsy()
   })
 
-  test('Should not change the transport status with driver_role', async () => {
+  test('Should change account status by id', async () => {
     expect.assertions(2)
-    await agent.post('/auth/login').send(driver1)
     const res = await agent
-      .put(TRANSPORT_STATUS_API.replace(/:id/, transportId2))
-      .send({ status: 'deny' })
-    expect(res.statusCode).toBe(401)
-    expect(res.text).toBe('Couldnt update other status with dirver_role')
+      .put(ACCOUNT_STATUS_API.replace(/:id/, accountId2))
+      .send({ account_status: 'pass' })
+    expect(res.statusCode).toBe(200)
+    expect(res.body.account_status).toEqual('pass')
   })
 })

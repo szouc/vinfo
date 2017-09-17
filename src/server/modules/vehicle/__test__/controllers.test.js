@@ -44,28 +44,44 @@ const driver2 = {
 }
 
 const fuel = {
-  applicant: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+  applicant: {
+    _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
   litre: 20,
   cost: 600,
   mile: 14435
 }
 
 const maintain = {
-  applicant: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+  applicant: {
+    _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
   reason: '换轮胎',
   cost: 1000,
   mile: 17333
 }
 
 const anotherFuel = {
-  applicant: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+  applicant: {
+    _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
   litre: 30,
   cost: 700,
   mile: 24435
 }
 
 const anotherMaintain = {
-  applicant: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+  applicant: {
+    _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
   reason: '换机油',
   cost: 200,
   mile: 19333
@@ -78,8 +94,16 @@ const vehicle = {
   purchase_date: moment('01/12/2017', 'MM/DD/YYYY', true),
   init_mile: 123456,
   drivers: {
-    principal: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
-    secondary: mongoose.Types.ObjectId('59acecec3884881aa733aa10')
+    principal: {
+      _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+      username: 'driver1_vehicle',
+      fullname: 'test manager'
+    },
+    secondary: {
+      _id: mongoose.Types.ObjectId('59acecec3884881aa733aa10'),
+      username: 'driver2_vehicle',
+      fullname: 'test manager'
+    }
   },
   fuels: [fuel],
   maintenance: [maintain]
@@ -92,8 +116,16 @@ const anotherVehicle = {
   purchase_date: moment('01/12/2017', 'MM/DD/YYYY', true),
   init_mile: 123456,
   drivers: {
-    principal: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
-    secondary: mongoose.Types.ObjectId('59acecec3884881aa733aa10')
+    principal: {
+      _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+      username: 'driver1_vehicle',
+      fullname: 'test manager'
+    },
+    secondary: {
+      _id: mongoose.Types.ObjectId('59acecec3884881aa733aa10'),
+      username: 'driver2_vehicle',
+      fullname: 'test manager'
+    }
   },
   fuels: [fuel, anotherFuel],
   maintenance: [maintain]
@@ -102,8 +134,16 @@ const anotherVehicle = {
 const modifiedVehicle = {
   model: '东风',
   drivers: {
-    principal: mongoose.Types.ObjectId('59acecec3884881aa733aa10'),
-    secondary: mongoose.Types.ObjectId('59acecec3884881aa833aa10')
+    secondary: {
+      _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
+      username: 'driver1_vehicle',
+      fullname: 'test manager'
+    },
+    principal: {
+      _id: mongoose.Types.ObjectId('59acecec3884881aa733aa10'),
+      username: 'driver2_vehicle',
+      fullname: 'test manager'
+    }
   }
 }
 

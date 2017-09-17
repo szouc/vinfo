@@ -1,14 +1,16 @@
 import express from 'express'
 
-// import {
-//   TRANSPORT_ID_ROUTE
-// } from './routes'
+import {
+  TRANSPORT_ID_ROUTE,
+  TRANSPORT_STATUS_ROUTE
+} from './routes'
 
 import {
-  // getAllTransports,
-  // getTransportById,
-  // updateTransportById,
-  // deleteTransportById,
+  getAllTransports,
+  getTransportById,
+  updateTransportById,
+  updateTransportStatusById,
+  deleteTransportById,
   createTransport
 } from './controllers'
 
@@ -19,13 +21,17 @@ const transportRouter = express.Router()
 transportRouter
   .route('/')
   .post(permitCaptain, createTransport)
-  // .get(permitCaptain, getAllTransports)
+  .get(permitCaptain, getAllTransports)
 
 // Dynamic route should put the last position
-// transportRouter
-//   .route(TRANSPORT_ID_ROUTE)
-//   .get(permitCaptain, getTransportById)
-//   .put(permitManager, updateTransportById)
-//   .delete(permitManager, deleteTransportById)
+transportRouter
+  .route(TRANSPORT_ID_ROUTE)
+  .get(permitCaptain, getTransportById)
+  .put(permitCaptain, updateTransportById)
+  .delete(permitCaptain, deleteTransportById)
+
+transportRouter
+  .route(TRANSPORT_STATUS_ROUTE)
+  .put(updateTransportStatusById)
 
 export default transportRouter

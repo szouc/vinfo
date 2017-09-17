@@ -125,7 +125,7 @@ function deleteProductById(req, res) {
       }
     })
     .catch(() => {
-      res.status(500).send('Couldnt find product by id')
+      res.status(500).send('Couldnt delete product by id')
     })
 }
 

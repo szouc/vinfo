@@ -6,10 +6,10 @@ import addHostAddr from '@clientUtils/addHostAddr'
 
 const LOGIN_API = addHostAddr(auth.LOGIN_API)
 const LOGOUT_API = addHostAddr(auth.LOGOUT_API)
-const GET_USER_BY_USERNAME_API = addHostAddr(user.GET_USER_BY_USERNAME_API)
+const USER_ID_API = addHostAddr(user.USER_ID_API)
 
 export {
   LOGIN_API,
   LOGOUT_API,
-  GET_USER_BY_USERNAME_API
+  USER_ID_API
 }

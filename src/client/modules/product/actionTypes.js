@@ -1,4 +1,3 @@
-
 import { MODULE_NAME } from './'
 
 const defineModule = module => (...constant) => {

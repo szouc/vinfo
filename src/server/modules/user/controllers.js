@@ -33,13 +33,20 @@ const deleteUserByUsername = (req, res) => {
 }
 
 const createUser = (req, res) => {
-  User.create(req.body)
-    .then(() => {
-      res.status(200).send('You have added a new user.')
-    })
-    .catch(() => {
+  User.register(req.body, req.body.password, (err, user) => {
+    if (err) {
       res.status(500).send('Couldnt save the user at this time')
-    })
+    } else {
+      res.status(200).json(user)
+    }
+  })
+  // User.create(req.body)
+  //   .then(() => {
+  //     res.status(200).send('You have added a new user.')
+  //   })
+  //   .catch(() => {
+  //     res.status(500).send('Couldnt save the user at this time')
+  //   })
 }
 
 const getUserByUsername = (req, res) => {

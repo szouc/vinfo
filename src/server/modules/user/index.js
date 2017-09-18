@@ -1,7 +1,7 @@
 import express from 'express'
 
 import {
-  GET_USER_BY_USERNAME_ROUTE,
+  USER_ID_ROUTE,
   USER_RESET_PASSWORD_ROUTE
 } from './routes'
 
@@ -22,10 +22,9 @@ userRouter.route('/')
   .get(getAllUser)
   .post(createUser)
 
-userRouter.route(GET_USER_BY_USERNAME_ROUTE)
-  .all(isOwner)
-  .get(getUserByUsername)
-  .delete(deleteUserByUsername)
+userRouter.route(USER_ID_ROUTE)
+  .get(isOwner, getUserByUsername)
+  .delete(permitManager, deleteUserByUsername)
 
 userRouter.route(USER_RESET_PASSWORD_ROUTE)
   .all(isOwner)

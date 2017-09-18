@@ -3,7 +3,7 @@
 import localforage from 'localforage'
 import fetch from '@clientUtils/fetch'
 import { fromJS } from 'immutable'
-import { LOGIN_API, LOGOUT_API, GET_USER_BY_USERNAME_API } from './apiRoutes'
+import { LOGIN_API, LOGOUT_API, USER_ID_API } from './apiRoutes'
 
 // response status
 const TRUE = true
@@ -99,7 +99,7 @@ async function logout() {
  */
 async function fetchProfile(username: string) {
   // Fetch url & options
-  let url: string = GET_USER_BY_USERNAME_API.replace(/:username/, username)
+  let url: string = USER_ID_API.replace(/:username/, username)
   let options: { method: string } = { method: 'get' }
 
   // Fetch a user info from the server API

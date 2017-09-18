@@ -4,7 +4,8 @@ import Header from '@clientModules/auth/containers/Header'
 import { Route, Switch } from 'react-router-dom'
 // import Carousel from '../Carousel'
 // import Company from '../Company'
-import Product from '../Product'
+// import Product from '../Product'
+import User from '../User'
 import NotFound from '../NotFound'
 
 const { Content, Footer } = Layout
@@ -15,7 +16,7 @@ const baseLayout = ({ match }) => {
       <Header />
       <Content>
         <Switch>
-          <Route exact path={match.url} render={() => <Product />} />
+          <Route exact path={match.url} render={() => <User />} />
           <Route render={() => <NotFound />} />
         </Switch>
       </Content>

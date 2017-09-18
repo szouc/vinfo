@@ -3,6 +3,7 @@ import { reducer as formReducer } from 'redux-form/immutable'
 import { reducer as authReducer } from '../modules/auth'
 import { reducer as companyReducer } from '../modules/company'
 import { reducer as productReducer } from '../modules/product'
+import { reducer as userReducer } from '../modules/user'
 import routerReducer from '../route/reducer' // hack the default to immutable routerReducer
 
 const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   company: companyReducer,
   product: productReducer,
+  user: userReducer,
   form: formReducer
 })
 export default rootReducer

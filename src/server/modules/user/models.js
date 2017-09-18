@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import {db} from '../../settings/db'
+import { db } from '../../settings/db'
 import passportLocalMongoose from 'passport-local-mongoose'
 
 import {
@@ -67,18 +67,16 @@ const vinfoUser = {
       trim: true
     },
     cert: {
-      number: {
-        type: String,
-        trim: true
-      },
-      expired: {
-        type: Date
-      }
+      type: String,
+      trim: true
     },
-    idFront: {
+    cert_expired: {
+      type: Date
+    },
+    id_front: {
       type: String
     },
-    idBack: {
+    id_back: {
       type: String
     }
   }

@@ -11,12 +11,10 @@ const user = {
   active: true,
   driver: {
     license: 'ADBDE12345',
-    cert: {
-      number: '1234123541sdfasdf',
-      expired: '2017-08-05'
-    },
-    idFront: './hello',
-    idBack: './End'
+    cert: '1234123541sdfasdf',
+    cert_expired: '2017-08-05',
+    id_front: './hello',
+    id_back: './End'
   }
 }
 

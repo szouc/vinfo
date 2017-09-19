@@ -61,24 +61,22 @@ const baseUser = {
 */
 const vinfoUser = {
   ...baseUser,
-  driver: {
-    license: {
-      type: String,
-      trim: true
-    },
-    cert: {
-      type: String,
-      trim: true
-    },
-    cert_expired: {
-      type: Date
-    },
-    id_front: {
-      type: String
-    },
-    id_back: {
-      type: String
-    }
+  license: {
+    type: String,
+    trim: true
+  },
+  cert: {
+    type: String,
+    trim: true
+  },
+  cert_expired: {
+    type: Date
+  },
+  id_front: {
+    type: String
+  },
+  id_back: {
+    type: String
   }
 }
 

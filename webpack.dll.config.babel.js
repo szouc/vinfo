@@ -48,7 +48,7 @@ const dllConfig = {
 
   output: {
     path: outputPath,
-    filename: 'js/[name].dll.js',
+    filename: '[name].dll.js',
     library: '[name]_library'
   },
 

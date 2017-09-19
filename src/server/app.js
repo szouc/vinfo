@@ -11,6 +11,7 @@ import passport from 'passport'
 import renderApp from './render-app'
 import session from 'express-session'
 import cors from 'cors'
+import path from 'path'
 
 import { User } from './modules/user/models'
 
@@ -35,7 +36,7 @@ const RedisStore = Redis(session)
 if (!isProd) {
   app.use(
     cors({
-      origin: 'http://localhost:7000',
+      origin: ['http://localhost:7000', 'http://localhost:8000'],
       credentials: true
     })
   )
@@ -71,8 +72,8 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 // Static path
-app.use(STATIC_PATH, express.static('dist'))
-app.use(STATIC_PATH, express.static('public'))
+app.use(STATIC_PATH, express.static(path.resolve(__dirname, '../../dist')))
+app.use(STATIC_PATH, express.static(path.resolve(__dirname, '../../public')))
 
 // Log request to console
 app.use(logger('dev'))

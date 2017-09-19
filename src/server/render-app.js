@@ -11,7 +11,7 @@ const renderApp = (title: string) =>
     </head>
     <body>
       <div class="${APP_CONTAINER_CLASS}"></div>
-      <script src="${`${STATIC_PATH}/js/vendors.dll.js`}"></script>
+      <script src="${`${STATIC_PATH}/vendors.dll.js`}"></script>
       <script src="${`http://localhost:${WDS_PORT}`}/js/manifest.js"></script>
       <script src="${`http://localhost:${WDS_PORT}`}/js/vendor.js"></script>
       <script src="${`http://localhost:${WDS_PORT}`}/js/bundle.js"></script>

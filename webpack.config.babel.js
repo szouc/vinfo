@@ -1,5 +1,6 @@
 import { STATIC_PATH, WDS_PORT } from './src/shared/config'
 
+import CleanWebpackPlugin from 'clean-webpack-plugin'
 import AssetsPlugin from 'assets-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
@@ -20,7 +21,17 @@ const outputPath = path.resolve(__dirname, './dist')
 const nodeModulesPath = path.resolve(__dirname, './node_modules')
 const clientUtilsPath = path.resolve(__dirname, './src/client/utils')
 const clientModulesPath = path.resolve(__dirname, './src/client/modules')
-const clientModulesSharedPath = path.resolve(__dirname, './src/client/modules/shared')
+const clientModulesSharedPath = path.resolve(
+  __dirname,
+  './src/client/modules/shared'
+)
+
+const pathsToClean = ['dist', 'lib']
+
+const cleanOptions = {
+  root: path.resolve(__dirname),
+  exclude: ['vendors-manifest.json', 'vendors.dll.js', 'upload']
+}
 
 //
 //
@@ -96,10 +107,7 @@ const clientConfig = {
 
   entry: {
     bundle: isProd
-      ? [
-        'babel-polyfill',
-        clientPath
-      ]
+      ? ['babel-polyfill', clientPath]
       : [
         'babel-polyfill',
         'react-hot-loader/patch',
@@ -113,16 +121,15 @@ const clientConfig = {
     ...config.output,
     filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
     sourceMapFilename: isProd ? 'js/[name].[chunkhash].map' : 'js/[name].map',
-    chunkFilename: isProd ? 'js/[name].[chunkhash].chunk.js' : 'js/[name].chunk.js',
+    chunkFilename: isProd
+      ? 'js/[name].[chunkhash].chunk.js'
+      : 'js/[name].chunk.js',
     publicPath: isProd ? STATIC_PATH : `http://localhost:${WDS_PORT}/`
   },
 
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
-    modules: [
-      srcPath,
-      nodeModulesPath
-    ],
+    modules: [srcPath, nodeModulesPath],
     alias: {
       '@server': serverPath,
       '@client': clientPath,
@@ -147,9 +154,7 @@ const clientConfig = {
             }
           }
         ],
-        exclude: [
-          nodeModulesPath
-        ]
+        exclude: [nodeModulesPath]
         // include: [
         //   path.resolve(__dirname, './src')
         // ]
@@ -166,11 +171,14 @@ const clientConfig = {
               babelrc: false,
               presets: [
                 // https://babeljs.io/docs/plugins/#presets
-                ['env', {
-                  modules: false,
-                  useBuiltIns: false,
-                  debug: false
-                }],
+                [
+                  'env',
+                  {
+                    modules: false,
+                    useBuiltIns: false,
+                    debug: false
+                  }
+                ],
                 'react',
                 'stage-0',
                 'flow'
@@ -179,26 +187,27 @@ const clientConfig = {
                 // https://babeljs.io/docs/plugins
                 ['syntax-dynamic-import'],
                 // ['transform-runtime'],
-                ['import', {
-                  libraryName: 'antd',
-                  libraryDirectory: 'es',
-                  style: 'css'
-                }],
-                ...isProd
+                [
+                  'import',
+                  {
+                    libraryName: 'antd',
+                    libraryDirectory: 'es',
+                    style: 'css'
+                  }
+                ],
+                ...(isProd
                   ? []
                   : [
                     'flow-react-proptypes',
                     'react-hot-loader/babel',
                     'transform-react-jsx-source',
                     'transform-react-jsx-self'
-                  ]
+                  ])
               ]
             }
           }
         ],
-        include: [
-          srcPath
-        ]
+        include: [srcPath]
       },
       {
         test: /\.css$/,
@@ -223,16 +232,21 @@ const clientConfig = {
               options: {
                 plugins: () => [
                   cssNext({
-                    browsers: ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 8', 'iOS >= 8', 'Android >= 4']
+                    browsers: [
+                      'last 2 versions',
+                      'Firefox ESR',
+                      '> 1%',
+                      'ie >= 8',
+                      'iOS >= 8',
+                      'Android >= 4'
+                    ]
                   })
                 ]
               }
             }
           ]
         }),
-        exclude: [
-          srcPath
-        ]
+        exclude: [srcPath]
       },
       {
         test: /\.css$/,
@@ -246,7 +260,9 @@ const clientConfig = {
                 importLoaders: 1,
                 sourceMap: !isProd,
                 modules: true,
-                localIdentName: !isProd ? '[name]-[local]-[hash:base64:5]' : '[hash:base64:5]',
+                localIdentName: !isProd
+                  ? '[name]-[local]-[hash:base64:5]'
+                  : '[hash:base64:5]',
                 minimize: isProd,
                 discardComments: { removeAll: true }
               }
@@ -256,16 +272,21 @@ const clientConfig = {
               options: {
                 plugins: () => [
                   cssNext({
-                    browsers: ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 8', 'iOS >= 8', 'Android >= 4']
+                    browsers: [
+                      'last 2 versions',
+                      'Firefox ESR',
+                      '> 1%',
+                      'ie >= 8',
+                      'iOS >= 8',
+                      'Android >= 4'
+                    ]
                   })
                 ]
               }
             }
           ]
         }),
-        include: [
-          srcPath
-        ]
+        include: [srcPath]
       }
     ]
   },
@@ -289,7 +310,9 @@ const clientConfig = {
   plugins: [
     // https://webpack.js.org/plugins/define-plugin/
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': isProd ? JSON.stringify('production') : JSON.stringify('development'),
+      'process.env.NODE_ENV': isProd
+        ? JSON.stringify('production')
+        : JSON.stringify('development'),
       'process.env.BROWSER': true,
       __DEV__: !isProd
     }),
@@ -319,11 +342,8 @@ const clientConfig = {
       children: true,
       async: 'common-in-lazy',
       // minChunks: module => /node_modules/.test(module.resource)
-      minChunks: ({ resource }) => (
-        resource &&
-        resource.includes('node_modules') &&
-        /antd/.test(resource)
-      )
+      minChunks: ({ resource }) =>
+        resource && resource.includes('node_modules') && /antd/.test(resource)
     }),
 
     // Common Chunk from the lazy modules
@@ -331,9 +351,7 @@ const clientConfig = {
       name: 'bundle',
       children: true,
       async: 'many-used',
-      minChunks: (module, count) => (
-        count >= 2
-      )
+      minChunks: (module, count) => count >= 2
     }),
 
     new webpack.optimize.CommonsChunkPlugin({
@@ -341,8 +359,10 @@ const clientConfig = {
       minChunks: Infinity
     }),
 
-    ...isProd
+    ...(isProd
       ? [
+        // https://github.com/johnagan/clean-webpack-plugin
+        new CleanWebpackPlugin(pathsToClean, cleanOptions),
         // https://webpack.js.org/plugins/hashed-module-ids-plugin/
         new webpack.HashedModuleIdsPlugin({
           hashFunction: 'sha256',
@@ -425,7 +445,7 @@ const clientConfig = {
         // https://github.com/th0r/webpack-bundle-analyzer
         // default host : 127.0.0.1 , port : 8888
         new BundleAnalyzerPlugin()
-      ]
+      ])
   ]
 }
 
@@ -452,11 +472,7 @@ export const serverConfig = {
 
   resolve: {
     extensions: ['.js', '.json'],
-    modules: [
-      nodeModulesPath,
-      serverPath,
-      sharedPath
-    ]
+    modules: [nodeModulesPath, serverPath, sharedPath]
   },
 
   module: {
@@ -473,9 +489,7 @@ export const serverConfig = {
             }
           }
         ],
-        include: [
-          srcPath
-        ]
+        include: [srcPath]
       },
       {
         test: /\.js$/,
@@ -489,14 +503,17 @@ export const serverConfig = {
               babelrc: false,
               presets: [
                 // https://babeljs.io/docs/plugins/#presets
-                ['env', {
-                  targets: {
-                    node: 'current'
-                  },
-                  modules: false,
-                  useBuiltIns: false,
-                  debug: false
-                }],
+                [
+                  'env',
+                  {
+                    targets: {
+                      node: 'current'
+                    },
+                    modules: false,
+                    useBuiltIns: false,
+                    debug: false
+                  }
+                ],
                 'react',
                 'stage-0',
                 'flow'
@@ -508,23 +525,23 @@ export const serverConfig = {
             }
           }
         ],
-        include: [
-          srcPath
-        ]
+        include: [srcPath]
       }
     ]
   },
 
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': isProd ? JSON.stringify('production') : JSON.stringify('development'),
+      'process.env.NODE_ENV': isProd
+        ? JSON.stringify('production')
+        : JSON.stringify('development'),
       'process.env.BROWSER': false,
       __DEV__: !isProd
     }),
 
     // https://webpack.js.org/plugins/limit-chunk-count-plugin/
     new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1// Only one file for the server bundle
+      maxChunks: 1 // Only one file for the server bundle
     })
   ],
 

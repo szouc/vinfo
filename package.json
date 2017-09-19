@@ -14,6 +14,7 @@
     "dev:vsc": "nodemon -e js,jsx --ignore lib --ignore dist --exec babel-node --inspect=5858 src/server",
     "dev:wds": "webpack-dev-server --config webpack.config.babel.js --progress --color",
     "dev:dll": "webpack --config webpack.dll.config.babel.js -p --progress --color --hide-modules",
+    "dev:build": "cross-env NODE_ENV=production webpack --config webpack.config.babel.js -p --progress && babel src -d lib --ignore .test.js",
     "prod:build": "rimraf lib dist && babel src -d lib --ignore .test.js && cross-env NODE_ENV=production webpack --config webpack.config.babel.js -p --progress",
     "server:bundle": "cross-env NODE_ENV=production babel-node tools/serverBundle",
     "prod:start": "cross-env NODE_ENV=production pm2 start lib/server && pm2 logs",
@@ -22,7 +23,7 @@
     "test": "yarn lint && flow && jest --coverage",
     "jest": "cross-env NODE_ENV=test jest --runInBand --watchAll",
     "precommit": "yarn lint",
-    "prepush": "yarn prod:build"
+    "prepush": "yarn dev:build"
   },
   "dependencies": {
     "antd": "^2.13.1",
@@ -82,6 +83,7 @@
     "babel-preset-env": "^1.5.2",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.16",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
     "enzyme": "^2.9.1",

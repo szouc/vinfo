@@ -3,13 +3,14 @@ import { Field, reduxForm } from 'redux-form/es/immutable'
 import { Button, Row, Alert } from 'antd'
 import { Input } from '@clientModulesShared/forms'
 import BaseComponent from '@clientModulesShared/BaseComponent'
-
+import LicenseUpload from '../LicenseUpload'
 import GenderRadio from '../GenderRadio'
 import RoleRadio from '../RoleRadio'
 import formItemHOC from '@clientModulesShared/formItemHOC'
 
 const GenderRadioFormItem = formItemHOC(GenderRadio)
 const RoleRadioFormItem = formItemHOC(RoleRadio)
+const LicenseUploadFormItem = formItemHOC(LicenseUpload)
 
 const validate = values => {
   const errors = {}
@@ -47,6 +48,7 @@ class UserCreateForm extends BaseComponent {
         <Field name='fullname' component={Input} placeholder='真实姓名' />
         <Field name='gender' component={GenderRadioFormItem} />
         <Field name='role' component={RoleRadioFormItem} />
+        <Field name='license' component={LicenseUploadFormItem} placeholder='身份证正面' />
         <Row type='flex' justify='space-between'>
           <Button
             size='large'

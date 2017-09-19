@@ -22,9 +22,9 @@ import multer from 'multer'
 // configuring Multer to use files directory for storing files
 // this is important because later we'll need to access file path
 const storage = multer.diskStorage({
-  destination: './upload',
+  destination: './dist/uploads/license',
   filename(req, file, cb) {
-    cb(null, `${new Date()}-${file.originalname}`)
+    cb(null, `${Date.now()}-${file.originalname}`)
   }
 })
 

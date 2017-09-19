@@ -12,8 +12,10 @@ class PriceHistoryCreateFieldItem extends BaseComponent {
     super(props)
   }
 
+  removeItemByIndex = () => this.props.removeItem(this.props.index)
+
   render() {
-    const { removeItem, priceHistory, index } = this.props
+    const { priceHistory, index } = this.props
     return (
       <Row>
         <li key={v4()}>
@@ -45,7 +47,7 @@ class PriceHistoryCreateFieldItem extends BaseComponent {
             />
           </Col>
           <Col span={4}>
-            <Button type='danger' onClick={removeItem(index)}>
+            <Button type='danger' onClick={this.removeItemByIndex}>
               删除
             </Button>
           </Col>

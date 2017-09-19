@@ -2,6 +2,11 @@
 
 import { User } from './models'
 
+const uploadUserLicense = (req, res) => {
+  const file = req.file
+  res.status(200).json(file)
+}
+
 const getAllUser = (req, res) => {
   User.find({})
     .then(document => {
@@ -85,6 +90,7 @@ const resetPassword = (req, res, next) => {
 export {
   getAllUser,
   deleteUserByUsername,
+  uploadUserLicense,
   createUser,
   getUserByUsername,
   getOwnUser,

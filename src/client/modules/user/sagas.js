@@ -3,8 +3,8 @@
 import {
   SET_LOADING,
   REQUEST_ERROR,
-  // FETCH_USER_LIST_REQUEST,
-  // FETCH_USER_LIST_SUCCESS,
+  FETCH_USER_LIST_REQUEST,
+  FETCH_USER_LIST_SUCCESS,
   // DELETE_USER_REQUEST,
   // DELETE_USER_SUCCESS,
   // UPDATE_USER_REQUEST,
@@ -51,25 +51,25 @@ function * createUserFlow() {
   }
 }
 
-// function * fetchAllProductsFlow() {
-//   while (true) {
-//     yield take(FETCH_PRODUCT_LIST_REQUEST)
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'fetchList', loading: true }
-//     })
-//     try {
-//       const product = yield call(Api.getAllProducts)
-//       if (product) {
-//         yield put({ type: FETCH_PRODUCT_LIST_SUCCESS, payload: product })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield fork(clearLoadingAndError, 'fetchList')
-//     }
-//   }
-// }
+function * fetchAllUsersFlow() {
+  while (true) {
+    yield take(FETCH_USER_LIST_REQUEST)
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'fetchList', loading: true }
+    })
+    try {
+      const response = yield call(Api.getAllUsers)
+      if (response) {
+        yield put({ type: FETCH_USER_LIST_SUCCESS, payload: response })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'fetchList')
+    }
+  }
+}
 
 // function * deleteProductByIdFlow() {
 //   while (true) {
@@ -173,7 +173,7 @@ function * createUserFlow() {
 
 export default function * rootSagas(): any {
   yield fork(createUserFlow)
-  // yield fork(fetchAllProductsFlow)
+  yield fork(fetchAllUsersFlow)
   // yield fork(createPriceHistoryFlow)
   // yield fork(deleteProductByIdFlow)
   // yield fork(deletePriceHistoryByIdFlow)

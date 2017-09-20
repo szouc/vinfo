@@ -1,2 +1,2 @@
-import UserCreateForm from './UserCreateForm'
-export { UserCreateForm }
+export UserCreateForm from './UserCreateForm'
+export UserListTable from './UserListTable'

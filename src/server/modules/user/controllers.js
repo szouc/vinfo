@@ -4,11 +4,24 @@ import { User } from './models'
 
 const uploadUserLicense = (req, res) => {
   const file = req.file
-  res.status(200).json(file)
+  const imageUrl = `uploads/license/${file.filename}`
+  res.status(200).json(imageUrl)
 }
 
-const getAllUser = (req, res) => {
-  User.find({})
+const uploadUserIdFront = (req, res) => {
+  const file = req.file
+  const imageUrl = `uploads/id_front/${file.filename}`
+  res.status(200).json(imageUrl)
+}
+
+const uploadUserIdBack = (req, res) => {
+  const file = req.file
+  const imageUrl = `uploads/id_end/${file.filename}`
+  res.status(200).json(imageUrl)
+}
+
+const getAllUsers = (req, res) => {
+  User.find({active: true})
     .then(document => {
       res.status(200).json({ data: document })
     })
@@ -88,9 +101,11 @@ const resetPassword = (req, res, next) => {
 }
 
 export {
-  getAllUser,
+  getAllUsers,
   deleteUserByUsername,
   uploadUserLicense,
+  uploadUserIdFront,
+  uploadUserIdBack,
   createUser,
   getUserByUsername,
   getOwnUser,

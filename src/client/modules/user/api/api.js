@@ -5,7 +5,7 @@ import { fromJS } from 'immutable'
 // import { replaceAll } from '@clientUtils/replaceAll'
 
 import {
-  // userArrayNormalize,
+  userArrayNormalize,
   userNormalize
 } from '../schema'
 
@@ -34,18 +34,18 @@ async function createUser(payload: Immut): ?Immut {
   throw new Error('Couldnt create a new user')
 }
 
-// async function getAllProducts(): ?Immut {
-//   const options = {
-//     method: 'get'
-//   }
-//   const response = await fetch(PRODUCT_ROOT_API, options)
-//   if (response.status === STATUS_OK) {
-//     const data = await response.json()
-//     const products = productArrayNormalize(data)
-//     return fromJS(products)
-//   }
-//   throw new Error('Something wrong at getAllCompanies Process')
-// }
+async function getAllUsers(): ?Immut {
+  const options = {
+    method: 'get'
+  }
+  const response = await fetch(USER_ROOT_API, options)
+  if (response.status === STATUS_OK) {
+    const data = await response.json()
+    const user = userArrayNormalize(data)
+    return fromJS(user)
+  }
+  throw new Error('Something wrong at getAllCompanies Process')
+}
 
 // async function createPriceHistory(payload: Immut): ?Immut {
 //   const productId = payload.get('productId')
@@ -111,7 +111,7 @@ async function createUser(payload: Immut): ?Immut {
 // }
 
 export {
-  // getAllProducts,
+  getAllUsers,
   // createPriceHistory,
   // deleteProductById,
   // deletePriceHistoryById,

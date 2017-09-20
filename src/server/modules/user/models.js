@@ -62,8 +62,7 @@ const baseUser = {
 const vinfoUser = {
   ...baseUser,
   license: {
-    type: String,
-    trim: true
+    type: String
   },
   cert: {
     type: String,

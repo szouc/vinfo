@@ -1,29 +1,41 @@
 import React from 'react'
-import { Upload, message, Button, Icon, Modal } from 'antd'
+import { Upload, message, Icon, Modal } from 'antd'
 import './style.css'
 
-class LicenseUpload extends React.Component {
+function beforeUpload(file) {
+  const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
+  if (!isJPG) {
+    message.error('只能上传 JPG/PNG 文件!')
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isLt2M) {
+    message.error('上传文件必须小于 2MB!')
+  }
+  return isJPG && isLt2M
+}
+
+/**
+ * A component controlling the upload field
+ * @param {String} placeholder to show the upload label
+ * @param {String} name the field name
+ * @param {String} uploadUrl the upload server url
+ * @param {Number} numberOfImage the number of the upload images
+ * @class LicenseUpload
+ * @extends {React.Component}
+ */
+class ImageUpload extends React.Component {
   constructor(props) {
     super(props)
     this.uploadProps = {
-      name: 'license',
+      name: this.props.name,
       data: file => {
         var formData = new FormData()
-        formData.append('license', file, file[name])
+        formData.append(this.props.name, file, file[name])
         return formData
       },
-      action: '//127.0.0.1:8000/api/user/license',
-      withCredentials: true
-      // onChange(info) {
-      //   if (info.file.status !== 'uploading') {
-      //     console.log(info.file, info.fileList)
-      //   }
-      //   if (info.file.status === 'done') {
-      //     message.success(`${info.file.name} file uploaded successfully`)
-      //   } else if (info.file.status === 'error') {
-      //     message.error(`${info.file.name} file upload failed.`)
-      //   }
-      // }
+      action: this.props.uploadUrl,
+      withCredentials: true,
+      listType: 'picture-card'
     }
     this.state = {
       previewVisible: false,
@@ -41,26 +53,21 @@ class LicenseUpload extends React.Component {
     })
   }
 
-  // handleChange = ({ fileList }) => {
-  //   this.props.onChange({ fileList })
-  //   this.setState({ fileList })
-  // }
-
   handleChange = info => {
-    this.props.onChange(info)
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList)
-    }
+    this.props.onChange(info.file.response)
+    // if (info.file.status !== 'uploading') {
+    //   console.log(info.file, info.fileList)
+    // }
     if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`)
+      message.success(`${info.file.name} 文件上传成功。`)
     } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`)
+      message.error(`${info.file.name} 文件上传失败。`)
     }
     this.setState({ fileList: info.fileList })
   }
 
   render() {
-    const { placeholder, ...rest } = this.props
+    const { placeholder, numberOfImage, ...rest } = this.props
     const { previewVisible, previewImage, fileList } = this.state
     const uploadButton = (
       <div>
@@ -73,12 +80,12 @@ class LicenseUpload extends React.Component {
         <Upload
           {...this.uploadProps}
           {...rest}
-          listType='picture-card'
           fileList={fileList}
+          beforeUpload={beforeUpload}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
         >
-          {fileList.length >= 1 ? null : uploadButton}
+          {fileList.length >= numberOfImage ? null : uploadButton}
         </Upload>
         <Modal
           visible={previewVisible}
@@ -92,4 +99,4 @@ class LicenseUpload extends React.Component {
   }
 }
 
-export default LicenseUpload
+export default ImageUpload

@@ -66,6 +66,8 @@ const userStatus = (
     case CREATE_USER_SUCCESS:
       const pushToAll = state.get('all').unshift(payload.get('result'))
       return state.set('all', pushToAll)
+    case FETCH_USER_LIST_SUCCESS:
+      return state.set('all', payload.get('result'))
     case DELETE_USER_SUCCESS:
       const productPosition = state.get('all').indexOf(payload)
       return state.deleteIn(['all', productPosition])

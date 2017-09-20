@@ -4,26 +4,27 @@ import { User } from './models'
 
 const uploadUserLicense = (req, res) => {
   const file = req.file
-  const imageUrl = `uploads/license/${file.filename}`
+  const imageUrl = `/static/uploads/license/${file.filename}`
   res.status(200).json(imageUrl)
 }
 
 const uploadUserIdFront = (req, res) => {
   const file = req.file
-  const imageUrl = `uploads/id_front/${file.filename}`
+  const imageUrl = `/static/uploads/id_front/${file.filename}`
   res.status(200).json(imageUrl)
 }
 
 const uploadUserIdBack = (req, res) => {
   const file = req.file
-  const imageUrl = `uploads/id_end/${file.filename}`
+  const imageUrl = `/static/uploads/id_back/${file.filename}`
   res.status(200).json(imageUrl)
 }
 
 const getAllUsers = (req, res) => {
-  User.find({active: true})
-    .then(document => {
-      res.status(200).json({ data: document })
+  User.find({ active: true })
+    .lean()
+    .then(docs => {
+      res.status(200).json(docs)
     })
     .catch(() => {
       res.status(500).send('Couldnt run the query smart guy')

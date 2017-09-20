@@ -30,7 +30,7 @@ const pathsToClean = ['dist', 'lib']
 
 const cleanOptions = {
   root: path.resolve(__dirname),
-  exclude: ['vendors-manifest.json', 'vendors.dll.js', 'upload']
+  exclude: ['vendors-manifest.json', 'vendors.dll.js', 'uploads']
 }
 
 //

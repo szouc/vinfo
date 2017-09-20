@@ -3,6 +3,8 @@ import BaseComponent from '@clientModulesShared/BaseComponent'
 import addHostAddr from '@clientUtils/addHostAddr'
 import moment from 'moment'
 import { Table, Button } from 'antd'
+import ImageModal from '../ImageModal'
+import { roleMapper, genderMapper } from '../constants'
 
 class UserListTable extends BaseComponent {
   constructor(props) {
@@ -14,7 +16,7 @@ class UserListTable extends BaseComponent {
   }
 
   render() {
-    const { users, deleteUserById } = this.props
+    const { users, deleteUserByUsername } = this.props
     const data = users
     const columns = [
       {
@@ -23,44 +25,68 @@ class UserListTable extends BaseComponent {
         render: (text, record) => record.username
       },
       {
-        title: '',
+        title: '姓名',
         key: 'fullname',
         render: (text, record) => record.fullname
       },
       {
-        title: '',
+        title: '性别',
         key: 'gender',
-        render: (text, record) => record.gender
+        render: (text, record) => genderMapper[record.gender]
       },
       {
-        title: '',
+        title: '权限',
         key: 'role',
-        render: (text, record) => record.role
+        render: (text, record) => roleMapper[record.role]
       },
       {
-        title: '',
+        title: '驾驶证',
         key: 'license',
-        render: (text, record) => <img src={addHostAddr(record.license)} />
+        render: (text, record) => {
+          if (record.license) {
+            return <ImageModal imageUrl={addHostAddr(record.license)} />
+          } else {
+            return record.license
+          }
+        }
       },
       {
-        title: '',
+        title: '身份证正面',
         key: 'id_front',
-        render: (text, record) => <img src={addHostAddr(record.id_front)} />
+        render: (text, record) => {
+          if (record.id_front) {
+            return <ImageModal imageUrl={addHostAddr(record.id_front)} />
+          } else {
+            return record.id_front
+          }
+        }
       },
       {
-        title: '',
+        title: '身份证反面',
         key: 'id_back',
-        render: (text, record) => <img src={addHostAddr(record.id_back)} />
+        render: (text, record) => {
+          if (record.id_back) {
+            return <ImageModal imageUrl={addHostAddr(record.id_back)} />
+          } else {
+            return record.idback_
+          }
+        }
       },
       {
-        title: '',
+        title: '运输证号',
         key: 'cert',
         render: (text, record) => record.cert
       },
       {
-        title: '',
+        title: '运输证到期日期',
         key: 'cert_expired',
-        render: (text, record) => moment(record.cert_expired)
+        render: (text, record) => {
+          if (record.cert_expired) {
+            return moment(record.cert_expired).format('LL')
+          } else {
+            return record.cert_expired
+          }
+        }
       },
       {
         title: '相关操作',
@@ -70,7 +96,7 @@ class UserListTable extends BaseComponent {
             <Button
               type='danger'
               size='small'
-              onClick={deleteUserById(record._id)}
+              onClick={deleteUserByUsername(record.username)}
             >
               删除
             </Button>
@@ -83,7 +109,8 @@ class UserListTable extends BaseComponent {
       <Table
         columns={columns}
         dataSource={data}
-        rowKey={record => record._id}
+        rowKey={record => record.username}
+        bordered
       />
     )
   }

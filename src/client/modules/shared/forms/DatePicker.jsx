@@ -4,7 +4,7 @@ import moment from 'moment'
 import { DatePicker } from 'antd'
 
 const AntDatePicker = formItemHOC(DatePicker, {
-  format: 'LL',
-  showTime: { defaultValue: moment('00:00:00', 'HH:mm:ss') }
+  showTime: { defaultValue: moment('00:00:00', 'HH:mm:ss') },
+  format: 'LL'
 })
 export default AntDatePicker

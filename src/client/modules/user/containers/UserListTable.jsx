@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import UserListTable from '../components/UserListTable'
-import { fetchUserListRequest } from '../actions'
+import { fetchUserListRequest, deleteUserRequest } from '../actions'
 
 import { userArraySelector } from '../selectors'
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
@@ -19,6 +19,9 @@ const mapDispatchToProps = dispatch => {
   return {
     getAllUsers: () => {
       dispatch(fetchUserListRequest())
+    },
+    deleteUserByUsername: id => {
+      dispatch(deleteUserRequest(id))
     }
   }
 }

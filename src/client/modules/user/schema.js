@@ -1,6 +1,6 @@
 import { schema, normalize, denormalize } from 'normalizr'
 
-export const userSchema = new schema.Entity('users', {}, { idAttribute: '_id' })
+export const userSchema = new schema.Entity('users', {}, { idAttribute: 'username' })
 
 const userNormalize = data => normalize(data, userSchema)
 const userArrayNormalize = data => normalize(data, [userSchema])

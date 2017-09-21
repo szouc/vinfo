@@ -42,9 +42,10 @@ const getOwnUser = (req, res) => {
 }
 
 const deleteUserByUsername = (req, res) => {
-  User.remove({ username: req.params.username })
+  const username = req.params.username
+  User.remove({ username: username })
     .then(() => {
-      res.status(200).send('You have removed a user.')
+      res.status(200).send(username)
     })
     .catch(() => {
       res.status(500).send('Couldnt remove the user at this time')

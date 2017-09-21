@@ -1,15 +1,25 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form/es/immutable'
-import Input from '@clientModulesShared/forms/Input'
-import InputNumber from '@clientModulesShared/forms/InputNumber'
-import DatePicker from '@clientModulesShared/forms/DatePicker'
-import { Button, Row, Alert } from 'antd'
-
+import { Button, Row, Col, Alert } from 'antd'
+import { Input, DatePicker } from '@clientModulesShared/forms'
 import BaseComponent from '@clientModulesShared/BaseComponent'
+import ImageUpload from '../ImageUpload'
+import GenderRadio from '../GenderRadio'
+import RoleRadio from '../RoleRadio'
+import formItemHOC from '@clientModulesShared/formItemHOC'
+import {
+  USER_LICENSE_UPLOAD_API,
+  USER_ID_FRONT_UPLOAD_API,
+  USER_ID_BACK_UPLOAD_API
+} from '../../api/apiRoutes'
+
+const GenderRadioFormItem = formItemHOC(GenderRadio)
+const RoleRadioFormItem = formItemHOC(RoleRadio)
+const ImageUploadFormItem = formItemHOC(ImageUpload)
 
 const validate = values => {
   const errors = {}
-  const requiredFields = ['name', 'specs', 'pricing']
+  const requiredFields = ['username', 'password', 'fullname']
   requiredFields.forEach(field => {
     if (!values.get(field)) {
       errors[field] = '必填'
@@ -18,18 +28,7 @@ const validate = values => {
   return errors
 }
 
-const showError = errorMessage => {
-  if (!errorMessage) {
-    return null
-  }
-  return (
-    <Row>
-      <Alert message={errorMessage} type='error' banner />
-    </Row>
-  )
-}
-
-class ProductUpdateForm extends BaseComponent {
+class UserUpdateForm extends BaseComponent {
   constructor(props) {
     super(props)
   }
@@ -44,20 +43,60 @@ class ProductUpdateForm extends BaseComponent {
     } = this.props
     return (
       <form onSubmit={handleSubmit}>
-        {showError(errorMessage)}
+        {errorMessage ? (
+          <Row>
+            <Alert message={errorMessage} type='error' banner />
+          </Row>
+        ) : null}
+        <Field name='username' component={Input} placeholder='工号' />
+        <Field
+          name='password'
+          component={Input}
+          type='password'
+          placeholder='密码'
+        />
+        <Field name='fullname' component={Input} placeholder='真实姓名' />
+        <Field name='gender' component={GenderRadioFormItem} />
+        <Field name='role' component={RoleRadioFormItem} />
+        <Row>
+          <Col span={8}>
+            <Field
+              name='id_front'
+              component={ImageUploadFormItem}
+              placeholder='身份证正面'
+              uploadUrl={USER_ID_FRONT_UPLOAD_API}
+              numberOfImage={1}
+            />
+          </Col>
+          <Col span={8}>
+            <Field
+              name='id_back'
+              component={ImageUploadFormItem}
+              placeholder='身份证反面'
+              uploadUrl={USER_ID_BACK_UPLOAD_API}
+              numberOfImage={1}
+            />
+          </Col>
+          <Col span={8}>
+            <Field
+              name='license'
+              component={ImageUploadFormItem}
+              placeholder='驾驶证'
+              uploadUrl={USER_LICENSE_UPLOAD_API}
+              numberOfImage={1}
+            />
+          </Col>
+        </Row>
+        <Field name='cert' component={Input} placeholder='运输证号' />
+        <Field name='cert_expired' component={DatePicker} placeholder='运输证到期日期' />
         <Row type='flex' justify='space-between'>
-          <Field name='license' component={Input} placeholder='驾驶证号' />
-          <Field name='cert' component={Input} placeholder='运输证号' />
-          <Field name='cert_expired' component={DatePicker} placeholder='运输证到期日期' />
-          <Field name='id_front' component={InputNumber} placeholder='身份证正面' />
-          <Field name='id_back' component={InputNumber} placeholder='身份证反面' />
           <Button
             size='large'
             type='primary'
             htmlType='submit'
             disabled={pristine || submitting}
           >
-            更新
+            注册
           </Button>
           <Button
             size='large'
@@ -65,7 +104,7 @@ class ProductUpdateForm extends BaseComponent {
             disabled={pristine || submitting}
             onClick={reset}
           >
-            取消
+            清空
           </Button>
         </Row>
       </form>
@@ -73,8 +112,7 @@ class ProductUpdateForm extends BaseComponent {
   }
 }
 
-export default productId =>
-  reduxForm({
-    form: `productUpdateForm_${productId}`,
-    validate
-  })(ProductUpdateForm)
+export default username => reduxForm({
+  form: `userCreateForm_${username}`,
+  validate
+})(UserUpdateForm)

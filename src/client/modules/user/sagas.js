@@ -5,8 +5,8 @@ import {
   REQUEST_ERROR,
   FETCH_USER_LIST_REQUEST,
   FETCH_USER_LIST_SUCCESS,
-  // DELETE_USER_REQUEST,
-  // DELETE_USER_SUCCESS,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
   // UPDATE_USER_REQUEST,
   // UPDATE_USER_SUCCESS,
   CREATE_USER_REQUEST,
@@ -71,31 +71,31 @@ function * fetchAllUsersFlow() {
   }
 }
 
-// function * deleteProductByIdFlow() {
-//   while (true) {
-//     const action: { type: string, payload: string } = yield take(
-//       DELETE_PRODUCT_REQUEST
-//     )
-//     const { payload } = action
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'delete', loading: true }
-//     })
-//     try {
-//       const productId = yield call(Api.deleteProductById, payload)
-//       if (productId) {
-//         yield put({
-//           type: DELETE_PRODUCT_SUCCESS,
-//           payload: productId
-//         })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield fork(clearLoadingAndError, 'delete')
-//     }
-//   }
-// }
+function * deleteUserByUsernameFlow() {
+  while (true) {
+    const action: { type: string, payload: string } = yield take(
+      DELETE_USER_REQUEST
+    )
+    const { payload } = action
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'delete', loading: true }
+    })
+    try {
+      const response = yield call(Api.deleteUserByUsername, payload)
+      if (response) {
+        yield put({
+          type: DELETE_USER_SUCCESS,
+          payload: response
+        })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'delete')
+    }
+  }
+}
 
 // function * createPriceHistoryFlow() {
 //   while (true) {
@@ -175,7 +175,7 @@ export default function * rootSagas(): any {
   yield fork(createUserFlow)
   yield fork(fetchAllUsersFlow)
   // yield fork(createPriceHistoryFlow)
-  // yield fork(deleteProductByIdFlow)
+  yield fork(deleteUserByUsernameFlow)
   // yield fork(deletePriceHistoryByIdFlow)
   // yield fork(updateProductByIdFlow)
 }

@@ -1,11 +1,12 @@
 import React from 'react'
 import { Modal, Button } from 'antd'
+import UserUpdateFormCreator from '../../containers/UserUpdateFormCreator'
 
 import BaseComponent from '@clientModulesShared/BaseComponent'
 import './style.css'
 
-export default class ImageModal extends BaseComponent {
-  constructor (props) {
+export default class UserUpdateFormModal extends BaseComponent {
+  constructor(props) {
     super(props)
     this.state = { visible: false }
   }
@@ -23,19 +24,18 @@ export default class ImageModal extends BaseComponent {
   }
 
   render() {
-    const { imageUrl } = this.props
+    const { user } = this.props
+    const UserUpdateForm = UserUpdateFormCreator(user.username)
     return (
       <div>
-        <Button size='small' onClick={this.showModal}>
-          查看图片
-        </Button>
+        <Button onClick={this.showModal}>更新</Button>
         <Modal
           wrapClassName='vertical-center-modal'
           visible={this.state.visible}
           onCancel={this.handleCancel}
           footer={null}
         >
-          <img width={416} src={imageUrl} />
+          <UserUpdateForm user={user} />
         </Modal>
       </div>
     )

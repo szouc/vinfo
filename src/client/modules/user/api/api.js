@@ -10,7 +10,7 @@ import {
 } from '../schema'
 
 import {
-  // USER_ID_API,
+  USER_ID_API,
   // USER_LICENSE_UPLOAD_API,
   USER_ROOT_API
 } from './apiRoutes'
@@ -66,16 +66,16 @@ async function getAllUsers(): ?Immut {
 //   throw new Error('Couldnt create a new product')
 // }
 
-// async function deleteProductById(id: string) {
-//   const options = {
-//     method: 'delete'
-//   }
-//   const response = await fetch(PRODUCT_ID_API.replace(/:id/, id), options)
-//   if (response.status === STATUS_OK) {
-//     return id
-//   }
-//   throw new Error('Something wrong at deleteProductById Process')
-// }
+async function deleteUserByUsername(username: string) {
+  const options = {
+    method: 'delete'
+  }
+  const response = await fetch(USER_ID_API.replace(/:username/, username), options)
+  if (response.status === STATUS_OK) {
+    return username
+  }
+  throw new Error('Something wrong at deleteUserByUsername Process')
+}
 
 // async function deletePriceHistoryById(payload: Immut) {
 //   const options = {
@@ -113,7 +113,7 @@ async function getAllUsers(): ?Immut {
 export {
   getAllUsers,
   // createPriceHistory,
-  // deleteProductById,
+  deleteUserByUsername,
   // deletePriceHistoryById,
   // updateProductById,
   createUser

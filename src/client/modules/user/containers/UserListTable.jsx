@@ -20,8 +20,8 @@ const mapDispatchToProps = dispatch => {
     getAllUsers: () => {
       dispatch(fetchUserListRequest())
     },
-    deleteUserByUsername: id => {
-      dispatch(deleteUserRequest(id))
+    deleteUserByUsername: username => () => {
+      dispatch(deleteUserRequest(username))
     }
   }
 }

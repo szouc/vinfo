@@ -2,7 +2,7 @@ import React from 'react'
 import { Field, reduxForm } from 'redux-form/es/immutable'
 import { Button, Row, Col, Alert } from 'antd'
 import { Input, DatePicker } from '@clientModulesShared/forms'
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 import ImageUpload from '../ImageUpload'
 import GenderRadio from '../GenderRadio'
 import RoleRadio from '../RoleRadio'
@@ -28,7 +28,7 @@ const validate = values => {
   return errors
 }
 
-class UserUpdateForm extends BaseComponent {
+class UserUpdateForm extends React.PureComponent {
   constructor(props) {
     super(props)
   }
@@ -48,13 +48,6 @@ class UserUpdateForm extends BaseComponent {
             <Alert message={errorMessage} type='error' banner />
           </Row>
         ) : null}
-        <Field name='username' component={Input} placeholder='工号' />
-        <Field
-          name='password'
-          component={Input}
-          type='password'
-          placeholder='密码'
-        />
         <Field name='fullname' component={Input} placeholder='真实姓名' />
         <Field name='gender' component={GenderRadioFormItem} />
         <Field name='role' component={RoleRadioFormItem} />
@@ -96,7 +89,7 @@ class UserUpdateForm extends BaseComponent {
             htmlType='submit'
             disabled={pristine || submitting}
           >
-            注册
+            更新
           </Button>
           <Button
             size='large'
@@ -104,7 +97,7 @@ class UserUpdateForm extends BaseComponent {
             disabled={pristine || submitting}
             onClick={reset}
           >
-            清空
+            还原
           </Button>
         </Row>
       </form>
@@ -113,6 +106,6 @@ class UserUpdateForm extends BaseComponent {
 }
 
 export default username => reduxForm({
-  form: `userCreateForm_${username}`,
+  form: `userUpdateForm_${username}`,
   validate
 })(UserUpdateForm)

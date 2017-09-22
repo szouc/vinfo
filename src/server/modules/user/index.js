@@ -11,6 +11,7 @@ import {
 import {
   createUser,
   uploadUserLicense,
+  updateUserByUsername,
   uploadUserIdFront,
   uploadUserIdBack,
   deleteUserByUsername,
@@ -52,6 +53,7 @@ userRouter
 userRouter
   .route(USER_ID_ROUTE)
   .get(isOwner, getUserByUsername)
+  .put(permitManager, updateUserByUsername)
   .delete(permitManager, deleteUserByUsername)
 
 userRouter

@@ -1,10 +1,10 @@
 import React from 'react'
 import { Modal, Button } from 'antd'
 
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 import './style.css'
 
-export default class ImageModal extends BaseComponent {
+export default class ImageModal extends React.PureComponent {
   constructor (props) {
     super(props)
     this.state = { visible: false }

@@ -2,7 +2,7 @@ import React from 'react'
 import { Field, reduxForm } from 'redux-form/es/immutable'
 import { Button, Row, Col, Alert } from 'antd'
 import { Input, DatePicker } from '@clientModulesShared/forms'
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 import ImageUpload from '../ImageUpload'
 import GenderRadio from '../GenderRadio'
 import RoleRadio from '../RoleRadio'
@@ -28,7 +28,8 @@ const validate = values => {
   return errors
 }
 
-class UserCreateForm extends BaseComponent {
+// class UserCreateForm extends BaseComponent {
+class UserCreateForm extends React.PureComponent {
   constructor(props) {
     super(props)
   }

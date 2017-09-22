@@ -1,70 +1,34 @@
-import Immutable, { fromJS } from 'immutable'
-import moment from 'moment'
-import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
+import Immutable, { fromJS, is } from 'immutable'
+import { normalize, denormalize, schema } from 'normalizr'
+import createImmutableSelector from './src/client/modules/shared/createImmutableSelector'
 
-let state,
-  list1Selector,
-  list2Selector,
-  keywordSelector,
-  filteredList2Selector,
-  createImmutableSelector
+const driver = {
+  id: 12,
+  name: 35
+}
+const driver1 = {
+  id: 13,
+  name: 35
+}
 
-// state for reducer a:
-state = Immutable.Map({
-  list1: Immutable.List(),
-  list2: Immutable.List(['hello goodbye', 'hello hello']),
-  keyword: ''
-})
+const userSchema = new schema.Entity('users')
 
-list1Selector = state => state.get('list1')
-list2Selector = state => state.get('list2')
-keywordSelector = state => state.get('keyword')
+const users = fromJS(normalize([driver, driver1], [userSchema]))
 
-filteredList2Selector = createSelector(
-  [list2Selector, keywordSelector],
-  (list2, keyword) => {
-    return list2.filter(x => {
-      return x.indexOf(keyword) !== -1
-    })
-  }
-)
+const userEntity = users.get('entities')
+const userResult = users.get('result')
 
-const somethingExpensive1Selector = createSelector(
-  [list1Selector, filteredList2Selector],
-  (list1, filteredList2) => {
-    console.log('EXPENSIVE COMPUTATION TRIGGERED! Generating for ===...')
-    return Math.random()
-  }
-)
+console.log(userEntity)
+console.log(userResult)
 
-createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is)
+const deUser = (id, entities) => denormalize(id, userSchema, entities)
+const deArrayUser = (id, entities) => denormalize(id, [userSchema], entities)
 
-const somethingExpensive2Selector = createImmutableSelector(
-  [list1Selector, filteredList2Selector],
-  (list1, filteredList2) => {
-    console.log(
-      'EXPENSIVE COMPUTATION TRIGGERED! Generating for Immutable.is()...'
-    )
-    return Math.random()
-  }
-)
+const userArraySelector = createImmutableSelector([deArrayUser], users => users)
 
-state = state.set('keyword', '')
-console.log('expensive1(state)', somethingExpensive1Selector(state))
-state = state.set('keyword', 'he')
-console.log('expensive1(state)', somethingExpensive1Selector(state))
-state = state.set('keyword', 'hell')
-console.log('expensive1(state)', somethingExpensive1Selector(state))
-state = state.set('keyword', 'helldsfs')
-console.log('expensive1(state)', somethingExpensive1Selector(state))
-console.log('')
-console.log('====================================')
-console.log('')
-state = state.set('keyword', '')
-console.log('expensive2(state)', somethingExpensive2Selector(state))
-state = state.set('keyword', 'he')
-console.log('expensive2(state)', somethingExpensive2Selector(state))
-state = state.set('keyword', 'hell')
-console.log('expensive2(state)', somethingExpensive2Selector(state))
-state = state.set('keyword', 'helldsfs')
-console.log('expensive2(state)', somethingExpensive2Selector(state))
+const users1 = userArraySelector(userResult, userEntity)
+const users2 = userArraySelector(userResult, userEntity)
+
+console.log(is(users1, users2))
+
+console.log(is(driver, driver1))

@@ -28,7 +28,7 @@ class AuthHeader extends BaseComponent {
 
     return (
       <Header>
-        <Row type='flex' justify='end'>
+        <Row type='flex' justify='space-around'>
           <Col span={18} offset={3}>
             <div className='logo'>Company LOGO</div>
           </Col>

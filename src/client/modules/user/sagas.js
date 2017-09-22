@@ -7,8 +7,8 @@ import {
   FETCH_USER_LIST_SUCCESS,
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
-  // UPDATE_USER_REQUEST,
-  // UPDATE_USER_SUCCESS,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
   CREATE_USER_REQUEST,
   CREATE_USER_SUCCESS
 } from './actionTypes'
@@ -145,31 +145,31 @@ function * deleteUserByUsernameFlow() {
 //   }
 // }
 
-// function * updateProductByIdFlow() {
-//   while (true) {
-//     const action: { type: string, payload: any } = yield take(
-//       UPDATE_PRODUCT_REQUEST
-//     )
-//     const { payload } = action
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'update', loading: true }
-//     })
-//     try {
-//       const product = yield call(Api.updateProductById, payload)
-//       if (product) {
-//         yield put({
-//           type: UPDATE_PRODUCT_SUCCESS,
-//           payload: product
-//         })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield fork(clearLoadingAndError, 'update')
-//     }
-//   }
-// }
+function * updateUserByUsernameFlow() {
+  while (true) {
+    const action: { type: string, payload: any } = yield take(
+      UPDATE_USER_REQUEST
+    )
+    const { payload } = action
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'update', loading: true }
+    })
+    try {
+      const response = yield call(Api.updateUserByUsername, payload)
+      if (response) {
+        yield put({
+          type: UPDATE_USER_SUCCESS,
+          payload: response
+        })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'update')
+    }
+  }
+}
 
 export default function * rootSagas(): any {
   yield fork(createUserFlow)
@@ -177,5 +177,5 @@ export default function * rootSagas(): any {
   // yield fork(createPriceHistoryFlow)
   yield fork(deleteUserByUsernameFlow)
   // yield fork(deletePriceHistoryByIdFlow)
-  // yield fork(updateProductByIdFlow)
+  yield fork(updateUserByUsernameFlow)
 }

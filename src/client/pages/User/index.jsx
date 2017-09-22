@@ -7,10 +7,10 @@ import { Row } from 'antd'
 const User = () => {
   return (
     <div>
-      <Row type='flex' justify='center'>
+      <Row type='flex' justify='space-around'>
         <UserCreateForm />
       </Row>
-      <Row type='flex' justify='center'>
+      <Row type='flex' justify='space-around'>
         <UserListTable />
       </Row>
     </div>

@@ -1,13 +1,13 @@
 import React from 'react'
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 import addHostAddr from '@clientUtils/addHostAddr'
 import moment from 'moment'
-import { Table, Button, Popconfirm } from 'antd'
+import { Table, Button, Popconfirm, Row, Col } from 'antd'
 import ImageModal from '../ImageModal'
 import { roleMapper, genderMapper } from '../constants'
 import UserUpdateFormModal from '../UserUpdateFormModal'
 
-class UserListTable extends BaseComponent {
+class UserListTable extends React.PureComponent {
   constructor(props) {
     super(props)
   }
@@ -41,17 +41,6 @@ class UserListTable extends BaseComponent {
         render: (text, record) => roleMapper[record.role]
       },
       {
-        title: '驾驶证',
-        key: 'license',
-        render: (text, record) => {
-          if (record.license) {
-            return <ImageModal imageUrl={addHostAddr(record.license)} />
-          } else {
-            return record.license
-          }
-        }
-      },
-      {
         title: '身份证正面',
         key: 'id_front',
         render: (text, record) => {
@@ -70,6 +59,17 @@ class UserListTable extends BaseComponent {
             return <ImageModal imageUrl={addHostAddr(record.id_back)} />
           } else {
             return record.idback_
+          }
+        }
+      },
+      {
+        title: '驾驶证',
+        key: 'license',
+        render: (text, record) => {
+          if (record.license) {
+            return <ImageModal imageUrl={addHostAddr(record.license)} />
+          } else {
+            return record.license
           }
         }
       },
@@ -94,17 +94,21 @@ class UserListTable extends BaseComponent {
         key: 'action',
         render: (text, record) => (
           <span>
-            <UserUpdateFormModal user={record} />
-            <span>
-              <Popconfirm
-                title='确认删除？'
-                onConfirm={deleteUserByUsername(record.username)}
-              >
-                <Button type='danger' size='small'>
-                  删除
-                </Button>
-              </Popconfirm>
-            </span>
+            <Row type='flex' justify='space-between' align='middle'>
+              <Col span={6}>
+                <UserUpdateFormModal user={record} />
+              </Col>
+              <Col span={11}>
+                <Popconfirm
+                  title='确认删除？'
+                  onConfirm={deleteUserByUsername(record.username)}
+                >
+                  <Button type='danger' size='small'>
+                    删除
+                  </Button>
+                </Popconfirm>
+              </Col>
+            </Row>
           </span>
         )
       }

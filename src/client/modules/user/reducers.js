@@ -62,7 +62,7 @@ const userStatus = (
     case SET_LOADING:
       return state.set(`${payload.scope}Loading`, payload.loading)
     case REQUEST_ERROR:
-      return state.set('error', payload)
+      return state.set('error', fromJS(payload))
     case CREATE_USER_SUCCESS:
       const pushToAll = state.get('all').unshift(payload.get('result'))
       return state.set('all', pushToAll)

@@ -23,7 +23,7 @@ function beforeUpload(file) {
  * @class LicenseUpload
  * @extends {React.Component}
  */
-class ImageUpload extends React.Component {
+class ImageUpload extends React.PureComponent {
   constructor(props) {
     super(props)
     this.uploadProps = {

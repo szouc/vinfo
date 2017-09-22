@@ -2,10 +2,10 @@ import React from 'react'
 import { Modal, Button } from 'antd'
 import UserUpdateFormCreator from '../../containers/UserUpdateFormCreator'
 
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 import './style.css'
 
-export default class UserUpdateFormModal extends BaseComponent {
+export default class UserUpdateFormModal extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = { visible: false }
@@ -28,7 +28,7 @@ export default class UserUpdateFormModal extends BaseComponent {
     const UserUpdateForm = UserUpdateFormCreator(user.username)
     return (
       <div>
-        <Button onClick={this.showModal}>更新</Button>
+        <Button type='primary' size='small' onClick={this.showModal}>更新</Button>
         <Modal
           wrapClassName='vertical-center-modal'
           visible={this.state.visible}

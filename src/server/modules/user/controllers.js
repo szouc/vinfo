@@ -102,8 +102,22 @@ const resetPassword = (req, res, next) => {
   })
 }
 
+const updateUserByUsername = (req, res) => {
+  User.findOneAndUpdate({ username: req.params.username }, req.body, {
+    new: true
+  })
+    .lean()
+    .then(user => {
+      res.status(200).json(user)
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt run the update smart guy')
+    })
+}
+
 export {
   getAllUsers,
+  updateUserByUsername,
   deleteUserByUsername,
   uploadUserLicense,
   uploadUserIdFront,

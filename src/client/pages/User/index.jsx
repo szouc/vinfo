@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { UserCreateForm, UserListTable, DriverSelect } from '@clientModules/user/containers'
+import { UserCreateForm, UserListTable } from '@clientModules/user/containers'
 
 import { Row } from 'antd'
 

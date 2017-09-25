@@ -5,7 +5,8 @@ import { Route, Switch } from 'react-router-dom'
 // import Carousel from '../Carousel'
 // import Company from '../Company'
 // import Product from '../Product'
-import User from '../User'
+// import User from '../User'
+import Vehicle from '../Vehicle'
 import NotFound from '../NotFound'
 
 const { Content, Footer } = Layout
@@ -16,7 +17,7 @@ const baseLayout = ({ match }) => {
       <Header />
       <Content>
         <Switch>
-          <Route exact path={match.url} render={() => <User />} />
+          <Route exact path={match.url} render={() => <Vehicle />} />
           <Route render={() => <NotFound />} />
         </Switch>
       </Content>

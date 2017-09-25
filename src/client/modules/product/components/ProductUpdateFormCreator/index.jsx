@@ -4,7 +4,7 @@ import Input from '@clientModulesShared/forms/Input'
 import InputNumber from '@clientModulesShared/forms/InputNumber'
 import { Button, Row, Col, Alert } from 'antd'
 
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 
 const validate = values => {
   const errors = {}
@@ -28,7 +28,7 @@ const showError = errorMessage => {
   )
 }
 
-class ProductUpdateForm extends BaseComponent {
+class ProductUpdateForm extends React.PureComponent {
   constructor(props) {
     super(props)
   }

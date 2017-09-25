@@ -6,10 +6,7 @@ import { fetchProductListRequest } from '../actions'
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
-  const products = productArraySelector(
-    state.getIn(['product', 'productEntity']),
-    state.getIn(['product', 'productStatus', 'all'])
-  )
+  const products = productArraySelector(state)
   return {
     products
   }

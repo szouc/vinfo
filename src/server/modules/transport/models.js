@@ -14,17 +14,13 @@ const baseTransport = {
     plate: { type: String, required: true },
     engine: { type: String, required: true }
   },
-  drivers: {
-    principal: {
-      _id: { type: Schema.Types.ObjectId, required: true },
-      username: { type: String, required: true },
-      fullname: { type: String, required: true }
-    },
-    secondary: {
-      _id: { type: Schema.Types.ObjectId, required: true },
-      username: { type: String, required: true },
-      fullname: { type: String, required: true }
-    }
+  principal: {
+    username: { type: String, required: true },
+    fullname: { type: String, required: true }
+  },
+  secondary: {
+    username: { type: String, required: true },
+    fullname: { type: String, required: true }
   },
   from: {
     company: {

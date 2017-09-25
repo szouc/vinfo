@@ -1,10 +1,10 @@
 import React from 'react'
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 import PriceHistoryListTable from '../PriceHistoryListTable'
 
 import { Table, Button } from 'antd'
 
-class ProductListTable extends BaseComponent {
+class ProductListTable extends React.PureComponent {
   constructor(props) {
     super(props)
   }
@@ -35,7 +35,7 @@ class ProductListTable extends BaseComponent {
       {
         title: '相关操作',
         key: 'action',
-        render: (text, record) =>
+        render: (text, record) => (
           <span>
             <Button
               type='danger'
@@ -45,17 +45,19 @@ class ProductListTable extends BaseComponent {
               删除
             </Button>
           </span>
+        )
       }
     ]
 
     return (
       <Table
         columns={columns}
-        expandedRowRender={record =>
+        expandedRowRender={record => (
           <PriceHistoryListTable
             product={record}
             deletePriceHistoryById={deletePriceHistoryById}
-          />}
+          />
+        )}
         dataSource={data}
         rowKey={record => record._id}
       />

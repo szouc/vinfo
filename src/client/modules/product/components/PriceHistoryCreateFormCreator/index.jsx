@@ -3,7 +3,7 @@ import { FieldArray, reduxForm } from 'redux-form/es/immutable'
 import { Button, Row, Col, Alert } from 'antd'
 import PriceHistoryCreateField from '../PriceHistoryCreateField'
 
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 
 const validate = values => {
   const errors = {}
@@ -27,7 +27,7 @@ const showError = errorMessage => {
   )
 }
 
-class PriceHistoryCreateForm extends BaseComponent {
+class PriceHistoryCreateForm extends React.PureComponent {
   constructor(props) {
     super(props)
   }

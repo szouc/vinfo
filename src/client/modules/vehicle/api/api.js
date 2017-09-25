@@ -5,7 +5,7 @@ import { fromJS } from 'immutable'
 // import { replaceAll } from '@clientUtils/replaceAll'
 
 import {
-  // vehicleArrayNormalize,
+  vehicleArrayNormalize,
   vehicleNormalize
 } from '../schema'
 
@@ -33,18 +33,18 @@ async function createVehicle(payload: Immut): ?Immut {
   throw new Error('Couldnt create a new vehicle')
 }
 
-// async function getAllProducts(): ?Immut {
-//   const options = {
-//     method: 'get'
-//   }
-//   const response = await fetch(PRODUCT_ROOT_API, options)
-//   if (response.status === STATUS_OK) {
-//     const data = await response.json()
-//     const products = productArrayNormalize(data)
-//     return fromJS(products)
-//   }
-//   throw new Error('Something wrong at getAllCompanies Process')
-// }
+async function getAllVehicles(): ?Immut {
+  const options = {
+    method: 'get'
+  }
+  const response = await fetch(VEHICLE_ROOT_API, options)
+  if (response.status === STATUS_OK) {
+    const data = await response.json()
+    const vehicles = vehicleArrayNormalize(data)
+    return fromJS(vehicles)
+  }
+  throw new Error('Something wrong at getAllVehicles Process')
+}
 
 // async function createPriceHistory(payload: Immut): ?Immut {
 //   const productId = payload.get('productId')
@@ -110,7 +110,7 @@ async function createVehicle(payload: Immut): ?Immut {
 // }
 
 export {
-  // getAllProducts,
+  getAllVehicles,
   // createPriceHistory,
   // deleteProductById,
   // deletePriceHistoryById,

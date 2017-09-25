@@ -5,7 +5,7 @@ import Input from '@clientModulesShared/forms/Input'
 import InputNumber from '@clientModulesShared/forms/InputNumber'
 import PriceHistoryCreateField from '../PriceHistoryCreateField'
 
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 
 const validate = values => {
   const errors = {}
@@ -29,7 +29,7 @@ const showError = errorMessage => {
   )
 }
 
-class ProductCreateForm extends BaseComponent {
+class ProductCreateForm extends React.PureComponent {
   constructor(props) {
     super(props)
   }

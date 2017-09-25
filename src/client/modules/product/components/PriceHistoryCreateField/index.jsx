@@ -1,11 +1,11 @@
 import React from 'react'
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 import { fromJS } from 'immutable'
 import FieldItem from './FieldItem'
 
 import { Button } from 'antd'
 
-class PriceHistoryCreateField extends BaseComponent {
+class PriceHistoryCreateField extends React.PureComponent {
   constructor(props) {
     super(props)
   }

@@ -3,8 +3,8 @@
 import {
   SET_LOADING,
   REQUEST_ERROR,
-  // FETCH_VEHICLE_LIST_REQUEST,
-  // FETCH_VEHICLE_LIST_SUCCESS,
+  FETCH_VEHICLE_LIST_REQUEST,
+  FETCH_VEHICLE_LIST_SUCCESS,
   // DELETE_VEHICLE_REQUEST,
   // DELETE_VEHICLE_SUCCESS,
   // UPDATE_VEHICLE_REQUEST,
@@ -51,25 +51,52 @@ function * createVehicleFlow() {
   }
 }
 
-// function * fetchAllProductsFlow() {
-//   while (true) {
-//     yield take(FETCH_PRODUCT_LIST_REQUEST)
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'fetchList', loading: true }
-//     })
-//     try {
-//       const product = yield call(Api.getAllProducts)
-//       if (product) {
-//         yield put({ type: FETCH_PRODUCT_LIST_SUCCESS, payload: product })
+// const createFlowCreator = (requestType, successType, api) =>
+//   function * () {
+//     while (true) {
+//       const action: { type: string, payload: Immut } = yield take(requestType)
+//       yield put({
+//         type: SET_LOADING,
+//         payload: { scope: 'create', loading: true }
+//       })
+//       try {
+//         const vehicle = yield call(api, action.payload)
+//         if (vehicle) {
+//           yield put({ type: successType, payload: vehicle })
+//         }
+//       } catch (error) {
+//         yield put({ type: REQUEST_ERROR, payload: error.message })
+//       } finally {
+//         yield fork(clearLoadingAndError, 'create')
 //       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield fork(clearLoadingAndError, 'fetchList')
 //     }
 //   }
-// }
+
+// const createVehicleFlow = createFlowCreator(
+//   CREATE_VEHICLE_REQUEST,
+//   CREATE_VEHICLE_SUCCESS,
+//   Api.createVehicle
+// )
+
+function * fetchAllVehiclesFlow() {
+  while (true) {
+    yield take(FETCH_VEHICLE_LIST_REQUEST)
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'fetchList', loading: true }
+    })
+    try {
+      const response = yield call(Api.getAllVehicles)
+      if (response) {
+        yield put({ type: FETCH_VEHICLE_LIST_SUCCESS, payload: response })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'fetchList')
+    }
+  }
+}
 
 // function * deleteProductByIdFlow() {
 //   while (true) {
@@ -173,7 +200,7 @@ function * createVehicleFlow() {
 
 export default function * rootSagas(): any {
   yield fork(createVehicleFlow)
-  // yield fork(fetchAllProductsFlow)
+  yield fork(fetchAllVehiclesFlow)
   // yield fork(createPriceHistoryFlow)
   // yield fork(deleteProductByIdFlow)
   // yield fork(deletePriceHistoryByIdFlow)

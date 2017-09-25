@@ -5,7 +5,6 @@ const Schema = mongoose.Schema
 
 const fuel = {
   applicant: {
-    _id: { type: Schema.Types.ObjectId, required: true },
     username: { type: String, required: true },
     fullname: { type: String, required: true }
   },
@@ -36,7 +35,6 @@ const FuelSchema = new Schema(fuel)
 
 const maintain = {
   applicant: {
-    _id: { type: Schema.Types.ObjectId, required: true },
     username: { type: String, required: true },
     fullname: { type: String, required: true }
   },
@@ -88,17 +86,13 @@ const baseVehicle = {
     type: Number,
     default: 0
   },
-  drivers: {
-    principal: {
-      _id: { type: Schema.Types.ObjectId, required: true },
-      username: { type: String, required: true },
-      fullname: { type: String, required: true }
-    },
-    secondary: {
-      _id: { type: Schema.Types.ObjectId, required: true },
-      username: { type: String, required: true },
-      fullname: { type: String, required: true }
-    }
+  principal: {
+    username: { type: String },
+    fullname: { type: String }
+  },
+  secondary: {
+    username: { type: String },
+    fullname: { type: String }
   },
   assigned: { type: Boolean, default: false },
   active: {

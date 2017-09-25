@@ -24,7 +24,6 @@ const manager = {
 }
 
 const driver1 = {
-  _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
   username: 'driver1_vehicle',
   password: '123',
   fullname: 'test manager',
@@ -34,7 +33,6 @@ const driver1 = {
 }
 
 const driver2 = {
-  _id: mongoose.Types.ObjectId('59acecec3884881aa733aa10'),
   username: 'driver2_vehicle',
   password: '123',
   fullname: 'test manager',
@@ -45,7 +43,6 @@ const driver2 = {
 
 const fuel = {
   applicant: {
-    _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
     username: 'driver1_vehicle',
     fullname: 'test manager'
   },
@@ -56,7 +53,6 @@ const fuel = {
 
 const maintain = {
   applicant: {
-    _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
     username: 'driver1_vehicle',
     fullname: 'test manager'
   },
@@ -72,17 +68,13 @@ const vehicle = {
   model: '解放',
   purchase_date: moment('01/12/2017', 'MM/DD/YYYY', true),
   init_mile: 123456,
-  drivers: {
-    principal: {
-      _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
-      username: 'driver1_vehicle',
-      fullname: 'test manager'
-    },
-    secondary: {
-      _id: mongoose.Types.ObjectId('59acecec3884881aa733aa10'),
-      username: 'driver2_vehicle',
-      fullname: 'test manager'
-    }
+  principal: {
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
+  secondary: {
+    username: 'driver2_vehicle',
+    fullname: 'test manager'
   },
   assign: false,
   fuels: [fuel],
@@ -96,17 +88,13 @@ const vehicle1 = {
   model: '东风',
   purchase_date: moment('01/12/2017', 'MM/DD/YYYY', true),
   init_mile: 123456,
-  drivers: {
-    principal: {
-      _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
-      username: 'driver1_vehicle',
-      fullname: 'test manager'
-    },
-    secondary: {
-      _id: mongoose.Types.ObjectId('59acecec3884881aa733aa10'),
-      username: 'driver2_vehicle',
-      fullname: 'test manager'
-    }
+  principal: {
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
+  secondary: {
+    username: 'driver2_vehicle',
+    fullname: 'test manager'
   },
   assign: false,
   fuels: [fuel],
@@ -195,17 +183,13 @@ const transport2 = {
 }
 
 const modifiedDrivers = {
-  drivers: {
-    secondary: {
-      _id: mongoose.Types.ObjectId('59acecec3884881aa833aa10'),
-      username: 'driver1_vehicle',
-      fullname: 'test manager'
-    },
-    principal: {
-      _id: mongoose.Types.ObjectId('59acecec3884881aa733aa10'),
-      username: 'driver2_vehicle',
-      fullname: 'test manager'
-    }
+  secondary: {
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
+  principal: {
+    username: 'driver2_vehicle',
+    fullname: 'test manager'
   }
 }
 
@@ -238,7 +222,7 @@ describe('Transport Base Operations', () => {
     const res = await agent.post(TRANSPORT_ROOT_API).send(transport)
     num = res.body[0].num
     expect(res.statusCode).toBe(200)
-    expect(res.body[0].drivers.principal._id).toBe('59acecec3884881aa833aa10')
+    expect(res.body[0].principal.username).toBe('driver1_vehicle')
     expect(res.body[1].assigned).toBeTruthy()
   })
 
@@ -288,7 +272,7 @@ describe('Transport Base Operations', () => {
       .put(TRANSPORT_ID_API.replace(/:id/, transportId))
       .send(modifiedDrivers)
     expect(res.statusCode).toBe(200)
-    expect(res.body.drivers.principal.username).toBe('driver2_vehicle')
+    expect(res.body.principal.username).toBe('driver2_vehicle')
   })
 
   test('Should delete transport by id', async () => {

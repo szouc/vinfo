@@ -9,7 +9,8 @@ async function createTransport(req, res) {
     if (vehicle.assigned) {
       res.status(400).send('车辆已分配！')
     } else {
-      transport.drivers = vehicle.drivers
+      transport.principal = vehicle.principal
+      transport.secondary = vehicle.secondary
       const doc = await Promise.all([
         Transport.create(transport),
         Vehicle.findByIdAndUpdate(

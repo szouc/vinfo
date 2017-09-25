@@ -12,10 +12,7 @@ import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
   const errorMessage = state.getIn(['product', 'productStatus', 'error'])
-  const products = productArraySelector(
-    state.getIn(['product', 'productEntity']),
-    state.getIn(['product', 'productStatus', 'all'])
-  )
+  const products = productArraySelector(state)
   return { errorMessage, products }
 }
 
@@ -33,4 +30,6 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(immutPropsToJS(ProductListTable))
+export default connect(mapStateToProps, mapDispatchToProps)(
+  immutPropsToJS(ProductListTable)
+)

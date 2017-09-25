@@ -1,10 +1,10 @@
 import React from 'react'
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 import { Select } from 'antd'
 
 const Option = Select.Option
 
-class CompanySelect extends BaseComponent {
+class CompanySelect extends React.PureComponent {
   constructor(props) {
     super(props)
   }

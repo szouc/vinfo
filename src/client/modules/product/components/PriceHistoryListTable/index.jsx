@@ -1,12 +1,12 @@
 import React from 'react'
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 import moment from 'moment'
 
 import { Table, Button } from 'antd'
 import PriceHistoryCreateFormCreator from '../../containers/PriceHistoryCreateFormCreator'
 import ProductUpdateFormCreator from '../../containers/ProductUpdateFormCreator'
 
-class PriceHistoryListTable extends BaseComponent {
+class PriceHistoryListTable extends React.PureComponent {
   constructor(props) {
     super(props)
   }

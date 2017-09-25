@@ -1,2 +1,5 @@
 export UserCreateForm from './UserCreateForm'
 export UserListTable from './UserListTable'
+export UserUpdateFormCreator from './UserUpdateFormCreator'
+export UserUpdateFormModal from './UserUpdateFormModal'
+export DriverSelect from './DriverSelect'

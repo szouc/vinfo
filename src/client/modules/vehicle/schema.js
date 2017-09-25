@@ -1,6 +1,6 @@
 import { schema, normalize, denormalize } from 'normalizr'
 
-export const userSchema = new schema.Entity('user', {}, { idAttribute: '_id' })
+export const userSchema = new schema.Entity('users', {}, { idAttribute: 'username' })
 
 export const fuelSchema = new schema.Entity(
   'fuels',
@@ -21,10 +21,8 @@ export const maintainSchema = new schema.Entity(
 export const vehicleSchema = new schema.Entity(
   'vehicles',
   {
-    drivers: {
-      principal: userSchema,
-      secondary: userSchema
-    },
+    principal: userSchema,
+    secondary: userSchema,
     fuels: [fuelSchema],
     maintenance: [maintainSchema]
   },

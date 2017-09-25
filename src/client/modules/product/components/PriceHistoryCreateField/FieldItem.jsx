@@ -1,13 +1,13 @@
 import React from 'react'
 import { v4 } from 'node-uuid'
-import BaseComponent from '@clientModulesShared/BaseComponent'
+// import BaseComponent from '@clientModulesShared/BaseComponent'
 import { Field } from 'redux-form/es/immutable'
 
 import { Button, Row, Col } from 'antd'
 import InputNumber from '@clientModulesShared/forms/InputNumber'
 import DatePicker from '@clientModulesShared/forms/DatePicker'
 
-class PriceHistoryCreateFieldItem extends BaseComponent {
+class PriceHistoryCreateFieldItem extends React.PureComponent {
   constructor(props) {
     super(props)
   }

@@ -1,7 +1,7 @@
 import React from 'react'
 // import BaseComponent from '@clientModulesShared/BaseComponent'
 import moment from 'moment'
-import { Table, Button, Popconfirm, Row, Col } from 'antd'
+import { Table, Button, Popconfirm } from 'antd'
 import VehicleUpdateFormModal from '../VehicleUpdateFormModal'
 
 class VehicleListTable extends React.PureComponent {
@@ -66,21 +66,13 @@ class VehicleListTable extends React.PureComponent {
         key: 'action',
         render: (text, record) => (
           <span>
-            <Row type='flex' justify='space-between' align='middle'>
-              <Col span={6}>
-                <VehicleUpdateFormModal vehicle={record} />
-              </Col>
-              <Col span={11}>
-                <Popconfirm
-                  title='确认删除？'
-                  onConfirm={deleteVehicleById(record._id)}
-                >
-                  <Button type='danger' size='small'>
-                    删除
-                  </Button>
-                </Popconfirm>
-              </Col>
-            </Row>
+            <VehicleUpdateFormModal vehicle={record} />
+            <span className='ant-divider' />
+            <Popconfirm title='确认删除？' onConfirm={deleteVehicleById(record._id)}>
+              <Button type='danger' size='small'>
+                删除
+              </Button>
+            </Popconfirm>
           </span>
         )
       }

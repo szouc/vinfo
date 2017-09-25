@@ -1,31 +1,18 @@
 import { connect } from 'react-redux'
 import { updateVehicleRequest } from '../actions'
 import { fromJS } from 'immutable'
-import moment from 'moment'
 
 import VehicleUpdateFormCreator from '../components/VehicleUpdateFormCreator'
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import { makeVehicleInitialValuesSelector } from '../selectors'
 
-const mapStateToProps = (state, ownProps) => {
-  const initialValues = {
-    plate: ownProps.vehicle.plate,
-    engine: ownProps.vehicle.engine,
-    model: ownProps.vehicle.model,
-    purchase_date: ownProps.vehicle.purchase_date
-      ? moment(ownProps.vehicle.purchase_date)
-      : ownProps.vehicle.purchase_datel,
-    init_mile: ownProps.vehicle.init_mile,
-    principal: ownProps.vehicle.principal
-      ? `${ownProps.vehicle.principal.fullname}(${ownProps.vehicle.principal
-        .username})`
-      : ownProps.vehicle.principal,
-    secondary: ownProps.vehicle.secondary
-      ? `${ownProps.vehicle.secondary.fullname}(${ownProps.vehicle.secondary
-        .username})`
-      : ownProps.vehicle.secondary
+const makeMapStateToProps = () => {
+  const vehicleInitialValuesSelector = makeVehicleInitialValuesSelector()
+  const mapStateToProps = (state, ownProps) => {
+    const initialValues = vehicleInitialValuesSelector(ownProps)
+    return { initialValues }
   }
-
-  return { initialValues }
+  return mapStateToProps
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -41,6 +28,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 export default vehicleId =>
-  connect(mapStateToProps, mapDispatchToProps)(
+  connect(makeMapStateToProps, mapDispatchToProps)(
     immutPropsToJS(VehicleUpdateFormCreator(vehicleId))
   )

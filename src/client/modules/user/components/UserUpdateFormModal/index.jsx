@@ -27,7 +27,7 @@ export default class UserUpdateFormModal extends React.PureComponent {
     const { user } = this.props
     const UserUpdateForm = UserUpdateFormCreator(user.username)
     return (
-      <div>
+      <span>
         <Button type='primary' size='small' onClick={this.showModal}>更新</Button>
         <Modal
           wrapClassName='vertical-center-modal'
@@ -37,7 +37,7 @@ export default class UserUpdateFormModal extends React.PureComponent {
         >
           <UserUpdateForm user={user} />
         </Modal>
-      </div>
+      </span>
     )
   }
 }

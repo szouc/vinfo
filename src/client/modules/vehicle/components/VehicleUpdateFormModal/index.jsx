@@ -26,7 +26,7 @@ export default class UserUpdateFormModal extends React.PureComponent {
     const { vehicle } = this.props
     const VehicleUpdateForm = VehicleUpdateFormCreator(vehicle._id)
     return (
-      <div>
+      <span>
         <Button type='primary' size='small' onClick={this.showModal}>更新</Button>
         <Modal
           wrapClassName='vertical-center-modal'
@@ -34,9 +34,9 @@ export default class UserUpdateFormModal extends React.PureComponent {
           onCancel={this.handleCancel}
           footer={null}
         >
-          <VehicleUpdateForm vehicle={vehicle} />
+          {this.state.visible ? <VehicleUpdateForm vehicle={vehicle} /> : null}
         </Modal>
-      </div>
+      </span>
     )
   }
 }

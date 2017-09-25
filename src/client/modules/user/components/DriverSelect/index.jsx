@@ -26,7 +26,7 @@ class DriverSelect extends React.PureComponent {
 
     return (
       <Select {...rest}>
-        <Option value='' className='first-option'>
+        <Option value='' className='first-option' disabled>
           {placeholder}
         </Option>
         {optionsList}

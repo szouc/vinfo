@@ -2,7 +2,7 @@ import React from 'react'
 // import BaseComponent from '@clientModulesShared/BaseComponent'
 import addHostAddr from '@clientUtils/addHostAddr'
 import moment from 'moment'
-import { Table, Button, Popconfirm, Row, Col } from 'antd'
+import { Table, Button, Popconfirm } from 'antd'
 import ImageModal from '../ImageModal'
 import { roleMapper, genderMapper } from '../constants'
 import UserUpdateFormModal from '../UserUpdateFormModal'
@@ -94,21 +94,16 @@ class UserListTable extends React.PureComponent {
         key: 'action',
         render: (text, record) => (
           <span>
-            <Row type='flex' justify='space-between' align='middle'>
-              <Col span={6}>
-                <UserUpdateFormModal user={record} />
-              </Col>
-              <Col span={11}>
-                <Popconfirm
-                  title='确认删除？'
-                  onConfirm={deleteUserByUsername(record.username)}
-                >
-                  <Button type='danger' size='small'>
-                    删除
-                  </Button>
-                </Popconfirm>
-              </Col>
-            </Row>
+            <UserUpdateFormModal user={record} />
+            <span className='ant-divider' />
+            <Popconfirm
+              title='确认删除？'
+              onConfirm={deleteUserByUsername(record.username)}
+            >
+              <Button type='danger' size='small'>
+                删除
+              </Button>
+            </Popconfirm>
           </span>
         )
       }

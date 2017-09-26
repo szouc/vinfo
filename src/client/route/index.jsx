@@ -20,7 +20,7 @@ import { authHOC } from '../modules/auth'
 const BaseRoute = () => {
   return (
     <Switch>
-      <Route exact path='/' component={authHOC(Layout)} />
+      <Route path='/home' component={authHOC(Layout)} />
       <Route path='/login' component={Login} />
       <Route render={() => <NotFound />} />
     </Switch>

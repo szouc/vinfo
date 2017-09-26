@@ -1,7 +1,7 @@
 import React from 'react'
 import { reduxForm, Field, FieldArray } from 'redux-form/es/immutable'
 import { Row, Button } from 'antd'
-import FuelCreateFormItem from './FuelCreateFormItem'
+import FuelCreateFormItemWrapper from './FuelCreateFormItemWrapper'
 import { VehicleSelectByUser } from '@clientModules/vehicle/containers'
 import formItemHOC from '@clientModulesShared/formItemHOC'
 
@@ -9,7 +9,7 @@ const VehicleSelectByUserFormItem = formItemHOC(VehicleSelectByUser)
 
 const validate = values => {
   const errors = {}
-  const requiredFields = ['plate', 'engine']
+  const requiredFields = ['vehicleId', 'fuels']
   requiredFields.forEach(field => {
     if (!values.get(field)) {
       errors[field] = '必填'
@@ -32,10 +32,9 @@ class FuelCreateForm extends React.PureComponent {
           component={VehicleSelectByUserFormItem}
           autoFocus
         />
-        <FieldArray
-          name='fuel_history'
-          component={FuelCreateFormItem}
-        />
+        <Row type='flex' justify='space-between'>
+          <FieldArray name='fuels' component={FuelCreateFormItemWrapper} />
+        </Row>
         <Row type='flex' justify='space-between'>
           <Button
             size='large'

@@ -6,8 +6,6 @@ import { createVehicleRequest } from '../actions'
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 import { fromJS } from 'immutable'
 
-const mapStateToProps = state => null
-
 const mapDispatchToProps = dispatch => {
   return {
     onSubmit: values => {
@@ -30,6 +28,6 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(null, mapDispatchToProps)(
   immutPropsToJS(VehicleCreateForm)
 )

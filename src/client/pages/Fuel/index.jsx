@@ -1,23 +1,20 @@
 import React from 'react'
 
 import {
-  VehicleCreateForm,
-  VehicleListTable
+  // FuelListTable,
+  FuelCreateForm
 } from '@clientModules/vehicle/containers'
 
 import { Row } from 'antd'
 
-const Vehicle = () => {
+const Fuel = () => {
   return (
     <div>
       <Row type='flex' justify='space-around'>
-        <VehicleCreateForm />
-      </Row>
-      <Row type='flex' justify='space-around'>
-        <VehicleListTable />
+        <FuelCreateForm />
       </Row>
     </div>
   )
 }
 
-export default Vehicle
+export default Fuel

@@ -7,7 +7,6 @@ import UserUpdateFormCreator from '../components/UserUpdateFormCreator'
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = (state, ownProps) => {
-  const errorMessage = state.getIn(['user', 'userStatus', 'error'])
   const initialValues = {
     fullname: ownProps.user.fullname,
     gender: ownProps.user.gender,
@@ -19,7 +18,7 @@ const mapStateToProps = (state, ownProps) => {
     cert_expired: ownProps.user.cert_expired ? moment(ownProps.user.cert_expired) : null
   }
 
-  return { errorMessage, initialValues }
+  return { initialValues }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

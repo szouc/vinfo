@@ -5,10 +5,10 @@ import {
   REQUEST_ERROR,
   FETCH_VEHICLE_LIST_REQUEST,
   FETCH_VEHICLE_LIST_SUCCESS,
-  // DELETE_VEHICLE_REQUEST,
-  // DELETE_VEHICLE_SUCCESS,
-  // UPDATE_VEHICLE_REQUEST,
-  // UPDATE_VEHICLE_SUCCESS,
+  DELETE_VEHICLE_REQUEST,
+  DELETE_VEHICLE_SUCCESS,
+  UPDATE_VEHICLE_REQUEST,
+  UPDATE_VEHICLE_SUCCESS,
   CREATE_VEHICLE_REQUEST,
   CREATE_VEHICLE_SUCCESS
 } from './actionTypes'
@@ -98,31 +98,31 @@ function * fetchAllVehiclesFlow() {
   }
 }
 
-// function * deleteProductByIdFlow() {
-//   while (true) {
-//     const action: { type: string, payload: string } = yield take(
-//       DELETE_PRODUCT_REQUEST
-//     )
-//     const { payload } = action
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'delete', loading: true }
-//     })
-//     try {
-//       const productId = yield call(Api.deleteProductById, payload)
-//       if (productId) {
-//         yield put({
-//           type: DELETE_PRODUCT_SUCCESS,
-//           payload: productId
-//         })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield fork(clearLoadingAndError, 'delete')
-//     }
-//   }
-// }
+function * deleteVehicleByIdFlow() {
+  while (true) {
+    const action: { type: string, payload: string } = yield take(
+      DELETE_VEHICLE_REQUEST
+    )
+    const { payload } = action
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'delete', loading: true }
+    })
+    try {
+      const response = yield call(Api.deleteVehicleById, payload)
+      if (response) {
+        yield put({
+          type: DELETE_VEHICLE_SUCCESS,
+          payload: response
+        })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'delete')
+    }
+  }
+}
 
 // function * createPriceHistoryFlow() {
 //   while (true) {
@@ -155,8 +155,7 @@ function * fetchAllVehiclesFlow() {
 //     yield put({
 //       type: SET_LOADING,
 //       payload: { scope: 'deletePH', loading: true }
-//     })
-//     try {
+//     })Vehicle try {
 //       const product = yield call(Api.deletePriceHistoryById, payload)
 //       if (product) {
 //         yield put({
@@ -172,37 +171,37 @@ function * fetchAllVehiclesFlow() {
 //   }
 // }
 
-// function * updateProductByIdFlow() {
-//   while (true) {
-//     const action: { type: string, payload: any } = yield take(
-//       UPDATE_PRODUCT_REQUEST
-//     )
-//     const { payload } = action
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'update', loading: true }
-//     })
-//     try {
-//       const product = yield call(Api.updateProductById, payload)
-//       if (product) {
-//         yield put({
-//           type: UPDATE_PRODUCT_SUCCESS,
-//           payload: product
-//         })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield fork(clearLoadingAndError, 'update')
-//     }
-//   }
-// }
+function * updateVehicleByIdFlow() {
+  while (true) {
+    const action: { type: string, payload: any } = yield take(
+      UPDATE_VEHICLE_REQUEST
+    )
+    const { payload } = action
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'update', loading: true }
+    })
+    try {
+      const response = yield call(Api.updateVehicleById, payload)
+      if (response) {
+        yield put({
+          type: UPDATE_VEHICLE_SUCCESS,
+          payload: response
+        })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'update')
+    }
+  }
+}
 
 export default function * rootSagas(): any {
   yield fork(createVehicleFlow)
   yield fork(fetchAllVehiclesFlow)
   // yield fork(createPriceHistoryFlow)
-  // yield fork(deleteProductByIdFlow)
+  yield fork(deleteVehicleByIdFlow)
   // yield fork(deletePriceHistoryByIdFlow)
-  // yield fork(updateProductByIdFlow)
+  yield fork(updateVehicleByIdFlow)
 }

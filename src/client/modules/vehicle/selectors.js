@@ -10,6 +10,7 @@ const vehicleCurrent = state =>
   state.getIn(['vehicle', 'vehicleStatus', 'current'])
 const vehicleAll = state => state.getIn(['vehicle', 'vehicleStatus', 'all'])
 const vehicleInitialValues = ownProps => fromJS(ownProps.vehicle)
+const currentUser = state => state.getIn(['auth', 'user', 'username'])
 
 const vehicleSelector = createImmutableSelector(
   [vehicleEntity, vehicleCurrent],
@@ -31,21 +32,32 @@ const makeVehicleInitialValuesSelector = () =>
       : vehicle.get('purchase_date'),
     init_mile: vehicle.get('init_mile'),
     principal: vehicle.get('principal')
-      ? `${vehicle.getIn(['principal', 'fullname'])}(${vehicle.getIn([
+      ? `${vehicle.getIn(['principal', 'fullname'])}@@${vehicle.getIn([
         'principal',
         'username'
-      ])})`
+      ])}`
       : vehicle.get('principal'),
     secondary: vehicle.get('secondary')
-      ? `${vehicle.getIn(['secondary', 'fullname'])}(${vehicle.getIn([
+      ? `${vehicle.getIn(['secondary', 'fullname'])}@@${vehicle.getIn([
         'secondary',
         'username'
-      ])})`
+      ])}`
       : vehicle.get('secondary')
   }))
+
+const vehicleArrayByUserSelector = createImmutableSelector(
+  [vehicleArraySelector, currentUser],
+  (vehicles, username) =>
+    vehicles.filter(
+      (vehicle, i) =>
+        vehicle.getIn(['principal', 'username']) === username ||
+        vehicle.getIn(['secondary', 'username']) === username
+    )
+)
 
 export {
   vehicleSelector,
   vehicleArraySelector,
+  vehicleArrayByUserSelector,
   makeVehicleInitialValuesSelector
 }

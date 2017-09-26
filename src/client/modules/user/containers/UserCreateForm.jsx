@@ -5,11 +5,6 @@ import { createUserRequest } from '../actions'
 
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
-const mapStateToProps = state => {
-  const errorMessage = state.getIn(['user', 'userStatus', 'error'])
-  return { errorMessage }
-}
-
 const mapDispatchToProps = dispatch => {
   return {
     onSubmit: values => {
@@ -18,4 +13,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(immutPropsToJS(UserCreateForm))
+export default connect(null, mapDispatchToProps)(immutPropsToJS(UserCreateForm))

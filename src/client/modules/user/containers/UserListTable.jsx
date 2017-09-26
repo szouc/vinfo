@@ -7,9 +7,8 @@ import { userArraySelector } from '../selectors'
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
-  const errorMessage = state.getIn(['user', 'userStatus', 'error'])
   const users = userArraySelector(state)
-  return { errorMessage, users }
+  return { users }
 }
 
 const mapDispatchToProps = dispatch => {

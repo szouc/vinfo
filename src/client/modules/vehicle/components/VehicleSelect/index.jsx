@@ -1,29 +1,28 @@
 import React from 'react'
 import { Select } from 'antd'
-import './style.css'
 
 const Option = Select.Option
 
-class DriverSelect extends React.PureComponent {
+class VehicleSelect extends React.PureComponent {
   constructor(props) {
     super(props)
   }
 
   static defaultProps = {
-    placeholder: '请选择司机'
+    placeholder: '请选择车辆'
   }
 
   componentDidMount() {
-    this.props.getAllUsers()
+    this.props.getAllVehicles()
   }
 
   render() {
-    const { drivers, placeholder, ...rest } = this.props
-    const options = drivers
-    const optionsList = options.map(user => {
+    const { vehicles, placeholder, ...rest } = this.props
+    const options = vehicles
+    const optionsList = options.map(vehicle => {
       return (
-        <Option key={user.username} value={`${user.username}@@${user.fullname}`}>
-          {user.fullname}({user.username})
+        <Option key={vehicle._id} value={vehicle._id}>
+          {vehicle.plate}
         </Option>
       )
     })
@@ -39,4 +38,4 @@ class DriverSelect extends React.PureComponent {
   }
 }
 
-export default DriverSelect
+export default VehicleSelect

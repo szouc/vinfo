@@ -7,9 +7,8 @@ import { driverArraySelector } from '../selectors'
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
-  const errorMessage = state.getIn(['user', 'userStatus', 'error'])
   const drivers = driverArraySelector(state)
-  return { errorMessage, drivers }
+  return { drivers }
 }
 
 const mapDispatchToProps = dispatch => {

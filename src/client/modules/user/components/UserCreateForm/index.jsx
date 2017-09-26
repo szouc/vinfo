@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form/es/immutable'
-import { Button, Row, Col, Alert } from 'antd'
+import { Button, Row, Col } from 'antd'
 import { Input, DatePicker } from '@clientModulesShared/forms'
 // import BaseComponent from '@clientModulesShared/BaseComponent'
 import ImageUpload from '../ImageUpload'
@@ -39,16 +39,10 @@ class UserCreateForm extends React.PureComponent {
       handleSubmit,
       pristine,
       reset,
-      submitting,
-      errorMessage
+      submitting
     } = this.props
     return (
       <form onSubmit={handleSubmit}>
-        {errorMessage ? (
-          <Row>
-            <Alert message={errorMessage} type='error' banner />
-          </Row>
-        ) : null}
         <Field name='username' component={Input} placeholder='工号' />
         <Field
           name='password'

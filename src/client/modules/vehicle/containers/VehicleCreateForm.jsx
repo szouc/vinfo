@@ -4,29 +4,27 @@ import VehicleCreateForm from '../components/VehicleCreateForm'
 import { createVehicleRequest } from '../actions'
 
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
-import Immutable from 'immutable'
+import { fromJS } from 'immutable'
 
 const mapStateToProps = state => null
 
 const mapDispatchToProps = dispatch => {
   return {
     onSubmit: values => {
-      let req
-      if (values.get('principal') && values.get('secondary')) {
+      const driver = { principal: {}, secondary: {} }
+      if (values.get('principal')) {
         const principal = values.get('principal').split('@@')
-        const secondary = values.get('secondary').split('@@')
-        req = values
-          .set(
-            'principal',
-            Immutable.Map({ username: principal[0], fullname: principal[1] })
-          )
-          .set(
-            'secondary',
-            Immutable.Map({ username: secondary[0], fullname: secondary[1] })
-          )
-      } else {
-        req = values
+        driver.principal.username = principal[0]
+        driver.principal.fullname = principal[1]
       }
+      if (values.get('secondary')) {
+        const secondary = values.get('secondary').split('@@')
+        driver.secondary.username = secondary[0]
+        driver.secondary.fullname = secondary[1]
+      }
+      const req = values
+        .set('principal', fromJS(driver.principal))
+        .set('secondary', fromJS(driver.secondary))
       dispatch(createVehicleRequest(req))
     }
   }

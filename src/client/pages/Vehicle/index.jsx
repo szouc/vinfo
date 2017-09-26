@@ -5,6 +5,8 @@ import {
   VehicleListTable
 } from '@clientModules/vehicle/containers'
 
+import FuelCreateForm from '../../modules/vehicle/components/FuelCreateForm'
+
 import { Row } from 'antd'
 
 const Vehicle = () => {
@@ -15,6 +17,9 @@ const Vehicle = () => {
       </Row>
       <Row type='flex' justify='space-around'>
         <VehicleListTable />
+      </Row>
+      <Row type='flex' justify='space-around'>
+        <FuelCreateForm />
       </Row>
     </div>
   )

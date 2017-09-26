@@ -24,7 +24,8 @@ const fuel = {
     default: Date.now()
   },
   is_check: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   info: {
     type: String

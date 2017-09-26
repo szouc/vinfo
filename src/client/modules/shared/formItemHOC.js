@@ -2,7 +2,6 @@
  * a wrapper for redux-form to wrap ant-design component
  */
 import React from 'react'
-import BaseComponent from './BaseComponent'
 
 import FormItem from 'antd/es/form/FormItem'
 import 'antd/es/form/style/css'
@@ -40,7 +39,7 @@ function formItemHOC(Component, ownProps) {
     }
   }
 
-  return class fieldComponent extends BaseComponent {
+  return class fieldComponent extends React.PureComponent {
     static displayName = `Redux-form-ANTD_${Component.name}`
     render() {
       const {

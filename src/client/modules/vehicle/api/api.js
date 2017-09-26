@@ -10,7 +10,7 @@ import {
 } from '../schema'
 
 import {
-  // VEHICLE_ID_API,
+  VEHICLE_ID_API,
   VEHICLE_ROOT_API
 } from './apiRoutes'
 
@@ -65,16 +65,16 @@ async function getAllVehicles(): ?Immut {
 //   throw new Error('Couldnt create a new product')
 // }
 
-// async function deleteProductById(id: string) {
-//   const options = {
-//     method: 'delete'
-//   }
-//   const response = await fetch(PRODUCT_ID_API.replace(/:id/, id), options)
-//   if (response.status === STATUS_OK) {
-//     return id
-//   }
-//   throw new Error('Something wrong at deleteProductById Process')
-// }
+async function deleteVehicleById(id: string) {
+  const options = {
+    method: 'delete'
+  }
+  const response = await fetch(VEHICLE_ID_API.replace(/:id/, id), options)
+  if (response.status === STATUS_OK) {
+    return id
+  }
+  throw new Error('Something wrong at deleteVehicleById Process')
+}
 
 // async function deletePriceHistoryById(payload: Immut) {
 //   const options = {
@@ -94,26 +94,26 @@ async function getAllVehicles(): ?Immut {
 //   throw new Error('Something wrong at deletePriceHistoryById Process')
 // }
 
-// async function updateProductById(payload: Immut) {
-//   const options = {
-//     method: 'put',
-//     body: JSON.stringify(payload.get('values')),
-//     headers: { 'Content-Type': 'application/json' }
-//   }
-//   const response = await fetch(PRODUCT_ID_API.replace(/:id/, payload.get('productId')), options)
-//   if (response) {
-//     const data = await response.json()
-//     const product = productNormalize(data)
-//     return fromJS(product)
-//   }
-//   throw new Error('Couldnt update a product by Id')
-// }
+async function updateVehicleById(payload: Immut) {
+  const options = {
+    method: 'put',
+    body: JSON.stringify(payload.get('values')),
+    headers: { 'Content-Type': 'application/json' }
+  }
+  const response = await fetch(VEHICLE_ID_API.replace(/:id/, payload.get('vehicleId')), options)
+  if (response) {
+    const data = await response.json()
+    const vehicle = vehicleNormalize(data)
+    return fromJS(vehicle)
+  }
+  throw new Error('Couldnt update a vehicle by Id')
+}
 
 export {
   getAllVehicles,
   // createPriceHistory,
-  // deleteProductById,
+  deleteVehicleById,
   // deletePriceHistoryById,
-  // updateProductById,
+  updateVehicleById,
   createVehicle
 }

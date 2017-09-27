@@ -6,6 +6,8 @@ import Login from '../pages/Login'
 import NotFound from '../pages/NotFound'
 import { authHOC } from '../modules/auth'
 
+const AuthLayout = authHOC(Layout)
+
 // export const childRoutes = [
 //   {
 //     'path': '/driver',
@@ -20,8 +22,8 @@ import { authHOC } from '../modules/auth'
 const BaseRoute = () => {
   return (
     <Switch>
-      <Route path='/home' component={authHOC(Layout)} />
-      <Route path='/login' component={Login} />
+      <Route exact path='/login' component={Login} />
+      <Route path='/' component={Layout} />
       <Route render={() => <NotFound />} />
     </Switch>
   )

@@ -18,6 +18,17 @@ import type { fromJS as Immut } from 'immutable'
 
 import * as Api from './api'
 
+function * clearLoadingAndError(scope) {
+  if (scope) {
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: scope, loading: false }
+    })
+  }
+  yield delay(2000)
+  yield put({ type: REQUEST_ERROR, payload: '' })
+}
+
 /**
  * Log in saga
  * @export
@@ -40,13 +51,7 @@ export function * loginFlow(): any {
       yield put({ type: REQUEST_ERROR, payload: error.message })
       yield put(replace('/login')) // Redirect to the login page
     } finally {
-      // unload pending page
-      yield put({
-        type: SET_LOADING,
-        payload: { scope: 'login', loading: false }
-      })
-      yield delay(2000)
-      yield put({ type: REQUEST_ERROR, payload: '' })
+      yield fork(clearLoadingAndError('login'))
     }
   }
 }
@@ -74,12 +79,7 @@ export function * fetchProfileFlow(): any {
       yield put({ type: REQUEST_ERROR, payload: error.message })
       yield put(replace('/login')) // Redirect to the login page
     } finally {
-      yield put({
-        type: SET_LOADING,
-        payload: { scope: 'fetchProfile', loading: false }
-      })
-      yield delay(2000)
-      yield put({ type: REQUEST_ERROR, payload: '' })
+      yield fork(clearLoadingAndError('fetchProfile'))
     }
   }
 }

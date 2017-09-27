@@ -1,7 +1,6 @@
 import React from 'react'
 import { replace } from 'react-router-redux'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
 
 import { getLocalLoggedIn, getLocalUser } from '../api'
 import { fetchProfileRequest } from '../actions'
@@ -54,21 +53,15 @@ async function validate(
 
 export default function authHOC(BaseComponent) {
   class CheckedComponent extends React.PureComponent {
-    constructor (props) {
-      super(props)
-    }
-
     componentWillMount() {
       this.checkAuthentication(this.props)
     }
-
     componentWillReceiveProps(nextProps) {
       if (nextProps.location !== this.props.location) {
         this.checkAuthentication(nextProps)
       }
     }
-
-    checkAuthentication = (props) => {
+    checkAuthentication(props) {
       const {
         location,
         stateloggedIn,
@@ -107,5 +100,5 @@ export default function authHOC(BaseComponent) {
     }
   }
 
-  return connect(mapStateToProps, mapDispatchToProps)(withRouter(CheckedComponent))
+  return connect(mapStateToProps, mapDispatchToProps)(CheckedComponent)
 }

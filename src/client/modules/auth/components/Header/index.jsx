@@ -1,9 +1,7 @@
 import React from 'react'
 import BaseComponent from '@clientModulesShared/BaseComponent'
 
-import { Layout, Menu, Row, Col, Dropdown, Icon, Avatar } from 'antd'
-
-const { Header } = Layout
+import { Menu, Row, Col, Dropdown, Icon, Avatar } from 'antd'
 
 class AuthHeader extends BaseComponent {
   constructor(props) {
@@ -27,27 +25,25 @@ class AuthHeader extends BaseComponent {
     )
 
     return (
-      <Header>
-        <Row type='flex' justify='space-around'>
-          <Col span={18} offset={3}>
-            <div className='logo'>Company LOGO</div>
-          </Col>
-          <Col span={3}>
-            <Dropdown overlay={userMenu}>
-              <a className='ant-dropdown-link' href='#'>
-                <Avatar
-                  style={{
-                    verticalAlign: 'middle',
-                    backgroundColor: '#7265e6'
-                  }}
-                  icon='user'
-                />{' '}
-                <Icon type='down' />
-              </a>
-            </Dropdown>
-          </Col>
-        </Row>
-      </Header>
+      <Row type='flex' justify='space-around'>
+        <Col span={18} offset={3}>
+          <div className='logo'>Company LOGO</div>
+        </Col>
+        <Col span={3}>
+          <Dropdown overlay={userMenu}>
+            <a className='ant-dropdown-link' href='#'>
+              <Avatar
+                style={{
+                  verticalAlign: 'middle',
+                  backgroundColor: '#7265e6'
+                }}
+                icon='user'
+              />{' '}
+              <Icon type='down' />
+            </a>
+          </Dropdown>
+        </Col>
+      </Row>
     )
   }
 }

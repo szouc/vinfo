@@ -114,7 +114,6 @@ class UserListTable extends React.PureComponent {
         columns={columns}
         dataSource={data}
         rowKey={record => record.username}
-        bordered
       />
     )
   }

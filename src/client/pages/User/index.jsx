@@ -10,7 +10,7 @@ const User = () => {
       <Row type='flex' justify='center'>
         <UserCreateForm />
       </Row>
-      <Row type='flex' justify='center'>
+      <Row style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
         <UserListTable />
       </Row>
     </div>

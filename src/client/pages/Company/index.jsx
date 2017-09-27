@@ -1,8 +1,7 @@
 import React from 'react'
 import {
   CompanyCreateForm,
-  CompanyListTable,
-  CompanySelect
+  CompanyListTable
 } from '@clientModules/company/containers'
 import { Row } from 'antd'
 
@@ -12,10 +11,7 @@ const Company = () => {
       <Row>
         <CompanyCreateForm />
       </Row>
-      <Row>
-        <CompanySelect />
-      </Row>
-      <Row>
+      <Row style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
         <CompanyListTable />
       </Row>
     </div>

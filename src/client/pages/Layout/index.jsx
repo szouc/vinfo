@@ -66,7 +66,7 @@ const baseLayout = ({ match }) => {
             </SubMenu>
           </Menu>
         </Sider>
-        <Content>
+        <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
           <Switch>
             <Route exact path={match.url} render={() => <Fuel />} />
             <Route exact path={`${match.url}/company`} render={() => <Company />} />

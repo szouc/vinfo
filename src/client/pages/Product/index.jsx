@@ -11,7 +11,7 @@ const Product = () => {
       <Row>
         <ProductCreateForm />
       </Row>
-      <Row>
+      <Row style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
         <ProductListTable />
       </Row>
     </div>

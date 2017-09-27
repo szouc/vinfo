@@ -2,7 +2,6 @@ import React from 'react'
 // import BaseComponent from '@clientModulesShared/BaseComponent'
 import { fromJS } from 'immutable'
 import FieldItem from './FieldItem'
-import { v4 } from 'node-uuid'
 
 import { Button } from 'antd'
 
@@ -18,11 +17,9 @@ class PriceHistoryCreateField extends React.PureComponent {
     const { fields } = this.props
     return (
       <ul>
-        <li key={v4()}>
-          <Button type='primary' onClick={this.pushItem}>
-            添加历史价格
-          </Button>
-        </li>
+        <Button type='primary' onClick={this.pushItem}>
+          添加历史价格
+        </Button>
         {fields.map((priceHistory, index) => (
           <FieldItem
             removeItem={this.removeItem}

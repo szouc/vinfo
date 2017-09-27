@@ -10,10 +10,10 @@ import { Row } from 'antd'
 const Vehicle = () => {
   return (
     <div>
-      <Row type='flex' justify='space-around'>
+      <Row type='flex' justify='center'>
         <VehicleCreateForm />
       </Row>
-      <Row type='flex' justify='space-around'>
+      <Row style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
         <VehicleListTable />
       </Row>
     </div>

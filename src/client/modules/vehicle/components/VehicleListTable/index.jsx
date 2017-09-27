@@ -83,7 +83,6 @@ class VehicleListTable extends React.PureComponent {
         columns={columns}
         dataSource={data}
         rowKey={record => record._id}
-        bordered
       />
     )
   }

@@ -51,7 +51,7 @@ export function * loginFlow(): any {
       yield put({ type: REQUEST_ERROR, payload: error.message })
       yield put(replace('/login')) // Redirect to the login page
     } finally {
-      yield fork(clearLoadingAndError('login'))
+      yield fork(clearLoadingAndError, 'login')
     }
   }
 }
@@ -79,7 +79,7 @@ export function * fetchProfileFlow(): any {
       yield put({ type: REQUEST_ERROR, payload: error.message })
       yield put(replace('/login')) // Redirect to the login page
     } finally {
-      yield fork(clearLoadingAndError('fetchProfile'))
+      yield fork(clearLoadingAndError, 'fetchProfile')
     }
   }
 }
@@ -101,8 +101,7 @@ export function * logoutFlow(): any {
     } catch (error) {
       yield put({ type: REQUEST_ERROR, payload: error.message })
     } finally {
-      yield delay(2000)
-      yield put({ type: REQUEST_ERROR, payload: '' })
+      yield fork(clearLoadingAndError)
     }
   }
 }

@@ -1,16 +1,9 @@
-import { Layout } from 'antd'
 import React from 'react'
 import BaseHeader from '@clientModules/auth/containers/Header'
 import BaseSider from '../Sider'
-import { Route, Switch, Redirect } from 'react-router-dom'
-// import Carousel from '../Carousel'
-import Company from '../Company'
-import Product from '../Product'
-import User from '../User'
-import Vehicle from '../Vehicle'
-import Fuel from '../Fuel'
-import NotFound from '../NotFound'
-
+import BaseContent from '../Content'
+import { Redirect } from 'react-router-dom'
+import { Layout } from 'antd'
 const { Header, Sider, Content, Footer } = Layout
 
 class BaseLayout extends React.PureComponent {
@@ -38,14 +31,7 @@ class BaseLayout extends React.PureComponent {
             }}
           >
             <Redirect to='/home' />
-            <Switch>
-              <Route exact path='/home' component={Fuel} />
-              <Route exact path='/company' component={Company} />
-              <Route exact path='/vehicle' component={Vehicle} />
-              <Route exact path='/user' component={User} />
-              <Route exact path='/product' component={Product} />
-              <Route component={NotFound} />
-            </Switch>
+            <BaseContent />
           </Content>
         </Layout>
         <Footer style={{ textAlign: 'center' }}>

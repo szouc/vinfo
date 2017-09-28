@@ -333,7 +333,10 @@ const clientConfig = {
     // Common Chunk from node_modules
     new webpack.optimize.CommonsChunkPlugin({
       names: 'vendor',
-      minChunks: module => /node_modules/.test(module.resource)
+      minChunks: module =>
+        module.resource &&
+        /node_modules/.test(module.resource) &&
+        module.resource.match(/\.js$/)
     }),
 
     // Common Chunk from the lazy import modules
@@ -355,8 +358,7 @@ const clientConfig = {
     }),
 
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      minChunks: Infinity
+      name: ['manifest']
     }),
 
     ...(isProd
@@ -421,7 +423,7 @@ const clientConfig = {
           comments: false
         }),
 
-        // new BundleAnalyzerPlugin(),
+        new BundleAnalyzerPlugin(),
         new HtmlWebpackPlugin({
           template: './index.prod.html'
         })

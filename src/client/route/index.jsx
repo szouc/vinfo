@@ -23,7 +23,7 @@ const BaseRoute = () => {
   return (
     <Switch>
       <Route exact path='/login' component={Login} />
-      <Route path='/' component={Layout} />
+      <Route path='/' component={AuthLayout} />
       <Route render={() => <NotFound />} />
     </Switch>
   )

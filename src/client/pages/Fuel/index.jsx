@@ -7,14 +7,20 @@ import {
 
 import { Row } from 'antd'
 
-const Fuel = () => {
-  return (
-    <div>
-      <Row type='flex' justify='space-around'>
-        <FuelCreateForm />
-      </Row>
-    </div>
-  )
+class Fuel extends React.PureComponent {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    return (
+      <div>
+        <Row type='flex' justify='space-around'>
+          <FuelCreateForm />
+        </Row>
+      </div>
+    )
+  }
 }
 
 export default Fuel

@@ -346,7 +346,7 @@ const clientConfig = {
       async: 'common-in-lazy',
       // minChunks: module => /node_modules/.test(module.resource)
       minChunks: ({ resource }) =>
-        resource && resource.includes('node_modules') && /antd/.test(resource)
+        resource && resource.includes('node_modules')
     }),
 
     // Common Chunk from the lazy modules
@@ -358,7 +358,7 @@ const clientConfig = {
     }),
 
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['manifest']
+      name: 'manifest'
     }),
 
     ...(isProd
@@ -423,7 +423,7 @@ const clientConfig = {
           comments: false
         }),
 
-        new BundleAnalyzerPlugin(),
+        // new BundleAnalyzerPlugin(),
         new HtmlWebpackPlugin({
           template: './index.prod.html'
         })

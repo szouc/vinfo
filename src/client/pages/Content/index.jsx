@@ -6,7 +6,7 @@ import { Route, Switch } from 'react-router-dom'
 // import Product from '../Product'
 // import User from '../User'
 // import Vehicle from '../Vehicle'
-import Fuel from '../Fuel'
+// import Fuel from '../Fuel'
 import NotFound from '../NotFound'
 
 const LoadableCompany = Loadable({
@@ -29,6 +29,11 @@ const LoadableVehicle = Loadable({
   loading: () => null
 })
 
+const LoadableFuel = Loadable({
+  loader: () => import(/* webpackChunkName: "FuelComponent" */ '../Fuel'),
+  loading: () => null
+})
+
 class BaseContent extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -37,11 +42,12 @@ class BaseContent extends React.PureComponent {
   render() {
     return (
       <Switch>
-        <Route exact path='/home' component={Fuel} />
+        <Route exact path='/home' component={NotFound} />
         <Route exact path='/company' component={LoadableCompany} />
         <Route exact path='/vehicle' component={LoadableVehicle} />
         <Route exact path='/user' component={LoadableUser} />
         <Route exact path='/product' component={LoadableProduct} />
+        <Route exact path='/fuel' component={LoadableFuel} />
         <Route component={NotFound} />
       </Switch>
     )

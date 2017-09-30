@@ -52,12 +52,14 @@ class BaseSider extends React.PureComponent {
           key='sub2'
           title={
             <span>
-              <Icon type='laptop' />subnav 2
+              <Icon type='laptop' />提交数据
             </span>
           }
         >
-          <Menu.Item key='5'>option5</Menu.Item>
-          <Menu.Item key='6'>option6</Menu.Item>
+          <Menu.Item key='5'>
+            <Link to='/fuel'>加油记录</Link>
+          </Menu.Item>
+          <Menu.Item key='6'>维修记录</Menu.Item>
           <Menu.Item key='7'>option7</Menu.Item>
           <Menu.Item key='8'>option8</Menu.Item>
         </SubMenu>

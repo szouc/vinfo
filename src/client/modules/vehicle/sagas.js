@@ -3,6 +3,8 @@
 import {
   SET_LOADING,
   REQUEST_ERROR,
+  CREATE_FUEL_REQUEST,
+  CREATE_FUEL_SUCCESS,
   FETCH_VEHICLE_LIST_REQUEST,
   FETCH_VEHICLE_LIST_SUCCESS,
   DELETE_VEHICLE_REQUEST,
@@ -124,53 +126,6 @@ function * deleteVehicleByIdFlow() {
   }
 }
 
-// function * createPriceHistoryFlow() {
-//   while (true) {
-//     const action: { type: string, payload: Immut } = yield take(
-//       CREATE_PRICE_HISTORY_REQUEST
-//     )
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'createPH', loading: true }
-//     })
-//     try {
-//       const product = yield call(Api.createPriceHistory, action.payload)
-//       if (product) {
-//         yield put({ type: CREATE_PRICE_HISTORY_SUCCESS, payload: product })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield fork(clearLoadingAndError, 'createPH')
-//     }
-//   }
-// }
-
-// function * deletePriceHistoryByIdFlow() {
-//   while (true) {
-//     const action: { type: string, payload: any } = yield take(
-//       DELETE_PRICE_HISTORY_REQUEST
-//     )
-//     const { payload } = action
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'deletePH', loading: true }
-//     })Vehicle try {
-//       const product = yield call(Api.deletePriceHistoryById, payload)
-//       if (product) {
-//         yield put({
-//           type: DELETE_PRICE_HISTORY_SUCCESS,
-//           payload: product
-//         })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield fork(clearLoadingAndError, 'deletePH')
-//     }
-//   }
-// }
-
 function * updateVehicleByIdFlow() {
   while (true) {
     const action: { type: string, payload: any } = yield take(
@@ -197,11 +152,58 @@ function * updateVehicleByIdFlow() {
   }
 }
 
+function * createVehicleFuelFlow() {
+  while (true) {
+    const action: { type: string, payload: Immut } = yield take(
+      CREATE_FUEL_REQUEST
+    )
+    yield put({
+      type: SET_LOADING,
+      payload: { scope: 'createFuel', loading: true }
+    })
+    try {
+      const response = yield call(Api.createVehicleFuel, action.payload)
+      if (response) {
+        yield put({ type: CREATE_FUEL_SUCCESS, payload: response })
+      }
+    } catch (error) {
+      yield put({ type: REQUEST_ERROR, payload: error.message })
+    } finally {
+      yield fork(clearLoadingAndError, 'createFuel')
+    }
+  }
+}
+
+// function * deletePriceHistoryByIdFlow() {
+//   while (true) {
+//     const action: { type: string, payload: any } = yield take(
+//       DELETE_PRICE_HISTORY_REQUEST
+//     )
+//     const { payload } = action
+//     yield put({
+//       type: SET_LOADING,
+//       payload: { scope: 'deletePH', loading: true }
+//     })Vehicle try {
+//       const product = yield call(Api.deletePriceHistoryById, payload)
+//       if (product) {
+//         yield put({
+//           type: DELETE_PRICE_HISTORY_SUCCESS,
+//           payload: product
+//         })
+//       }
+//     } catch (error) {
+//       yield put({ type: REQUEST_ERROR, payload: error.message })
+//     } finally {
+//       yield fork(clearLoadingAndError, 'deletePH')
+//     }
+//   }
+// }
+
 export default function * rootSagas(): any {
   yield fork(createVehicleFlow)
   yield fork(fetchAllVehiclesFlow)
-  // yield fork(createPriceHistoryFlow)
   yield fork(deleteVehicleByIdFlow)
-  // yield fork(deletePriceHistoryByIdFlow)
   yield fork(updateVehicleByIdFlow)
+  yield fork(createVehicleFuelFlow)
+  // yield fork(deletePriceHistoryByIdFlow)
 }

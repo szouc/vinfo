@@ -1,10 +1,11 @@
-import { MODULE_NAME } from './'
+// import { MODULE_NAME } from './'
 
 const defineModule = module => (...constant) => {
   const SEPARATOR = '/'
   return [module, ...constant].join(SEPARATOR)
 }
 
+export const MODULE_NAME = 'user'
 const defineConstant = defineModule(MODULE_NAME)
 
 /**

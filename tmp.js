@@ -1,7 +1,6 @@
-import Immutable, { fromJS, is } from 'immutable'
+import Immutable from 'immutable'
 
-const str = '12345@@张三'
+const data = Immutable.fromJS({a: 1, b: 2, c: 3})
 
-const name = str.split('@@')
-
-console.log(name)
+const re = data.withMutations((data) => data.set('a', 5).set('b', 6).set('c', 7))
+console.log(re)

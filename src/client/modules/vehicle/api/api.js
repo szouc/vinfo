@@ -10,6 +10,7 @@ import {
 } from '../schema'
 
 import {
+  VEHICLE_FUEL_API,
   VEHICLE_ID_API,
   VEHICLE_ROOT_API
 } from './apiRoutes'
@@ -46,25 +47,6 @@ async function getAllVehicles(): ?Immut {
   throw new Error('Something wrong at getAllVehicles Process')
 }
 
-// async function createPriceHistory(payload: Immut): ?Immut {
-//   const productId = payload.get('productId')
-//   const options = {
-//     method: 'post',
-//     body: JSON.stringify(payload.getIn(['values', 'price_history'])),
-//     headers: { 'Content-Type': 'application/json' }
-//   }
-//   const response = await fetch(
-//     PRODUCT_PRICE_HISTORY_API.replace(/:id/, productId),
-//     options
-//   )
-//   if (response.status === STATUS_OK) {
-//     const data = await response.json()
-//     const product = productNormalize(data)
-//     return fromJS(product)
-//   }
-//   throw new Error('Couldnt create a new product')
-// }
-
 async function deleteVehicleById(id: string) {
   const options = {
     method: 'delete'
@@ -74,6 +56,40 @@ async function deleteVehicleById(id: string) {
     return id
   }
   throw new Error('Something wrong at deleteVehicleById Process')
+}
+
+async function updateVehicleById(payload: Immut) {
+  const options = {
+    method: 'put',
+    body: JSON.stringify(payload.get('values')),
+    headers: { 'Content-Type': 'application/json' }
+  }
+  const response = await fetch(VEHICLE_ID_API.replace(/:id/, payload.get('vehicleId')), options)
+  if (response) {
+    const data = await response.json()
+    const vehicle = vehicleNormalize(data)
+    return fromJS(vehicle)
+  }
+  throw new Error('Couldnt update a vehicle by Id')
+}
+
+async function createVehicleFuel(payload: Immut): ?Immut {
+  const vehicleId = payload.get('vehicleId')
+  const options = {
+    method: 'post',
+    body: JSON.stringify(payload.getIn(['values', 'fuels'])),
+    headers: { 'Content-Type': 'application/json' }
+  }
+  const response = await fetch(
+    VEHICLE_FUEL_API.replace(/:id/, vehicleId),
+    options
+  )
+  if (response.status === STATUS_OK) {
+    const data = await response.json()
+    const vehicle = vehicleNormalize(data)
+    return fromJS(vehicle)
+  }
+  throw new Error('Couldnt create a new fuel')
 }
 
 // async function deletePriceHistoryById(payload: Immut) {
@@ -94,25 +110,10 @@ async function deleteVehicleById(id: string) {
 //   throw new Error('Something wrong at deletePriceHistoryById Process')
 // }
 
-async function updateVehicleById(payload: Immut) {
-  const options = {
-    method: 'put',
-    body: JSON.stringify(payload.get('values')),
-    headers: { 'Content-Type': 'application/json' }
-  }
-  const response = await fetch(VEHICLE_ID_API.replace(/:id/, payload.get('vehicleId')), options)
-  if (response) {
-    const data = await response.json()
-    const vehicle = vehicleNormalize(data)
-    return fromJS(vehicle)
-  }
-  throw new Error('Couldnt update a vehicle by Id')
-}
-
 export {
   getAllVehicles,
-  // createPriceHistory,
   deleteVehicleById,
+  createVehicleFuel,
   // deletePriceHistoryById,
   updateVehicleById,
   createVehicle

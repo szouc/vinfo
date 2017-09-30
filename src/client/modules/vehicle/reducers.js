@@ -3,6 +3,7 @@
 import {
   SET_LOADING,
   REQUEST_ERROR,
+  CREATE_FUEL_SUCCESS,
   // FETCH_USER_SUCCESS,
   UPDATE_VEHICLE_SUCCESS,
   DELETE_VEHICLE_SUCCESS,
@@ -20,6 +21,10 @@ const InitialState = fromJS({
   createLoading: false,
   updateLoading: false,
   deleteLoading: false,
+  createFuelLoading: false,
+  deleteFuelLoading: false,
+  createMaintainLoading: false,
+  deleteMaintainLoading: false,
   error: undefined,
   current: undefined,
   all: []
@@ -41,6 +46,8 @@ const vehicleEntity = (
     case DELETE_VEHICLE_SUCCESS:
       return state.deleteIn(['vehicles', payload])
     case UPDATE_VEHICLE_SUCCESS:
+      return state.mergeDeep(payload.get('entities'))
+    case CREATE_FUEL_SUCCESS:
       return state.mergeDeep(payload.get('entities'))
     default:
       return state

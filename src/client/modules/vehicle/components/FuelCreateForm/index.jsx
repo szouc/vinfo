@@ -32,10 +32,14 @@ class FuelCreateForm extends React.PureComponent {
           component={VehicleSelectByUserFormItem}
           autoFocus
         />
-        <Row type='flex' justify='space-between'>
+        <Row
+          type='flex'
+          justify='space-between'
+          style={{ background: '#fff', padding: 24, margin: 0, minHeight: 180 }}
+        >
           <FieldArray name='fuels' component={FuelCreateFormItemWrapper} />
         </Row>
-        <Row type='flex' justify='space-between'>
+        <Row type='flex' justify='space-around'>
           <Button
             size='large'
             type='primary'

@@ -118,67 +118,121 @@ function addFuel(req, res) {
     })
 }
 
-// function addVehicleMaintain(req, res) {
-//   Vehicle.findByIdAndUpdate(
-//     req.params.id,
-//     {
-//       $addToSet: { maintenance: { $each: req.body } }
-//     },
-//     { new: true }
-//   )
-//     .then(doc => {
-//       if (doc) {
-//         res.status(200).json(doc)
-//       } else {
-//         res.status(400).send('No vehicle matching')
-//       }
-//     })
-//     .catch(() => {
-//       res.status(500).send('Couldnt add maintenance to vehicle')
-//     })
-// }
+function getAllFuels(req, res) {
+  Vehicle.find(
+    { fuels: { $elemMatch: { 'applicant.username': req.params.username } } },
+    {
+      _id: 1,
+      plate: 1,
+      'fuels.$': 1
+    }
+  )
+    .then(docs => {
+      res.status(200).json(docs)
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt fetch all fuels')
+    })
+}
 
-// function deleteVehicleFuel(req, res) {
-//   Vehicle.findById(req.params.id)
-//     .then(doc => {
-//       if (doc) {
-//         doc.fuels.id(req.params.childId).remove()
-//         return doc.save()
-//       } else {
-//         res.status(400).send('Couldnt find the vehicle by id')
-//       }
-//     })
-//     .then(doc => {
-//       res.status(200).json(doc)
-//     })
-//     .catch(() => {
-//       res.status(500).send('Couldnt delete fuel by id')
-//     })
-// }
+function getAllMaintains(req, res) {
+  Vehicle.find(
+    {
+      maintenance: { $elemMatch: { 'applicant.username': req.params.username } }
+    },
+    {
+      _id: 1,
+      plate: 1,
+      'maintenance.$': 1
+    }
+  )
+    .then(docs => {
+      res.status(200).json(docs)
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt fetch all maintains')
+    })
+}
 
-// function deleteVehicleMaintain(req, res) {
-//   Vehicle.findById(req.params.id)
-//     .then(doc => {
-//       if (doc) {
-//         doc.maintenance.id(req.params.childId).remove()
-//         return doc.save()
-//       } else {
-//         res.status(400).send('Couldnt find the vehicle by id')
-//       }
-//     })
-//     .then(doc => {
-//       res.status(200).json(doc)
-//     })
-//     .catch(() => {
-//       res.status(500).send('Couldnt delete maintenance by id')
-//     })
-// }
+function addMaintain(req, res) {
+  Vehicle.findByIdAndUpdate(
+    req.body.vehicleId,
+    {
+      $addToSet: { maintenance: { $each: req.body.values } }
+    },
+    { new: true }
+  )
+    .then(doc => {
+      if (doc) {
+        res.status(200).json(doc)
+      } else {
+        res.status(400).send('No vehicle matching')
+      }
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt add maintain to vehicle')
+    })
+}
+
+function deleteFuel(req, res) {
+  Vehicle.findOne({
+    fuels: {
+      $elemMatch: {
+        _id: req.params.childId,
+        'applicant.username': req.params.username,
+        is_check: false
+      }
+    }
+  })
+    .then(doc => {
+      if (doc) {
+        doc.fuels.id(req.params.childId).remove()
+        return doc.save()
+      } else {
+        res.status(400).send('Couldnt find the vehicle by id')
+      }
+    })
+    .then(doc => {
+      res.status(200).json(doc)
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt delete fuel by id')
+    })
+}
+
+function deleteMaintain(req, res) {
+  Vehicle.findOne({
+    maintenance: {
+      $elemMatch: {
+        _id: req.params.childId,
+        'applicant.username': req.params.username,
+        is_check: false
+      }
+    }
+  })
+    .then(doc => {
+      if (doc) {
+        doc.maintenance.id(req.params.childId).remove()
+        return doc.save()
+      } else {
+        res.status(400).send('Couldnt find the vehicle by id')
+      }
+    })
+    .then(doc => {
+      res.status(200).json(doc)
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt delete maintain by id')
+    })
+}
 
 export {
   addFuel,
-  // addVehicleMaintain,
-  // deleteVehicleMaintain,
-  // deleteVehicleFuel,
+  getAllFuels,
+  addMaintain,
+  getAllMaintains,
+  deleteMaintain,
+  deleteFuel,
   // createVehicle,
   // getAllVehicles,
   // deleteVehicleById,

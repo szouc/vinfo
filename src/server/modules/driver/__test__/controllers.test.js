@@ -3,8 +3,14 @@ import { Vehicle } from '../models'
 import { User } from '../../user/models'
 import app from '../../../app'
 import request from 'supertest'
-// import { replaceAll } from '../../../utils/replaceAll'
-import { DRIVER_FUEL_API, DRIVER_ID_API } from '../routes'
+import { replaceAll } from '../../../utils/replaceAll'
+import {
+  DRIVER_MAINTAIN_API,
+  DRIVER_MAINTAIN_ID_API,
+  DRIVER_FUEL_API,
+  DRIVER_FUEL_ID_API,
+  DRIVER_ID_API
+} from '../routes'
 
 const driverTemplate = {
   username: () => Mock.Random.natural(10000, 99999),
@@ -46,6 +52,8 @@ const data = Mock.mock({
 })
 
 let vehicle0Id
+let fuel0Id
+let maintain0Id
 describe('Driver Base Operations', () => {
   const agent = request.agent(app)
   beforeAll(async () => {
@@ -102,6 +110,46 @@ describe('Driver Base Operations', () => {
     const res = await agent
       .post(DRIVER_FUEL_API.replace(/:username/, data.drivers[2].username))
       .send({ vehicleId: vehicle0Id, values: values })
+    fuel0Id = res.body.fuels[0]._id
     expect(res.body.fuels[0].litre).toBe(data.fuels[1].litre)
+  })
+
+  test('Should add some maintains', async () => {
+    expect.assertions(1)
+    const values = [{ ...data.maintains[1], applicant: { username: data.drivers[2].username, fullname: data.drivers[2].fullname } }]
+    const res = await agent
+      .post(DRIVER_MAINTAIN_API.replace(/:username/, data.drivers[2].username))
+      .send({ vehicleId: vehicle0Id, values: values })
+    maintain0Id = res.body.maintenance[0]._id
+    expect(res.body.maintenance[0].reason).toBe(data.maintains[1].reason)
+  })
+
+  test('Should list fuels by username', async () => {
+    expect.assertions(2)
+    const res = await agent.get(DRIVER_FUEL_API.replace(/:username/, data.drivers[2].username))
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toHaveLength(1)
+  })
+
+  test('Should list maintains by username', async () => {
+    expect.assertions(1)
+    const res = await agent.get(DRIVER_MAINTAIN_API.replace(/:username/, data.drivers[2].username))
+    expect(res.statusCode).toBe(200)
+  })
+
+  test('Should delete a fuel', async () => {
+    expect.assertions(2)
+    const mapObj = { ':username': data.drivers[2].username, ':childId': fuel0Id }
+    const res = await agent.delete(replaceAll(DRIVER_FUEL_ID_API, mapObj))
+    expect(res.statusCode).toBe(200)
+    expect(res.body.fuels).toHaveLength(0)
+  })
+
+  test('Should delete a maintain', async () => {
+    expect.assertions(2)
+    const mapObj = { ':username': data.drivers[2].username, ':childId': maintain0Id }
+    const res = await agent.delete(replaceAll(DRIVER_MAINTAIN_ID_API, mapObj))
+    expect(res.statusCode).toBe(200)
+    expect(res.body.maintenance).toHaveLength(0)
   })
 })

@@ -9,6 +9,7 @@ const CAPTAIN_STATUS = [ASSIGN, ACCEPT, SUBMIT, PASS, DENY]
 const ACCOUNT_STATUS = [SUBMIT, PASS, DENY]
 
 const baseTransport = {
+  assigner: { type: String },
   vehicle: {
     _id: { type: Schema.Types.ObjectId, required: true },
     plate: { type: String, required: true },
@@ -51,7 +52,8 @@ const baseTransport = {
     default: ASSIGN,
     required: true
   },
-  info: { type: String },
+  captain: { type: String },
+  captain_info: { type: String },
   price: { type: Number, required: true, default: 0 },
   account_status: {
     type: String,
@@ -59,6 +61,7 @@ const baseTransport = {
     default: SUBMIT,
     required: true
   },
+  account: { type: String },
   account_info: { type: String },
   active: { type: Boolean, default: true }
 }

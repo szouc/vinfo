@@ -27,6 +27,9 @@ const fuel = {
     type: Boolean,
     default: false
   },
+  captain: {
+    type: String
+  },
   info: {
     type: String
   }
@@ -58,7 +61,11 @@ const maintain = {
     type: String
   },
   is_check: {
-    type: Boolean
+    type: Boolean,
+    default: false
+  },
+  captain: {
+    type: String
   },
   info: {
     type: String

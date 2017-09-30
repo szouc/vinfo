@@ -2,21 +2,23 @@ import express from 'express'
 
 import {
   // DRIVER_TRANSPORT_ID_ROUTE,
-  // DRIVER_FUEL_ID_ROUTE,
-  // DRIVER_MAINTAIN_ID_ROUTE,
+  DRIVER_FUEL_ID_ROUTE,
+  DRIVER_MAINTAIN_ID_ROUTE,
   // DRIVER_TRANSPORT_ROUTE,
   DRIVER_FUEL_ROUTE,
-  // DRIVER_MAINTAIN_ROUTE,
+  DRIVER_MAINTAIN_ROUTE,
   DRIVER_ID_ROUTE
 } from './routes'
 
 import {
   addFuel,
-  // deleteFuel,
+  deleteFuel,
+  getAllFuels,
+  getAllMaintains,
   // addTransport,
   // deleteTransport,
-  // addMaintain,
-  // deleteMaintain,
+  addMaintain,
+  deleteMaintain,
   // updateDriverByUsername,
   changePasswordByUsername,
   getDriverByUsername
@@ -39,18 +41,23 @@ driverRouter
 driverRouter
   .route(DRIVER_FUEL_ROUTE)
   .all(isOwner)
+  .get(getAllFuels)
   .post(addFuel)
 
-// driverRouter
-//   .route(VEHICLE_FUEL_ID_ROUTE)
-//   .delete(permitManager, deleteVehicleFuel)
+driverRouter
+  .route(DRIVER_FUEL_ID_ROUTE)
+  .all(isOwner)
+  .delete(deleteFuel)
 
-// driverRouter
-//   .route(VEHICLE_MAINTAIN_ROUTE)
-//   .post(permitManager, addVehicleMaintain)
+driverRouter
+  .route(DRIVER_MAINTAIN_ROUTE)
+  .all(isOwner)
+  .get(getAllMaintains)
+  .post(addMaintain)
 
-// driverRouter
-//   .route(VEHICLE_MAINTAIN_ID_ROUTE)
-//   .delete(permitManager, deleteVehicleMaintain)
+driverRouter
+  .route(DRIVER_MAINTAIN_ID_ROUTE)
+  .all(isOwner)
+  .delete(deleteMaintain)
 
 export default driverRouter

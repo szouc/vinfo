@@ -117,6 +117,10 @@ const company2 = {
 }
 
 const transport = {
+  assigner: {
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
   vehicle: {
     _id: mongoose.Types.ObjectId('59acecec3884881aa3333333'),
     plate: '鲁B 12345',
@@ -148,6 +152,10 @@ const transport = {
 }
 
 const transport2 = {
+  assigner: {
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
   vehicle: {
     _id: mongoose.Types.ObjectId('59acecec3884881aa4444444'),
     plate: '鲁B 54321',
@@ -191,7 +199,7 @@ const modifiedDrivers = {
 
 let accountId
 let accountId2
-describe('Transport Base Operations', () => {
+describe('Accountant Base Operations', () => {
   const agent = request.agent(app)
   beforeAll(async () => {
     await agent.post('/auth/register').send(driver1)
@@ -226,7 +234,7 @@ describe('Transport Base Operations', () => {
     expect.assertions(2)
     const res = await agent.get(ACCOUNT_ID_API.replace(/:id/, accountId))
     expect(res.statusCode).toBe(200)
-    expect(res.body.status).toEqual('assign')
+    expect(res.body.captain_status).toEqual('assign')
   })
 
   test('Should update account by id', async () => {
@@ -249,8 +257,8 @@ describe('Transport Base Operations', () => {
     expect.assertions(2)
     const res = await agent
       .put(ACCOUNT_STATUS_API.replace(/:id/, accountId2))
-      .send({ account_status: 'pass' })
+      .send({ accountant_status: 'pass' })
     expect(res.statusCode).toBe(200)
-    expect(res.body.account_status).toEqual('pass')
+    expect(res.body.accountant_status).toEqual('pass')
   })
 })

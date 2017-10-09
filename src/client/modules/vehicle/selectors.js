@@ -50,6 +50,14 @@ const makeVehicleInitialValuesSelector = () =>
     const purchase = vehicle.get('purchase_date')
       ? fromJS(moment(vehicle.get('purchase_date')))
       : vehicle.get('purchase_date')
+    const captain = vehicle.get('captain')
+      ? fromJS(
+        `${vehicle.getIn(['captain', 'username'])}@@${vehicle.getIn([
+          'captain',
+          'fullname'
+        ])}`
+      )
+      : vehicle.get('captain')
     const principal = vehicle.get('principal')
       ? fromJS(
         `${vehicle.getIn(['principal', 'username'])}@@${vehicle.getIn([
@@ -67,6 +75,7 @@ const makeVehicleInitialValuesSelector = () =>
       )
       : vehicle.get('secondary')
     return vehicle
+      .set('captain', captain)
       .set('purchase_date', purchase)
       .set('principal', principal)
       .set('secondary', secondary)

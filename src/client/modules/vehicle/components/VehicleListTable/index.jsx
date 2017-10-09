@@ -46,6 +46,14 @@ class VehicleListTable extends React.PureComponent {
         render: (text, record) => record.init_mile
       },
       {
+        title: '所属队长',
+        key: 'captain',
+        render: (text, record) =>
+          record.captain
+            ? `${record.captain.fullname}(${record.captain.username})`
+            : record.captain
+      },
+      {
         title: '第一司机',
         key: 'principal',
         render: (text, record) =>

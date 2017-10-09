@@ -4,6 +4,8 @@ import { createApiRoute } from '../routes'
 
 export const CAPTAIN_ROOT_ROUTE = '/captain'
 export const CAPTAIN_ID_ROUTE = '/:username'
+export const CAPTAIN_DRIVER_ROUTE = '/:username/driver'
+export const CAPTAIN_VEHICLE_ROUTE = '/:username/vehicle'
 export const CAPTAIN_FUEL_ROUTE = '/:username/fuel'
 export const CAPTAIN_FUEL_ID_ROUTE = '/:username/fuel/:childId'
 export const CAPTAIN_MAINTAIN_ROUTE = '/:username/maintenance'
@@ -17,9 +19,17 @@ export const CAPTAIN_ID_API = createApiRoute(
   CAPTAIN_ROOT_ROUTE,
   CAPTAIN_ID_ROUTE
 )
-export const DRIVER_FUEL_API = createApiRoute(
+export const CAPTAIN_FUEL_API = createApiRoute(
   CAPTAIN_ROOT_ROUTE,
   CAPTAIN_FUEL_ROUTE
+)
+export const CAPTAIN_DRIVER_API = createApiRoute(
+  CAPTAIN_ROOT_ROUTE,
+  CAPTAIN_DRIVER_ROUTE
+)
+export const CAPTAIN_VEHICLE_API = createApiRoute(
+  CAPTAIN_ROOT_ROUTE,
+  CAPTAIN_VEHICLE_ROUTE
 )
 export const CAPTAIN_MAINTAIN_API = createApiRoute(
   CAPTAIN_ROOT_ROUTE,

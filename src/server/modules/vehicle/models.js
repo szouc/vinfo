@@ -27,9 +27,6 @@ const fuel = {
     type: Boolean,
     default: false
   },
-  captain: {
-    type: String
-  },
   info: {
     type: String
   }
@@ -64,9 +61,6 @@ const maintain = {
     type: Boolean,
     default: false
   },
-  captain: {
-    type: String
-  },
   info: {
     type: String
   }
@@ -99,6 +93,10 @@ const baseVehicle = {
     fullname: { type: String }
   },
   secondary: {
+    username: { type: String },
+    fullname: { type: String }
+  },
+  captain: {
     username: { type: String },
     fullname: { type: String }
   },

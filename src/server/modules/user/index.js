@@ -2,6 +2,7 @@ import express from 'express'
 
 import {
   USER_ID_ROUTE,
+  USER_ROLE_ROUTE,
   USER_LICENSE_UPLOAD_ROUTE,
   USER_ID_FRONT_UPLOAD_ROUTE,
   USER_ID_BACK_UPLOAD_ROUTE,
@@ -16,11 +17,12 @@ import {
   uploadUserIdBack,
   deleteUserByUsername,
   getAllUsers,
+  getUsersByRole,
   getUserByUsername,
   resetPassword
 } from './controllers'
 
-import { permitManager, isOwner } from './permissions'
+import { permitManager } from './permissions'
 
 import multer from 'multer'
 
@@ -52,9 +54,15 @@ userRouter
 
 userRouter
   .route(USER_ID_ROUTE)
-  .get(isOwner, getUserByUsername)
-  .put(permitManager, updateUserByUsername)
-  .delete(permitManager, deleteUserByUsername)
+  .all(permitManager)
+  .get(getUserByUsername)
+  .put(updateUserByUsername)
+  .delete(deleteUserByUsername)
+
+userRouter
+  .route(USER_ROLE_ROUTE)
+  .all(permitManager)
+  .get(getUsersByRole)
 
 userRouter
   .route(USER_LICENSE_UPLOAD_ROUTE)
@@ -70,7 +78,6 @@ userRouter
 
 userRouter
   .route(USER_RESET_PASSWORD_ROUTE)
-  .all(isOwner)
   .post(resetPassword)
 
 export default userRouter

@@ -2,10 +2,11 @@ import React from 'react'
 import { reduxForm, Field } from 'redux-form/es/immutable'
 import { Row, Button } from 'antd'
 import { Input, DatePicker } from '@clientModulesShared/forms'
-import { DriverSelect } from '@clientModules/user/containers'
+import { DriverSelect, CaptainSelect } from '@clientModules/user/containers'
 import formItemHOC from '@clientModulesShared/formItemHOC'
 
 const DriverSelectFormItem = formItemHOC(DriverSelect)
+const CaptainSelectFormItem = formItemHOC(CaptainSelect)
 
 const validate = values => {
   const errors = {}
@@ -32,6 +33,12 @@ class VehicleUpdateForm extends React.PureComponent {
         <Field name='model' component={Input} placeholder='车型' />
         <Field name='purchase_date' component={DatePicker} placeholder='购买日期' />
         <Field name='init_mile' component={Input} placeholder='初始里程' />
+        <Field
+          name='captain'
+          component={CaptainSelectFormItem}
+          placeholder='所属队长'
+          showSearch
+        />
         <Field
           name='principal'
           component={DriverSelectFormItem}

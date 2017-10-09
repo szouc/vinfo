@@ -121,6 +121,10 @@ const company2 = {
 }
 
 const transport = {
+  assigner: {
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
   vehicle: {
     _id: mongoose.Types.ObjectId('59acecec3884881aa3333333'),
     plate: '鲁B 12345',
@@ -152,6 +156,10 @@ const transport = {
 }
 
 const transport2 = {
+  assigner: {
+    username: 'driver1_vehicle',
+    fullname: 'test manager'
+  },
   vehicle: {
     _id: mongoose.Types.ObjectId('59acecec3884881aa4444444'),
     plate: '鲁B 54321',
@@ -253,16 +261,16 @@ describe('Transport Base Operations', () => {
     expect.assertions(2)
     const res = await agent.get(TRANSPORT_ID_API.replace(/:id/, transportId))
     expect(res.statusCode).toBe(200)
-    expect(res.body.status).toEqual('assign')
+    expect(res.body.captain_status).toEqual('assign')
   })
 
   test('Should change the transport status by id', async () => {
     expect.assertions(3)
     const res = await agent
       .put(TRANSPORT_STATUS_API.replace(/:id/, transportId))
-      .send({ status: 'submit' })
+      .send({ captain_status: 'submit' })
     expect(res.statusCode).toBe(200)
-    expect(res.body[0].status).toBe('submit')
+    expect(res.body[0].captain_status).toBe('submit')
     expect(res.body[1].assigned).toBeFalsy()
   })
 

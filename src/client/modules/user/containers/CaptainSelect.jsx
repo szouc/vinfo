@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 import UserSelect from '../components/UserSelect'
 import { fetchUserListRequest } from '../actions'
 
-import { driverArraySelector } from '../selectors'
+import { captainArraySelector } from '../selectors'
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
-  const users = driverArraySelector(state)
+  const users = captainArraySelector(state)
   return { users }
 }
 

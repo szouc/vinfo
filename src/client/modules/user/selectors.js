@@ -22,4 +22,9 @@ const driverArraySelector = createImmutableSelector(
   users => users.filter((user, i) => user.get('role') === 'driver')
 )
 
-export { userSelector, userArraySelector, driverArraySelector }
+const captainArraySelector = createImmutableSelector(
+  [userArraySelector],
+  users => users.filter((user, i) => user.get('role') === 'captain')
+)
+
+export { userSelector, userArraySelector, driverArraySelector, captainArraySelector }

@@ -21,6 +21,7 @@ export const maintainSchema = new schema.Entity(
 export const vehicleSchema = new schema.Entity(
   'vehicles',
   {
+    captain: userSchema,
     principal: userSchema,
     secondary: userSchema,
     fuels: [fuelSchema],

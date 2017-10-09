@@ -9,11 +9,14 @@ const CAPTAIN_STATUS = [ASSIGN, ACCEPT, SUBMIT, PASS, DENY]
 const ACCOUNT_STATUS = [SUBMIT, PASS, DENY]
 
 const baseTransport = {
-  assigner: { type: String },
+  assigner: {
+    username: { type: String, required: true },
+    fullname: { type: String, required: true }
+  },
   vehicle: {
-    _id: { type: Schema.Types.ObjectId, required: true },
-    plate: { type: String, required: true },
-    engine: { type: String, required: true }
+    _id: { type: Schema.Types.ObjectId, required: true, ref: 'Vehicle' },
+    plate: { type: String },
+    engine: { type: String }
   },
   principal: {
     username: { type: String, required: true },
@@ -25,44 +28,46 @@ const baseTransport = {
   },
   from: {
     company: {
-      _id: { type: Schema.Types.ObjectId, required: true },
-      name: { type: String, required: true },
-      addr: { type: String, required: true }
+      _id: { type: Schema.Types.ObjectId, required: true, ref: 'Company' },
+      name: { type: String },
+      addr: { type: String }
     },
     weight: { type: Number, default: 0 },
     date: { type: Date, default: Date.now() }
   },
   to: {
     company: {
-      _id: { type: Schema.Types.ObjectId, required: true },
-      name: { type: String, required: true },
-      addr: { type: String, required: true }
+      _id: { type: Schema.Types.ObjectId, required: true, ref: 'Company' },
+      name: { type: String },
+      addr: { type: String }
     },
     weight: { type: Number, default: 0 },
     date: { type: Date, default: Date.now() }
   },
   product: {
-    _id: { type: Schema.Types.ObjectId, required: true },
-    name: { type: String, required: true },
-    specs: { type: String, required: true }
+    _id: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
+    name: { type: String },
+    specs: { type: String }
   },
-  status: {
+  captain_status: {
     type: String,
     enum: CAPTAIN_STATUS,
     default: ASSIGN,
     required: true
   },
-  captain: { type: String },
   captain_info: { type: String },
   price: { type: Number, required: true, default: 0 },
-  account_status: {
+  accountant_status: {
     type: String,
     enum: ACCOUNT_STATUS,
     default: SUBMIT,
     required: true
   },
-  account: { type: String },
-  account_info: { type: String },
+  accountant: {
+    username: { type: String },
+    fullname: { type: String }
+  },
+  accountant_info: { type: String },
   active: { type: Boolean, default: true }
 }
 

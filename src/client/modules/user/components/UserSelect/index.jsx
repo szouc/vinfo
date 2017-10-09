@@ -4,13 +4,13 @@ import './style.css'
 
 const Option = Select.Option
 
-class DriverSelect extends React.PureComponent {
+class UserSelect extends React.PureComponent {
   constructor(props) {
     super(props)
   }
 
   static defaultProps = {
-    placeholder: '请选择司机'
+    placeholder: '请选择人员'
   }
 
   componentDidMount() {
@@ -18,8 +18,8 @@ class DriverSelect extends React.PureComponent {
   }
 
   render() {
-    const { drivers, placeholder, ...rest } = this.props
-    const options = drivers
+    const { users, placeholder, ...rest } = this.props
+    const options = users
     const optionsList = options.map(user => {
       return (
         <Option key={user.username} value={`${user.username}@@${user.fullname}`}>
@@ -39,4 +39,4 @@ class DriverSelect extends React.PureComponent {
   }
 }
 
-export default DriverSelect
+export default UserSelect

@@ -31,8 +31,19 @@ const getAllUsers = (req, res) => {
     })
 }
 
+const getUsersByRole = (req, res) => {
+  User.find({ role: req.params.role, active: true })
+    .lean()
+    .then(docs => {
+      res.status(200).json(docs)
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt run the query smart guy')
+    })
+}
+
 const getOwnUser = (req, res) => {
-  User.find({ username: req.user.username })
+  User.findOne({ username: req.user.username })
     .then(document => {
       res.json({ data: document })
     })
@@ -117,6 +128,7 @@ const updateUserByUsername = (req, res) => {
 
 export {
   getAllUsers,
+  getUsersByRole,
   updateUserByUsername,
   deleteUserByUsername,
   uploadUserLicense,

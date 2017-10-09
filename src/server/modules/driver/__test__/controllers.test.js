@@ -1,4 +1,3 @@
-import Mock from 'mockjs'
 import { Vehicle } from '../models'
 import { User } from '../../user/models'
 import app from '../../../app'
@@ -12,44 +11,7 @@ import {
   DRIVER_ID_API
 } from '../routes'
 
-const driverTemplate = {
-  username: () => Mock.Random.natural(10000, 99999),
-  password: '123',
-  fullname: () => Mock.Random.cname(),
-  gender: 'male',
-  role: 'driver'
-}
-
-const managerTemplate = {
-  ...driverTemplate,
-  role: 'manager'
-}
-
-const vehicleTemplate = {
-  plate: () => Mock.Random.string('upper', 7),
-  engine: () => Mock.Random.string('number', 7),
-  model: () => Mock.Random.string('lower', 7)
-}
-
-const fuelTemplate = {
-  litre: () => Mock.Random.natural(30, 50),
-  cost: () => Mock.Random.natural(100, 500),
-  mile: () => Mock.Random.natural(12345, 34352)
-}
-
-const maintainTemplate = {
-  reason: () => Mock.Random.string('lower', 50),
-  cost: () => Mock.Random.natural(100, 500),
-  mile: () => Mock.Random.natural(12345, 34352)
-}
-
-const data = Mock.mock({
-  'managers|2': [managerTemplate],
-  'drivers|5': [driverTemplate],
-  'vehicles|5': [vehicleTemplate],
-  'fuels|5': [fuelTemplate],
-  'maintains|5': [maintainTemplate]
-})
+import { data } from '../../../utils/mockData'
 
 let vehicle0Id
 let fuel0Id

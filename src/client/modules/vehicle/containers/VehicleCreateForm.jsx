@@ -9,6 +9,11 @@ import { fromJS } from 'immutable'
 const mapDispatchToProps = dispatch => {
   return {
     onSubmit: values => {
+      const captain = {}
+      if (values.get('captain')) {
+        captain.username = values.get('captain').split('@@')[0]
+        captain.fullname = values.get('captain').split('@@')[1]
+      }
       const driver = { principal: {}, secondary: {} }
       if (values.get('principal')) {
         const principal = values.get('principal').split('@@')
@@ -21,6 +26,7 @@ const mapDispatchToProps = dispatch => {
         driver.secondary.fullname = secondary[1]
       }
       const req = values
+        .set('captain', fromJS(captain))
         .set('principal', fromJS(driver.principal))
         .set('secondary', fromJS(driver.secondary))
       dispatch(createVehicleRequest(req))

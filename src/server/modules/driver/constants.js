@@ -1,1 +1,1 @@
-export { ASSIGN, ACCEPT, SUBMIT } from '../transport/constants' 
+export { ASSIGN, ACCEPT, SUBMIT } from '../transport/constants'

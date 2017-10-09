@@ -1,10 +1,10 @@
 import express from 'express'
 
 import {
-  // DRIVER_TRANSPORT_ID_ROUTE,
+  DRIVER_TRANSPORT_ID_ROUTE,
   DRIVER_FUEL_ID_ROUTE,
   DRIVER_MAINTAIN_ID_ROUTE,
-  // DRIVER_TRANSPORT_ROUTE,
+  DRIVER_TRANSPORT_ROUTE,
   DRIVER_FUEL_ROUTE,
   DRIVER_MAINTAIN_ROUTE,
   DRIVER_ID_ROUTE
@@ -15,11 +15,10 @@ import {
   deleteFuel,
   getAllFuels,
   getAllMaintains,
-  // addTransport,
-  // deleteTransport,
+  getAllDriverTransports,
+  acceptTransportById,
   addMaintain,
   deleteMaintain,
-  // updateDriverByUsername,
   changePasswordByUsername,
   getDriverByUsername
 } from './controllers'
@@ -59,5 +58,15 @@ driverRouter
   .route(DRIVER_MAINTAIN_ID_ROUTE)
   .all(isOwner)
   .delete(deleteMaintain)
+
+driverRouter
+  .route(DRIVER_TRANSPORT_ROUTE)
+  .all(isOwner)
+  .get(getAllDriverTransports)
+
+driverRouter
+  .route(DRIVER_TRANSPORT_ID_ROUTE)
+  .all(isOwner)
+  .put(acceptTransportById)
 
 export default driverRouter

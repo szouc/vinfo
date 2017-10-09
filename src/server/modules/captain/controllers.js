@@ -1,4 +1,5 @@
 import { User, Vehicle, Transport } from './models'
+import { ASSIGN, ACCEPT, SUBMIT } from './constants'
 
 function getCaptainByUsername(req, res) {
   User.findByUsername(req.params.username)
@@ -41,7 +42,7 @@ function changePasswordByUsername(req, res) {
     })
 }
 
-function getAllVehiclesByUsername(req, res) {
+function getAllCaptainVehicles(req, res) {
   Vehicle.find({
     'captain.username': req.params.username
   })
@@ -81,6 +82,19 @@ async function createTransport(req, res) {
   } catch (error) {
     res.status(500).send('Couldnt save the transport at this time')
   }
+}
+
+function getAllCaptainTransports(req, res) {
+  Transport.find({
+    'assigner.username': req.params.username,
+    active: true
+  })
+    .then(docs => {
+      res.status(200).json(docs)
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt fetch all transports by username')
+    })
 }
 
 function checkFuelById(req, res) {
@@ -147,6 +161,32 @@ function checkMaintainById(req, res) {
     })
 }
 
+function checkTransportById(req, res) {
+  Transport.findOneAndUpdate(
+    {
+      'assigner.username': req.params.username,
+      _id: req.params.childId,
+      captain_status: { $in: [ASSIGN, ACCEPT, SUBMIT] }
+    },
+    {
+      $set: req.body
+    },
+    {
+      new: true
+    }
+  )
+    .then(doc => {
+      if (doc) {
+        res.status(200).json(doc)
+      } else {
+        res.status(400).send('Couldnt find the transport by id')
+      }
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt check transport by id')
+    })
+}
+
 // function deleteMaintain(req, res) {
 //   Vehicle.findOne({
 //     maintenance: {
@@ -184,10 +224,12 @@ export {
   // getAllVehicles,
   // deleteVehicleById,
   // updateVehicleById,
+  checkTransportById,
   createTransport,
+  getAllCaptainTransports,
   checkFuelById,
   checkMaintainById,
-  getAllVehiclesByUsername,
+  getAllCaptainVehicles,
   changePasswordByUsername,
   getCaptainByUsername
 }

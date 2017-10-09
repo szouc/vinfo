@@ -1,29 +1,46 @@
-import { User, Vehicle } from './models'
+import { User, Vehicle, Transport } from './models'
+import {ASSIGN, ACCEPT} from './constants'
 
-// function createVehicle(req, res) {
-//   Vehicle.create(req.body)
-//     .then(doc => {
-//       res.status(200).json(doc)
-//     })
-//     .catch(e => {
-//       res.status(500).send('Couldnt save the vehicle at this time')
-//     })
-// }
+function getAllDriverTransports(req, res) {
+  Transport.find({ 'principal.username': req.params.username })
+    .lean()
+    .then(docs => {
+      if (docs) {
+        res.status(200).json(docs)
+      } else {
+        res.status(400).send('No transports matching')
+      }
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt find all transports')
+    })
+}
 
-// function getAllVehicles(req, res) {
-//   Vehicle.find({ active: true })
-//     .lean()
-//     .then(docs => {
-//       if (docs) {
-//         res.status(200).json(docs)
-//       } else {
-//         res.status(400).send('No vehicles matching')
-//       }
-//     })
-//     .catch(() => {
-//       res.status(500).send('Couldnt find all vehicles')
-//     })
-// }
+function acceptTransportById(req, res) {
+  Transport.findOneAndUpdate(
+    {
+      'principal.username': req.params.username,
+      _id: req.params.childId,
+      captain_status: { $in: [ASSIGN, ACCEPT] }
+    },
+    {
+      $set: req.body
+    },
+    {
+      new: true
+    }
+  )
+    .then(doc => {
+      if (doc) {
+        res.status(200).json(doc)
+      } else {
+        res.status(400).send('Couldnt find the transport by id')
+      }
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt check transport by id')
+    })
+}
 
 function getDriverByUsername(req, res) {
   User.findByUsername(req.params.username)
@@ -65,38 +82,6 @@ function changePasswordByUsername(req, res) {
       res.status(500).send('Couldnt find the user')
     })
 }
-
-// function deleteVehicleById(req, res) {
-//   Vehicle.findByIdAndUpdate(
-//     req.params.id,
-//     { $set: { active: false } },
-//     { new: true }
-//   )
-//     .then(doc => {
-//       if (doc) {
-//         res.status(200).json(doc)
-//       } else {
-//         res.status(400).send('No vehicle matching')
-//       }
-//     })
-//     .catch(() => {
-//       res.status(500).send('Couldnt delete vehicle at this time')
-//     })
-// }
-
-// function updateVehicleById(req, res) {
-//   Vehicle.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
-//     .then(doc => {
-//       if (doc) {
-//         res.status(200).json(doc)
-//       } else {
-//         res.status(400).send('NO vehicle matching')
-//       }
-//     })
-//     .catch(() => {
-//       res.status(500).send('Couldnt update vehicle at this time')
-//     })
-// }
 
 function addFuel(req, res) {
   Vehicle.findByIdAndUpdate(
@@ -233,10 +218,8 @@ export {
   getAllMaintains,
   deleteMaintain,
   deleteFuel,
-  // createVehicle,
-  // getAllVehicles,
-  // deleteVehicleById,
-  // updateVehicleById,
+  getAllDriverTransports,
+  acceptTransportById,
   changePasswordByUsername,
   getDriverByUsername
 }

@@ -203,7 +203,7 @@ const modifiedDrivers = {
 
 let num
 let transportId
-let transportId2
+// let transportId2
 describe('Transport Base Operations', () => {
   const agent = request.agent(app)
   beforeAll(async () => {
@@ -253,7 +253,7 @@ describe('Transport Base Operations', () => {
     expect.assertions(1)
     const res = await agent.get(TRANSPORT_ROOT_API)
     transportId = res.body[1]._id
-    transportId2 = res.body[0]._id
+    // transportId2 = res.body[0]._id
     expect(res.body).toHaveLength(2)
   })
 
@@ -288,15 +288,5 @@ describe('Transport Base Operations', () => {
     const res = await agent.delete(TRANSPORT_ID_API.replace(/:id/, transportId))
     expect(res.statusCode).toBe(200)
     expect(res.body[1].assigned).toBeFalsy()
-  })
-
-  test('Should not change the transport status with driver_role', async () => {
-    expect.assertions(2)
-    await agent.post('/auth/login').send(driver1)
-    const res = await agent
-      .put(TRANSPORT_STATUS_API.replace(/:id/, transportId2))
-      .send({ status: 'deny' })
-    expect(res.statusCode).toBe(401)
-    expect(res.text).toBe('Couldnt update other status with dirver_role')
   })
 })

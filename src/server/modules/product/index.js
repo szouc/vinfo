@@ -17,21 +17,23 @@ import {
   deleteProductPriceHistory
 } from './controllers'
 
-import { permitCaptain, permitManager } from './permissions'
+import { permitManager } from './permissions'
 
 const productRouter = express.Router()
 
 productRouter
   .route('/')
-  .get(permitCaptain, getAllProducts)
-  .post(permitManager, createProduct)
+  .all(permitManager)
+  .get(getAllProducts)
+  .post(createProduct)
 
 // Dynamic route should put the last position
 productRouter
   .route(PRODUCT_ID_ROUTE)
-  .get(permitCaptain, getProductById)
-  .put(permitManager, updateProductById)
-  .delete(permitManager, deleteProductById)
+  .all(permitManager)
+  .get(getProductById)
+  .put(updateProductById)
+  .delete(deleteProductById)
 
 productRouter
   .route(PRODUCT_PRICE_HISTORY_ROUTE)

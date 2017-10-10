@@ -1,6 +1,6 @@
 import { Transport } from './models'
 import { Vehicle } from '../vehicle/models'
-import { SUBMIT, ACCEPT } from './constants.js'
+// import { SUBMIT, ACCEPT } from './constants.js'
 
 async function createTransport(req, res) {
   try {
@@ -27,7 +27,7 @@ async function createTransport(req, res) {
 }
 
 function getAllTransports(req, res) {
-  Transport.find({active: true})
+  Transport.find({ active: true })
     .lean()
     .then(docs => {
       if (docs) {
@@ -88,31 +88,51 @@ async function deleteTransportById(req, res) {
 }
 
 async function updateTransportStatusById(req, res) {
-  if (
-    req.user.role === 'driver' &&
-    (req.body.status !== ACCEPT && req.body.status !== SUBMIT)
-  ) {
-    res.status(401).send('Couldnt update other status with dirver_role')
-  } else {
-    try {
-      const transport = await Transport.findByIdAndUpdate(
-        req.params.id,
-        { $set: req.body },
-        { new: true }
-      )
-      const vehicle = await Vehicle.findByIdAndUpdate(
-        transport.vehicle._id,
-        {
-          $set: { assigned: false }
-        },
-        { new: true }
-      )
-      res.status(200).json([transport, vehicle])
-    } catch (error) {
-      res.status(500).send('Couldnt update transport status')
-    }
+  try {
+    const transport = await Transport.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    )
+    const vehicle = await Vehicle.findByIdAndUpdate(
+      transport.vehicle._id,
+      {
+        $set: { assigned: false }
+      },
+      { new: true }
+    )
+    res.status(200).json([transport, vehicle])
+  } catch (error) {
+    res.status(500).send('Couldnt update transport status')
   }
 }
+
+// async function updateTransportStatusById(req, res) {
+//   if (
+//     req.user.role === 'driver' &&
+//     (req.body.status !== ACCEPT && req.body.status !== SUBMIT)
+//   ) {
+//     res.status(401).send('Couldnt update other status with dirver_role')
+//   } else {
+//     try {
+//       const transport = await Transport.findByIdAndUpdate(
+//         req.params.id,
+//         { $set: req.body },
+//         { new: true }
+//       )
+//       const vehicle = await Vehicle.findByIdAndUpdate(
+//         transport.vehicle._id,
+//         {
+//           $set: { assigned: false }
+//         },
+//         { new: true }
+//       )
+//       res.status(200).json([transport, vehicle])
+//     } catch (error) {
+//       res.status(500).send('Couldnt update transport status')
+//     }
+//   }
+// }
 
 export {
   createTransport,

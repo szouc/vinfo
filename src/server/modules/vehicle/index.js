@@ -20,21 +20,23 @@ import {
   createVehicle
 } from './controllers'
 
-import { permitCaptain, permitManager } from './permissions'
+import { permitManager } from './permissions'
 
 const vehicleRouter = express.Router()
 
 vehicleRouter
   .route('/')
-  .post(permitManager, createVehicle)
-  .get(permitCaptain, getAllVehicles)
+  .all(permitManager)
+  .post(createVehicle)
+  .get(getAllVehicles)
 
 // Dynamic route should put the last position
 vehicleRouter
   .route(VEHICLE_ID_ROUTE)
-  .get(permitCaptain, getVehicleById)
-  .put(permitManager, updateVehicleById)
-  .delete(permitManager, deleteVehicleById)
+  .all(permitManager)
+  .get(getVehicleById)
+  .put(updateVehicleById)
+  .delete(deleteVehicleById)
 
 vehicleRouter.route(VEHICLE_FUEL_ROUTE).post(permitManager, addVehicleFuel)
 

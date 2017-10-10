@@ -78,6 +78,6 @@ userRouter
 
 userRouter
   .route(USER_RESET_PASSWORD_ROUTE)
-  .post(resetPassword)
+  .post(permitManager, resetPassword)
 
 export default userRouter

@@ -14,24 +14,26 @@ import {
   createTransport
 } from './controllers'
 
-import { permitCaptain } from './permissions'
+import { permitManager } from './permissions'
 
 const transportRouter = express.Router()
 
 transportRouter
   .route('/')
-  .post(permitCaptain, createTransport)
-  .get(permitCaptain, getAllTransports)
+  .all(permitManager)
+  .post(createTransport)
+  .get(getAllTransports)
 
 // Dynamic route should put the last position
 transportRouter
   .route(TRANSPORT_ID_ROUTE)
-  .get(permitCaptain, getTransportById)
-  .put(permitCaptain, updateTransportById)
-  .delete(permitCaptain, deleteTransportById)
+  .all(permitManager)
+  .get(getTransportById)
+  .put(updateTransportById)
+  .delete(deleteTransportById)
 
 transportRouter
   .route(TRANSPORT_STATUS_ROUTE)
-  .put(updateTransportStatusById)
+  .put(permitManager, updateTransportStatusById)
 
 export default transportRouter

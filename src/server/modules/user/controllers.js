@@ -71,13 +71,6 @@ const createUser = (req, res) => {
       res.status(200).json(user)
     }
   })
-  // User.create(req.body)
-  //   .then(() => {
-  //     res.status(200).send('You have added a new user.')
-  //   })
-  //   .catch(() => {
-  //     res.status(500).send('Couldnt save the user at this time')
-  //   })
 }
 
 const getUserByUsername = (req, res) => {

@@ -78,29 +78,6 @@ function deleteProductPriceHistory(req, res) {
     })
 }
 
-// function deleteProductPriceHistory(req, res) {
-//   Product.findById(req.params.id)
-//     .then(doc => {
-//       if (doc) {
-//         doc.price_history.id(req.params.childId).remove()
-//         doc
-//           .save()
-//           .then(() => {
-//             res.status(200).json(doc)
-//           })
-//           .catch(() => {
-//             res.status(500).send('Couldnt find product by id')
-//           })
-//         res.status(200).json(doc)
-//       } else {
-//         res.status(400).send('No product matching')
-//       }
-//     })
-//     .catch(() => {
-//       res.status(500).send('Couldnt find product by id')
-//     })
-// }
-
 function updateProductById(req, res) {
   Product.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
     .then(doc => {

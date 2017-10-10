@@ -9,21 +9,28 @@ class CompanySelect extends React.PureComponent {
     super(props)
   }
 
+  static defaultProps = {
+    placeholder: '请选择公司'
+  }
+
   componentDidMount() {
     this.props.getAllCompanies()
   }
 
   render() {
-    const { companies, ...rest } = this.props
+    const { companies, placeholder, ...rest } = this.props
     const options = companies
     const optionsList = options.map(company => (
-      <Option value={company._id}>
+      <Option key={company._id} value={`${company._id}@@${company.name}@@${company.addr}`}>
         {company.name}({company.addr})
       </Option>
     ))
 
     return (
       <Select style={{ width: '100%' }} {...rest}>
+        <Option value='' className='first-option' disabled>
+          {placeholder}
+        </Option>
         {optionsList}
       </Select>
     )

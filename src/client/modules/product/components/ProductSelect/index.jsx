@@ -9,21 +9,28 @@ class ProductSelect extends React.PureComponent {
     super(props)
   }
 
+  static defaultProps = {
+    placeholder: '请选择产品'
+  }
+
   componentDidMount() {
     this.props.getAllProducts()
   }
 
   render() {
-    const { products, ...rest } = this.props
+    const { products, placeholder, ...rest } = this.props
     const options = products
     const optionsList = options.map(product => (
-      <Option value={product._id}>
+      <Option key={product._id} value={`${product._id}@@${product.name}@@${product.specs}`}>
         {product.name}({product.specs})
       </Option>
     ))
 
     return (
       <Select style={{ width: '100%' }} {...rest}>
+        <Option value='' className='first-option' disabled>
+          {placeholder}
+        </Option>
         {optionsList}
       </Select>
     )

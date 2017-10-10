@@ -1,5 +1,6 @@
 export VehicleCreateForm from './VehicleCreateForm'
 export VehicleListTable from './VehicleListTable'
 export VehicleSelect from './VehicleSelect'
+export NotAssignedVehicleSelect from './NotAssignedVehicleSelect'
 export VehicleSelectByUser from './VehicleSelectByUser'
 export FuelCreateForm from './FuelCreateForm'

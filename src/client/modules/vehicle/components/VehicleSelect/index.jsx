@@ -21,7 +21,7 @@ class VehicleSelect extends React.PureComponent {
     const options = vehicles
     const optionsList = options.map(vehicle => {
       return (
-        <Option key={vehicle._id} value={vehicle._id}>
+        <Option key={vehicle._id} value={`${vehicle._id}@@${vehicle.plate}@@${vehicle.engine}`}>
           {vehicle.plate}
         </Option>
       )

@@ -19,7 +19,7 @@ async function createTransport(req, res) {
           { new: true }
         )
       ])
-      res.status(200).json(doc)
+      res.status(200).json(doc[0])
     }
   } catch (error) {
     res.status(500).send('Couldnt save the transport at this time')

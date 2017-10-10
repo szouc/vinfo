@@ -5,6 +5,7 @@ import { reducer as companyReducer } from '../modules/company'
 import { reducer as productReducer } from '../modules/product'
 import { reducer as userReducer } from '../modules/user'
 import { reducer as vehicleReducer } from '../modules/vehicle'
+import { reducer as transportReducer } from '../modules/transport'
 import routerReducer from '../route/reducer' // hack the default to immutable routerReducer
 
 const rootReducer = combineReducers({
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   product: productReducer,
   user: userReducer,
   vehicle: vehicleReducer,
+  transport: transportReducer,
   form: formReducer
 })
 export default rootReducer

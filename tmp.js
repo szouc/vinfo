@@ -1,4 +1,4 @@
-import Immutable from 'immutable'
+import Immutable, { fromJS } from 'immutable'
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
 
 let state,
@@ -67,3 +67,10 @@ state = state.set('keyword', 'hell')
 console.log('expensive2(state)', somethingExpensive2Selector(state))
 state = state.set('keyword', 'helldsfs')
 console.log('expensive2(state)', somethingExpensive2Selector(state))
+
+const values = fromJS({ assigner: '12324@@你好' })
+
+const req = values.update('assigner', value => {
+  return value.split('@@')[0]
+})
+console.log(req)

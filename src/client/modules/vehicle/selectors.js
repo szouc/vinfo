@@ -95,9 +95,15 @@ const vehicleArrayByUserSelector = createImmutableSelector(
     })
 )
 
+const notAssignedVehicleArraySelector = createImmutableSelector(
+  [vehicleArraySelector],
+  vehicles => vehicles.filter((vehicle, i) => !vehicle.get('assigned'))
+)
+
 export {
   vehicleSelector,
   vehicleArraySelector,
   vehicleArrayByUserSelector,
+  notAssignedVehicleArraySelector,
   makeVehicleInitialValuesSelector
 }

@@ -34,6 +34,11 @@ const LoadableFuel = Loadable({
   loading: () => null
 })
 
+const LoadableTransport = Loadable({
+  loader: () => import(/* webpackChunkName: "TransportComponent" */ '../Transport'),
+  loading: () => null
+})
+
 class BaseContent extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -47,6 +52,7 @@ class BaseContent extends React.PureComponent {
         <Route exact path='/vehicle' component={LoadableVehicle} />
         <Route exact path='/user' component={LoadableUser} />
         <Route exact path='/product' component={LoadableProduct} />
+        <Route exact path='/transport' component={LoadableTransport} />
         <Route exact path='/fuel' component={LoadableFuel} />
         <Route component={NotFound} />
       </Switch>

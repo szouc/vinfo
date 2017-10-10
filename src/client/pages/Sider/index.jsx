@@ -47,6 +47,9 @@ class BaseSider extends React.PureComponent {
           <Menu.Item key='4'>
             <Link to='/vehicle'>车辆管理</Link>
           </Menu.Item>
+          <Menu.Item key='55'>
+            <Link to='/transport'>运输管理</Link>
+          </Menu.Item>
         </SubMenu>
         <SubMenu
           key='sub2'

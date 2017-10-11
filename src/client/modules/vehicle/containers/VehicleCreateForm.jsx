@@ -25,10 +25,12 @@ const mapDispatchToProps = dispatch => {
         driver.secondary.username = secondary[0]
         driver.secondary.fullname = secondary[1]
       }
-      const req = values
-        .set('captain', fromJS(captain))
-        .set('principal', fromJS(driver.principal))
-        .set('secondary', fromJS(driver.secondary))
+      const req = values.withMutations(value =>
+        value
+          .set('captain', fromJS(captain))
+          .set('principal', fromJS(driver.principal))
+          .set('secondary', fromJS(driver.secondary))
+      )
       dispatch(createVehicleRequest(req))
     }
   }

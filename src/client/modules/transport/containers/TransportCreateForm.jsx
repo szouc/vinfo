@@ -38,12 +38,14 @@ const mapDispatchToProps = dispatch => {
         product.name = values.get('product').split('@@')[1]
         product.specs = values.get('product').split('@@')[2]
       }
-      const req = values
-        .set('assigner', fromJS(assigner))
-        .set('vehicle', fromJS(vehicle))
-        .setIn(['from', 'company'], fromJS(fromCompany))
-        .setIn(['to', 'company'], fromJS(toCompany))
-        .set('product', fromJS(product))
+      const req = values.withMutations(value =>
+        value
+          .set('assigner', fromJS(assigner))
+          .set('vehicle', fromJS(vehicle))
+          .setIn(['from', 'company'], fromJS(fromCompany))
+          .setIn(['to', 'company'], fromJS(toCompany))
+          .set('product', fromJS(product))
+      )
       dispatch(createTransportRequest(req))
     }
   }

@@ -70,7 +70,9 @@ console.log('expensive2(state)', somethingExpensive2Selector(state))
 
 const values = fromJS({ assigner: '12324@@你好' })
 
-const req = values.update('assigner', value => {
-  return value.split('@@')[0]
-})
+const req = values.withMutations(value =>
+  value
+    .set('assigner', fromJS({ username: '12345', fullname: '你好' }))
+    .set('vehicle', fromJS({ plate: '12345', engine: 'L21342354' }))
+)
 console.log(req)

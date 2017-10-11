@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import VehicleSelect from '../components/VehicleSelect'
 import { fetchVehicleListRequest } from '../actions'
 
-import { notAssignedVehicleArraySelector } from '../selectors'
+import { availableVehicleByCaptainSelector } from '../selectors'
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
-  const vehicles = notAssignedVehicleArraySelector(state)
+  const vehicles = availableVehicleByCaptainSelector(state)
   return { vehicles }
 }
 

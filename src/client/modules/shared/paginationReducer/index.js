@@ -1,2 +1,1 @@
-import { paginationReducerFor } from './pagination'
-export { paginationReducerFor }
+export paginationReducerFor from './pagination'

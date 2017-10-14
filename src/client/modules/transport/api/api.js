@@ -27,7 +27,7 @@ async function createTransport(payload: Immut): ?Immut {
   const response = await fetch(TRANSPORT_ROOT_API, options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
-    const transport = transportNormalize(data)
+    const transport = transportNormalize(data[0])
     return fromJS(transport)
   }
   throw new Error('Couldnt create a new transport')

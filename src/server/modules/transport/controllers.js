@@ -1,6 +1,6 @@
 import { Transport } from './models'
 import { Vehicle } from '../vehicle/models'
-// import { SUBMIT, ACCEPT } from './constants.js'
+import { ASSIGN } from './constants.js'
 
 async function createTransport(req, res) {
   try {
@@ -19,7 +19,7 @@ async function createTransport(req, res) {
           { new: true }
         )
       ])
-      res.status(200).json(doc[0])
+      res.status(200).json(doc)
     }
   } catch (error) {
     res.status(500).send('Couldnt save the transport at this time')
@@ -74,14 +74,18 @@ function updateTransportById(req, res) {
 async function deleteTransportById(req, res) {
   try {
     const transport = await Transport.findByIdAndRemove(req.params.id)
-    const vehicle = await Vehicle.findByIdAndUpdate(
-      transport.vehicle._id,
-      {
-        $set: { assigned: false }
-      },
-      { new: true }
-    )
-    res.status(200).json([transport, vehicle])
+    if (transport.captain_status === ASSIGN) {
+      const vehicle = await Vehicle.findByIdAndUpdate(
+        transport.vehicle._id,
+        {
+          $set: { assigned: false }
+        },
+        { new: true }
+      )
+      res.status(200).json([transport, vehicle])
+    } else {
+      res.status(200).json([transport, {}])
+    }
   } catch (error) {
     res.status(500).send('Couldnt delete transport status')
   }

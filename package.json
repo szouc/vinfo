@@ -24,7 +24,7 @@
     "test": "yarn lint && flow && jest --coverage",
     "jest": "cross-env NODE_ENV=test jest --runInBand --watchAll",
     "precommit": "yarn lint",
-    "prepush": "yarn dev:build",
+    "prepush": "yarn prod:build",
     "reactopt": "node node_modules/reactopt/main.js"
   },
   "dependencies": {

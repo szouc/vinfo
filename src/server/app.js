@@ -1,33 +1,32 @@
 // @flow
-import LocalStrategy from 'passport-local'
-import Redis from 'connect-redis'
-import bodyParser from 'body-parser'
-import compression from 'compression'
-import debugCreator from 'debug'
-import express from 'express'
-import flash from 'connect-flash'
-import logger from 'morgan'
-import passport from 'passport'
-import renderApp from './render-app'
-import session from 'express-session'
-import cors from 'cors'
-import path from 'path'
 
-import { User } from './modules/user/models'
+import { APP_NAME, STATIC_PATH } from '../shared/config'
 
-import auth from './auth'
-import api from './modules'
-import {
-  AUTH_ROOT_ROUTE
-} from './auth/routes'
 import {
   API_ROOT_ROUTE
 } from './modules/routes'
-import { isAuthenticated } from './auth/controllers'
-
-import { isProd } from '../shared/utils'
-import { APP_NAME, STATIC_PATH } from '../shared/config'
+import {
+  AUTH_ROOT_ROUTE
+} from './auth/routes'
+import LocalStrategy from 'passport-local'
+import Redis from 'connect-redis'
 import { SESSION_SECRET_KEY } from './settings/constants'
+import { User } from './modules/user/models'
+import api from './modules'
+import auth from './auth'
+import bodyParser from 'body-parser'
+import compression from 'compression'
+import cors from 'cors'
+import debugCreator from 'debug'
+import express from 'express'
+import flash from 'connect-flash'
+import { isAuthenticated } from './auth/controllers'
+import { isProd } from '../shared/utils'
+import logger from 'morgan'
+import passport from 'passport'
+import path from 'path'
+import renderApp from './render-app'
+import session from 'express-session'
 
 const debug = debugCreator('app')
 const app = express()
@@ -36,7 +35,7 @@ const RedisStore = Redis(session)
 if (!isProd) {
   app.use(
     cors({
-      origin: ['http://localhost:7000', 'http://localhost:8000'],
+      origin: ['http://localhost:7000', 'http://localhost:8000', 'http://localhost:8081'],
       credentials: true
     })
   )

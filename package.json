@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "tmp": "babel-node ./tmp.js",
+    "babel": "babel src -d lib --ignore .test.js",
     "start": "cross-env DEBUG=app,user yarn dev:start",
     "vsc": "cross-env DEBUG=server,app,user,auth yarn dev:vsc",
     "dev": "yarn dev:dll && yarn dev:wds",
@@ -14,8 +15,8 @@
     "dev:vsc": "nodemon -e js,jsx --ignore lib --ignore dist --exec babel-node --inspect=5858 src/server",
     "dev:wds": "webpack-dev-server --config webpack.config.babel.js --progress --color",
     "dev:dll": "webpack --config webpack.dll.config.babel.js -p --progress --color --hide-modules",
-    "dev:build": "cross-env NODE_ENV=production webpack --config webpack.config.babel.js -p --progress && babel src -d lib --ignore .test.js",
-    "prod:build": "rimraf lib dist && babel src -d lib --ignore .test.js && cross-env NODE_ENV=production webpack --config webpack.config.babel.js -p --progress",
+    "dev:build": "cross-env NODE_ENV=development webpack --config webpack.config.babel.js -p --progress && yarn babel",
+    "prod:build": "cross-env NODE_ENV=production webpack --config webpack.config.babel.js -p --progress && yarn babel",
     "server:bundle": "cross-env NODE_ENV=production babel-node tools/serverBundle",
     "prod:start": "cross-env NODE_ENV=production pm2 start lib/server && pm2 logs",
     "prod:stop": "pm2 delete server",
@@ -23,7 +24,8 @@
     "test": "yarn lint && flow && jest --coverage",
     "jest": "cross-env NODE_ENV=test jest --runInBand --watchAll",
     "precommit": "yarn lint",
-    "prepush": "yarn dev:build"
+    "prepush": "yarn dev:build",
+    "reactopt": "node node_modules/reactopt/main.js"
   },
   "dependencies": {
     "antd": "^2.13.4",

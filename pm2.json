@@ -1,0 +1,15 @@
+{
+  "name": "vinfo",
+  "log_date_format": "YYYY-MM-DD HH:mm:ss SSS",
+  "script": "./lib/server/index.js",
+  "out_file": "./var/log/app.log",
+  "error_file": "./var/log/err.log",
+  "pid_file": "./var/pid",
+  "watch": true,
+  "ignore_watch": ["var", "public", "test", ".git", "node_modules"],
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "9101"
+  },
+  "node_args": "--harmony"
+}

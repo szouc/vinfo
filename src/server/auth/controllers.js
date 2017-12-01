@@ -68,7 +68,7 @@ const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     next()
   } else {
-    res.status(401).send('请登录')
+    res.status(403).send('请登录')
   }
 }
 
@@ -76,7 +76,7 @@ const isLoggedIn = (req, res) => {
   if (req.isAuthenticated()) {
     res.status(200).send('User loggedIn')
   } else {
-    res.status(401).send('Please Log in')
+    res.status(403).send('Please Log in')
   }
 }
 

@@ -361,10 +361,10 @@ const clientConfig = {
       name: 'manifest'
     }),
 
+    new CleanWebpackPlugin(pathsToClean, cleanOptions),
     ...(isProd
       ? [
         // https://github.com/johnagan/clean-webpack-plugin
-        new CleanWebpackPlugin(pathsToClean, cleanOptions),
         // https://webpack.js.org/plugins/hashed-module-ids-plugin/
         new webpack.HashedModuleIdsPlugin({
           hashFunction: 'sha256',

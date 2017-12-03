@@ -1,0 +1,23 @@
+{
+  "presets": [
+    // https://babeljs.io/docs/plugins/#presets
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current"
+        },
+        "modules": "commonjs",
+        "useBuiltIns": false,
+        "debug": false
+      }
+    ],
+    "react",
+    "stage-0",
+    "flow"
+  ],
+  "plugins": [
+    // https://babeljs.io/docs/plugins
+    ["syntax-dynamic-import"]
+  ]
+}

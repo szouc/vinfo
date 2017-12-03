@@ -25,7 +25,7 @@ import { isProd } from '../shared/utils'
 import logger from 'morgan'
 import passport from 'passport'
 import path from 'path'
-import renderApp from './render-app'
+// import renderApp from './render-app'
 import session from 'express-session'
 
 const debug = debugCreator('app')
@@ -78,8 +78,11 @@ app.use(STATIC_PATH, express.static(path.resolve(__dirname, '../../public')))
 app.use(logger('dev'))
 
 // Routes
+// app.get('/', (req, res) => {
+//   res.send(renderApp(APP_NAME))
+// })
 app.get('/', (req, res) => {
-  res.send(renderApp(APP_NAME))
+  res.sendFile(path.resolve(__dirname, '../../dist/index.html'))
 })
 
 app.use(AUTH_ROOT_ROUTE, auth)

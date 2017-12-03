@@ -1,1 +1,1 @@
-export const WEB_ADDR = 'http://127.0.0.1:8000'
+export const WEB_ADDR = 'http://localhost:8000'

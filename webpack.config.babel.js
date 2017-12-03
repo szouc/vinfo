@@ -124,7 +124,7 @@ const clientConfig = {
     chunkFilename: isProd
       ? 'js/[name].[chunkhash].chunk.js'
       : 'js/[name].chunk.js',
-    publicPath: isProd ? STATIC_PATH : `http://localhost:${WDS_PORT}/`
+    publicPath: isProd ? `${STATIC_PATH}/` : `http://localhost:${WDS_PORT}/`
   },
 
   resolve: {
@@ -296,7 +296,7 @@ const clientConfig = {
   devServer: {
     historyApiFallback: true,
     contentBase: outputPath,
-    publicPath: isProd ? STATIC_PATH : `http://localhost:${WDS_PORT}/`,
+    publicPath: isProd ? `${STATIC_PATH}/` : `http://localhost:${WDS_PORT}/`,
     port: WDS_PORT,
     hot: true,
     stats: {
@@ -360,57 +360,16 @@ const clientConfig = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest'
     }),
-
-    new CleanWebpackPlugin(pathsToClean, cleanOptions),
     ...(isProd
       ? [
         // https://github.com/johnagan/clean-webpack-plugin
+        new CleanWebpackPlugin(pathsToClean, cleanOptions),
         // https://webpack.js.org/plugins/hashed-module-ids-plugin/
         new webpack.HashedModuleIdsPlugin({
           hashFunction: 'sha256',
           hashDigest: 'hex',
           hashDigestLength: 20
         }),
-
-        // // https://webpack.js.org/plugins/commons-chunk-plugin/
-        // // Common Chunk from node_modules
-        // new webpack.optimize.CommonsChunkPlugin({
-        //   names: 'vendor',
-        //   minChunks: module => /node_modules/.test(module.resource)
-        //   // minChunks: ({ resource }) => (
-        //   //   resource &&
-        //   //   resource.indexOf('node_modules') >= 0 &&
-        //   //   resource.match(/\.js$/)
-        //   // )
-        // }),
-
-        // // Common Chunk from the lazy import modules
-        // new webpack.optimize.CommonsChunkPlugin({
-        //   name: 'bundle',
-        //   children: true,
-        //   async: 'common-in-lazy',
-        //   // minChunks: module => /node_modules/.test(module.resource)
-        //   minChunks: ({ resource }) => (
-        //     resource &&
-        //     resource.includes('node_modules') &&
-        //     /antd/.test(resource)
-        //   )
-        // }),
-
-        // // Common Chunk from the lazy modules
-        // new webpack.optimize.CommonsChunkPlugin({
-        //   name: 'bundle',
-        //   children: true,
-        //   async: 'many-used',
-        //   minChunks: (module, count) => (
-        //     count >= 2
-        //   )
-        // }),
-
-        // new webpack.optimize.CommonsChunkPlugin({
-        //   name: 'manifest',
-        //   minChunks: Infinity
-        // }),
 
         // https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
         new UglifyJsPlugin({

@@ -36,7 +36,6 @@ const dllConfig = {
       'redux-saga/lib',
       'redux-saga/es',
       'react-redux',
-      'redux-persist-immutable',
       'normalizr',
       'reselect',
       'redux-form/es',

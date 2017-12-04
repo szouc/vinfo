@@ -1,0 +1,36 @@
+{
+  "common-in-lazy": {
+    "js": "/static/js/common-in-lazy.31101b96c477f469d7a6.chunk.js"
+  },
+  "many-used": {
+    "js": "/static/js/many-used.87204e81b05559a18e78.chunk.js"
+  },
+  "TransportComponent": {
+    "js": "/static/js/TransportComponent.f9a0a1cfd14cee3c673f.chunk.js"
+  },
+  "VehicleComponent": {
+    "js": "/static/js/VehicleComponent.e679475a8fb928b37491.chunk.js"
+  },
+  "UserComponent": {
+    "js": "/static/js/UserComponent.70fe6cc0ee7609b34ae4.chunk.js"
+  },
+  "ProductComponent": {
+    "js": "/static/js/ProductComponent.ab513295e49c3678c88a.chunk.js"
+  },
+  "FuelComponent": {
+    "js": "/static/js/FuelComponent.3cb3606b883b0fb37708.chunk.js"
+  },
+  "CompanyComponent": {
+    "js": "/static/js/CompanyComponent.16b6427e78ddd3161a67.chunk.js"
+  },
+  "vendor": {
+    "js": "/static/js/vendor.e3947373ce43d002a237.js"
+  },
+  "bundle": {
+    "js": "/static/js/bundle.ccd52e52dbfe7cea1c66.js",
+    "css": "/static/css/bundle.efefcdeb9043816d304f22e658fa951f.css"
+  },
+  "manifest": {
+    "js": "/static/js/manifest.96bc1f1f38f88957679e.js"
+  }
+}

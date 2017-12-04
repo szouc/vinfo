@@ -1,6 +1,6 @@
 // @flow
 
-import { APP_NAME, STATIC_PATH } from '../shared/config'
+import { STATIC_PATH } from '../shared/config'
 
 import {
   API_ROOT_ROUTE
@@ -77,10 +77,6 @@ app.use(STATIC_PATH, express.static(path.resolve(__dirname, '../../public')))
 // Log request to console
 app.use(logger('dev'))
 
-// Routes
-// app.get('/', (req, res) => {
-//   res.send(renderApp(APP_NAME))
-// })
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../dist/index.html'))
 })

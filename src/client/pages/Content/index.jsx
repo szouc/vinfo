@@ -1,18 +1,18 @@
 import React from 'react'
 import Loadable from 'react-loadable'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom'
 // import Carousel from '../Carousel'
-import Company from '../Company'
+// import Company from '../Company'
 // import Product from '../Product'
 // import User from '../User'
 // import Vehicle from '../Vehicle'
 // import Fuel from '../Fuel'
 import NotFound from '../NotFound'
 
-// const LoadableCompany = Loadable({
-//   loader: () => import(/* webpackChunkName: "CompanyComponent" */ '../Company'),
-//   loading: () => null
-// })
+const LoadableCompany = Loadable({
+  loader: () => import(/* webpackChunkName: "CompanyComponent" */ '../Company'),
+  loading: () => null
+})
 
 const LoadableProduct = Loadable({
   loader: () => import(/* webpackChunkName: "ProductComponent" */ '../Product'),
@@ -47,17 +47,17 @@ class BaseContent extends React.PureComponent {
   render() {
     return (
       <Switch>
-        <Route exact path='/home' component={NotFound} />
-        <Route exact path='/company' component={Company} />
-        <Route exact path='/vehicle' component={LoadableVehicle} />
-        <Route exact path='/user' component={LoadableUser} />
-        <Route exact path='/product' component={LoadableProduct} />
-        <Route exact path='/transport' component={LoadableTransport} />
-        <Route exact path='/fuel' component={LoadableFuel} />
+        <Route path='/home' component={NotFound} />
+        <Route path='/company' component={LoadableCompany} />
+        <Route path='/vehicle' component={LoadableVehicle} />
+        <Route path='/user' component={LoadableUser} />
+        <Route path='/product' component={LoadableProduct} />
+        <Route path='/transport' component={LoadableTransport} />
+        <Route path='/fuel' component={LoadableFuel} />
         <Route component={NotFound} />
       </Switch>
     )
   }
 }
 
-export default BaseContent
+export default withRouter(BaseContent)

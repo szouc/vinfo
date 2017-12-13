@@ -21,7 +21,7 @@
     "prod:stop": "pm2 delete server",
     "lint": "eslint src webpack.config.babel.js webpack.dll.config.babel.js --ext .js,.jsx",
     "test": "yarn lint && flow && jest --coverage",
-    "jest": "cross-env NODE_ENV=test jest --runInBand --watchAll",
+    "jest": "cross-env NODE_ENV=test jest --no-cache --runInBand --watchAll",
     "precommit": "yarn lint"
   },
   "dependencies": {
@@ -73,6 +73,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
+    "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-flow-react-proptypes": "^6.1.0",
     "babel-plugin-import": "^1.6.0",
@@ -128,28 +129,6 @@
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
     "webpack-node-externals": "^1.6.0"
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ],
-      "stage-0",
-      "react"
-    ],
-    "plugins": [
-      [
-        "flow-react-proptypes"
-      ],
-      [
-        "syntax-dynamic-import"
-      ]
-    ]
   },
   "browserslist": [
     "> 5%"

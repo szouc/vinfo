@@ -11,7 +11,7 @@ node_modules
 .vscode
 
 # dist folder
-# /dist/
+/dist/
 
 # Jest coverage files
 /coverage/

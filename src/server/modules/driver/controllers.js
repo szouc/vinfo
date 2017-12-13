@@ -57,6 +57,23 @@ function getDriverByUsername(req, res) {
     })
 }
 
+function getVehicleByUsername(req, res) {
+  Vehicle.find({
+    'principal.username': req.params.username
+  })
+    .lean()
+    .then(doc => {
+      if (doc) {
+        res.status(200).json(doc)
+      } else {
+        res.status(400).send('No vehicle matching')
+      }
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt find vehicle by username')
+    })
+}
+
 function changePasswordByUsername(req, res) {
   User.findByUsername(req.params.username)
     .then(user => {
@@ -221,5 +238,6 @@ export {
   getAllDriverTransports,
   acceptTransportById,
   changePasswordByUsername,
+  getVehicleByUsername,
   getDriverByUsername
 }

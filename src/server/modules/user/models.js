@@ -45,6 +45,9 @@ const baseUser = {
     enum: roles,
     default: STAFF
   },
+  phone: {
+    type: String
+  },
   active: {
     type: Boolean,
     default: true

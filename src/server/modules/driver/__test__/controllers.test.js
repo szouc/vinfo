@@ -11,6 +11,7 @@ import {
   DRIVER_MAINTAIN_ID_API,
   DRIVER_FUEL_API,
   DRIVER_FUEL_ID_API,
+  DRIVER_VEHICLE_API,
   DRIVER_ID_API
 } from '../routes'
 
@@ -85,6 +86,12 @@ describe('Driver Base Operations', () => {
     const res = await agent
       .put(DRIVER_ID_API.replace(/:username/, data.drivers[2].username))
       .send({ password: '12345' })
+    expect(res.statusCode).toBe(200)
+  })
+
+  test('Should fetch a vehicle by username', async () => {
+    expect.assertions(1)
+    const res = await agent.get(DRIVER_VEHICLE_API.replace(/:username/, data.drivers[2].username))
     expect(res.statusCode).toBe(200)
   })
 

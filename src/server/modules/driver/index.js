@@ -1,6 +1,7 @@
 import express from 'express'
 
 import {
+  DRIVER_VEHICLE_ROUTE,
   DRIVER_TRANSPORT_ID_ROUTE,
   DRIVER_FUEL_ID_ROUTE,
   DRIVER_MAINTAIN_ID_ROUTE,
@@ -20,6 +21,7 @@ import {
   addMaintain,
   deleteMaintain,
   changePasswordByUsername,
+  getVehicleByUsername,
   getDriverByUsername
 } from './controllers'
 
@@ -27,46 +29,44 @@ import { isOwner } from './permissions'
 
 const driverRouter = express.Router()
 
+// all routes from the driver modules require 'isOwner' permission
 // driverRouter
-//   .route('/')
+//   .all('*', isOwner)
 
 // Dynamic route should put the last position
 driverRouter
   .route(DRIVER_ID_ROUTE)
-  .all(isOwner)
   .get(getDriverByUsername)
   .put(changePasswordByUsername)
 
 driverRouter
+  .route(DRIVER_VEHICLE_ROUTE)
+  .get(getVehicleByUsername)
+
+driverRouter
   .route(DRIVER_FUEL_ROUTE)
-  .all(isOwner)
   .get(getAllFuels)
   .post(addFuel)
 
 driverRouter
   .route(DRIVER_FUEL_ID_ROUTE)
-  .all(isOwner)
   .delete(deleteFuel)
 
 driverRouter
   .route(DRIVER_MAINTAIN_ROUTE)
-  .all(isOwner)
   .get(getAllMaintains)
   .post(addMaintain)
 
 driverRouter
   .route(DRIVER_MAINTAIN_ID_ROUTE)
-  .all(isOwner)
   .delete(deleteMaintain)
 
 driverRouter
   .route(DRIVER_TRANSPORT_ROUTE)
-  .all(isOwner)
   .get(getAllDriverTransports)
 
 driverRouter
   .route(DRIVER_TRANSPORT_ID_ROUTE)
-  .all(isOwner)
   .put(acceptTransportById)
 
 export default driverRouter

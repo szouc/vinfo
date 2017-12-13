@@ -1,36 +1,36 @@
 {
   "common-in-lazy": {
-    "js": "/static/js/common-in-lazy.31101b96c477f469d7a6.chunk.js"
+    "js": "/static/js/common-in-lazy.cfccd9ead0b249183c58.chunk.js"
   },
   "many-used": {
-    "js": "/static/js/many-used.87204e81b05559a18e78.chunk.js"
+    "js": "/static/js/many-used.cf85ea05037722e95739.chunk.js"
   },
   "TransportComponent": {
-    "js": "/static/js/TransportComponent.f9a0a1cfd14cee3c673f.chunk.js"
+    "js": "/static/js/TransportComponent.916b53d27ce832064f73.chunk.js"
   },
   "VehicleComponent": {
-    "js": "/static/js/VehicleComponent.e679475a8fb928b37491.chunk.js"
+    "js": "/static/js/VehicleComponent.293cb902d554f2bb9f3b.chunk.js"
   },
   "UserComponent": {
-    "js": "/static/js/UserComponent.70fe6cc0ee7609b34ae4.chunk.js"
+    "js": "/static/js/UserComponent.15edb892e7f106887969.chunk.js"
   },
   "ProductComponent": {
-    "js": "/static/js/ProductComponent.ab513295e49c3678c88a.chunk.js"
+    "js": "/static/js/ProductComponent.e1a42b4bedad33739a1a.chunk.js"
   },
   "FuelComponent": {
     "js": "/static/js/FuelComponent.3cb3606b883b0fb37708.chunk.js"
   },
   "CompanyComponent": {
-    "js": "/static/js/CompanyComponent.16b6427e78ddd3161a67.chunk.js"
+    "js": "/static/js/CompanyComponent.d04c55ffa9c0da7e11fd.chunk.js"
   },
   "vendor": {
-    "js": "/static/js/vendor.e3947373ce43d002a237.js"
+    "js": "/static/js/vendor.88a3d6a494d1e8986622.js"
   },
   "bundle": {
-    "js": "/static/js/bundle.88ce9c01aef538e2817e.js",
-    "css": "/static/css/bundle.efefcdeb9043816d304f22e658fa951f.css"
+    "js": "/static/js/bundle.d93de411825d7346e2c1.js",
+    "css": "/static/css/bundle.35b8b8f3d0973975ed9b4b4faca210a4.css"
   },
   "manifest": {
-    "js": "/static/js/manifest.1908134ad7d7587bd6b1.js"
+    "js": "/static/js/manifest.9de3ee77afb9fcda0329.js"
   }
 }

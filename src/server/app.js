@@ -1,6 +1,6 @@
 // @flow
 
-import { STATIC_PATH } from '../shared/config'
+import { APP_NAME, STATIC_PATH } from '../shared/config'
 
 import {
   API_ROOT_ROUTE
@@ -25,7 +25,7 @@ import { isProd } from '../shared/utils'
 import logger from 'morgan'
 import passport from 'passport'
 import path from 'path'
-// import renderApp from './render-app'
+import renderApp from './render-app'
 import session from 'express-session'
 
 const debug = debugCreator('app')
@@ -78,7 +78,11 @@ app.use(STATIC_PATH, express.static(path.resolve(__dirname, '../../public')))
 app.use(logger('dev'))
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../dist/index.html'))
+  if (isProd) {
+    res.sendFile(path.resolve(__dirname, '../../dist/index.html'))
+  } else {
+    res.send(renderApp(APP_NAME))
+  }
 })
 
 app.use(AUTH_ROOT_ROUTE, auth)

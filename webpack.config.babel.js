@@ -111,8 +111,6 @@ const clientConfig = {
       : [
         'babel-polyfill',
         'react-hot-loader/patch',
-        `webpack-dev-server/client?http://localhost:${WDS_PORT}`,
-        'webpack/hot/only-dev-server',
         clientPath
       ]
   },

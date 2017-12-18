@@ -33,15 +33,20 @@ const initialState: Immut = Immutable.fromJS(devtool)
 // const enhancer = compose(applyMiddleware(...middleware), autoRehydrate())
 const enhancer = compose(applyMiddleware(...middleware))
 
-const store = createStore(
-  rootReducer,
-  initialState,
-  enhancer
-)
+export const configureStore = (state: Immut = initialState) => {
+  const store = createStore(rootReducer, state, enhancer)
 
-sagaMiddleware.run(rootSagas)
-// persistStore(store, {
-//   storage: localforage
-// })
+  if (module.hot) {
+    // flow-disable-next-line
+    module.hot.accept('./reducer', () => {
+      store.replaceReducer(rootReducer)
+    })
+  }
 
-export default store
+  sagaMiddleware.run(rootSagas)
+  // persistStore(store, {
+  //   storage: localforage
+  // })
+
+  return store
+}

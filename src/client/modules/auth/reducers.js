@@ -14,8 +14,7 @@ const initialState = Immutable.fromJS({
   loginLoading: false,
   fetchProfileLoading: false,
   loggedIn: global.window.localStorage.getItem('auth/loggedIn'),
-  user: {},
-  error: ''
+  user: {}
 })
 
 const authReducer = (

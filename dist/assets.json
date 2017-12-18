@@ -1,36 +1,36 @@
 {
   "common-in-lazy": {
-    "js": "/static/js/common-in-lazy.cfccd9ead0b249183c58.chunk.js"
+    "js": "http://localhost:7000/js/common-in-lazy.chunk.js"
   },
   "many-used": {
-    "js": "/static/js/many-used.cf85ea05037722e95739.chunk.js"
+    "js": "http://localhost:7000/js/many-used.chunk.js"
   },
   "TransportComponent": {
-    "js": "/static/js/TransportComponent.916b53d27ce832064f73.chunk.js"
+    "js": "http://localhost:7000/js/TransportComponent.chunk.js"
   },
   "VehicleComponent": {
-    "js": "/static/js/VehicleComponent.293cb902d554f2bb9f3b.chunk.js"
+    "js": "http://localhost:7000/js/VehicleComponent.chunk.js"
   },
   "UserComponent": {
-    "js": "/static/js/UserComponent.15edb892e7f106887969.chunk.js"
+    "js": "http://localhost:7000/js/UserComponent.chunk.js"
   },
   "ProductComponent": {
-    "js": "/static/js/ProductComponent.e1a42b4bedad33739a1a.chunk.js"
+    "js": "http://localhost:7000/js/ProductComponent.chunk.js"
   },
   "FuelComponent": {
-    "js": "/static/js/FuelComponent.3cb3606b883b0fb37708.chunk.js"
+    "js": "http://localhost:7000/js/FuelComponent.chunk.js"
   },
   "CompanyComponent": {
-    "js": "/static/js/CompanyComponent.d04c55ffa9c0da7e11fd.chunk.js"
-  },
-  "vendor": {
-    "js": "/static/js/vendor.88a3d6a494d1e8986622.js"
+    "js": "http://localhost:7000/js/CompanyComponent.chunk.js"
   },
   "bundle": {
-    "js": "/static/js/bundle.d93de411825d7346e2c1.js",
-    "css": "/static/css/bundle.35b8b8f3d0973975ed9b4b4faca210a4.css"
+    "js": "http://localhost:7000/js/bundle.js",
+    "css": "http://localhost:7000/css/bundle.css"
+  },
+  "vendor": {
+    "js": "http://localhost:7000/js/vendor.js"
   },
   "manifest": {
-    "js": "/static/js/manifest.9de3ee77afb9fcda0329.js"
+    "js": "http://localhost:7000/js/manifest.js"
   }
 }

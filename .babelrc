@@ -1,6 +1,5 @@
 {
   "presets": [
-    // https://babeljs.io/docs/plugins/#presets
     [
       "env",
       {
@@ -17,7 +16,6 @@
     "flow"
   ],
   "plugins": [
-    // https://babeljs.io/docs/plugins
     ["flow-react-proptypes"],
     ["syntax-dynamic-import"]
   ]

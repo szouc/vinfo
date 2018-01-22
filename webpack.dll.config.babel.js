@@ -20,7 +20,6 @@ const nodeModulesPath = path.resolve(__dirname, './node_modules')
 const dllConfig = {
   entry: {
     vendors: [
-      'antd/es',
       'babel-polyfill',
       'localforage',
       'react',

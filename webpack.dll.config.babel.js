@@ -3,7 +3,6 @@
 // import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
-import { isProd } from './src/shared/utils'
 import path from 'path'
 import webpack from 'webpack'
 
@@ -68,7 +67,7 @@ const dllConfig = {
             loader: 'babel-loader',
             options: {
               // https://babeljs.io/docs/usage/api/#options
-              cacheDirectory: !isProd,
+              cacheDirectory: true,
               babelrc: false,
               presets: [
                 // https://babeljs.io/docs/plugins/#presets
@@ -83,11 +82,11 @@ const dllConfig = {
               ],
               plugins: [
                 // https://babeljs.io/docs/plugins
-                ['syntax-dynamic-import'],
-                ...isProd ? [] : ['flow-react-proptypes'],
-                ...isProd ? [] : ['react-hot-loader/babel'],
-                ...isProd ? [] : ['transform-react-jsx-source'],
-                ...isProd ? [] : ['transform-react-jsx-self']
+                'syntax-dynamic-import',
+                'flow-react-proptypes',
+                'react-hot-loader/babel',
+                'transform-react-jsx-source',
+                'transform-react-jsx-self'
               ]
             }
           }
@@ -99,7 +98,7 @@ const dllConfig = {
     ]
   },
 
-  devtool: isProd ? false : 'cheap-eval-source-map',
+  devtool: 'cheap-eval-source-map',
 
   plugins: [
     new webpack.DllPlugin({

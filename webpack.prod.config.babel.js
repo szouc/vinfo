@@ -1,15 +1,14 @@
-import { STATIC_PATH, WDS_PORT } from './src/shared/config'
+import { STATIC_PATH } from './src/shared/config'
 
+import {baseConfig} from './webpack.base.config.babel'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
 import AssetsPlugin from 'assets-webpack-plugin'
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 import cssNext from 'postcss-cssnext'
 import eslintFormatter from 'eslint-friendly-formatter'
 import { isProd } from './src/shared/utils'
-import nodeExternals from 'webpack-node-externals'
 import path from 'path'
 import webpack from 'webpack'
 
@@ -35,94 +34,25 @@ const cleanOptions = {
 
 //
 //
-// Common Config
-//
-//
-
-const config = {
-  output: {
-    path: outputPath,
-    pathinfo: !isProd
-  },
-
-  module: {
-    rules: [
-      {
-        test: /\.(ico|jpg|jpeg|gif|png|svg|otf|eot|woff|woff2|ttf)(\?.*)?$/,
-        use: [
-          {
-            // https://github.com/webpack-contrib/file-loader
-            loader: 'file-loader',
-            options: {
-              name: !isProd ? '[path][name].[ext]?[hash:8]' : '[hash:8].[ext]'
-            }
-          }
-        ]
-      },
-      {
-        test: /\.(mp4|mp3|wav|webm)(\?.*)?$/,
-        use: [
-          {
-            // https://github.com/webpack-contrib/url-loader
-            loader: 'url-loader',
-            options: {
-              name: !isProd ? '[path][name].[ext]?[hash:8]' : '[hash:8].[ext]',
-              limit: 10000
-            }
-          }
-        ]
-      }
-    ]
-  },
-
-  // Abort the compilation on first error if true
-  bail: !isProd,
-
-  cache: isProd,
-
-  // https://webpack.js.org/api/node/#stats-object
-  stats: {
-    colors: true,
-    reasons: isProd,
-    hash: !isProd,
-    version: !isProd,
-    timings: true,
-    chunks: !isProd,
-    chunkModules: !isProd,
-    cached: !isProd,
-    cachedAssets: !isProd
-  }
-}
-
-//
-//
 // Client Bundle Config
 //
 //
 
 const clientConfig = {
-  ...config,
+  ...baseConfig,
 
   target: 'web',
 
   entry: {
-    bundle: isProd
-      ? ['babel-polyfill', clientPath]
-      : [
-        'babel-polyfill',
-        'react-hot-loader/patch',
-        clientPath
-      ]
+    bundle: ['babel-polyfill', clientPath]
   },
 
   output: {
-    ...config.output,
-    filename: isProd ? 'js/[name].[chunkhash].js' : 'js/[name].js',
-    sourceMapFilename: isProd ? 'js/[name].[chunkhash].map' : 'js/[name].map',
-    chunkFilename: isProd
-      ? 'js/[name].[chunkhash].chunk.js'
-      : 'js/[name].chunk.js',
-    publicPath: isProd ? `${STATIC_PATH}/` : `http://localhost:${WDS_PORT}/`
+    ...baseConfig.output,
+    filename: 'js/[name].[chunkhash].js',
+    sourceMapFilename: 'js/[name].[chunkhash].map',
+    chunkFilename: 'js/[name].[chunkhash].chunk.js',
+    publicPath: `${STATIC_PATH}/`
   },
 
   resolve: {
@@ -140,7 +70,7 @@ const clientConfig = {
 
   module: {
     rules: [
-      ...config.module.rules,
+      ...baseConfig.module.rules,
       {
         enforce: 'pre',
         test: /\.(js|jsx)$/,
@@ -165,7 +95,7 @@ const clientConfig = {
             loader: 'babel-loader',
             options: {
               // https://babeljs.io/docs/usage/api/#options
-              cacheDirectory: !isProd,
+              cacheDirectory: false,
               babelrc: false,
               presets: [
                 // https://babeljs.io/docs/plugins/#presets
@@ -192,15 +122,7 @@ const clientConfig = {
                     libraryDirectory: 'es',
                     style: 'css'
                   }
-                ],
-                ...(isProd
-                  ? []
-                  : [
-                    'flow-react-proptypes',
-                    'react-hot-loader/babel',
-                    'transform-react-jsx-source',
-                    'transform-react-jsx-self'
-                  ])
+                ]
               ]
             }
           }
@@ -219,9 +141,9 @@ const clientConfig = {
               loader: 'css-loader',
               options: {
                 importLoaders: 1,
-                sourceMap: !isProd,
+                sourceMap: false,
                 // modules: true,
-                minimize: isProd,
+                minimize: true,
                 discardComments: { removeAll: true }
               }
             },
@@ -256,12 +178,10 @@ const clientConfig = {
               loader: 'css-loader',
               options: {
                 importLoaders: 1,
-                sourceMap: !isProd,
+                sourceMap: false,
                 modules: true,
-                localIdentName: !isProd
-                  ? '[name]-[local]-[hash:base64:5]'
-                  : '[hash:base64:5]',
-                minimize: isProd,
+                localIdentName: '[name]-[local]-[hash:base64:5]',
+                minimize: true,
                 discardComments: { removeAll: true }
               }
             },
@@ -289,30 +209,14 @@ const clientConfig = {
     ]
   },
 
-  devtool: isProd ? false : 'cheap-eval-source-map',
-
-  devServer: {
-    historyApiFallback: true,
-    contentBase: outputPath,
-    publicPath: isProd ? `${STATIC_PATH}/` : `http://localhost:${WDS_PORT}/`,
-    port: WDS_PORT,
-    hot: true,
-    stats: {
-      color: true
-    },
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    }
-  },
+  devtool: false,
 
   plugins: [
     // https://webpack.js.org/plugins/define-plugin/
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': isProd
-        ? JSON.stringify('production')
-        : JSON.stringify('development'),
+      'process.env.NODE_ENV': JSON.stringify('production'),
       'process.env.BROWSER': true,
-      __DEV__: !isProd
+      __DEV__: false
     }),
 
     // https://github.com/kossnocorp/assets-webpack-plugin
@@ -323,7 +227,7 @@ const clientConfig = {
     }),
 
     new ExtractTextPlugin({
-      filename: isProd ? 'css/[name].[contenthash].css' : 'css/[name].css',
+      filename: 'css/[name].[contenthash].css',
       allChunks: true
     }),
 
@@ -358,166 +262,30 @@ const clientConfig = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest'
     }),
-    ...(isProd
-      ? [
-        // https://github.com/johnagan/clean-webpack-plugin
-        new CleanWebpackPlugin(pathsToClean, cleanOptions),
-        // https://webpack.js.org/plugins/hashed-module-ids-plugin/
-        new webpack.HashedModuleIdsPlugin({
-          hashFunction: 'sha256',
-          hashDigest: 'hex',
-          hashDigestLength: 20
-        }),
-
-        // https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
-        new UglifyJsPlugin({
-          sourceMap: true,
-          compress: {
-            warnings: !isProd,
-            unused: true,
-            dead_code: true
-          },
-          comments: false
-        }),
-
-        // new BundleAnalyzerPlugin(),
-        new HtmlWebpackPlugin({
-          template: './index.prod.html'
-        })
-      ]
-      : [
-        new webpack.DllReferencePlugin({
-          context: __dirname,
-          // flow-disable-next-line
-          manifest: require('./dist/vendors-manifest.json'),
-          sourceType: 'commonsjs2'
-        }),
-
-        new HtmlWebpackPlugin({
-          template: './index.html'
-        }),
-
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NamedModulesPlugin(),
-        // https://webpack.js.org/plugins/no-emit-on-errors-plugin/
-        new webpack.NoEmitOnErrorsPlugin(),
-        // https://github.com/th0r/webpack-bundle-analyzer
-        // default host : 127.0.0.1 , port : 8888
-        new BundleAnalyzerPlugin()
-      ])
-  ]
-}
-
-//
-//
-// Server Bundle Config
-//
-//
-
-export const serverConfig = {
-  ...config,
-
-  target: 'node',
-
-  entry: {
-    server: ['babel-polyfill', serverPath]
-  },
-
-  output: {
-    ...config.output,
-    filename: 'server/[name].js',
-    libraryTarget: 'commonjs2'
-  },
-
-  resolve: {
-    extensions: ['.js', '.json'],
-    modules: [nodeModulesPath, serverPath, sharedPath]
-  },
-
-  module: {
-    rules: [
-      ...config.module.rules,
-      {
-        enforce: 'pre',
-        test: /\.js$/,
-        use: [
-          {
-            loader: 'eslint-loader',
-            options: {
-              formatter: eslintFormatter
-            }
-          }
-        ],
-        include: [srcPath]
-      },
-      {
-        test: /\.js$/,
-        use: [
-          {
-            // https://github.com/babel/babel-loader
-            loader: 'babel-loader',
-            options: {
-              // https://babeljs.io/docs/usage/api/#options
-              cacheDirectory: !isProd,
-              babelrc: false,
-              presets: [
-                // https://babeljs.io/docs/plugins/#presets
-                [
-                  'env',
-                  {
-                    targets: {
-                      node: 'current'
-                    },
-                    modules: false,
-                    useBuiltIns: false,
-                    debug: false
-                  }
-                ],
-                'react',
-                'stage-0',
-                'flow'
-              ],
-              plugins: [
-                // https://babeljs.io/docs/plugins
-                ['transform-runtime']
-              ]
-            }
-          }
-        ],
-        include: [srcPath]
-      }
-    ]
-  },
-
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': isProd
-        ? JSON.stringify('production')
-        : JSON.stringify('development'),
-      'process.env.BROWSER': false,
-      __DEV__: !isProd
+    // https://github.com/johnagan/clean-webpack-plugin new CleanWebpackPlugin(pathsToClean, cleanOptions),
+    // https://webpack.js.org/plugins/hashed-module-ids-plugin/
+    new webpack.HashedModuleIdsPlugin({
+      hashFunction: 'sha256',
+      hashDigest: 'hex',
+      hashDigestLength: 20
     }),
 
-    // https://webpack.js.org/plugins/limit-chunk-count-plugin/
-    new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1 // Only one file for the server bundle
+    // https://webpack.js.org/plugins/uglifyjs-webpack-plugin/
+    new UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: !isProd,
+        unused: true,
+        dead_code: true
+      },
+      comments: false
+    }),
+
+    // new BundleAnalyzerPlugin(),
+    new HtmlWebpackPlugin({
+      template: './index.prod.html'
     })
-  ],
-
-  // externals: nodeModules,
-  // tells Webpack not to bundle those modules in the node_modules folder
-  externals: [nodeExternals()],
-
-  node: {
-    console: false,
-    global: false,
-    process: false,
-    Buffer: false,
-    __filename: false,
-    __dirname: false
-  },
-
-  devtool: isProd ? 'source-map' : 'cheap-module-source-map'
+  ]
 }
 
 export default clientConfig

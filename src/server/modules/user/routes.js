@@ -1,23 +1,11 @@
 // @flow
 
-import { createApiRoute } from '../routes'
+export const USER_ROOT = '/user'
 
-// API ROOT PATH - '/'
-
-export const USER_ROOT_ROUTE = '/user'
-
-export const USER_ROLE_ROUTE = '/:role'
-export const USER_LICENSE_UPLOAD_ROUTE = '/upload/license'
-export const USER_ID_FRONT_UPLOAD_ROUTE = '/upload/id_front'
-export const USER_ID_BACK_UPLOAD_ROUTE = '/upload/id_back'
-export const USER_ID_ROUTE = '/:username'
-export const USER_RESET_PASSWORD_ROUTE = '/reset_password'
-
-// OUTPUT API
-export const USER_ROOT_API = createApiRoute(USER_ROOT_ROUTE)
-export const USER_ROLE_API = createApiRoute(USER_ROOT_ROUTE, USER_ROLE_ROUTE)
-export const USER_LICENSE_UPLOAD_API = createApiRoute(USER_ROOT_ROUTE, USER_LICENSE_UPLOAD_ROUTE)
-export const USER_ID_FRONT_UPLOAD_API = createApiRoute(USER_ROOT_ROUTE, USER_ID_FRONT_UPLOAD_ROUTE)
-export const USER_ID_BACK_UPLOAD_API = createApiRoute(USER_ROOT_ROUTE, USER_ID_BACK_UPLOAD_ROUTE)
-export const USER_ID_API = createApiRoute(USER_ROOT_ROUTE, USER_ID_ROUTE)
-export const USER_RESET_PASSWORD_API = createApiRoute(USER_ROOT_ROUTE, USER_RESET_PASSWORD_ROUTE) // Only Owner Permissions
+export const USER_ALL = '/all'
+export const USER_ROLE = '/role/:role'
+export const USER_ID = '/:username'
+export const USER_RESET_PASSWORD = '/reset_password'
+export const USER_LICENSE_UPLOAD = '/upload/license'
+export const USER_ID_FRONT_UPLOAD = '/upload/id_front'
+export const USER_ID_BACK_UPLOAD = '/upload/id_back'

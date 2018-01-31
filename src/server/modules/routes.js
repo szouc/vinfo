@@ -1,7 +1,9 @@
 // @flow
 
-import createRoute from '../utils/createRoute'
+import createPath from '../utils/createPath'
 
 // API ROOT PATH - '/'
-export const API_ROOT_ROUTE = '/api'
-export const createApiRoute = createRoute(API_ROOT_ROUTE)
+export const API_ROOT = '/api'
+export const createApiPath = createPath(API_ROOT)
+// tmp
+export const createApiRoute = createPath(API_ROOT)

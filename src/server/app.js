@@ -2,12 +2,8 @@
 
 import { APP_NAME, STATIC_PATH } from '../shared/config'
 
-import {
-  API_ROOT_ROUTE
-} from './modules/routes'
-import {
-  AUTH_ROOT_ROUTE
-} from './auth/routes'
+import { API_ROOT } from './modules/routes'
+import { AUTH_ROOT } from './auth/routes'
 import LocalStrategy from 'passport-local'
 import Redis from 'connect-redis'
 import { SESSION_SECRET_KEY } from './settings/constants'
@@ -35,7 +31,11 @@ const RedisStore = Redis(session)
 if (!isProd) {
   app.use(
     cors({
-      origin: ['http://localhost:7000', 'http://localhost:8000', 'http://localhost:8081'],
+      origin: [
+        'http://localhost:7000',
+        'http://localhost:8000',
+        'http://localhost:8081'
+      ],
       credentials: true
     })
   )
@@ -85,8 +85,8 @@ app.get('/', (req, res) => {
   }
 })
 
-app.use(AUTH_ROOT_ROUTE, auth)
-app.use(API_ROOT_ROUTE, isAuthenticated, api)
+app.use(AUTH_ROOT, auth)
+app.use(API_ROOT, isAuthenticated, api)
 // app.use(API_ROOT_ROUTE, api)
 
 // catch 404 and forward to error handler

@@ -1,83 +1,49 @@
 import express from 'express'
 
-import {
-  USER_ID_ROUTE,
-  USER_ROLE_ROUTE,
-  USER_LICENSE_UPLOAD_ROUTE,
-  USER_ID_FRONT_UPLOAD_ROUTE,
-  USER_ID_BACK_UPLOAD_ROUTE,
-  USER_RESET_PASSWORD_ROUTE
-} from './routes'
-
-import {
-  createUser,
-  uploadUserLicense,
-  updateUserByUsername,
-  uploadUserIdFront,
-  uploadUserIdBack,
-  deleteUserByUsername,
-  getAllUsers,
-  getUsersByRole,
-  getUserByUsername,
-  resetPassword
-} from './controllers'
+import * as Route from './routes'
+import * as Controller from './controllers'
 
 import { permitManager } from './permissions'
-
-import multer from 'multer'
-
-// configuring Multer to use files directory for storing files
-// this is important because later we'll need to access file path
-const storageCreator = path => ({
-  storage: multer.diskStorage({
-    destination: `./dist/uploads/${path}`,
-    filename(req, file, cb) {
-      cb(null, `${Date.now()}-${file.originalname}`)
-    }
-  })
-})
-
-const licenseUploadPath = 'license'
-const idFrontUploadPath = 'id_front'
-const idBackUploadPath = 'id_back'
-const licenseUpload = multer(storageCreator(licenseUploadPath))
-const idFrontUpload = multer(storageCreator(idFrontUploadPath))
-const idBackUpload = multer(storageCreator(idBackUploadPath))
 
 const userRouter = express.Router()
 
 userRouter
   .route('/')
   .all(permitManager)
-  .get(getAllUsers)
-  .post(createUser)
+  .get(Controller.getUsers)
+  .post(Controller.createUser)
 
 userRouter
-  .route(USER_ID_ROUTE)
+  .route(Route.USER_ALL)
   .all(permitManager)
-  .get(getUserByUsername)
-  .put(updateUserByUsername)
-  .delete(deleteUserByUsername)
+  .get(Controller.getAllUsers)
 
 userRouter
-  .route(USER_ROLE_ROUTE)
+  .route(Route.USER_ID)
   .all(permitManager)
-  .get(getUsersByRole)
+  .get(Controller.getUserByUsername)
+  .put(Controller.updateUserByUsername)
+  .delete(Controller.deleteUserByUsername)
 
 userRouter
-  .route(USER_LICENSE_UPLOAD_ROUTE)
-  .post(permitManager, licenseUpload.single('license'), uploadUserLicense)
+  .route(Route.USER_ROLE)
+  .all(permitManager)
+  .get(Controller.getUsersByRole)
 
 userRouter
-  .route(USER_ID_FRONT_UPLOAD_ROUTE)
-  .post(permitManager, idFrontUpload.single('id_front'), uploadUserIdFront)
+  .route(Route.USER_LICENSE_UPLOAD)
+  .post(permitManager, Controller.uploadLicense, Controller.getLicenseUrl)
 
 userRouter
-  .route(USER_ID_BACK_UPLOAD_ROUTE)
-  .post(permitManager, idBackUpload.single('id_back'), uploadUserIdBack)
+  .route(Route.USER_ID_FRONT_UPLOAD)
+  .post(permitManager, Controller.uploadIdFront, Controller.getIdFrontUrl)
 
 userRouter
-  .route(USER_RESET_PASSWORD_ROUTE)
-  .post(permitManager, resetPassword)
+  .route(Route.USER_ID_BACK_UPLOAD)
+  .post(permitManager, Controller.uploadIdBack, Controller.getIdBackUrl)
+
+userRouter
+  .route(Route.USER_RESET_PASSWORD)
+  .post(permitManager, Controller.resetPassword)
 
 export default userRouter

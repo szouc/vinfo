@@ -1,11 +1,6 @@
 import express from 'express'
 
-import {
-  LOGIN_ROUTE,
-  LOGOUT_ROUTE,
-  REGISTER_ROUTE,
-  RESET_PASSWORD_ROUTE
-} from './routes'
+import * as Route from './routes'
 
 import {
   resetPassword,
@@ -19,20 +14,17 @@ import { permitManager } from './permissions'
 
 const authRouter = express.Router()
 
-authRouter.route('/')
-  .get(isLoggedIn)
+authRouter.route('/').get(isLoggedIn)
 
-authRouter.route(REGISTER_ROUTE)
-  .post(userRegister)
+authRouter.route(Route.REGISTER).post(userRegister)
 
-authRouter.route(RESET_PASSWORD_ROUTE)
+authRouter
+  .route(Route.RESET_PASSWORD)
   .all(permitManager)
   .post(resetPassword)
 
-authRouter.route(LOGIN_ROUTE)
-  .post(userLogin)
+authRouter.route(Route.LOGIN).post(userLogin)
 
-authRouter.route(LOGOUT_ROUTE)
-  .get(userLogout)
+authRouter.route(Route.LOGOUT).get(userLogout)
 
 export default authRouter

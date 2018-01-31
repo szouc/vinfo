@@ -1,4 +1,4 @@
-import { USER_ROOT_ROUTE } from './user/routes'
+import { USER_ROOT } from './user/routes'
 import { COMPANY_ROOT_ROUTE } from './company/routes'
 import { PRODUCT_ROOT_ROUTE } from './product/routes'
 import { VEHICLE_ROOT_ROUTE } from './vehicle/routes'
@@ -18,7 +18,7 @@ import captain from './captain'
 
 const apiRouter = express.Router()
 
-apiRouter.use(USER_ROOT_ROUTE, user)
+apiRouter.use(USER_ROOT, user)
 apiRouter.use(COMPANY_ROOT_ROUTE, company)
 apiRouter.use(PRODUCT_ROOT_ROUTE, product)
 apiRouter.use(VEHICLE_ROOT_ROUTE, vehicle)

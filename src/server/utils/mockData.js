@@ -3,7 +3,7 @@ import Mock from 'mockjs'
 import { DRIVER, CAPTAIN, ACCOUNTANT, MANAGER } from '../modules/user/constants'
 
 const driverTemplate = {
-  username: () => Mock.Random.natural(10000, 99999),
+  username: () => String(Mock.Random.natural(10000, 99999)),
   password: '123',
   fullname: () => Mock.Random.cname(),
   gender: 'male',

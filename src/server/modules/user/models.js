@@ -2,22 +2,9 @@ import mongoose from 'mongoose'
 import { db } from '../../settings/db'
 import passportLocalMongoose from 'passport-local-mongoose'
 
-import {
-  STAFF,
-  DRIVER,
-  CAPTAIN,
-  ACCOUNTANT,
-  MANAGER,
-  ADMIN,
-  MALE,
-  FEMALE
-} from './constants'
+import { ROLES, GENDERS } from './constants'
 
 const Schema = mongoose.Schema
-
-// User Role Enum
-const roles = [STAFF, DRIVER, CAPTAIN, ACCOUNTANT, MANAGER, ADMIN]
-const genders = [MALE, FEMALE]
 
 /*
 * baseUser Types
@@ -37,13 +24,13 @@ const baseUser = {
   },
   gender: {
     type: String,
-    enum: genders,
-    default: MALE
+    enum: GENDERS,
+    default: GENDERS[0]
   },
   role: {
     type: String,
-    enum: roles,
-    default: STAFF
+    enum: ROLES,
+    default: ROLES[0]
   },
   phone: {
     type: String

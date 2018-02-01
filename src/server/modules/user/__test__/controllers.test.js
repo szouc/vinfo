@@ -81,4 +81,13 @@ describe('User Base Operations', () => {
     expect(res.statusCode).toBe(200)
     expect(res.body.result.username).toBe(data.drivers[0].username)
   })
+
+  test('Should get the image url', async () => {
+    expect.assertions(2)
+    const res = await agent
+      .post(Api.USER_LICENSE_UPLOAD)
+      .attach('license', data.images[0].license, 'license.png')
+    expect(res.statusCode).toBe(200)
+    expect(res.body.ok).toBeTruthy()
+  })
 })

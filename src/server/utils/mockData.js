@@ -60,6 +60,21 @@ const maintainTemplate = {
   mile: () => Mock.Random.natural(12345, 34352)
 }
 
+// function to create file from base64 encoded string
+function base64Decode(base64Image) {
+  const BASE64_MARKER = ';base64,'
+  const parts = base64Image.split(BASE64_MARKER)
+  // create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+  const bitmap = Buffer.from(parts[1], 'base64')
+  return bitmap
+}
+
+const imageTemplate = {
+  license: () => base64Decode(Mock.Random.dataImage('200x100', 'license')),
+  idFront: () => base64Decode(Mock.Random.dataImage('200x100', 'idFront')),
+  idBack: () => base64Decode(Mock.Random.dataImage('200x100', 'idBack'))
+}
+
 const data = Mock.mock({
   'managers|2': [managerTemplate],
   'drivers|5': [driverTemplate],
@@ -70,7 +85,8 @@ const data = Mock.mock({
   'maintains|5': [maintainTemplate],
   'products|5': [productTemplate],
   'priceHistories|5': [priceHistoryTemplate],
-  'companies|5': [companyTemplate]
+  'companies|5': [companyTemplate],
+  'images|5': [imageTemplate]
 })
 
 export { data }

@@ -64,6 +64,15 @@ describe('User Base Operations', () => {
     expect(res.body.result).toBe(data.drivers[2].username)
   })
 
+  test('Should not delete a user by a wrong username', async () => {
+    expect.assertions(2)
+    const res = await agent.delete(
+      Api.USER_ID.replace(/:username/, data.drivers[4].username)
+    )
+    expect(res.statusCode).toBe(400)
+    expect(res.body.ok).toBeFalsy()
+  })
+
   test('Should update a user by username', async () => {
     expect.assertions(2)
     const res = await agent

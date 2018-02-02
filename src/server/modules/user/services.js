@@ -30,6 +30,23 @@ const createUser = (user, callback) => {
   })
 }
 
+/*
+* Use Promise instead of the callback fn
+*/
+
+// const getAllUsers = callback => {
+//   User.find({ active: true })
+//     .then((docs) => {
+//       if (!docs) {
+//         return callback(new Error('没有用户，请添加。'))
+//       }
+//       callback(null, docs)
+//     })
+//     .catch((err) => {
+//       callback(err)
+//     })
+// }
+
 const getAllUsers = callback => {
   User.find({ active: true }, (err, docs) => {
     if (err) {
@@ -66,13 +83,29 @@ const getUserByUsername = (username, callback) => {
   })
 }
 
+// const deleteUserByUsername = (username, callback) => {
+//   User.remove({ username: username })
+//     .then((doc) => {
+//       if (!doc.n) {
+//         return callback(new Error('没有这个用户。'))
+//       }
+//       callback(null, doc)
+//     })
+//     .catch((err) => {
+//       callback(err)
+//     })
+// }
+
 const deleteUserByUsername = (username, callback) => {
   User.remove({ username: username }, (err, doc) => {
     if (err) {
       return callback(err)
     }
-    if (!doc.result.n) {
-      // if user is not exist,mongoDB returns the {result: {'n': 0, 'ok': 1}, ...rest}
+    /* In mongoose v4 if user is not exist,
+    * mongoDB returns the {result: {'n': 0, 'ok': 1}, ...rest};
+    * In mongoose v5 returns the {'n': 0, 'ok': 1}
+    */
+    if (!doc.n) {
       return callback(new Error('没有这个用户。'))
     }
     callback(null, doc)

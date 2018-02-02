@@ -14,6 +14,15 @@ const baseCompany = {
     trim: true,
     required: true
   },
+  phone: {
+    type: String
+  },
+  legal_person: {
+    type: String
+  },
+  tax_number: {
+    type: String
+  },
   active: {
     type: Boolean,
     default: true

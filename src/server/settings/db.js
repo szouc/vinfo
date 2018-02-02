@@ -7,11 +7,8 @@ mongoose.Promise = global.Promise
 
 // Set up default mongoose connection
 const options = isTest
-  ? {
-    useMongoClient: true
-  }
+  ? {}
   : {
-    useMongoClient: true,
     autoReconnect: true,
     keepAlive: true,
     socketTimeoutMS: 0,

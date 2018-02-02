@@ -2,50 +2,14 @@ import { Company } from '../models'
 import { User } from '../../user/models'
 import app from '../../../app'
 import request from 'supertest'
-import {
-  COMPANY_ROOT_API,
-  COMPANY_ID_API,
-  COMPANY_QUERY_API
-} from '../routes.js'
+import * as Api from '../api.js'
+import { data } from '../../../utils/mockData'
 
-const manager = {
-  username: 'manager_company',
-  password: '123',
-  fullname: 'test manager',
-  role: 'manager',
-  gender: 'male',
-  active: true
-}
-
-const company = {
-  name: '青岛利特',
-  addr: '市北区黑龙江路'
-}
-
-const company1 = {
-  name: '青岛利特1',
-  addr: '市北区黑龙江路'
-}
-
-const company2 = {
-  name: '青岛利特2',
-  addr: '市北区黑龙江路'
-}
-
-const modifiedCompany = {
-  name: '青岛利特力',
-  addr: '市北区黑龙江南路'
-}
-
-const query = {
-  addr: '市北区黑龙江路'
-}
-
-let companyId
 describe('Company Basic Operations', () => {
+  let companyId
   const agent = request.agent(app)
   beforeAll(async () => {
-    await agent.post('/auth/register').send(manager)
+    await agent.post('/auth/register').send(data.managers[0])
   })
 
   afterAll(async () => {
@@ -55,36 +19,36 @@ describe('Company Basic Operations', () => {
 
   test('Should create a company', async () => {
     expect.assertions(2)
-    const res = await agent.post(COMPANY_ROOT_API).send(company)
+    const res = await agent.post(Api.COMPANY_ROOT).send(data.companies[0])
     expect(res.statusCode).toBe(200)
-    expect(res.body.name).toBe(company.name)
+    expect(res.body.result.name).toBe(data.companies[0].name)
   })
 
-  test('Should not create a company', async () => {
+  test('Should not create a company by a duplicated company ', async () => {
     expect.assertions(1)
-    const res = await agent.post(COMPANY_ROOT_API).send(company)
-    expect(res.statusCode).toBe(500)
+    const res = await agent.post(Api.COMPANY_ROOT).send(data.companies[0])
+    expect(res.statusCode).toBe(400)
   })
 
   test('Should get all companies', async () => {
     expect.assertions(2)
-    const res = await agent.get(COMPANY_ROOT_API)
-    companyId = res.body[0]._id
+    const res = await agent.get(Api.COMPANY_ROOT)
+    companyId = res.body.result[0]._id
     expect(res.statusCode).toBe(200)
-    expect(res.body[0].name).toEqual(company.name)
+    expect(res.body.result[0].name).toEqual(data.companies[0].name)
   })
 
   test('Should get company by id', async () => {
     expect.assertions(2)
-    const res = await agent.get(COMPANY_ID_API.replace(/:id/, companyId))
+    const res = await agent.get(Api.COMPANY_ID.replace(/:id/, companyId))
     expect(res.statusCode).toBe(200)
-    expect(res.body.name).toEqual(company.name)
+    expect(res.body.result.name).toEqual(data.companies[0].name)
   })
 
-  test('Should not get company by id', async () => {
+  test('Should not get company by a wrong id', async () => {
     expect.assertions(1)
     const res = await agent.get(
-      COMPANY_ID_API.replace(/:id/, '59a25d39082e0f3954207953')
+      Api.COMPANY_ID.replace(/:id/, '59a25d39082e0f3954207953')
     )
     expect(res.statusCode).toBe(400)
   })
@@ -92,40 +56,42 @@ describe('Company Basic Operations', () => {
   test('Should modify a company', async () => {
     expect.assertions(2)
     const res = await agent
-      .put(COMPANY_ID_API.replace(/:id/, companyId))
-      .send(modifiedCompany)
+      .put(Api.COMPANY_ID.replace(/:id/, companyId))
+      .send(data.companies[1])
     expect(res.statusCode).toBe(200)
-    expect(res.body.addr).toEqual(modifiedCompany.addr)
+    expect(res.body.result.addr).toEqual(data.companies[1].addr)
   })
 
-  test('Should not modify a company', async () => {
+  test('Should not modify a company by a wrong id', async () => {
     expect.assertions(1)
     const res = await agent
-      .put(COMPANY_ID_API.replace(/:id/, '59a25d39082e0f3954207953'))
-      .send(modifiedCompany)
+      .put(Api.COMPANY_ID.replace(/:id/, '59a25d39082e0f3954207953'))
+      .send(data.companies[2])
     expect(res.statusCode).toBe(400)
   })
 
   test('Should delete a company', async () => {
     expect.assertions(2)
-    const res = await agent.delete(COMPANY_ID_API.replace(/:id/, companyId))
+    const res = await agent.delete(Api.COMPANY_ID.replace(/:id/, companyId))
     expect(res.statusCode).toBe(200)
-    expect(res.body.active).not.toBeTruthy()
+    expect(res.body.active).toBeFalsy()
   })
 
-  test('Should not delete a company', async () => {
+  test('Should not delete a company by a wrong id', async () => {
     expect.assertions(1)
     const res = await agent.delete(
-      COMPANY_ID_API.replace(/:id/, '59a25d39082e0f3954207953')
+      Api.COMPANY_ID.replace(/:id/, '59a25d39082e0f3954207953')
     )
     expect(res.statusCode).toBe(400)
   })
 
   test('Should find some company according to query', async () => {
     expect.assertions(1)
-    await agent.post(COMPANY_ROOT_API).send(company1)
-    await agent.post(COMPANY_ROOT_API).send(company2)
-    const res = await agent.get(COMPANY_QUERY_API).query(query)
-    expect(res.body).toHaveLength(2)
+    await agent.post(Api.COMPANY_ROOT).send(data.companies[3])
+    await agent.post(Api.COMPANY_ROOT).send(data.companies[4])
+    const res = await agent
+      .get(Api.COMPANY_QUERY)
+      .query({ addr: data.companies[3].addr })
+    expect(res.body.result).toHaveLength(1)
   })
 })

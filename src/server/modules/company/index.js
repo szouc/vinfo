@@ -1,33 +1,29 @@
 import express from 'express'
 
-import { COMPANY_ID_ROUTE, COMPANY_QUERY_ROUTE } from './routes'
+import * as Route from './routes'
 
-import {
-  createCompany,
-  getAllCompanies,
-  getCompanyById,
-  updateCompanyById,
-  deleteCompanyById,
-  getCompanyByQuery
-} from './controllers'
+import * as Controller from './controllers'
 
 import { permitManager } from './permissions'
 
 const companyRouter = express.Router()
 
-companyRouter.route('/')
+companyRouter
+  .route('/')
   .all(permitManager)
-  .get(getAllCompanies)
-  .post(createCompany)
+  .get(Controller.getAllCompanies)
+  .post(Controller.createCompany)
 
-companyRouter.route(COMPANY_QUERY_ROUTE)
-  .get(permitManager, getCompanyByQuery)
+companyRouter
+  .route(Route.COMPANY_QUERY)
+  .get(permitManager, Controller.getCompanyByQuery)
 
 // Dynamic route should put the last position
-companyRouter.route(COMPANY_ID_ROUTE)
+companyRouter
+  .route(Route.COMPANY_ID)
   .all(permitManager)
-  .get(getCompanyById)
-  .put(updateCompanyById)
-  .delete(deleteCompanyById)
+  .get(Controller.getCompanyById)
+  .put(Controller.updateCompanyById)
+  .delete(Controller.deleteCompanyById)
 
 export default companyRouter

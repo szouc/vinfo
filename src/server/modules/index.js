@@ -1,5 +1,5 @@
 import { USER_ROOT } from './user/routes'
-import { COMPANY_ROOT_ROUTE } from './company/routes'
+import { COMPANY_ROOT } from './company/routes'
 import { PRODUCT_ROOT_ROUTE } from './product/routes'
 import { VEHICLE_ROOT_ROUTE } from './vehicle/routes'
 import { TRANSPORT_ROOT_ROUTE } from './transport/routes'
@@ -19,7 +19,7 @@ import captain from './captain'
 const apiRouter = express.Router()
 
 apiRouter.use(USER_ROOT, user)
-apiRouter.use(COMPANY_ROOT_ROUTE, company)
+apiRouter.use(COMPANY_ROOT, company)
 apiRouter.use(PRODUCT_ROOT_ROUTE, product)
 apiRouter.use(VEHICLE_ROOT_ROUTE, vehicle)
 apiRouter.use(TRANSPORT_ROOT_ROUTE, transport)

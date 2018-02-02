@@ -6,6 +6,7 @@ const driverTemplate = {
   username: () => String(Mock.Random.natural(10000, 99999)),
   password: '123',
   fullname: () => Mock.Random.cname(),
+  phone: () => Mock.Random.natural(13000000000, 17299999999),
   gender: 'male',
   role: DRIVER
 }
@@ -27,7 +28,8 @@ const accountantTemplate = {
 
 const companyTemplate = {
   name: () => Mock.Random.string('upper', 10),
-  addr: () => Mock.Random.string('lower', 20)
+  addr: () => Mock.Random.string('lower', 20),
+  phone: () => Mock.Random.natural(13000000000, 17299999999)
 }
 
 const productTemplate = {

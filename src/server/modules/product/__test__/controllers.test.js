@@ -1,4 +1,3 @@
-import moment from 'moment'
 import { Product } from '../models'
 import { User } from '../../user/models'
 import app from '../../../app'
@@ -6,47 +5,6 @@ import request from 'supertest'
 import { replaceAll } from '../../../utils/replaceAll'
 import * as Api from '../api'
 import { data } from '../../../utils/mockData'
-
-const manager = {
-  username: 'manager_product',
-  password: '123',
-  fullname: 'test manager',
-  role: 'manager',
-  gender: 'male',
-  active: true
-}
-
-const singlePriceHistory = [
-  {
-    price: 180,
-    start: moment('01/12/2017', 'MM/DD/YYYY', true),
-    end: moment('02/12/2017', 'MM/DD/YYYY', true)
-  }
-]
-
-const multiPriceHistory = [
-  {
-    price: 220,
-    start: moment('03/12/2017', 'MM/DD/YYYY', true),
-    end: moment('03/22/2017', 'MM/DD/YYYY', true)
-  },
-  {
-    price: 215,
-    start: moment('04/12/2017', 'MM/DD/YYYY', true),
-    end: moment('04/22/2017', 'MM/DD/YYYY', true)
-  }
-]
-
-const product = {
-  name: '硫酸',
-  specs: '98%',
-  pricing: '200'
-}
-
-const modifiedProduct = {
-  specs: '95%',
-  pricing: 500
-}
 
 describe('Product Base Operations', () => {
   let productId

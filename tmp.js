@@ -1,5 +1,6 @@
 import Immutable, { fromJS } from 'immutable'
 import Mock from 'mockjs'
+import { data } from './src/server/utils/mockData'
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
 
 let state,
@@ -77,4 +78,5 @@ const req = values.withMutations(value =>
     .set('vehicle', fromJS({ plate: '12345', engine: 'L21342354' }))
 )
 console.log(req)
-console.log(Mock.Random.dataImage())
+
+console.log(data.transports[1])

@@ -30,9 +30,16 @@ describe('Company Basic Operations', () => {
     expect(res.statusCode).toBe(400)
   })
 
+  test('Should get companies by page_number = 1 and page_size = 2', async () => {
+    expect.assertions(2)
+    const res = await agent.get(`${Api.COMPANY_ROOT}?page=1&size=2`)
+    expect(res.statusCode).toBe(200)
+    expect(res.body.result).toHaveLength(1)
+  })
+
   test('Should get all companies', async () => {
     expect.assertions(2)
-    const res = await agent.get(Api.COMPANY_ROOT)
+    const res = await agent.get(Api.COMPANY_ALL)
     companyId = res.body.result[0]._id
     expect(res.statusCode).toBe(200)
     expect(res.body.result[0].name).toEqual(data.companies[0].name)

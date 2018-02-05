@@ -8,11 +8,7 @@ import { Product } from '../../product/models'
 import app from '../../../app'
 import request from 'supertest'
 // import { replaceAll } from '../../../utils/replaceAll'
-import {
-  TRANSPORT_ID_API,
-  TRANSPORT_STATUS_API,
-  TRANSPORT_ROOT_API
-} from '../routes'
+import * as Api from '../api'
 
 const manager = {
   username: 'manager_vehicle',
@@ -201,10 +197,10 @@ const modifiedDrivers = {
   }
 }
 
-let num
-let transportId
-// let transportId2
 describe('Transport Base Operations', () => {
+  let num
+  let transportId
+  // let transportId2
   const agent = request.agent(app)
   beforeAll(async () => {
     await agent.post('/auth/register').send(driver1)
@@ -227,66 +223,74 @@ describe('Transport Base Operations', () => {
 
   test('Should create a transport', async () => {
     expect.assertions(3)
-    const res = await agent.post(TRANSPORT_ROOT_API).send(transport)
-    num = res.body[0].num
+    const res = await agent.post(Api.TRANSPORT_ROOT).send(transport)
+    num = res.body.result[0].num
     expect(res.statusCode).toBe(200)
-    expect(res.body[0].principal.username).toBe('driver1_vehicle')
-    expect(res.body[1].assigned).toBeTruthy()
+    expect(res.body.result[0].principal.username).toBe('driver1_vehicle')
+    expect(res.body.result[1].assigned).toBeTruthy()
   })
 
   test('Should create another transport', async () => {
     expect.assertions(2)
-    const res = await agent.post(TRANSPORT_ROOT_API).send(transport2)
+    const res = await agent.post(Api.TRANSPORT_ROOT).send(transport2)
     const re = num + 1
     expect(res.statusCode).toBe(200)
-    expect(res.body[0].num).toEqual(re)
+    expect(res.body.result[0].num).toEqual(re)
+  })
+
+  test('Should fetch transport by page_number = 1 and page_size = 2', async () => {
+    expect.assertions(2)
+    const res = await agent.get(`${Api.TRANSPORT_ROOT}?page=1&size=2`)
+    expect(res.statusCode).toBe(200)
+    expect(res.body.result).toHaveLength(2)
   })
 
   test('Should not create a transport', async () => {
     expect.assertions(2)
-    const res = await agent.post(TRANSPORT_ROOT_API).send(transport2)
+    const res = await agent.post(Api.TRANSPORT_ROOT).send(transport2)
     expect(res.statusCode).toBe(400)
-    expect(res.text).toEqual('车辆已分配！')
+    expect(res.body.error).toEqual('车辆不存在或已分配！')
   })
 
   test('Should fecth all transports', async () => {
     expect.assertions(1)
-    const res = await agent.get(TRANSPORT_ROOT_API)
-    transportId = res.body[1]._id
+    const res = await agent.get(Api.TRANSPORT_ROOT)
+    transportId = res.body.result[1]._id
     // transportId2 = res.body[0]._id
-    expect(res.body).toHaveLength(2)
+    expect(res.body.result).toHaveLength(2)
   })
 
   test('Should fetch a transport by id', async () => {
     expect.assertions(2)
-    const res = await agent.get(TRANSPORT_ID_API.replace(/:id/, transportId))
+    const res = await agent.get(Api.TRANSPORT_ID.replace(/:id/, transportId))
     expect(res.statusCode).toBe(200)
-    expect(res.body.captain_status).toEqual('assign')
+    expect(res.body.result.captain_status).toEqual('assign')
   })
 
   test('Should change the transport status by id', async () => {
     expect.assertions(3)
     const res = await agent
-      .put(TRANSPORT_STATUS_API.replace(/:id/, transportId))
+      .put(Api.TRANSPORT_STATUS.replace(/:id/, transportId))
       .send({ captain_status: 'submit' })
     expect(res.statusCode).toBe(200)
-    expect(res.body[0].captain_status).toBe('submit')
-    expect(res.body[1].assigned).toBeFalsy()
+    expect(res.body.result[0].captain_status).toBe('submit')
+    expect(res.body.result[1].assigned).toBeFalsy()
   })
 
   test('Should update transport by id', async () => {
     expect.assertions(2)
     const res = await agent
-      .put(TRANSPORT_ID_API.replace(/:id/, transportId))
+      .put(Api.TRANSPORT_ID.replace(/:id/, transportId))
       .send(modifiedDrivers)
     expect(res.statusCode).toBe(200)
-    expect(res.body.principal.username).toBe('driver2_vehicle')
+    expect(res.body.result.principal.username).toBe('driver2_vehicle')
   })
 
   test('Should delete transport by id', async () => {
     expect.assertions(2)
-    const res = await agent.delete(TRANSPORT_ID_API.replace(/:id/, transportId))
+    const res = await agent.delete(Api.TRANSPORT_ID.replace(/:id/, transportId))
     expect(res.statusCode).toBe(200)
-    expect(res.body[1].assigned).toBeFalsy()
+    expect(res.body.result[1]).toBeFalsy()
+    // expect(res.body.result).toBe(200)
   })
 })

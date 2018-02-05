@@ -11,23 +11,15 @@
     "start": "cross-env DEBUG=app,user yarn dev:start",
     "vsc": "cross-env DEBUG=server,app,user,auth yarn dev:vsc",
     "dev": "yarn dev:dll && yarn dev:wds",
-    "dev:start":
-      "nodemon -e js,jsx --ignore lib --ignore dist --exec babel-node src/server",
-    "dev:vsc":
-      "nodemon -e js,jsx --ignore lib --ignore dist --exec babel-node --inspect=5858 src/server",
-    "dev:wds":
-      "webpack-dev-server --config webpack.config.babel.js --progress --color",
-    "dev:dll":
-      "webpack --config webpack.dll.config.babel.js -p --progress --color --hide-modules",
-    "prod:build":
-      "cross-env NODE_ENV=production webpack --config webpack.config.babel.js -p --progress && yarn babel",
-    "server:bundle":
-      "cross-env NODE_ENV=production babel-node tools/serverBundle",
-    "prod:start":
-      "cross-env NODE_ENV=production pm2 start lib/server && pm2 logs",
+    "dev:start": "nodemon -e js,jsx --ignore lib --ignore dist --exec babel-node src/server",
+    "dev:vsc": "nodemon -e js,jsx --ignore lib --ignore dist --exec babel-node --inspect=5858 src/server",
+    "dev:wds": "webpack-dev-server --config webpack.config.babel.js --progress --color",
+    "dev:dll": "webpack --config webpack.dll.config.babel.js -p --progress --color --hide-modules",
+    "prod:build": "cross-env NODE_ENV=production webpack --config webpack.config.babel.js -p --progress && yarn babel",
+    "server:bundle": "cross-env NODE_ENV=production babel-node tools/serverBundle",
+    "prod:start": "cross-env NODE_ENV=production pm2 start lib/server && pm2 logs",
     "prod:stop": "pm2 delete server",
-    "lint":
-      "eslint src webpack.config.babel.js webpack.dll.config.babel.js --ext .js,.jsx",
+    "lint": "eslint src webpack.config.babel.js webpack.dll.config.babel.js --ext .js,.jsx",
     "test": "yarn lint && flow && jest --coverage",
     "jest": "cross-env NODE_ENV=test jest --no-cache --runInBand --watchAll",
     "precommit": "yarn lint"
@@ -140,19 +132,20 @@
     "webpack-dev-server": "^2.9.1",
     "webpack-node-externals": "^1.6.0"
   },
-  "browserslist": ["> 5%"],
+  "browserslist": [
+    "> 5%"
+  ],
   "standard": {
-    "env": ["jest"]
+    "env": [
+      "jest"
+    ]
   },
   "jest": {
     "testEnvironment": "jsdom",
     "bail": true,
     "verbose": true,
     "roots": [
-      "<rootDir>/src/server/auth",
-      "<rootDir>/src/server/modules/user",
-      "<rootDir>/src/server/modules/company",
-      "<rootDir>/src/server/modules/product"
+      "<rootDir>/src/server/modules/driver"
     ]
   }
 }

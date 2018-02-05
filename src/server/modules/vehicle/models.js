@@ -100,7 +100,7 @@ const baseVehicle = {
     username: { type: String },
     fullname: { type: String }
   },
-  assigned: { type: Boolean, default: false },
+  assigned: { type: Boolean, required: true, default: false },
   active: {
     type: Boolean,
     default: true

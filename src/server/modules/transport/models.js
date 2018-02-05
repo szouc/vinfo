@@ -1,12 +1,9 @@
 import { db } from '../../settings/db'
 import mongoose from 'mongoose'
 import incrementCreator from 'mongoose-sequence'
-import { ASSIGN, ACCEPT, SUBMIT, PASS, DENY } from './constants'
+import { CAPTAIN_STATUS, ACCOUNT_STATUS } from './constants'
 
 const Schema = mongoose.Schema
-
-const CAPTAIN_STATUS = [ASSIGN, ACCEPT, SUBMIT, PASS, DENY]
-const ACCOUNT_STATUS = [SUBMIT, PASS, DENY]
 
 const baseTransport = {
   assigner: {
@@ -52,7 +49,7 @@ const baseTransport = {
   captain_status: {
     type: String,
     enum: CAPTAIN_STATUS,
-    default: ASSIGN,
+    default: CAPTAIN_STATUS[0],
     required: true
   },
   captain_info: { type: String },
@@ -60,7 +57,7 @@ const baseTransport = {
   accountant_status: {
     type: String,
     enum: ACCOUNT_STATUS,
-    default: SUBMIT,
+    default: ACCOUNT_STATUS[0],
     required: true
   },
   accountant: {
@@ -68,7 +65,8 @@ const baseTransport = {
     fullname: { type: String }
   },
   accountant_info: { type: String },
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
+  created: { type: Date, default: Date.now() }
 }
 
 const TransportSchema = new Schema(baseTransport)

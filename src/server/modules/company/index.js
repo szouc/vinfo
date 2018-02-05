@@ -11,8 +11,13 @@ const companyRouter = express.Router()
 companyRouter
   .route('/')
   .all(permitManager)
-  .get(Controller.getAllCompanies)
+  .get(Controller.getCompanies)
   .post(Controller.createCompany)
+
+companyRouter
+  .route(Route.COMPANY_ALL)
+  .all(permitManager)
+  .get(Controller.getAllCompanies)
 
 companyRouter
   .route(Route.COMPANY_QUERY)

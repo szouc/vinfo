@@ -1,85 +1,74 @@
 import { Company } from './models'
 
+/*
+* Model or Query will Executes immediately if callback function is passed.
+* Otherwise, the query statement will return a Promise.
+*/
+const generateQueryCallback = (queryError, callback) => {
+  if (typeof callback !== 'function') {
+    return null
+  }
+  return (err, doc) => {
+    if (err) {
+      return callback(err)
+    }
+    if (!doc) {
+      return callback(new Error(queryError))
+    }
+    callback(null, doc)
+  }
+}
+
 const createCompany = (company, callback) => {
-  Company.create(company)
-    .then(doc => {
-      if (!doc) {
-        return callback(new Error('公司没有成功创建。'))
-      }
-      callback(null, doc)
-    })
-    .catch(err => {
-      callback(err)
-    })
+  // 'Create' cmd returns a Promise instead of the Query.
+  return Company.create(
+    company,
+    generateQueryCallback('公司没有成功创建。', callback)
+  )
+}
+
+const getCompanies = (pageNumber, pageSize, callback) => {
+  return Company.find({ active: true })
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize)
+    .sort({ name: 1 })
+    .lean()
+    .exec(generateQueryCallback('还没有公司，请添加。', callback))
 }
 
 const getAllCompanies = callback => {
-  Company.find({ active: true })
-    .then(docs => {
-      if (!docs) {
-        return callback(new Error('还没有公司，请添加。'))
-      }
-      callback(null, docs)
-    })
-    .catch(err => {
-      callback(err)
-    })
+  return Company.find({ active: true })
+    .lean()
+    .exec(generateQueryCallback('还没有公司，请添加。', callback))
 }
 
 const getCompanyById = (id, callback) => {
-  Company.findById(id)
-    .then(doc => {
-      if (!doc) {
-        return callback(new Error('没有找到该公司。'))
-      }
-      callback(null, doc)
-    })
-    .catch(err => {
-      callback(err)
-    })
+  return Company.findById(id)
+    .lean()
+    .exec(generateQueryCallback('没有找到该公司。', callback))
 }
 
 const updateCompanyById = (id, update, callback) => {
-  Company.findByIdAndUpdate(id, { $set: update }, { new: true })
-    .then(doc => {
-      if (!doc) {
-        return callback(new Error('没有这个公司。'))
-      }
-      callback(null, doc)
-    })
-    .catch(err => {
-      callback(err)
-    })
+  return Company.findByIdAndUpdate(id, { $set: update }, { new: true })
+    .lean()
+    .exec(generateQueryCallback('没有找到该公司。', callback))
 }
 
 const deleteCompanyById = (id, callback) => {
-  Company.findByIdAndUpdate(id, { active: false }, { new: true })
-    .then(doc => {
-      if (!doc) {
-        return callback(new Error('没有这个公司。'))
-      }
-      callback(null, doc)
-    })
-    .catch(err => {
-      callback(err)
-    })
+  return Company.findByIdAndUpdate(id, { active: false }, { new: true })
+    .lean()
+    .exec(generateQueryCallback('没有找到该公司。', callback))
 }
 
 const getCompanyByQuery = (query, callback) => {
-  Company.find(query)
-    .then(docs => {
-      if (!docs) {
-        return callback(new Error('没有找到符合条件的公司。'))
-      }
-      callback(null, docs)
-    })
-    .catch(err => {
-      callback(err)
-    })
+  return Company.find(query)
+    .lean()
+    .exec(generateQueryCallback('没有找到符合条件的公司。', callback))
 }
 
 export {
   createCompany,
+  getCompanies,
   getAllCompanies,
   getCompanyById,
   updateCompanyById,

@@ -1,10 +1,10 @@
 import { USER_ROOT } from './user/routes'
 import { COMPANY_ROOT } from './company/routes'
-import { PRODUCT_ROOT_ROUTE } from './product/routes'
-import { VEHICLE_ROOT_ROUTE } from './vehicle/routes'
-import { TRANSPORT_ROOT_ROUTE } from './transport/routes'
+import { PRODUCT_ROOT } from './product/routes'
+import { VEHICLE_ROOT } from './vehicle/routes'
+import { TRANSPORT_ROOT } from './transport/routes'
 import { ACCOUNT_ROOT_ROUTE } from './account/routes'
-import { DRIVER_ROOT_ROUTE } from './driver/routes'
+import { DRIVER_ROOT } from './driver/routes'
 import { CAPTAIN_ROOT_ROUTE } from './captain/routes'
 import express from 'express'
 import user from './user'
@@ -20,11 +20,11 @@ const apiRouter = express.Router()
 
 apiRouter.use(USER_ROOT, user)
 apiRouter.use(COMPANY_ROOT, company)
-apiRouter.use(PRODUCT_ROOT_ROUTE, product)
-apiRouter.use(VEHICLE_ROOT_ROUTE, vehicle)
-apiRouter.use(TRANSPORT_ROOT_ROUTE, transport)
+apiRouter.use(PRODUCT_ROOT, product)
+apiRouter.use(VEHICLE_ROOT, vehicle)
+apiRouter.use(TRANSPORT_ROOT, transport)
 apiRouter.use(ACCOUNT_ROOT_ROUTE, account)
-apiRouter.use(DRIVER_ROOT_ROUTE, driver)
+apiRouter.use(DRIVER_ROOT, driver)
 apiRouter.use(CAPTAIN_ROOT_ROUTE, captain)
 
 export default apiRouter

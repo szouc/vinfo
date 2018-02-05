@@ -2,102 +2,66 @@
 
 import { User } from './models'
 
+/*
+* Model or Query will Executes immediately if callback function is passed.
+* Otherwise, the query statement will return a Promise.
+*/
+const generateQueryCallback = (queryError, callback) => {
+  if (typeof callback !== 'function') {
+    return null
+  }
+  return (err, doc) => {
+    if (err) {
+      return callback(err)
+    }
+    if (!doc) {
+      return callback(new Error(queryError))
+    }
+    callback(null, doc)
+  }
+}
+
 const getUsers = (pageNumber, pageSize, callback) => {
-  User.find({ active: true })
+  return User.find({ active: true })
     .skip((pageNumber - 1) * pageSize)
     .limit(pageSize)
     .sort({ username: 1 })
-    .exec((err, docs) => {
-      if (err) {
-        return callback(err)
-      }
-      if (!docs) {
-        return callback(new Error('没有用户,请添加。'))
-      }
-      callback(null, docs)
-    })
+    .lean()
+    .exec(generateQueryCallback('没有用户,请添加。', callback))
 }
 
 const createUser = (user, callback) => {
-  User.register(user, user.password, (err, doc) => {
-    if (err) {
-      return callback(err)
-    }
-    if (!doc) {
-      return callback(new Error('创建不成功，请检查后继续。'))
-    }
-    callback(null, doc)
-  })
+  // Register must pass the callback function
+  return User.register(
+    user,
+    user.password,
+    generateQueryCallback('创建不成功，请检查后继续。', callback)
+  )
 }
 
-/*
-* Use Promise instead of the callback fn
-*/
-
-// const getAllUsers = callback => {
-//   User.find({ active: true })
-//     .then((docs) => {
-//       if (!docs) {
-//         return callback(new Error('没有用户，请添加。'))
-//       }
-//       callback(null, docs)
-//     })
-//     .catch((err) => {
-//       callback(err)
-//     })
-// }
-
 const getAllUsers = callback => {
-  User.find({ active: true }, (err, docs) => {
-    if (err) {
-      return callback(err)
-    }
-    if (!docs) {
-      return callback(new Error('没有用户,请添加。'))
-    }
-    callback(null, docs)
-  })
+  return User.find({ active: true })
+    .lean()
+    .exec(generateQueryCallback('没有用户,请添加。', callback))
 }
 
 const getUsersByRole = (role, callback) => {
-  User.find({ role: role, active: true }, (err, docs) => {
-    if (err) {
-      return callback(err)
-    }
-    if (!docs) {
-      return callback(new Error('没有用户,请添加。'))
-    }
-    callback(null, docs)
-  })
+  return User.find({ role: role, active: true })
+    .lean()
+    .exec(generateQueryCallback('没有用户,请添加。', callback))
 }
 
 const getUserByUsername = (username, callback) => {
-  User.findOne({ username: username }, (err, doc) => {
-    if (err) {
-      return callback(err)
-    }
-    if (!doc) {
-      return callback(new Error('没有这个用户。'))
-    }
-    callback(null, doc)
-  })
+  return User.findOne({ username: username })
+    .lean()
+    .exec(generateQueryCallback('没有这个用户。', callback))
 }
 
-// const deleteUserByUsername = (username, callback) => {
-//   User.remove({ username: username })
-//     .then((doc) => {
-//       if (!doc.n) {
-//         return callback(new Error('没有这个用户。'))
-//       }
-//       callback(null, doc)
-//     })
-//     .catch((err) => {
-//       callback(err)
-//     })
-// }
-
 const deleteUserByUsername = (username, callback) => {
-  User.remove({ username: username }, (err, doc) => {
+  if (typeof callback !== 'function') {
+    return User.remove({ username: username })
+  }
+  return User.remove({ username: username }, (err, doc) => {
     if (err) {
       return callback(err)
     }
@@ -108,31 +72,20 @@ const deleteUserByUsername = (username, callback) => {
     if (!doc.n) {
       return callback(new Error('没有这个用户。'))
     }
-    callback(null, doc)
+    callback(null, username)
   })
 }
 
 const updateUserByUsername = (username, update, callback) => {
-  User.findOneAndUpdate(
-    { username: username },
-    update,
-    {
-      new: true
-    },
-    (err, doc) => {
-      if (err) {
-        return callback(err)
-      }
-      if (!doc) {
-        return callback(new Error('该用户暂时无法修改或不存在。'))
-      }
-      callback(null, doc)
-    }
-  )
+  return User.findOneAndUpdate({ username: username }, update, {
+    new: true
+  })
+    .lean()
+    .exec(generateQueryCallback('该用户暂时无法修改或不存在。', callback))
 }
 
 const resetPassword = (username, password, callback) => {
-  User.findByUsername(username, (err, user) => {
+  return User.findByUsername(username, (err, user) => {
     if (err) {
       return callback(err)
     }

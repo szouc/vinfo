@@ -1,24 +1,8 @@
 import express from 'express'
 
-import {
-  VEHICLE_FUEL_ID_ROUTE,
-  VEHICLE_MAINTAIN_ID_ROUTE,
-  VEHICLE_FUEL_ROUTE,
-  VEHICLE_MAINTAIN_ROUTE,
-  VEHICLE_ID_ROUTE
-} from './routes'
+import * as Route from './routes'
 
-import {
-  getAllVehicles,
-  getVehicleById,
-  updateVehicleById,
-  deleteVehicleById,
-  addVehicleFuel,
-  deleteVehicleFuel,
-  addVehicleMaintain,
-  deleteVehicleMaintain,
-  createVehicle
-} from './controllers'
+import * as Controller from './controllers'
 
 import { permitManager } from './permissions'
 
@@ -27,29 +11,36 @@ const vehicleRouter = express.Router()
 vehicleRouter
   .route('/')
   .all(permitManager)
-  .post(createVehicle)
-  .get(getAllVehicles)
+  .post(Controller.createVehicle)
+  .get(Controller.getVehicles)
+
+vehicleRouter
+  .route(Route.VEHICLE_ALL)
+  .all(permitManager)
+  .get(Controller.getAllVehicles)
 
 // Dynamic route should put the last position
 vehicleRouter
-  .route(VEHICLE_ID_ROUTE)
+  .route(Route.VEHICLE_ID)
   .all(permitManager)
-  .get(getVehicleById)
-  .put(updateVehicleById)
-  .delete(deleteVehicleById)
-
-vehicleRouter.route(VEHICLE_FUEL_ROUTE).post(permitManager, addVehicleFuel)
+  .get(Controller.getVehicleById)
+  .put(Controller.updateVehicleById)
+  .delete(Controller.deleteVehicleById)
 
 vehicleRouter
-  .route(VEHICLE_FUEL_ID_ROUTE)
-  .delete(permitManager, deleteVehicleFuel)
+  .route(Route.VEHICLE_FUEL)
+  .post(permitManager, Controller.addVehicleFuel)
 
 vehicleRouter
-  .route(VEHICLE_MAINTAIN_ROUTE)
-  .post(permitManager, addVehicleMaintain)
+  .route(Route.VEHICLE_FUEL_ID)
+  .delete(permitManager, Controller.deleteVehicleFuel)
 
 vehicleRouter
-  .route(VEHICLE_MAINTAIN_ID_ROUTE)
-  .delete(permitManager, deleteVehicleMaintain)
+  .route(Route.VEHICLE_MAINTAIN)
+  .post(permitManager, Controller.addVehicleMaintain)
+
+vehicleRouter
+  .route(Route.VEHICLE_MAINTAIN_ID)
+  .delete(permitManager, Controller.deleteVehicleMaintain)
 
 export default vehicleRouter

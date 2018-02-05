@@ -1,59 +1,58 @@
 import { User, Vehicle, Transport } from './models'
 import { ASSIGN, ACCEPT } from './constants'
-import * as TransportService from '../transport/services'
-import * as UserService from '../user/services'
-import * as VehicleService from '../vehicle/services'
 
-const PAGE_NUMBER = 1 // default number of page
-const PAGE_SIZE = 20 // default size of page
-
-const generateResponseCallback = res => (err, doc) => {
-  if (err) {
-    return res.status(400).json({ ok: false, error: err.message })
+/*
+* Model or Query will Executes immediately if callback function is passed.
+* Otherwise, the query statement will return a Promise.
+*/
+const generateQueryCallback = (queryError, callback) => {
+  if (typeof callback !== 'function') {
+    return null
   }
-  res.status(200).json({ ok: true, result: doc })
+  return (err, doc) => {
+    if (err) {
+      return callback(err)
+    }
+    if (!doc) {
+      return callback(new Error(queryError))
+    }
+    callback(null, doc)
+  }
 }
 
-function getDriverTransports(req, res) {
-  let username = req.params.username
-  let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
-  let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  TransportService.getConditionTransports(
-    { 'principal.username': username },
-    page,
-    size,
-    generateResponseCallback(res)
-  )
-}
-
-const acceptTransportById = (req, res) => {
-  let username = req.params.username
-  let transportId = req.params.childId
-  let update = req.body
-  TransportService.updateTransportByQuery(
+const acceptTransportById = (username, transportId, update, callback) => {
+  return Transport.findOneAndUpdate(
     {
       'principal.username': username,
       _id: transportId,
       captain_status: { $in: [ASSIGN, ACCEPT] }
     },
-    update,
-    generateResponseCallback(res)
-  )
-}
-
-const getDriverByUsername = (req, res) => {
-  let username = req.params.username
-  UserService.getUserByUsername(username, generateResponseCallback(res))
-}
-
-const getVehicleByUsername = (req, res) => {
-  let username = req.params.username
-  VehicleService.getVehicleByQuery(
     {
-      'principal.username': username
+      $set: update
     },
-    generateResponseCallback(res)
+    {
+      new: true
+    }
   )
+    .lean()
+    .exec(generateQueryCallback('没有找到该运输记录。', callback))
+}
+
+function getVehicleByUsername(req, res) {
+  Vehicle.find({
+    'principal.username': req.params.username
+  })
+    .lean()
+    .then(doc => {
+      if (doc) {
+        res.status(200).json(doc)
+      } else {
+        res.status(400).send('No vehicle matching')
+      }
+    })
+    .catch(() => {
+      res.status(500).send('Couldnt find vehicle by username')
+    })
 }
 
 function changePasswordByUsername(req, res) {
@@ -217,9 +216,7 @@ export {
   getAllMaintains,
   deleteMaintain,
   deleteFuel,
-  getDriverTransports,
   acceptTransportById,
   changePasswordByUsername,
-  getVehicleByUsername,
-  getDriverByUsername
+  getVehicleByUsername
 }

@@ -3,10 +3,12 @@ import Mock from 'mockjs'
 import { DRIVER, CAPTAIN, ACCOUNTANT, MANAGER } from '../modules/user/constants'
 
 const driverTemplate = {
-  username: () => String(Mock.Random.natural(10000, 99999)),
+  // username: () => String(Mock.Random.natural(10000, 99999)),
+  username: '@string("number", 5, 10)',
   password: '123',
-  fullname: () => Mock.Random.cname(),
-  phone: () => Mock.Random.natural(13000000000, 17299999999),
+  // fullname: () => Mock.Random.cname(),
+  fullname: '@cname',
+  phone: '@natural(13000000000, 17299999999)',
   gender: 'male',
   role: DRIVER
 }
@@ -27,39 +29,58 @@ const accountantTemplate = {
 }
 
 const companyTemplate = {
-  name: () => Mock.Random.string('upper', 10),
-  addr: () => Mock.Random.string('lower', 20),
-  phone: () => Mock.Random.natural(13000000000, 17299999999)
-}
-
-const productTemplate = {
-  name: () => Mock.Random.string('upper', 10),
-  specs: () => Mock.Random.string('lower', 10),
-  pricing: () => Mock.Random.natural(300, 500)
+  name: '@ctitle(5,10)',
+  addr: '@county(true)',
+  phone: '@natural(13000000000, 17299999999)'
 }
 
 const priceHistoryTemplate = {
-  price: () => Mock.Random.natural(300, 500),
-  start: () => Mock.Random.date(),
-  end: () => Mock.Random.date()
+  price: '@natural(300, 500)',
+  start: '@date()',
+  end: '@date()'
 }
 
-const vehicleTemplate = {
-  plate: () => Mock.Random.string('upper', 7),
-  engine: () => Mock.Random.string('number', 7),
-  model: () => Mock.Random.string('lower', 7)
+const productTemplate = {
+  name: '@ctitle(4)',
+  specs: '@string("lower", 10)',
+  pricing: '@natural(300, 500)',
+  'price_history|5': [priceHistoryTemplate]
 }
 
 const fuelTemplate = {
-  litre: () => Mock.Random.natural(30, 50),
-  cost: () => Mock.Random.natural(100, 500),
-  mile: () => Mock.Random.natural(12345, 34352)
+  applicant: driverTemplate,
+  litre: '@natural(30, 50)',
+  cost: '@natural(100, 500)',
+  mile: '@natural(12345, 34352)'
 }
 
 const maintainTemplate = {
-  reason: () => Mock.Random.string('lower', 50),
-  cost: () => Mock.Random.natural(100, 500),
-  mile: () => Mock.Random.natural(12345, 34352)
+  applicant: driverTemplate,
+  reason: '@cparagraph(2,5)',
+  cost: '@natural(100, 500)',
+  mile: '@natural(12345, 34352)'
+}
+
+const vehicleTemplate = {
+  plate: '@string("upper", 7)',
+  engine: '@string("number", 11)',
+  model: '@string("lower", 7)',
+  principal: driverTemplate,
+  secondary: driverTemplate,
+  'fuels|3': [fuelTemplate],
+  'maintenance|3': [maintainTemplate]
+}
+
+const transportTemplate = {
+  assigner: captainTemplate,
+  vehicle: vehicleTemplate,
+  from: {
+    company: companyTemplate
+  },
+  to: {
+    company: companyTemplate
+  },
+  product: productTemplate
 }
 
 // function to create file from base64 encoded string
@@ -88,6 +109,7 @@ const data = Mock.mock({
   'products|5': [productTemplate],
   'priceHistories|5': [priceHistoryTemplate],
   'companies|5': [companyTemplate],
+  'transports|5': [transportTemplate],
   'images|5': [imageTemplate]
 })
 

@@ -1,151 +1,76 @@
-import { Vehicle } from './models'
+import * as Service from './services'
 
-function createVehicle(req, res) {
-  Vehicle.create(req.body)
-    .then(doc => {
-      res.status(200).json(doc)
-    })
-    .catch(e => {
-      res.status(500).send('Couldnt save the vehicle at this time')
-    })
+const PAGE_NUMBER = 1 // default number of page
+const PAGE_SIZE = 20 // default size of page
+
+const generateResponseCallback = res => (err, doc) => {
+  if (err) {
+    return res.status(400).json({ ok: false, error: err.message })
+  }
+  res.status(200).json({ ok: true, result: doc })
 }
 
-function getAllVehicles(req, res) {
-  Vehicle.find({ active: true })
-    .lean()
-    .then(docs => {
-      if (docs) {
-        res.status(200).json(docs)
-      } else {
-        res.status(400).send('No vehicles matching')
-      }
-    })
-    .catch(() => {
-      res.status(500).send('Couldnt find all vehicles')
-    })
+const createVehicle = (req, res) => {
+  let vehicle = req.body
+  Service.createVehicle(vehicle, generateResponseCallback(res))
 }
 
-function getVehicleById(req, res) {
-  Vehicle.findById(req.params.id)
-    .lean()
-    .then(doc => {
-      if (doc) {
-        res.status(200).json(doc)
-      } else {
-        res.status(400).send('No vehicle matching')
-      }
-    })
-    .catch(() => {
-      res.status(500).send('Couldnt find vehicle by id')
-    })
+const getVehicles = (req, res) => {
+  let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
+  let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
+  Service.getVehicles(page, size, generateResponseCallback(res))
 }
 
-function deleteVehicleById(req, res) {
-  Vehicle.findByIdAndUpdate(
-    req.params.id,
-    { $set: { active: false } },
-    { new: true }
+const getAllVehicles = (req, res) => {
+  Service.getAllVehicles(generateResponseCallback(res))
+}
+
+const getVehicleById = (req, res) => {
+  let vehicleId = req.params.id
+  Service.getVehicleById(vehicleId, generateResponseCallback(res))
+}
+
+const deleteVehicleById = (req, res) => {
+  let vehicleId = req.params.id
+  Service.deleteVehicleById(vehicleId, generateResponseCallback(res))
+}
+
+const updateVehicleById = (req, res) => {
+  let vehicleId = req.params.id
+  let update = req.body
+  Service.updateVehicleById(vehicleId, update, generateResponseCallback(res))
+}
+
+const addVehicleFuel = (req, res) => {
+  let vehicleId = req.params.id
+  let fuelArray = req.body
+  Service.addVehicleFuel(vehicleId, fuelArray, generateResponseCallback(res))
+}
+
+const addVehicleMaintain = (req, res) => {
+  let vehicleId = req.params.id
+  let maintainArray = req.body
+  Service.addVehicleMaintain(
+    vehicleId,
+    maintainArray,
+    generateResponseCallback(res)
   )
-    .then(doc => {
-      if (doc) {
-        res.status(200).json(doc)
-      } else {
-        res.status(400).send('No vehicle matching')
-      }
-    })
-    .catch(() => {
-      res.status(500).send('Couldnt delete vehicle at this time')
-    })
 }
 
-function updateVehicleById(req, res) {
-  Vehicle.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
-    .then(doc => {
-      if (doc) {
-        res.status(200).json(doc)
-      } else {
-        res.status(400).send('NO vehicle matching')
-      }
-    })
-    .catch(() => {
-      res.status(500).send('Couldnt update vehicle at this time')
-    })
+const deleteVehicleFuel = (req, res) => {
+  let vehicleId = req.params.id
+  let fuelId = req.params.childId
+  Service.deleteVehicleFuel(vehicleId, fuelId, generateResponseCallback(res))
 }
 
-function addVehicleFuel(req, res) {
-  Vehicle.findByIdAndUpdate(
-    req.params.id,
-    {
-      $addToSet: { fuels: { $each: req.body } }
-    },
-    { new: true }
+const deleteVehicleMaintain = (req, res) => {
+  let vehicleId = req.params.id
+  let maintainId = req.params.childId
+  Service.deleteVehicleMaintain(
+    vehicleId,
+    maintainId,
+    generateResponseCallback(res)
   )
-    .then(doc => {
-      if (doc) {
-        res.status(200).json(doc)
-      } else {
-        res.status(400).send('No vehicle matching')
-      }
-    })
-    .catch(() => {
-      res.status(500).send('Couldnt add fuel to vehicle')
-    })
-}
-
-function addVehicleMaintain(req, res) {
-  Vehicle.findByIdAndUpdate(
-    req.params.id,
-    {
-      $addToSet: { maintenance: { $each: req.body } }
-    },
-    { new: true }
-  )
-    .then(doc => {
-      if (doc) {
-        res.status(200).json(doc)
-      } else {
-        res.status(400).send('No vehicle matching')
-      }
-    })
-    .catch(() => {
-      res.status(500).send('Couldnt add maintenance to vehicle')
-    })
-}
-
-function deleteVehicleFuel(req, res) {
-  Vehicle.findById(req.params.id)
-    .then(doc => {
-      if (doc) {
-        doc.fuels.id(req.params.childId).remove()
-        return doc.save()
-      } else {
-        res.status(400).send('Couldnt find the vehicle by id')
-      }
-    })
-    .then(doc => {
-      res.status(200).json(doc)
-    })
-    .catch(() => {
-      res.status(500).send('Couldnt delete fuel by id')
-    })
-}
-
-function deleteVehicleMaintain(req, res) {
-  Vehicle.findById(req.params.id)
-    .then(doc => {
-      if (doc) {
-        doc.maintenance.id(req.params.childId).remove()
-        return doc.save()
-      } else {
-        res.status(400).send('Couldnt find the vehicle by id')
-      }
-    })
-    .then(doc => {
-      res.status(200).json(doc)
-    })
-    .catch(() => {
-      res.status(500).send('Couldnt delete maintenance by id')
-    })
 }
 
 export {
@@ -154,6 +79,7 @@ export {
   deleteVehicleMaintain,
   deleteVehicleFuel,
   createVehicle,
+  getVehicles,
   getAllVehicles,
   getVehicleById,
   deleteVehicleById,

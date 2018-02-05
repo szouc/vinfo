@@ -1,29 +1,8 @@
 import express from 'express'
 
-import {
-  DRIVER_VEHICLE_ROUTE,
-  DRIVER_TRANSPORT_ID_ROUTE,
-  DRIVER_FUEL_ID_ROUTE,
-  DRIVER_MAINTAIN_ID_ROUTE,
-  DRIVER_TRANSPORT_ROUTE,
-  DRIVER_FUEL_ROUTE,
-  DRIVER_MAINTAIN_ROUTE,
-  DRIVER_ID_ROUTE
-} from './routes'
+import * as Route from './routes'
 
-import {
-  addFuel,
-  deleteFuel,
-  getAllFuels,
-  getAllMaintains,
-  getAllDriverTransports,
-  acceptTransportById,
-  addMaintain,
-  deleteMaintain,
-  changePasswordByUsername,
-  getVehicleByUsername,
-  getDriverByUsername
-} from './controllers'
+import * as Controller from './controllers'
 
 import { isOwner } from './permissions'
 
@@ -31,46 +10,46 @@ const driverRouter = express.Router()
 
 // Dynamic route should put the last position
 driverRouter
-  .route(DRIVER_ID_ROUTE)
+  .route(Route.DRIVER_ID)
   .all(isOwner)
-  .get(getDriverByUsername)
-  .put(changePasswordByUsername)
+  .get(Controller.getDriverByUsername)
+  .put(Controller.changePasswordByUsername)
 
 driverRouter
-  .route(DRIVER_VEHICLE_ROUTE)
+  .route(Route.DRIVER_VEHICLE)
   .all(isOwner)
-  .get(getVehicleByUsername)
+  .get(Controller.getVehicleByUsername)
 
 driverRouter
-  .route(DRIVER_FUEL_ROUTE)
+  .route(Route.DRIVER_FUEL)
   .all(isOwner)
-  .get(getAllFuels)
-  .post(addFuel)
+  .get(Controller.getAllFuels)
+  .post(Controller.addFuel)
 
 driverRouter
-  .route(DRIVER_FUEL_ID_ROUTE)
+  .route(Route.DRIVER_FUEL_ID)
   .all(isOwner)
-  .delete(deleteFuel)
+  .delete(Controller.deleteFuel)
 
 driverRouter
-  .route(DRIVER_MAINTAIN_ROUTE)
+  .route(Route.DRIVER_MAINTAIN)
   .all(isOwner)
-  .get(getAllMaintains)
-  .post(addMaintain)
+  .get(Controller.getAllMaintains)
+  .post(Controller.addMaintain)
 
 driverRouter
-  .route(DRIVER_MAINTAIN_ID_ROUTE)
+  .route(Route.DRIVER_MAINTAIN_ID)
   .all(isOwner)
-  .delete(deleteMaintain)
+  .delete(Controller.deleteMaintain)
 
 driverRouter
-  .route(DRIVER_TRANSPORT_ROUTE)
+  .route(Route.DRIVER_TRANSPORT)
   .all(isOwner)
-  .get(getAllDriverTransports)
+  .get(Controller.getDriverTransports)
 
 driverRouter
-  .route(DRIVER_TRANSPORT_ID_ROUTE)
+  .route(Route.DRIVER_TRANSPORT_ID)
   .all(isOwner)
-  .put(acceptTransportById)
+  .put(Controller.acceptTransportById)
 
 export default driverRouter

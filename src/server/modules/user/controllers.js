@@ -41,35 +41,27 @@ const getLicenseUrl = uploadImageUrl(LICENSE_UPLOAD_PATH)
 const getIdFrontUrl = uploadImageUrl(ID_FRONT_UPLOAD_PATH)
 const getIdBackUrl = uploadImageUrl(ID_BACK_UPLOAD_PATH)
 
+const generateResponseCallback = res => (err, doc) => {
+  if (err) {
+    return res.status(400).json({ ok: false, error: err.message })
+  }
+  return res.status(200).json({ ok: true, result: doc })
+}
+
 const getUsers = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  Service.getUsers(page, size, (err, docs) => {
-    if (err) {
-      return res.status(400).json({ ok: false, error: err.message })
-    }
-    res.status(200).json({ ok: true, result: docs })
-  })
+  Service.getUsers(page, size, generateResponseCallback(res))
 }
 
 const createUser = (req, res) => {
   let user = req.body
   user.password = req.body.password
-  Service.createUser(user, (err, doc) => {
-    if (err) {
-      return res.status(400).json({ ok: false, error: err.message })
-    }
-    return res.status(200).json({ ok: true, result: doc })
-  })
+  Service.createUser(user, generateResponseCallback(res))
 }
 
 const getAllUsers = (req, res) => {
-  Service.getAllUsers((err, docs) => {
-    if (err) {
-      return res.status(400).json({ ok: false, error: err.message })
-    }
-    res.status(200).json({ ok: true, result: docs })
-  })
+  Service.getAllUsers(generateResponseCallback(res))
 }
 
 const getUsersByRole = (req, res) => {
@@ -77,54 +69,29 @@ const getUsersByRole = (req, res) => {
   if (!ROLES.includes(role)) {
     return res.status(400).json({ ok: false, error: '没有该角色！' })
   }
-  Service.getUsersByRole(role, (err, docs) => {
-    if (err) {
-      return res.status(400).json({ ok: false, error: err.message })
-    }
-    res.status(200).json({ ok: true, result: docs })
-  })
+  Service.getUsersByRole(role, generateResponseCallback(res))
 }
 
 const getUserByUsername = (req, res) => {
   let username = req.params.username
-  Service.getUserByUsername(username, (err, doc) => {
-    if (err) {
-      return res.status(400).json({ ok: false, error: err.message })
-    }
-    res.status(200).json({ ok: true, result: doc })
-  })
+  Service.getUserByUsername(username, generateResponseCallback(res))
 }
 
 const deleteUserByUsername = (req, res) => {
   let username = req.params.username
-  Service.deleteUserByUsername(username, (err, doc) => {
-    if (err) {
-      return res.status(400).json({ ok: false, error: err.message })
-    }
-    res.status(200).json({ ok: true, result: username })
-  })
+  Service.deleteUserByUsername(username, generateResponseCallback(res))
 }
 
 const updateUserByUsername = (req, res) => {
   let username = req.params.username
   let update = req.body
-  Service.updateUserByUsername(username, update, (err, doc) => {
-    if (err) {
-      return res.status(400).json({ ok: false, error: err.message })
-    }
-    res.status(200).json({ ok: true, result: doc })
-  })
+  Service.updateUserByUsername(username, update, generateResponseCallback(res))
 }
 
 const resetPassword = (req, res) => {
   let username = req.body.username
   let password = req.body.password
-  Service.resetPassword(username, password, (err, doc) => {
-    if (err) {
-      return res.status(400).json({ ok: false, error: err.message })
-    }
-    res.status(200).json({ ok: true, result: doc })
-  })
+  Service.resetPassword(username, password, generateResponseCallback(res))
 }
 
 export {

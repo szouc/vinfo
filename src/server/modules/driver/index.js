@@ -18,29 +18,29 @@ driverRouter
 driverRouter
   .route(Route.DRIVER_VEHICLE)
   .all(isOwner)
-  .get(Controller.getVehicleByUsername)
+  .get(Controller.getVehiclesByPrincipal)
 
 driverRouter
   .route(Route.DRIVER_FUEL)
   .all(isOwner)
-  .get(Controller.getAllFuels)
-  .post(Controller.addFuel)
+  .get(Controller.getVehicleFuels)
+  .post(Controller.addVehicleFuel)
 
 driverRouter
   .route(Route.DRIVER_FUEL_ID)
   .all(isOwner)
-  .delete(Controller.deleteFuel)
+  .delete(Controller.deleteVehicleFuel)
 
 driverRouter
   .route(Route.DRIVER_MAINTAIN)
   .all(isOwner)
-  .get(Controller.getAllMaintains)
-  .post(Controller.addMaintain)
+  .get(Controller.getVehicleMaintains)
+  .post(Controller.addVehicleMaintain)
 
 driverRouter
   .route(Route.DRIVER_MAINTAIN_ID)
   .all(isOwner)
-  .delete(Controller.deleteMaintain)
+  .delete(Controller.deleteVehicleMaintain)
 
 driverRouter
   .route(Route.DRIVER_TRANSPORT)

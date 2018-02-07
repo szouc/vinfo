@@ -49,6 +49,15 @@ const getVehicleByQuery = (query, callback) => {
     .exec(generateQueryCallback('没有找到该车辆。', callback))
 }
 
+/**
+ * Why not use 'getVehicleByQuery', see differences of the 'findOne' and 'findById':
+ *
+ * Except for how it treats undefined. If you use findOne(),
+ * you'll see that findOne(undefined) and findOne({ _id: undefined }) are
+ * equivalent to findOne({}) and return arbitrary documents.
+ * However, mongoose translates findById(undefined) into findOne({ _id: null }).
+ **/
+
 const getVehicleById = (id, callback) => {
   return Vehicle.findById(id)
     .lean()
@@ -95,28 +104,43 @@ const addVehicleMaintain = (id, maintainArray, callback) => {
     .exec(generateQueryCallback('没有找到该车辆。', callback))
 }
 
-const deleteVehicleFuel = (id, childId, callback) => {
-  Vehicle.findById(id)
+const deleteFuelByQuery = (query, fuelId, callback) => {
+  Vehicle.findOne(query)
     .then(doc => {
       if (!doc) {
         return callback(new Error('没有找到该车辆。'))
       }
-      doc.fuels.id(childId).remove()
+      doc.fuels.id(fuelId).remove()
       return doc.save(generateQueryCallback('无法删除加油记录。', callback))
     })
     .catch(err => callback(err))
 }
 
-const deleteVehicleMaintain = (id, childId, callback) => {
-  Vehicle.findById(id)
+const deleteVehicleFuel = (vehicleId, fuelId, callback) => {
+  // see differences of the 'findOne' and 'findById'
+  if (vehicleId) {
+    return deleteFuelByQuery({ _id: vehicleId }, fuelId, callback)
+  }
+  deleteFuelByQuery({ _id: null }, fuelId, callback)
+}
+
+const deleteMaintainByQuery = (query, maintainId, callback) => {
+  Vehicle.findOne(query)
     .then(doc => {
       if (!doc) {
         return callback(new Error('没有找到该车辆。'))
       }
-      doc.maintenance.id(childId).remove()
+      doc.maintenance.id(maintainId).remove()
       return doc.save(generateQueryCallback('无法删除维修记录。', callback))
     })
     .catch(err => callback(err))
+}
+
+const deleteVehicleMaintain = (vehicleId, maintainId, callback) => {
+  if (vehicleId) {
+    return deleteMaintainByQuery({ _id: vehicleId }, maintainId, callback)
+  }
+  deleteMaintainByQuery({ _id: null }, maintainId, callback)
 }
 
 export {
@@ -124,6 +148,8 @@ export {
   addVehicleMaintain,
   deleteVehicleMaintain,
   deleteVehicleFuel,
+  deleteMaintainByQuery,
+  deleteFuelByQuery,
   createVehicle,
   getVehicles,
   getAllVehicles,

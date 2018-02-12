@@ -11,7 +11,7 @@ const productRouter = express.Router()
 productRouter
   .route('/')
   .all(permitManager)
-  .get(Controller.getProducts)
+  .get(Controller.getProductsWithPagination)
   .post(Controller.createProduct)
 
 productRouter

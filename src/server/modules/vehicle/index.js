@@ -12,7 +12,7 @@ vehicleRouter
   .route('/')
   .all(permitManager)
   .post(Controller.createVehicle)
-  .get(Controller.getVehicles)
+  .get(Controller.getVehiclesWithPagination)
 
 vehicleRouter
   .route(Route.VEHICLE_ALL)

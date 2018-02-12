@@ -93,12 +93,13 @@ describe('Driver Base Operations', () => {
   })
 
   test('Should fetch a vehicle by username', async () => {
-    expect.assertions(2)
+    expect.assertions(3)
     const res = await agent.get(
-      Api.DRIVER_VEHICLE.replace(/:username/, data.drivers[2].username)
+      `${Api.DRIVER_VEHICLE.replace(/:username/, data.drivers[2].username)}?page=1&size=2`
     )
     expect(res.statusCode).toBe(200)
     expect(res.body.result[0]._id).toBe(vehicle0Id)
+    expect(res.body.pagination.pageNumber).toBe(1)
   })
 
   test('Should add some fuels', async () => {
@@ -216,7 +217,7 @@ describe('Driver Base Operations', () => {
     }
     const res = await agent
       .put(replaceAll(Api.DRIVER_TRANSPORT_ID, mapObj))
-      .send({ captain_status: 'accept' })
+      .send({ status: 'accept' })
     expect(res.statusCode).toBe(200)
   })
 })

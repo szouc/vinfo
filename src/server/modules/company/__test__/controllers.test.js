@@ -31,10 +31,11 @@ describe('Company Basic Operations', () => {
   })
 
   test('Should get companies by page_number = 1 and page_size = 2', async () => {
-    expect.assertions(2)
+    expect.assertions(3)
     const res = await agent.get(`${Api.COMPANY_ROOT}?page=1&size=2`)
     expect(res.statusCode).toBe(200)
     expect(res.body.result).toHaveLength(1)
+    expect(res.body.pagination.pageNumber).toBe(1)
   })
 
   test('Should get all companies', async () => {

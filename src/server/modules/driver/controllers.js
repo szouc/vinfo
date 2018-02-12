@@ -1,42 +1,39 @@
-import { User, Vehicle, Transport } from './models'
-import { ASSIGN, ACCEPT } from './constants'
 import * as TransportService from '../transport/services'
 import * as UserService from '../user/services'
 import * as VehicleService from '../vehicle/services'
+import { CAPTAIN_STATUS } from '../transport/constants'
 
 const PAGE_NUMBER = 1 // default number of page
 const PAGE_SIZE = 20 // default size of page
 
-const generateResponseCallback = res => (err, doc) => {
+const generateResponseCallback = res => (err, doc, pagination = {}) => {
   if (err) {
     return res.status(400).json({ ok: false, error: err.message })
   }
-  res.status(200).json({ ok: true, result: doc })
+  res.status(200).json({ ok: true, result: doc, pagination })
 }
 
 const getDriverTransports = (req, res) => {
   let username = req.params.username
+  const getDriverTransportsPage = TransportService.getUserTransWithPagination(
+    username
+  )
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  TransportService.getConditionTransports(
-    { 'principal.username': username },
-    page,
-    size,
-    generateResponseCallback(res)
-  )
+  getDriverTransportsPage(page, size, generateResponseCallback(res))
 }
 
-const acceptTransportById = (req, res) => {
+const updateTransportStatus = (req, res) => {
   let username = req.params.username
   let transportId = req.params.childId
-  let update = req.body
-  TransportService.updateTransportByQuery(
-    {
-      'principal.username': username,
-      _id: transportId,
-      captain_status: { $in: [ASSIGN, ACCEPT] }
-    },
-    update,
+  let updateStatus = req.body.status
+  if (!CAPTAIN_STATUS.includes(updateStatus)) {
+    return res.status(400).json({ ok: false, error: '没有这种状态。' })
+  }
+  TransportService.updateTransportStatus(
+    username,
+    transportId,
+    updateStatus,
     generateResponseCallback(res)
   )
 }
@@ -48,48 +45,32 @@ const getDriverByUsername = (req, res) => {
 
 const getVehiclesByPrincipal = (req, res) => {
   let username = req.params.username
-  VehicleService.getVehiclesByQuery(
-    {
-      'principal.username': username
-    },
-    generateResponseCallback(res)
+  const getVehiclesByPrincipalPage = VehicleService.getUserVehiclesWithPagination(
+    username
   )
+  let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
+  let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
+  getVehiclesByPrincipalPage(page, size, generateResponseCallback(res))
 }
 
 const getVehiclesBySecondary = (req, res) => {
   let username = req.params.username
+  let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
+  let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   VehicleService.getVehiclesByQuery(
     {
       'secondary.username': username
     },
+    page,
+    size,
     generateResponseCallback(res)
   )
 }
 
-function changePasswordByUsername(req, res) {
-  User.findByUsername(req.params.username)
-    .then(user => {
-      user.setPassword(req.body.password, (err, user) => {
-        if (err) {
-          res.status(500).send('Couldnt reset the password at this time')
-        }
-        if (user) {
-          user
-            .save()
-            .then(user => {
-              res.status(200).json(user)
-            })
-            .catch(() => {
-              res
-                .status(500)
-                .send('Could not save user at change password operation')
-            })
-        }
-      })
-    })
-    .catch(() => {
-      res.status(500).send('Couldnt find the user')
-    })
+const changePasswordByUsername = (req, res) => {
+  let username = req.params.username
+  let password = req.body.password
+  UserService.resetPassword(username, password, generateResponseCallback(res))
 }
 
 const addVehicleFuel = (req, res) => {
@@ -192,7 +173,7 @@ export {
   deleteVehicleMaintain,
   deleteVehicleFuel,
   getDriverTransports,
-  acceptTransportById,
+  updateTransportStatus,
   changePasswordByUsername,
   getVehiclesByPrincipal,
   getVehiclesBySecondary,

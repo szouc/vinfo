@@ -1,33 +1,20 @@
 // @ flow
 
 import { User } from './models'
+import {
+  generateQueryCallback,
+  returnPromiseOrExec,
+  addPagination
+} from '../../utils/dbService'
 
-/*
-* Model or Query will Executes immediately if callback function is passed.
-* Otherwise, the query statement will return a Promise.
-*/
-const generateQueryCallback = (queryError, callback) => {
-  if (typeof callback !== 'function') {
-    return null
-  }
-  return (err, doc) => {
-    if (err) {
-      return callback(err)
-    }
-    if (!doc) {
-      return callback(new Error(queryError))
-    }
-    callback(null, doc)
-  }
+const getUsersByQuery = (query, callback) => {
+  const dbQuery = User.find(query)
+  return returnPromiseOrExec(dbQuery, '没有用户，请添加。', callback)
 }
 
-const getUsers = (pageNumber, pageSize, callback) => {
-  return User.find({ active: true })
-    .skip((pageNumber - 1) * pageSize)
-    .limit(pageSize)
-    .sort({ username: 1 })
-    .lean()
-    .exec(generateQueryCallback('没有用户,请添加。', callback))
+const getUserByQuery = (query, callback) => {
+  const dbQuery = User.findOne(query)
+  return returnPromiseOrExec(dbQuery, '没有用户，请添加。', callback)
 }
 
 const createUser = (user, callback) => {
@@ -40,21 +27,25 @@ const createUser = (user, callback) => {
 }
 
 const getAllUsers = callback => {
-  return User.find({ active: true })
-    .lean()
-    .exec(generateQueryCallback('没有用户,请添加。', callback))
+  return getUsersByQuery({ active: true }, callback)
 }
+
+const getUsersWithPagination = query =>
+  addPagination(
+    getAllUsers,
+    query,
+    { username: 1 } // sortField
+  )
 
 const getUsersByRole = (role, callback) => {
-  return User.find({ role: role, active: true })
-    .lean()
-    .exec(generateQueryCallback('没有用户,请添加。', callback))
+  return getUsersByQuery({ role: role, active: true }, callback)
 }
 
+const getUsersByRoleWithPagination = role =>
+  addPagination(getUsersByRole, role, { username: 1 })
+
 const getUserByUsername = (username, callback) => {
-  return User.findOne({ username: username })
-    .lean()
-    .exec(generateQueryCallback('没有这个用户。', callback))
+  return getUserByQuery({ username: username }, callback)
 }
 
 const deleteUserByUsername = (username, callback) => {
@@ -65,10 +56,10 @@ const deleteUserByUsername = (username, callback) => {
     if (err) {
       return callback(err)
     }
-    /* In mongoose v4 if user is not exist,
-    * mongoDB returns the {result: {'n': 0, 'ok': 1}, ...rest};
-    * In mongoose v5 returns the {'n': 0, 'ok': 1}
-    */
+    /** In mongoose v4 if user is not exist,
+     * mongoDB returns the {result: {'n': 0, 'ok': 1}, ...rest};
+     * In mongoose v5 returns the {'n': 0, 'ok': 1}
+     **/
     if (!doc.n) {
       return callback(new Error('没有这个用户。'))
     }
@@ -76,12 +67,13 @@ const deleteUserByUsername = (username, callback) => {
   })
 }
 
+const updateUserByQuery = (query, update, callback) => {
+  const dbQuery = User.findOneAndUpdate(query, update, { new: true })
+  return returnPromiseOrExec(dbQuery, '没有这个用户。', callback)
+}
+
 const updateUserByUsername = (username, update, callback) => {
-  return User.findOneAndUpdate({ username: username }, update, {
-    new: true
-  })
-    .lean()
-    .exec(generateQueryCallback('该用户暂时无法修改或不存在。', callback))
+  return updateUserByQuery({ username: username }, update, callback)
 }
 
 const resetPassword = (username, password, callback) => {
@@ -113,12 +105,13 @@ const resetPassword = (username, password, callback) => {
 }
 
 export {
-  getUsers,
+  createUser,
+  getUsersWithPagination,
   getAllUsers,
   getUsersByRole,
+  getUsersByRoleWithPagination,
+  getUserByUsername,
   updateUserByUsername,
   deleteUserByUsername,
-  createUser,
-  getUserByUsername,
   resetPassword
 }

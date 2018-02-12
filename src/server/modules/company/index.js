@@ -11,7 +11,7 @@ const companyRouter = express.Router()
 companyRouter
   .route('/')
   .all(permitManager)
-  .get(Controller.getCompanies)
+  .get(Controller.getCompaniesWithPagination)
   .post(Controller.createCompany)
 
 companyRouter
@@ -21,7 +21,7 @@ companyRouter
 
 companyRouter
   .route(Route.COMPANY_QUERY)
-  .get(permitManager, Controller.getCompanyByQuery)
+  .get(permitManager, Controller.getCompaniesByQuery)
 
 // Dynamic route should put the last position
 companyRouter

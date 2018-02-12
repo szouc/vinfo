@@ -5,11 +5,11 @@ import { ASSIGN } from './constants.js'
 const PAGE_NUMBER = 1 // default number of page
 const PAGE_SIZE = 20 // default size of page
 
-const generateResponseCallback = res => (err, doc) => {
+const generateResponseCallback = res => (err, doc, pagination = {}) => {
   if (err) {
     return res.status(400).json({ ok: false, error: err.message })
   }
-  res.status(200).json({ ok: true, result: doc })
+  res.status(200).json({ ok: true, result: doc, pagination })
 }
 
 const createTransport = async (req, res) => {
@@ -33,15 +33,11 @@ const createTransport = async (req, res) => {
   }
 }
 
-const getTransports = (req, res) => {
+const getTransportsWithPagination = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  TransportService.getConditionTransports(
-    { active: true },
-    page,
-    size,
-    generateResponseCallback(res)
-  )
+  const getTransportsPage = TransportService.getTransportsWithPagination()
+  getTransportsPage(page, size, generateResponseCallback(res))
 }
 
 const getAllTransports = (req, res) => {
@@ -107,7 +103,7 @@ const updateTransportStatusById = async (req, res) => {
 
 export {
   createTransport,
-  getTransports,
+  getTransportsWithPagination,
   getAllTransports,
   updateTransportById,
   deleteTransportById,

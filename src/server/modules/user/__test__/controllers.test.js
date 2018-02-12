@@ -3,6 +3,7 @@ import { User } from '../models'
 import app from '../../../app'
 import request from 'supertest'
 import * as Api from '../api'
+import { DRIVER } from '../constants'
 
 describe('User Base Operations', () => {
   const agent = request.agent(app)
@@ -33,10 +34,21 @@ describe('User Base Operations', () => {
   })
 
   test('Should fetch users by page_number = 1 and page_size = 2', async () => {
-    expect.assertions(2)
+    expect.assertions(3)
     const res = await agent.get(`${Api.USER_ROOT}?page=1&size=2`)
     expect(res.statusCode).toBe(200)
     expect(res.body.result).toHaveLength(2)
+    expect(res.body.pagination.pageNumber).toBe(1)
+  })
+
+  test('Should fetch users by role and page_number = 1 and page_size = 20', async () => {
+    expect.assertions(3)
+    const res = await agent.get(
+      `${Api.USER_ROLE.replace(/:role/, DRIVER)}?page=1&size=20`
+    )
+    expect(res.statusCode).toBe(200)
+    expect(res.body.result).toHaveLength(3)
+    expect(res.body.pagination.pageNumber).toBe(1)
   })
 
   test('Should get a user by username', async () => {
@@ -52,7 +64,7 @@ describe('User Base Operations', () => {
     expect.assertions(2)
     const res = await agent.get(Api.USER_ID.replace(/:username/, 'anonymous'))
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('没有这个用户。')
+    expect(res.body.error).toBe('没有用户，请添加。')
   })
 
   test('Should delete a user by username', async () => {

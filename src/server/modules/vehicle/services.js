@@ -1,52 +1,42 @@
 import { Vehicle } from './models'
-
-const generateQueryCallback = (queryError, callback) => {
-  if (typeof callback !== 'function') {
-    return null
-  }
-  return (err, doc) => {
-    if (err) {
-      return callback(err)
-    }
-    if (!doc) {
-      return callback(new Error(queryError))
-    }
-    callback(null, doc)
-  }
-}
+import {
+  generateQueryCallback,
+  returnPromiseOrExec,
+  addPagination
+} from '../../utils/dbService'
 
 const createVehicle = (vehicle, callback) => {
-  return Vehicle.create(
-    vehicle,
-    generateQueryCallback('无法创建车辆。', callback)
-  )
-}
-
-const getVehicles = (pageNumber, pageSize, callback) => {
-  return Vehicle.find({ active: true })
-    .skip((pageNumber - 1) * pageSize)
-    .limit(pageSize)
-    .sort({ name: 1 })
-    .lean()
-    .exec(generateQueryCallback('还没有车辆，请添加。', callback))
-}
-
-const getAllVehicles = callback => {
-  return Vehicle.find({ active: true })
-    .lean()
-    .exec(generateQueryCallback('还没有车辆，请添加。', callback))
+  if (typeof callback === 'function') {
+    return Vehicle.create(
+      vehicle,
+      generateQueryCallback('无法创建车辆。', callback)
+    )
+  }
+  return Vehicle.create(vehicle) // return a 'Promise'
 }
 
 const getVehiclesByQuery = (query, callback) => {
-  return Vehicle.find(query)
-    .lean()
-    .exec(generateQueryCallback('没有找到相关车辆。', callback))
+  const dbQuery = Vehicle.find(query)
+  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
 }
 
+const getAllVehicles = callback => {
+  return getVehiclesByQuery({ active: true }, callback)
+}
+
+const getVehiclesWithPagination = () =>
+  addPagination(getAllVehicles, null, { plate: 1 })
+
+const getVehiclesByUsername = (username, callback) => {
+  return getVehiclesByQuery({ 'principal.username': username }, callback)
+}
+
+const getUserVehiclesWithPagination = username =>
+  addPagination(getVehiclesByUsername, username, { plate: 1 })
+
 const getVehicleByQuery = (query, callback) => {
-  return Vehicle.findOne(query)
-    .lean()
-    .exec(generateQueryCallback('没有找到该车辆。', callback))
+  const dbQuery = Vehicle.findOne(query)
+  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
 }
 
 /**
@@ -59,49 +49,44 @@ const getVehicleByQuery = (query, callback) => {
  **/
 
 const getVehicleById = (id, callback) => {
-  return Vehicle.findById(id)
-    .lean()
-    .exec(generateQueryCallback('没有找到该车辆。', callback))
+  const dbQuery = Vehicle.findById(id)
+  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
 }
 
 const deleteVehicleById = (id, callback) => {
-  return Vehicle.findByIdAndUpdate(
+  const dbQuery = Vehicle.findByIdAndUpdate(
     id,
     { $set: { active: false } },
     { new: true }
   )
-    .lean()
-    .exec(generateQueryCallback('没有找到该车辆。', callback))
+  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
 }
 
 const updateVehicleById = (id, update, callback) => {
-  return Vehicle.findByIdAndUpdate(id, { $set: update }, { new: true })
-    .lean()
-    .exec(generateQueryCallback('没有找到该车辆。', callback))
+  const dbQuery = Vehicle.findByIdAndUpdate(id, { $set: update }, { new: true })
+  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
 }
 
 const addVehicleFuel = (id, fuelArray, callback) => {
-  return Vehicle.findByIdAndUpdate(
+  const dbQuery = Vehicle.findByIdAndUpdate(
     id,
     {
       $addToSet: { fuels: { $each: fuelArray } }
     },
     { new: true }
   )
-    .lean()
-    .exec(generateQueryCallback('没有找到该车辆。', callback))
+  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
 }
 
 const addVehicleMaintain = (id, maintainArray, callback) => {
-  return Vehicle.findByIdAndUpdate(
+  const dbQuery = Vehicle.findByIdAndUpdate(
     id,
     {
       $addToSet: { maintenance: { $each: maintainArray } }
     },
     { new: true }
   )
-    .lean()
-    .exec(generateQueryCallback('没有找到该车辆。', callback))
+  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
 }
 
 const deleteFuelByQuery = (query, fuelId, callback) => {
@@ -111,7 +96,7 @@ const deleteFuelByQuery = (query, fuelId, callback) => {
         return callback(new Error('没有找到该车辆。'))
       }
       doc.fuels.id(fuelId).remove()
-      return doc.save(generateQueryCallback('无法删除加油记录。', callback))
+      doc.save(generateQueryCallback('无法删除加油记录。', callback))
     })
     .catch(err => callback(err))
 }
@@ -151,10 +136,12 @@ export {
   deleteMaintainByQuery,
   deleteFuelByQuery,
   createVehicle,
-  getVehicles,
-  getAllVehicles,
+  getVehiclesWithPagination,
+  getVehiclesByUsername,
+  getUserVehiclesWithPagination,
   getVehiclesByQuery,
   getVehicleByQuery,
+  getAllVehicles,
   getVehicleById,
   deleteVehicleById,
   updateVehicleById

@@ -10,7 +10,7 @@ const userRouter = express.Router()
 userRouter
   .route('/')
   .all(permitManager)
-  .get(Controller.getUsers)
+  .get(Controller.getUsersWithPagination)
   .post(Controller.createUser)
 
 userRouter
@@ -28,7 +28,7 @@ userRouter
 userRouter
   .route(Route.USER_ROLE)
   .all(permitManager)
-  .get(Controller.getUsersByRole)
+  .get(Controller.getUsersByRoleWithPagination)
 
 userRouter
   .route(Route.USER_LICENSE_UPLOAD)

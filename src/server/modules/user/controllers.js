@@ -41,17 +41,18 @@ const getLicenseUrl = uploadImageUrl(LICENSE_UPLOAD_PATH)
 const getIdFrontUrl = uploadImageUrl(ID_FRONT_UPLOAD_PATH)
 const getIdBackUrl = uploadImageUrl(ID_BACK_UPLOAD_PATH)
 
-const generateResponseCallback = res => (err, doc) => {
+const generateResponseCallback = res => (err, doc, pagination = {}) => {
   if (err) {
     return res.status(400).json({ ok: false, error: err.message })
   }
-  return res.status(200).json({ ok: true, result: doc })
+  return res.status(200).json({ ok: true, result: doc, pagination })
 }
 
-const getUsers = (req, res) => {
+const getUsersWithPagination = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  Service.getUsers(page, size, generateResponseCallback(res))
+  const getUsersPage = Service.getUsersWithPagination()
+  getUsersPage(page, size, generateResponseCallback(res))
 }
 
 const createUser = (req, res) => {
@@ -64,12 +65,15 @@ const getAllUsers = (req, res) => {
   Service.getAllUsers(generateResponseCallback(res))
 }
 
-const getUsersByRole = (req, res) => {
+const getUsersByRoleWithPagination = (req, res) => {
   let role = req.params.role
+  let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
+  let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   if (!ROLES.includes(role)) {
     return res.status(400).json({ ok: false, error: '没有该角色！' })
   }
-  Service.getUsersByRole(role, generateResponseCallback(res))
+  const getUsersByRolePage = Service.getUsersByRoleWithPagination(role)
+  getUsersByRolePage(page, size, generateResponseCallback(res))
 }
 
 const getUserByUsername = (req, res) => {
@@ -101,9 +105,9 @@ export {
   getLicenseUrl,
   getIdFrontUrl,
   getIdBackUrl,
-  getUsers,
+  getUsersWithPagination,
   getAllUsers,
-  getUsersByRole,
+  getUsersByRoleWithPagination,
   updateUserByUsername,
   deleteUserByUsername,
   createUser,

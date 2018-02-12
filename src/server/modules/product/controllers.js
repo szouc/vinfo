@@ -3,11 +3,11 @@ import * as Service from './services'
 const PAGE_NUMBER = 1 // default number of page
 const PAGE_SIZE = 20 // default size of page
 
-const generateResponseCallback = res => (err, doc) => {
+const generateResponseCallback = res => (err, doc, pagination = {}) => {
   if (err) {
     return res.status(400).json({ ok: false, error: err.message })
   }
-  res.status(200).json({ ok: true, result: doc })
+  res.status(200).json({ ok: true, result: doc, pagination })
 }
 
 const createProduct = (req, res) => {
@@ -15,10 +15,11 @@ const createProduct = (req, res) => {
   Service.createProduct(product, generateResponseCallback(res))
 }
 
-const getProducts = (req, res) => {
+const getProductsWithPagination = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  Service.getProducts(page, size, generateResponseCallback(res))
+  const getProductsPage = Service.getProductsWithPagination()
+  getProductsPage(page, size, generateResponseCallback(res))
 }
 
 const getAllProducts = (req, res) => {
@@ -63,7 +64,7 @@ const deleteProductById = (req, res) => {
 
 export {
   createProduct,
-  getProducts,
+  getProductsWithPagination,
   getAllProducts,
   getProductById,
   addProductPriceHistory,

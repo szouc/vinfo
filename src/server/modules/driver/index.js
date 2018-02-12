@@ -50,6 +50,6 @@ driverRouter
 driverRouter
   .route(Route.DRIVER_TRANSPORT_ID)
   .all(isOwner)
-  .put(Controller.acceptTransportById)
+  .put(Controller.updateTransportStatus)
 
 export default driverRouter

@@ -3,7 +3,7 @@
 import localforage from 'localforage'
 import fetch from '@clientUtils/fetch'
 import { fromJS } from 'immutable'
-import { LOGIN_API, LOGOUT_API, USER_ID_API } from './apiRoutes'
+import { LOGIN, LOGOUT, USER_ID } from './apiRoutes'
 
 // response status
 const TRUE = true
@@ -22,8 +22,8 @@ const getLocalUser = () => localforage.getItem('user')
  */
 async function setLocalLogin(username: string) {
   await Promise.all([
-    localforage.setItem('loggedIn', true),
-    localforage.setItem('user', username)
+    localforage.setItem('loggedIn', JSON.stringify(true)),
+    localforage.setItem('user', JSON.stringify(username))
   ])
 }
 
@@ -55,7 +55,7 @@ async function login(payload: {
   }
 
   // Fetch options
-  let url = LOGIN_API
+  let url = LOGIN
   let options = {
     method: 'post',
     body: JSON.stringify(payload),
@@ -80,7 +80,7 @@ async function login(payload: {
  */
 async function logout() {
   // Fetch url & options
-  let url: string = LOGOUT_API
+  let url: string = LOGOUT
   let options: { method: string } = { method: 'get' }
 
   // Logs a user out from the server API
@@ -99,14 +99,14 @@ async function logout() {
  */
 async function fetchProfile(username: string) {
   // Fetch url & options
-  let url: string = USER_ID_API.replace(/:username/, username)
+  let url: string = USER_ID.replace(/:username/, username)
   let options: { method: string } = { method: 'get' }
 
   // Fetch a user info from the server API
   let response = await fetch(url, options)
   if (response.status === STATUS_OK) {
     let user = await response.json()
-    return fromJS(user)
+    return fromJS(user.result)
   }
   await setLocalLogout()
   throw new Error('Something Wrong at FetchProfile Process')

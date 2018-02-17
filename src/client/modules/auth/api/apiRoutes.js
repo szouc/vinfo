@@ -4,12 +4,12 @@ import {
 
 import addHostAddr from '@clientUtils/addHostAddr'
 
-const LOGIN_API = addHostAddr(auth.LOGIN_API)
-const LOGOUT_API = addHostAddr(auth.LOGOUT_API)
-const USER_ID_API = addHostAddr(user.USER_ID_API)
+const LOGIN = addHostAddr(auth.LOGIN)
+const LOGOUT = addHostAddr(auth.LOGOUT)
+const USER_ID = addHostAddr(user.USER_ID)
 
 export {
-  LOGIN_API,
-  LOGOUT_API,
-  USER_ID_API
+  LOGIN,
+  LOGOUT,
+  USER_ID
 }

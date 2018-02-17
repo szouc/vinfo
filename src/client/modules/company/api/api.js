@@ -5,9 +5,9 @@ import { fromJS } from 'immutable'
 import { companyNormalize, companyArrayNormalize } from '../schema'
 
 import {
-  COMPANY_ID_API,
-  // COMPANY_QUESRY_API,
-  COMPANY_ROOT_API
+  COMPANY_ID,
+  // COMPANY_QUERY,
+  COMPANY_ROOT
 } from './apiRoutes'
 
 import fetch from '@clientUtils/fetch'
@@ -20,7 +20,7 @@ async function createCompany(payload: Immut): ?Immut {
     body: JSON.stringify(payload),
     headers: { 'Content-Type': 'application/json' }
   }
-  const response = await fetch(COMPANY_ROOT_API, options)
+  const response = await fetch(COMPANY_ROOT, options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
     const company = companyNormalize(data)
@@ -33,10 +33,10 @@ async function getAllCompanies(): ?Immut {
   const options = {
     method: 'get'
   }
-  const response = await fetch(COMPANY_ROOT_API, options)
+  const response = await fetch(COMPANY_ROOT, options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
-    const companies = companyArrayNormalize(data)
+    const companies = companyArrayNormalize(data.result)
     return fromJS(companies)
   }
   throw new Error('Something wrong at getAllCompanies Process')
@@ -46,7 +46,7 @@ async function getCompanyById(id: string): ?Immut {
   const options = {
     method: 'get'
   }
-  const response = await fetch(COMPANY_ID_API.replace(/:id/, id), options)
+  const response = await fetch(COMPANY_ID.replace(/:id/, id), options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
     const company = companyNormalize(data)
@@ -60,7 +60,7 @@ async function updateCompanyById(id: string, payload: Immut): ?Immut {
     method: 'put',
     body: JSON.stringify(payload)
   }
-  const response = await fetch(COMPANY_ID_API.replace(/:id/, id), options)
+  const response = await fetch(COMPANY_ID.replace(/:id/, id), options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
     const company = companyNormalize(data)
@@ -73,10 +73,10 @@ async function deleteCompanyById(id: string) {
   const options = {
     method: 'delete'
   }
-  const response = await fetch(COMPANY_ID_API.replace(/:id/, id), options)
+  const response = await fetch(COMPANY_ID.replace(/:id/, id), options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
-    const company = companyNormalize(data)
+    const company = companyNormalize(data.result)
     return fromJS(company)
   }
   throw new Error('Something wrong at deleteCompanyById Process')

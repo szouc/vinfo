@@ -6,12 +6,11 @@ import { companyArraySelector } from '../selectors'
 import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
 
 const mapStateToProps = state => {
-  const errorMessage = state.getIn(['company', 'companyStatus', 'error'])
   const companies = companyArraySelector(
     state.getIn(['company', 'companyEntity']),
     state.getIn(['company', 'companyStatus', 'all'])
   )
-  return { errorMessage, companies }
+  return { companies }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -25,4 +24,6 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(immutPropsToJS(CompanyListTable))
+export default connect(mapStateToProps, mapDispatchToProps)(
+  immutPropsToJS(CompanyListTable)
+)

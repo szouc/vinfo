@@ -23,12 +23,12 @@
   "CompanyComponent": {
     "js": "http://localhost:7000/js/CompanyComponent.chunk.js"
   },
+  "vendor": {
+    "js": "http://localhost:7000/js/vendor.js"
+  },
   "bundle": {
     "js": "http://localhost:7000/js/bundle.js",
     "css": "http://localhost:7000/css/bundle.css"
-  },
-  "vendor": {
-    "js": "http://localhost:7000/js/vendor.js"
   },
   "manifest": {
     "js": "http://localhost:7000/js/manifest.js"

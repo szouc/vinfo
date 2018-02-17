@@ -90,7 +90,7 @@ app.use(API_ROOT, isAuthenticated, api)
 // app.use(API_ROOT_ROUTE, api)
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   var err = new Error('Not Found')
   // flow-disable-next-line
   err.status = 404
@@ -98,13 +98,14 @@ app.use(function (req, res, next) {
 })
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
   // show the error on the console
   if (!isProd) {
     debug(res.locals.error)
+    debug(req.user)
   }
   // render the error page
   res.status(err.status || 500)

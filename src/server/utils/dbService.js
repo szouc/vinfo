@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs'
+
 const generateQueryCallback = (errHint, callback) => {
   return (err, doc) => {
     if (err) {
@@ -58,4 +60,42 @@ const addPagination = (fn, query, sortField) => async (
   }
 }
 
-export { generateQueryCallback, returnPromiseOrExec, addPagination }
+const addPagination1 = (countObservable, dataObservable) => (
+  pageNumber,
+  pageSize
+) => {
+  return Observable.forkJoin(
+    countObservable(),
+    dataObservable(pageNumber, pageSize)
+  )
+    .map(data => {
+      let nextPage = 0
+      let previousPage = 0
+      let total = data[0]
+      let doc = data[1]
+      if (data[0] > pageNumber * pageSize) {
+        nextPage = pageNumber + 1
+      }
+      if (pageNumber > 1) {
+        previousPage = pageNumber - 1
+      }
+      return {
+        doc: doc,
+        pagination: {
+          total,
+          pageNumber,
+          pageSize,
+          nextPage,
+          previousPage
+        }
+      }
+    })
+    .catch(error => Observable.of(error))
+}
+
+export {
+  generateQueryCallback,
+  returnPromiseOrExec,
+  addPagination,
+  addPagination1
+}

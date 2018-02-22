@@ -34,8 +34,8 @@ describe('Company Basic Operations', () => {
     expect.assertions(3)
     const res = await agent.get(`${Api.COMPANY_ROOT}?page=1&size=2`)
     expect(res.statusCode).toBe(200)
-    expect(res.body.result).toHaveLength(1)
-    expect(res.body.pagination.pageNumber).toBe(1)
+    expect(res.body.result.doc).toHaveLength(1)
+    expect(res.body.result.pagination.pageNumber).toBe(1)
   })
 
   test('Should get all companies', async () => {

@@ -64,7 +64,7 @@ describe('User Base Operations', () => {
     expect.assertions(2)
     const res = await agent.get(Api.USER_ID.replace(/:username/, 'anonymous'))
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toBe('没有用户，请添加。')
+    expect(res.body.error).toBe('没有找到用户。')
   })
 
   test('Should delete a user by username', async () => {
@@ -73,7 +73,7 @@ describe('User Base Operations', () => {
       Api.USER_ID.replace(/:username/, data.drivers[2].username)
     )
     expect(res.statusCode).toBe(200)
-    expect(res.body.result).toBe(data.drivers[2].username)
+    expect(res.body.result.n).toEqual(1)
   })
 
   test('Should not delete a user by a wrong username', async () => {

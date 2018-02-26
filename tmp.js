@@ -1,6 +1,4 @@
 import Immutable, { fromJS } from 'immutable'
-import Mock from 'mockjs'
-import { data } from './src/server/utils/mockData'
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
 
 let state,
@@ -79,4 +77,5 @@ const req = values.withMutations(value =>
 )
 console.log(req)
 
-console.log(data.transports[1])
+const page = {}
+console.log(Boolean(page))

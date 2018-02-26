@@ -3,63 +3,91 @@ import * as Service from './services'
 const PAGE_NUMBER = 1 // default number of page
 const PAGE_SIZE = 20 // default size of page
 
-const generateResponseCallback = res => (err, doc, pagination = {}) => {
-  if (err) {
+const createObserver = (res, errHint) => ({
+  next: data => {
+    if (!data) {
+      return res.status(400).json({ ok: false, error: errHint })
+    }
+    if (data.doc) {
+      if (data.doc.length === 0) {
+        return res.status(400).json({ ok: false, error: errHint })
+      }
+      return res
+        .status(200)
+        .json({ ok: true, result: data.doc, pagination: data.pagination })
+    }
+    if (data.ok) {
+      if (data.n === 0) {
+        return res.status(400).json({ ok: false, error: errHint })
+      }
+    }
+    return res.status(200).json({ ok: true, result: data })
+  },
+  error: err => {
     return res.status(400).json({ ok: false, error: err.message })
   }
-  res.status(200).json({ ok: true, result: doc, pagination })
-}
+})
 
 const createProduct = (req, res) => {
   let product = req.body
-  Service.createProduct(product, generateResponseCallback(res))
+  const createProduct$ = Service.createProduct(product)
+  createProduct$.subscribe(createObserver(res, '无法创建产品。'))
 }
 
 const getProductsWithPagination = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  const getProductsPage = Service.getProductsWithPagination()
-  getProductsPage(page, size, generateResponseCallback(res))
+  const getProductsWithPagination$ = Service.getProductsWithPagination(
+    page,
+    size
+  )
+  getProductsWithPagination$.subscribe(
+    createObserver(res, '没有找到相关产品。')
+  )
 }
 
 const getAllProducts = (req, res) => {
-  Service.getAllProducts(generateResponseCallback(res))
+  const getAllProducts$ = Service.getAllProducts()
+  getAllProducts$.subscribe(createObserver(res, '没有找到产品，请添加。'))
 }
 
 const getProductById = (req, res) => {
   let productId = req.params.id
-  Service.getProductById(productId, generateResponseCallback(res))
+  const getProductById$ = Service.getProductById(productId)
+  getProductById$.subscribe(createObserver(res, '没有找到该产品。'))
 }
 
 const addProductPriceHistory = (req, res) => {
   let productId = req.params.id
   let priceHistory = req.body
-  Service.addProductPriceHistory(
+  const addProductPriceHistory$ = Service.addProductPriceHistory(
     productId,
-    priceHistory,
-    generateResponseCallback(res)
+    priceHistory
   )
+  addProductPriceHistory$.subscribe(createObserver(res, '无法添加历史价格。'))
 }
 
 const deleteProductPriceHistory = (req, res) => {
   let productId = req.params.id
   let priceHistoryId = req.params.childId
-  Service.deleteProductPriceHistory(
+  const deleteProductPriceHistory$ = Service.deleteProductPriceHistory(
     productId,
-    priceHistoryId,
-    generateResponseCallback(res)
+    priceHistoryId
   )
+  deleteProductPriceHistory$.subscribe(createObserver(res, '无法删除该产品。'))
 }
 
 const updateProductById = (req, res) => {
   let productId = req.params.id
   let update = req.body
-  Service.updateProductById(productId, update, generateResponseCallback(res))
+  const updateProductById$ = Service.updateProductById(productId, update)
+  updateProductById$.subscribe(createObserver(res, '没有找到相关产品。'))
 }
 
 const deleteProductById = (req, res) => {
   let productId = req.params.id
-  Service.deleteProductById(productId, generateResponseCallback(res))
+  const deleteProductById$ = Service.deleteProductById(productId)
+  deleteProductById$.subscribe(createObserver(res, '没有找到相关产品。'))
 }
 
 export {

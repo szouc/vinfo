@@ -1,86 +1,83 @@
 import { Transport } from './models'
+import { Observable } from 'rxjs'
+import * as Page from '../../utils/pagination'
 import { ASSIGN, ACCEPT } from './constants'
-import {
-  generateQueryCallback,
-  returnPromiseOrExec,
-  addPagination
-} from '../../utils/dbService'
 
-const createTransport = (transport, callback) => {
-  if (typeof callback === 'function') {
-    return Transport.create(
-      transport,
-      generateQueryCallback('无法创建运输记录。', callback)
-    )
-  }
-  return Transport.create(transport)
-}
+const createTransport = transport =>
+  Observable.fromPromise(Transport.create(transport))
 
-const getTransportByQuery = (query, callback) => {
-  const dbQuery = Transport.findOne(query)
-  return returnPromiseOrExec(dbQuery, '没有找到该运输记录。', callback)
-}
+const getTransportByQuery = query =>
+  Observable.fromPromise(Transport.findOne(query))
 
-const getTransportsByQuery = (query, callback) => {
-  const dbQuery = Transport.find(query)
-  return returnPromiseOrExec(dbQuery, '没有找到该运输记录。', callback)
-}
+const getTransportsByQuery = query =>
+  Observable.fromPromise(Transport.find(query))
 
-const getAllTransports = callback => {
-  return getTransportsByQuery({ active: true }, callback)
-}
+const getAllTransports = () => getTransportsByQuery({ active: true })
 
-const getTransportsWithPagination = () =>
-  addPagination(getAllTransports, null, { created: -1 })
+const getTransportsPagination = Page.producePagination(Transport)
 
-const getTransportsByUsername = (username, callback) =>
-  getTransportsByQuery({ 'principal.username': username }, callback)
+const getTransportsData = Page.getModelSortedData(Transport, '-created')
 
-const getUserTransWithPagination = username =>
-  addPagination(getTransportsByUsername, username, { created: -1 })
-
-const getTransportById = (id, callback) => {
-  const dbQuery = Transport.findById(id)
-  return returnPromiseOrExec(dbQuery, '没有找到该运输记录。', callback)
-}
-
-const updateTransportByQuery = (query, update, callback) => {
-  const dbQuery = Transport.findOneAndUpdate(query, update, { new: true })
-  return returnPromiseOrExec(dbQuery, '没有找到该运输记录。', callback)
-}
-
-const updateTransportById = (id, update, callback) => {
-  return updateTransportByQuery({ _id: id }, update, callback)
-}
-
-const updateTransportStatus = (username, transportId, updateStatus, callback) => {
-  return updateTransportByQuery(
-    {
-      'principal.username': username,
-      _id: transportId,
-      captain_status: { $in: [ASSIGN, ACCEPT] }
-    },
-    { captain_status: updateStatus },
-    callback
+const getTransportsWithPg = (pageNumber, pageSize, ...rest) => {
+  let query = { active: true }
+  return Page.addPagination(
+    getTransportsPagination(pageNumber, pageSize, query),
+    getTransportsData(pageNumber, pageSize, query)
   )
 }
 
-const deleteTransportById = (id, callback) => {
-  const dbQuery = Transport.findByIdAndRemove(id)
-  return returnPromiseOrExec(dbQuery, '运输记录不存在。', callback)
+const getUserTransportsWithPg = (pageNumber, pageSize, ...rest) => {
+  let [username] = rest
+  let query = { 'principal.username': username, active: true }
+  return Page.addPagination(
+    getTransportsPagination(pageNumber, pageSize, query),
+    getTransportsData(pageNumber, pageSize, query)
+  )
 }
+
+const getTransportById = id => Observable.fromPromise(Transport.findById(id))
+
+const updateTransportByQuery = (query, update) =>
+  Observable.fromPromise(
+    Transport.findOneAndUpdate(query, update, { new: true })
+  )
+
+const updateTransportById = (id, update) =>
+  updateTransportByQuery({ _id: id }, update)
+
+const updateTransportStatus = (transportId, updateStatus) => {
+  let query = {
+    _id: transportId,
+    captain_status: { $in: [ASSIGN, ACCEPT] }
+  }
+  let update = { captain_status: updateStatus }
+  return updateTransportByQuery(query, update)
+}
+
+const updateStatusByDriver = (username, transportId, updateStatus) => {
+  let query = {
+    _id: transportId,
+    'principal.username': username,
+    captain_status: { $in: [ASSIGN, ACCEPT] }
+  }
+  let update = { captain_status: updateStatus }
+  return updateTransportByQuery(query, update)
+}
+
+const deleteTransportById = id =>
+  Observable.fromPromise(Transport.findByIdAndRemove(id))
 
 export {
   getTransportByQuery,
   getTransportsByQuery,
   createTransport,
-  getTransportsWithPagination,
-  getUserTransWithPagination,
-  getTransportsByUsername,
+  getTransportsWithPg,
+  getUserTransportsWithPg,
   getAllTransports,
   updateTransportByQuery,
   updateTransportById,
   updateTransportStatus,
+  updateStatusByDriver,
   deleteTransportById,
   getTransportById
 }

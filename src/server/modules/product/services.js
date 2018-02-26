@@ -1,79 +1,84 @@
+import { Observable } from 'rxjs'
 import { Product } from './models'
-import {
-  generateQueryCallback,
-  returnPromiseOrExec,
-  addPagination
-} from '../../utils/dbService'
+import * as Page from '../../utils/pagination'
 
-const createProduct = (product, callback) => {
-  if (typeof callback === 'function') {
-    return Product.create(
-      product,
-      generateQueryCallback('无法创建该产品。', callback)
+const createProduct = product => Observable.fromPromise(Product.create(product))
+
+const getProductByQuery = query =>
+  Observable.fromPromise(
+    Product.findOne(query)
+      .lean()
+      .exec()
+  )
+
+const getProductsByQuery = query =>
+  Observable.fromPromise(
+    Product.find(query)
+      .lean()
+      .exec()
+  )
+
+const getAllProducts = () => getProductsByQuery({ active: true })
+
+const getProductsPagination = Page.producePagination(Product)
+
+const getProductsData = Page.getModelSortedData(Product, 'name')
+
+const getProductsWithPagination = (pageNumber, pageSize, ...rest) => {
+  let query = { active: true }
+  return Page.addPagination(
+    getProductsPagination(pageNumber, pageSize, query),
+    getProductsData(pageNumber, pageSize, query)
+  )
+}
+
+const getProductById = id =>
+  Observable.fromPromise(
+    Product.findById(id)
+      .lean()
+      .exec()
+  )
+
+const updateProductById = (id, update) =>
+  Observable.fromPromise(
+    Product.findByIdAndUpdate(id, { $set: update }, { new: true })
+      .lean()
+      .exec()
+  )
+
+const deleteProductById = id =>
+  Observable.fromPromise(
+    Product.findByIdAndUpdate(id, { active: false }, { new: true })
+      .lean()
+      .exec()
+  )
+
+const addProductPriceHistory = (id, priceHistory) =>
+  Observable.fromPromise(
+    Product.findByIdAndUpdate(
+      id,
+      {
+        $addToSet: { price_history: { $each: priceHistory } }
+      },
+      { new: true }
     )
-  }
-  return Product.create(product)
-}
-
-const getProductByQuery = (query, callback) => {
-  const dbQuery = Product.findOne(query)
-  return returnPromiseOrExec(dbQuery, '没有找到该产品。', callback)
-}
-
-const getProductsByQuery = (query, callback) => {
-  const dbQuery = Product.find(query)
-  return returnPromiseOrExec(dbQuery, '没有找到该产品。', callback)
-}
-
-const getAllProducts = callback => {
-  return getProductsByQuery({ active: true }, callback)
-}
-
-const getProductsWithPagination = () =>
-  addPagination(getAllProducts, null, { name: 1 })
-
-const getProductById = (id, callback) => {
-  const dbQuery = Product.findById(id)
-  return returnPromiseOrExec(dbQuery, '没有找到该产品。', callback)
-}
-
-const updateProductById = (id, update, callback) => {
-  const dbQuery = Product.findByIdAndUpdate(id, { $set: update }, { new: true })
-  return returnPromiseOrExec(dbQuery, '没有找到该产品。', callback)
-}
-
-const deleteProductById = (id, callback) => {
-  const dbQuery = Product.findByIdAndUpdate(
-    id,
-    { active: false },
-    { new: true }
+      .lean()
+      .exec()
   )
-  return returnPromiseOrExec(dbQuery, '没有找到该产品。', callback)
-}
 
-const addProductPriceHistory = (id, priceHistory, callback) => {
-  return Product.findByIdAndUpdate(
-    id,
-    {
-      $addToSet: { price_history: { $each: priceHistory } }
-    },
-    { new: true }
-  )
-    .lean()
-    .exec(generateQueryCallback('没有找到该产品。', callback))
-}
-
-const deleteProductPriceHistory = (id, childId, callback) => {
-  return Product.findById(id)
-    .then(doc => {
-      if (!doc) {
-        return callback(new Error('没有找到该产品。'))
+const deleteProductPriceHistory = (id, childId) =>
+  Observable.fromPromise(Product.findById(id))
+    .do(doc => {
+      if (doc) {
+        doc.price_history.id(childId).remove()
       }
-      doc.price_history.id(childId).remove()
-      return doc.save(generateQueryCallback('无法删除历史价格。', callback))
     })
-    .catch(err => callback(err))
-}
+    .switchMap(doc => {
+      if (!doc) {
+        return Observable.throw({ message: '没有找到相关产品。' })
+      }
+      return Observable.fromPromise(doc.save())
+    })
 
 export {
   createProduct,

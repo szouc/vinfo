@@ -41,28 +41,55 @@ const getLicenseUrl = uploadImageUrl(LICENSE_UPLOAD_PATH)
 const getIdFrontUrl = uploadImageUrl(ID_FRONT_UPLOAD_PATH)
 const getIdBackUrl = uploadImageUrl(ID_BACK_UPLOAD_PATH)
 
-const generateResponseCallback = res => (err, doc, pagination = {}) => {
-  if (err) {
+const createObserver = (res, errHint) => ({
+  next: data => {
+    if (!data) {
+      return res.status(400).json({ ok: false, error: errHint })
+    }
+    if (data.doc) {
+      if (data.doc.length === 0) {
+        return res.status(400).json({ ok: false, error: errHint })
+      }
+      return res
+        .status(200)
+        .json({ ok: true, result: data.doc, pagination: data.pagination })
+    }
+    if (data.ok) {
+      if (data.n === 0) {
+        return res.status(400).json({ ok: false, error: errHint })
+      }
+    }
+    return res.status(200).json({ ok: true, result: data })
+  },
+  error: err => {
     return res.status(400).json({ ok: false, error: err.message })
   }
-  return res.status(200).json({ ok: true, result: doc, pagination })
-}
+})
 
 const getUsersWithPagination = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  const getUsersPage = Service.getUsersWithPagination()
-  getUsersPage(page, size, generateResponseCallback(res))
+  const getUsersWithPagination$ = Service.getUsersWithPagination(page, size)
+  getUsersWithPagination$.subscribe(createObserver(res, '没有找到相关用户。'))
 }
 
 const createUser = (req, res) => {
   let user = req.body
   user.password = req.body.password
-  Service.createUser(user, generateResponseCallback(res))
+  Service.createUser(user, (err, doc) => {
+    if (err) {
+      return res.status(400).json({ ok: false, error: err.message })
+    }
+    return res.status(200).json({ ok: true, result: doc })
+  })
+  // const createUser$ = Service.createUser(user, user.password)
+  // console.log(createUser$)
+  // createUser$.subscribe(createObserver(res, '无法创建用户。'))
 }
 
 const getAllUsers = (req, res) => {
-  Service.getAllUsers(generateResponseCallback(res))
+  const getAllUsers$ = Service.getAllUsers()
+  getAllUsers$.subscribe(createObserver(res, '还没有用户，请添加。'))
 }
 
 const getUsersByRoleWithPagination = (req, res) => {
@@ -72,30 +99,44 @@ const getUsersByRoleWithPagination = (req, res) => {
   if (!ROLES.includes(role)) {
     return res.status(400).json({ ok: false, error: '没有该角色！' })
   }
-  const getUsersByRolePage = Service.getUsersByRoleWithPagination(role)
-  getUsersByRolePage(page, size, generateResponseCallback(res))
+  const getUsersByRoleWithPagination$ = Service.getUsersByRoleWithPagination(
+    page,
+    size,
+    role
+  )
+  getUsersByRoleWithPagination$.subscribe(
+    createObserver(res, '没找到相关用户。')
+  )
 }
 
 const getUserByUsername = (req, res) => {
   let username = req.params.username
-  Service.getUserByUsername(username, generateResponseCallback(res))
+  const getUserByUsername$ = Service.getUserByUsername(username)
+  getUserByUsername$.subscribe(createObserver(res, '没有找到用户。'))
 }
 
 const deleteUserByUsername = (req, res) => {
   let username = req.params.username
-  Service.deleteUserByUsername(username, generateResponseCallback(res))
+  const deleteUserByUsername$ = Service.deleteUserByUsername(username)
+  deleteUserByUsername$.subscribe(createObserver(res, '没有找到用户。'))
 }
 
 const updateUserByUsername = (req, res) => {
   let username = req.params.username
   let update = req.body
-  Service.updateUserByUsername(username, update, generateResponseCallback(res))
+  const updateUserByUsername$ = Service.updateUserByUsername(username, update)
+  updateUserByUsername$.subscribe(createObserver(res, '没有找到用户。'))
 }
 
 const resetPassword = (req, res) => {
   let username = req.body.username
   let password = req.body.password
-  Service.resetPassword(username, password, generateResponseCallback(res))
+  Service.resetPassword(username, password, (err, doc) => {
+    if (err) {
+      return res.status(400).json({ ok: false, error: err.message })
+    }
+    return res.status(200).json({ ok: true, result: doc })
+  })
 }
 
 export {

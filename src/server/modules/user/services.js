@@ -1,80 +1,66 @@
 // @ flow
 
+import { Observable } from 'rxjs'
 import { User } from './models'
-import {
-  generateQueryCallback,
-  returnPromiseOrExec,
-  addPagination
-} from '../../utils/dbService'
+import * as Page from '../../utils/pagination'
 
-const getUsersByQuery = (query, callback) => {
-  const dbQuery = User.find(query)
-  return returnPromiseOrExec(dbQuery, '没有用户，请添加。', callback)
-}
+const getUsersByQuery = query => Observable.fromPromise(User.find(query))
 
-const getUserByQuery = (query, callback) => {
-  const dbQuery = User.findOne(query)
-  return returnPromiseOrExec(dbQuery, '没有用户，请添加。', callback)
-}
+const getUserByQuery = query => Observable.fromPromise(User.findOne(query))
 
 const createUser = (user, callback) => {
   // Register must pass the callback function
-  return User.register(
-    user,
-    user.password,
-    generateQueryCallback('创建不成功，请检查后继续。', callback)
-  )
-}
-
-const getAllUsers = callback => {
-  return getUsersByQuery({ active: true }, callback)
-}
-
-const getUsersWithPagination = query =>
-  addPagination(
-    getAllUsers,
-    query,
-    { username: 1 } // sortField
-  )
-
-const getUsersByRole = (role, callback) => {
-  return getUsersByQuery({ role: role, active: true }, callback)
-}
-
-const getUsersByRoleWithPagination = role =>
-  addPagination(getUsersByRole, role, { username: 1 })
-
-const getUserByUsername = (username, callback) => {
-  return getUserByQuery({ username: username }, callback)
-}
-
-const deleteUserByUsername = (username, callback) => {
-  if (typeof callback !== 'function') {
-    return User.remove({ username: username })
-  }
-  return User.remove({ username: username }, (err, doc) => {
+  return User.register(user, user.password, (err, doc) => {
     if (err) {
       return callback(err)
     }
-    /** In mongoose v4 if user is not exist,
-     * mongoDB returns the {result: {'n': 0, 'ok': 1}, ...rest};
-     * In mongoose v5 returns the {'n': 0, 'ok': 1}
-     **/
-    if (!doc.n) {
-      return callback(new Error('没有这个用户。'))
+    if (!doc) {
+      return callback(new Error('创建不成功，请检查后继续。'))
     }
-    callback(null, username)
+    return callback(null, doc)
   })
 }
 
-const updateUserByQuery = (query, update, callback) => {
-  const dbQuery = User.findOneAndUpdate(query, update, { new: true })
-  return returnPromiseOrExec(dbQuery, '没有这个用户。', callback)
+// const createUser = Observable.bindNodeCallback(User.register)
+
+const getAllUsers = () => getUsersByQuery({ active: true })
+
+const getUsersPagination = Page.producePagination(User)
+
+const getUsersData = Page.getModelSortedData(User, 'username')
+
+const getUsersWithPagination = (pageNumber, pageSize, ...rest) => {
+  let query = { active: true }
+  return Page.addPagination(
+    getUsersPagination(pageNumber, pageSize, query),
+    getUsersData(pageNumber, pageSize, query)
+  )
 }
 
-const updateUserByUsername = (username, update, callback) => {
-  return updateUserByQuery({ username: username }, update, callback)
+const getUsersByRole = role => getUsersByQuery({ role: role, active: true })
+
+const getUsersByRoleWithPagination = (pageNumber, pageSize, ...rest) => {
+  let query = { active: true, role: rest[0] }
+  return Page.addPagination(
+    getUsersPagination(pageNumber, pageSize, query),
+    getUsersData(pageNumber, pageSize, query)
+  )
 }
+
+const getUserByUsername = username => getUserByQuery({ username: username })
+
+/** In mongoose v4 if user is not exist,
+ * mongoDB returns the {result: {'n': 0, 'ok': 1}, ...rest};
+ * In mongoose v5 returns the {'n': 0, 'ok': 1}
+ **/
+const deleteUserByUsername = username =>
+  Observable.fromPromise(User.remove({ username: username }))
+
+const updateUserByQuery = (query, update) =>
+  Observable.fromPromise(User.findOneAndUpdate(query, update, { new: true }))
+
+const updateUserByUsername = (username, update) =>
+  updateUserByQuery({ username: username }, update)
 
 const resetPassword = (username, password, callback) => {
   return User.findByUsername(username, (err, user) => {

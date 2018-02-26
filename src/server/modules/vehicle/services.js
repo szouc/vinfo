@@ -1,43 +1,36 @@
+import { Observable } from 'rxjs'
 import { Vehicle } from './models'
-import {
-  generateQueryCallback,
-  returnPromiseOrExec,
-  addPagination
-} from '../../utils/dbService'
+import * as Page from '../../utils/pagination'
 
-const createVehicle = (vehicle, callback) => {
-  if (typeof callback === 'function') {
-    return Vehicle.create(
-      vehicle,
-      generateQueryCallback('无法创建车辆。', callback)
-    )
-  }
-  return Vehicle.create(vehicle) // return a 'Promise'
+const createVehicle = vehicle => Observable.fromPromise(Vehicle.create(vehicle))
+
+const getVehiclesByQuery = query => Observable.fromPromise(Vehicle.find(query))
+
+const getAllVehicles = () => getVehiclesByQuery({ active: true })
+
+const getVehiclesPagination = Page.producePagination(Vehicle)
+
+const getVehiclesData = Page.getModelSortedData(Vehicle, 'plate')
+
+const getVehiclesWithPagination = (pageNumber, pageSize, ...rest) => {
+  let query = { active: true }
+  return Page.addPagination(
+    getVehiclesPagination(pageNumber, pageSize, query),
+    getVehiclesData(pageNumber, pageSize, query)
+  )
 }
 
-const getVehiclesByQuery = (query, callback) => {
-  const dbQuery = Vehicle.find(query)
-  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
+const getUserVehiclesWithPg = (pageNumber, pageSize, ...rest) => {
+  const [username] = rest
+  let query = { 'principal.username': username, active: true }
+  return Page.addPagination(
+    getVehiclesPagination(pageNumber, pageSize, query),
+    getVehiclesData(pageNumber, pageSize, query)
+  )
 }
 
-const getAllVehicles = callback => {
-  return getVehiclesByQuery({ active: true }, callback)
-}
-
-const getVehiclesWithPagination = () =>
-  addPagination(getAllVehicles, null, { plate: 1 })
-
-const getVehiclesByUsername = (username, callback) => {
-  return getVehiclesByQuery({ 'principal.username': username }, callback)
-}
-
-const getUserVehiclesWithPagination = username =>
-  addPagination(getVehiclesByUsername, username, { plate: 1 })
-
-const getVehicleByQuery = (query, callback) => {
-  const dbQuery = Vehicle.findOne(query)
-  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
-}
+const getVehicleByQuery = query =>
+  Observable.fromPromise(Vehicle.findOne(query))
 
 /**
  * Why not use 'getVehicleByQuery', see differences of the 'findOne' and 'findById':
@@ -48,84 +41,131 @@ const getVehicleByQuery = (query, callback) => {
  * However, mongoose translates findById(undefined) into findOne({ _id: null }).
  **/
 
-const getVehicleById = (id, callback) => {
-  const dbQuery = Vehicle.findById(id)
-  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
-}
+const getVehicleById = id => Observable.fromPromise(Vehicle.findById(id))
 
-const deleteVehicleById = (id, callback) => {
-  const dbQuery = Vehicle.findByIdAndUpdate(
-    id,
-    { $set: { active: false } },
-    { new: true }
+const deleteVehicleById = id =>
+  Observable.fromPromise(
+    Vehicle.findByIdAndUpdate(id, { $set: { active: false } }, { new: true })
   )
-  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
-}
 
-const updateVehicleById = (id, update, callback) => {
-  const dbQuery = Vehicle.findByIdAndUpdate(id, { $set: update }, { new: true })
-  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
-}
-
-const addVehicleFuel = (id, fuelArray, callback) => {
-  const dbQuery = Vehicle.findByIdAndUpdate(
-    id,
-    {
-      $addToSet: { fuels: { $each: fuelArray } }
-    },
-    { new: true }
+const updateVehicleById = (id, update) =>
+  Observable.fromPromise(
+    Vehicle.findByIdAndUpdate(id, { $set: update }, { new: true })
   )
-  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
-}
 
-const addVehicleMaintain = (id, maintainArray, callback) => {
-  const dbQuery = Vehicle.findByIdAndUpdate(
-    id,
-    {
-      $addToSet: { maintenance: { $each: maintainArray } }
-    },
-    { new: true }
+const addVehicleFuel = (id, fuelArray) =>
+  Observable.fromPromise(
+    Vehicle.findByIdAndUpdate(
+      id,
+      {
+        $addToSet: { fuels: { $each: fuelArray } }
+      },
+      { new: true }
+    )
   )
-  return returnPromiseOrExec(dbQuery, '没有找到该车辆。', callback)
-}
 
-const deleteFuelByQuery = (query, fuelId, callback) => {
-  Vehicle.findOne(query)
-    .then(doc => {
-      if (!doc) {
-        return callback(new Error('没有找到该车辆。'))
+const addVehicleMaintain = (id, maintainArray) =>
+  Observable.fromPromise(
+    Vehicle.findByIdAndUpdate(
+      id,
+      {
+        $addToSet: { maintenance: { $each: maintainArray } }
+      },
+      { new: true }
+    )
+  )
+
+const deleteFuelByQuery = (query, fuelId) =>
+  Observable.fromPromise(Vehicle.findOne(query))
+    .do(doc => {
+      if (doc) {
+        doc.fuels.id(fuelId).remove()
       }
-      doc.fuels.id(fuelId).remove()
-      doc.save(generateQueryCallback('无法删除加油记录。', callback))
     })
-    .catch(err => callback(err))
-}
+    .switchMap(doc => {
+      if (!doc) {
+        return Observable.throw({ message: '没有找到该车辆。' })
+      }
+      return Observable.fromPromise(doc.save())
+    })
 
-const deleteVehicleFuel = (vehicleId, fuelId, callback) => {
+// const deleteFuelByQuery = (query, fuelId, callback) => {
+//   Vehicle.findOne(query)
+//     .then(doc => {
+//       if (!doc) {
+//         return callback(new Error('没有找到该车辆。'))
+//       }
+//       doc.fuels.id(fuelId).remove()
+//       doc.save(generateQueryCallback('无法删除加油记录。', callback))
+//     })
+//     .catch(err => callback(err))
+// }
+
+const deleteVehicleFuel = (vehicleId, fuelId) => {
   // see differences of the 'findOne' and 'findById'
   if (vehicleId) {
-    return deleteFuelByQuery({ _id: vehicleId }, fuelId, callback)
+    return deleteFuelByQuery({ _id: vehicleId }, fuelId)
   }
-  deleteFuelByQuery({ _id: null }, fuelId, callback)
+  deleteFuelByQuery({ _id: null }, fuelId)
 }
 
-const deleteMaintainByQuery = (query, maintainId, callback) => {
-  Vehicle.findOne(query)
-    .then(doc => {
-      if (!doc) {
-        return callback(new Error('没有找到该车辆。'))
+const deleteOwnFuel = (username, fuelId) => {
+  let query = {
+    fuels: {
+      $elemMatch: {
+        _id: fuelId,
+        'applicant.username': username,
+        is_check: false
       }
-      doc.maintenance.id(maintainId).remove()
-      return doc.save(generateQueryCallback('无法删除维修记录。', callback))
-    })
-    .catch(err => callback(err))
+    }
+  }
+  return deleteFuelByQuery(query, fuelId)
 }
 
-const deleteVehicleMaintain = (vehicleId, maintainId, callback) => {
+const deleteMaintainByQuery = (query, maintainId) =>
+  Observable.fromPromise(Vehicle.findOne(query))
+    .do(doc => {
+      if (doc) {
+        doc.maintenance.id(maintainId).remove()
+      }
+    })
+    .switchMap(doc => {
+      if (!doc) {
+        return Observable.throw({ message: '没有找到相关车辆。' })
+      }
+      return Observable.fromPromise(doc.save())
+    })
+
+// const deleteMaintainByQuery = (query, maintainId, callback) => {
+//   Vehicle.findOne(query)
+//     .then(doc => {
+//       if (!doc) {
+//         return callback(new Error('没有找到该车辆。'))
+//       }
+//       doc.maintenance.id(maintainId).remove()
+//       return doc.save(generateQueryCallback('无法删除维修记录。', callback))
+//     })
+//     .catch(err => callback(err))
+// }
+
+const deleteVehicleMaintain = (vehicleId, maintainId) => {
   if (vehicleId) {
-    return deleteMaintainByQuery({ _id: vehicleId }, maintainId, callback)
+    return deleteMaintainByQuery({ _id: vehicleId }, maintainId)
   }
-  deleteMaintainByQuery({ _id: null }, maintainId, callback)
+  deleteMaintainByQuery({ _id: null }, maintainId)
+}
+
+const deleteOwnMaintain = (username, maintainId) => {
+  let query = {
+    maintenance: {
+      $elemMatch: {
+        _id: maintainId,
+        'applicant.username': username,
+        is_check: false
+      }
+    }
+  }
+  return deleteMaintainByQuery(query, maintainId)
 }
 
 export {
@@ -137,12 +177,13 @@ export {
   deleteFuelByQuery,
   createVehicle,
   getVehiclesWithPagination,
-  getVehiclesByUsername,
-  getUserVehiclesWithPagination,
+  getUserVehiclesWithPg,
   getVehiclesByQuery,
   getVehicleByQuery,
   getAllVehicles,
   getVehicleById,
   deleteVehicleById,
+  deleteOwnFuel,
+  deleteOwnMaintain,
   updateVehicleById
 }

@@ -250,7 +250,7 @@ describe('Transport Base Operations', () => {
     expect.assertions(2)
     const res = await agent.post(Api.TRANSPORT_ROOT).send(transport2)
     expect(res.statusCode).toBe(400)
-    expect(res.body.error).toEqual('车辆不存在或已分配！')
+    expect(res.body.error).toEqual('车辆不存在或已分配。')
   })
 
   test('Should fecth all transports', async () => {

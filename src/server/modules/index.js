@@ -5,7 +5,7 @@ import { VEHICLE_ROOT } from './vehicle/routes'
 import { TRANSPORT_ROOT } from './transport/routes'
 import { ACCOUNT_ROOT_ROUTE } from './account/routes'
 import { DRIVER_ROOT } from './driver/routes'
-import { CAPTAIN_ROOT_ROUTE } from './captain/routes'
+import { CAPTAIN_ROOT } from './captain/routes'
 import express from 'express'
 import user from './user'
 import company from './company'
@@ -25,6 +25,6 @@ apiRouter.use(VEHICLE_ROOT, vehicle)
 apiRouter.use(TRANSPORT_ROOT, transport)
 apiRouter.use(ACCOUNT_ROOT_ROUTE, account)
 apiRouter.use(DRIVER_ROOT, driver)
-apiRouter.use(CAPTAIN_ROOT_ROUTE, captain)
+apiRouter.use(CAPTAIN_ROOT, captain)
 
 export default apiRouter

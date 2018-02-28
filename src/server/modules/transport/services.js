@@ -1,7 +1,7 @@
 import { Transport } from './models'
 import { Observable } from 'rxjs'
 import * as Page from '../../utils/pagination'
-import { ASSIGN, ACCEPT } from './constants'
+import { ASSIGN, ACCEPT, SUBMIT } from './constants'
 
 const createTransport = transport =>
   Observable.fromPromise(Transport.create(transport))
@@ -26,9 +26,18 @@ const getTransportsWithPg = (pageNumber, pageSize, ...rest) => {
   )
 }
 
-const getUserTransportsWithPg = (pageNumber, pageSize, ...rest) => {
+const getDriverTransportsWithPg = (pageNumber, pageSize, ...rest) => {
   let [username] = rest
   let query = { 'principal.username': username, active: true }
+  return Page.addPagination(
+    getTransportsPagination(pageNumber, pageSize, query),
+    getTransportsData(pageNumber, pageSize, query)
+  )
+}
+
+const getCaptainTransportsWithPg = (pageNumber, pageSize, ...rest) => {
+  let [username] = rest
+  let query = { 'assigner.username': username, active: true }
   return Page.addPagination(
     getTransportsPagination(pageNumber, pageSize, query),
     getTransportsData(pageNumber, pageSize, query)
@@ -60,24 +69,38 @@ const updateStatusByDriver = (username, transportId, updateStatus) => {
     'principal.username': username,
     captain_status: { $in: [ASSIGN, ACCEPT] }
   }
-  let update = { captain_status: updateStatus }
+  let update = { $set: { captain_status: updateStatus } }
   return updateTransportByQuery(query, update)
 }
 
 const deleteTransportById = id =>
   Observable.fromPromise(Transport.findByIdAndRemove(id))
 
+const checkTransportById = (username, transportId, updateStatus) => {
+  let query = {
+    'assigner.username': username,
+    _id: transportId,
+    captain_status: { $in: [ASSIGN, ACCEPT, SUBMIT] }
+  }
+  let update = {
+    $set: { captain_status: updateStatus }
+  }
+  return updateTransportByQuery(query, update)
+}
+
 export {
   getTransportByQuery,
   getTransportsByQuery,
   createTransport,
   getTransportsWithPg,
-  getUserTransportsWithPg,
+  getDriverTransportsWithPg,
+  getCaptainTransportsWithPg,
   getAllTransports,
   updateTransportByQuery,
   updateTransportById,
   updateTransportStatus,
   updateStatusByDriver,
   deleteTransportById,
+  checkTransportById,
   getTransportById
 }

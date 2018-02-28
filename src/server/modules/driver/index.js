@@ -18,7 +18,7 @@ driverRouter
 driverRouter
   .route(Route.DRIVER_VEHICLE)
   .all(isOwner)
-  .get(Controller.getVehiclesByUsername)
+  .get(Controller.getDriverVehicles)
 
 driverRouter
   .route(Route.DRIVER_FUEL)

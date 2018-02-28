@@ -12,7 +12,7 @@ const getVehiclesPagination = Page.producePagination(Vehicle)
 
 const getVehiclesData = Page.getModelSortedData(Vehicle, 'plate')
 
-const getVehiclesWithPagination = (pageNumber, pageSize, ...rest) => {
+const getVehiclesWithPg = (pageNumber, pageSize, ...rest) => {
   let query = { active: true }
   return Page.addPagination(
     getVehiclesPagination(pageNumber, pageSize, query),
@@ -20,9 +20,18 @@ const getVehiclesWithPagination = (pageNumber, pageSize, ...rest) => {
   )
 }
 
-const getUserVehiclesWithPg = (pageNumber, pageSize, ...rest) => {
+const getDriverVehiclesWithPg = (pageNumber, pageSize, ...rest) => {
   const [username] = rest
   let query = { 'principal.username': username, active: true }
+  return Page.addPagination(
+    getVehiclesPagination(pageNumber, pageSize, query),
+    getVehiclesData(pageNumber, pageSize, query)
+  )
+}
+
+const getCaptainVehiclesWithPg = (pageNumber, pageSize, ...rest) => {
+  const [username] = rest
+  let query = { 'captain.username': username }
   return Page.addPagination(
     getVehiclesPagination(pageNumber, pageSize, query),
     getVehiclesData(pageNumber, pageSize, query)
@@ -168,6 +177,52 @@ const deleteOwnMaintain = (username, maintainId) => {
   return deleteMaintainByQuery(query, maintainId)
 }
 
+const checkFuelById = (username, fuelId) =>
+  Observable.fromPromise(
+    Vehicle.findOneAndUpdate(
+      {
+        'captain.username': username,
+        fuels: {
+          $elemMatch: {
+            _id: fuelId,
+            is_check: false
+          }
+        }
+      },
+      {
+        $set: {
+          'fuels.$.is_check': true
+        }
+      },
+      {
+        new: true
+      }
+    )
+  )
+
+const checkMaintainById = (username, maintainId) =>
+  Observable.fromPromise(
+    Vehicle.findOneAndUpdate(
+      {
+        'captain.username': username,
+        maintenance: {
+          $elemMatch: {
+            _id: maintainId,
+            is_check: false
+          }
+        }
+      },
+      {
+        $set: {
+          'maintenance.$.is_check': true
+        }
+      },
+      {
+        new: true
+      }
+    )
+  )
+
 export {
   addVehicleFuel,
   addVehicleMaintain,
@@ -176,8 +231,9 @@ export {
   deleteMaintainByQuery,
   deleteFuelByQuery,
   createVehicle,
-  getVehiclesWithPagination,
-  getUserVehiclesWithPg,
+  getVehiclesWithPg,
+  getDriverVehiclesWithPg,
+  getCaptainVehiclesWithPg,
   getVehiclesByQuery,
   getVehicleByQuery,
   getAllVehicles,
@@ -185,5 +241,7 @@ export {
   deleteVehicleById,
   deleteOwnFuel,
   deleteOwnMaintain,
+  checkFuelById,
+  checkMaintainById,
   updateVehicleById
 }

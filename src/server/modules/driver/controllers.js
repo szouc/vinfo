@@ -35,7 +35,7 @@ const getDriverTransports = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   let username = req.params.username
-  const getDriverTransports$ = TransportService.getUserTransportsWithPg(
+  const getDriverTransports$ = TransportService.getDriverTransportsWithPg(
     page,
     size,
     username
@@ -66,16 +66,16 @@ const getDriverByUsername = (req, res) => {
   getDriverByUsername$.subscribe(createObserver(res, '没有找到司机信息。'))
 }
 
-const getVehiclesByUsername = (req, res) => {
+const getDriverVehicles = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   let username = req.params.username
-  const getVehiclesByUsername$ = VehicleService.getUserVehiclesWithPg(
+  const getDriverVehicles$ = VehicleService.getDriverVehiclesWithPg(
     page,
     size,
     username
   )
-  getVehiclesByUsername$.subscribe(createObserver(res, '还没有相关车辆信息。'))
+  getDriverVehicles$.subscribe(createObserver(res, '还没有相关车辆信息。'))
 }
 
 // const getVehiclesBySecondary = (req, res) => {
@@ -213,7 +213,7 @@ export {
   getDriverTransports,
   updateTransportStatus,
   changePasswordByUsername,
-  getVehiclesByUsername,
+  getDriverVehicles,
   // getVehiclesBySecondary,
   getDriverByUsername
 }

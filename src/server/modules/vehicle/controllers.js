@@ -34,10 +34,10 @@ const createVehicle = (req, res) => {
   createVehicle$.subscribe(createObserver(res, '无法创建车辆信息。'))
 }
 
-const getVehiclesWithPagination = (req, res) => {
+const getVehiclesWithPg = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  const getVehiclesWithPagination$ = Service.getVehiclesWithPagination(
+  const getVehiclesWithPagination$ = Service.getVehiclesWithPg(
     page,
     size
   )
@@ -110,7 +110,7 @@ export {
   deleteVehicleMaintain,
   deleteVehicleFuel,
   createVehicle,
-  getVehiclesWithPagination,
+  getVehiclesWithPg,
   getAllVehicles,
   getVehicleById,
   deleteVehicleById,

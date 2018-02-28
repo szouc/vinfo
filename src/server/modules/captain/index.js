@@ -1,24 +1,8 @@
 import express from 'express'
 
-import {
-  CAPTAIN_TRANSPORT_ID_ROUTE,
-  CAPTAIN_FUEL_ID_ROUTE,
-  CAPTAIN_MAINTAIN_ID_ROUTE,
-  CAPTAIN_TRANSPORT_ROUTE,
-  CAPTAIN_VEHICLE_ROUTE,
-  CAPTAIN_ID_ROUTE
-} from './routes'
+import * as Route from './routes'
 
-import {
-  checkTransportById,
-  createTransport,
-  getAllCaptainTransports,
-  checkFuelById,
-  checkMaintainById,
-  changePasswordByUsername,
-  getAllCaptainVehicles,
-  getCaptainByUsername
-} from './controllers'
+import * as Controller from './controllers'
 
 import { isOwner, permitCaptain } from './permissions'
 
@@ -29,35 +13,35 @@ const captainRouter = express.Router()
 
 // Dynamic route should put the last position
 captainRouter
-  .route(CAPTAIN_ID_ROUTE)
+  .route(Route.CAPTAIN_ID)
   .all(isOwner, permitCaptain)
-  .get(getCaptainByUsername)
-  .put(changePasswordByUsername)
+  .get(Controller.getCaptainByUsername)
+  .put(Controller.changePasswordByUsername)
 
 captainRouter
-  .route(CAPTAIN_VEHICLE_ROUTE)
+  .route(Route.CAPTAIN_VEHICLE)
   .all(isOwner, permitCaptain)
-  .get(getAllCaptainVehicles)
+  .get(Controller.getCaptainVehicles)
 
 captainRouter
-  .route(CAPTAIN_FUEL_ID_ROUTE)
+  .route(Route.CAPTAIN_FUEL_ID)
   .all(isOwner, permitCaptain)
-  .put(checkFuelById)
+  .put(Controller.checkFuelById)
 
 captainRouter
-  .route(CAPTAIN_MAINTAIN_ID_ROUTE)
+  .route(Route.CAPTAIN_MAINTAIN_ID)
   .all(isOwner, permitCaptain)
-  .put(checkMaintainById)
+  .put(Controller.checkMaintainById)
 
 captainRouter
-  .route(CAPTAIN_TRANSPORT_ROUTE)
+  .route(Route.CAPTAIN_TRANSPORT)
   .all(isOwner, permitCaptain)
-  .post(createTransport)
-  .get(getAllCaptainTransports)
+  .post(Controller.createTransport)
+  .get(Controller.getCaptainTransports)
 
 captainRouter
-  .route(CAPTAIN_TRANSPORT_ID_ROUTE)
+  .route(Route.CAPTAIN_TRANSPORT_ID)
   .all(isOwner, permitCaptain)
-  .put(checkTransportById)
+  .put(Controller.checkTransportById)
 
 export default captainRouter

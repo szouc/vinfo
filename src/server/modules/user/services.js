@@ -21,8 +21,6 @@ const createUser = (user, callback) => {
   })
 }
 
-// const createUser = Observable.bindNodeCallback(User.register)
-
 const getAllUsers = () => getUsersByQuery({ active: true })
 
 const getUsersPagination = Page.producePagination(User)

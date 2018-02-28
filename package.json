@@ -147,6 +147,7 @@
     "bail": true,
     "verbose": true,
     "roots": [
+      "<rootDir>/src/server/modules/captain",
       "<rootDir>/src/server/modules/driver",
       "<rootDir>/src/server/modules/transport",
       "<rootDir>/src/server/modules/vehicle",

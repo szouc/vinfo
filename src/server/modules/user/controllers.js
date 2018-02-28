@@ -82,9 +82,6 @@ const createUser = (req, res) => {
     }
     return res.status(200).json({ ok: true, result: doc })
   })
-  // const createUser$ = Service.createUser(user, user.password)
-  // console.log(createUser$)
-  // createUser$.subscribe(createObserver(res, '无法创建用户。'))
 }
 
 const getAllUsers = (req, res) => {

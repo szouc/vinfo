@@ -6,4 +6,4 @@ import createPath from '../utils/createPath'
 export const API_ROOT = '/api'
 export const createApiPath = createPath(API_ROOT)
 // tmp
-export const createApiRoute = createPath(API_ROOT)
+// export const createApiRoute = createPath(API_ROOT)

@@ -8,7 +8,7 @@ import { Product } from '../../product/models'
 import app from '../../../app'
 import request from 'supertest'
 // import { replaceAll } from '../../../utils/replaceAll'
-import { ACCOUNT_ID_API, ACCOUNT_STATUS_API, ACCOUNT_ROOT_API } from '../routes'
+import * as Api from '../api'
 
 const manager = {
   username: 'manager_vehicle',
@@ -224,7 +224,7 @@ describe('Accountant Base Operations', () => {
 
   test('Should fecth all accounts', async () => {
     expect.assertions(1)
-    const res = await agent.get(ACCOUNT_ROOT_API)
+    const res = await agent.get(Api.ACCOUNT_ROOT)
     accountId = res.body[1]._id
     accountId2 = res.body[0]._id
     expect(res.body).toHaveLength(2)
@@ -232,7 +232,7 @@ describe('Accountant Base Operations', () => {
 
   test('Should fetch a account by id', async () => {
     expect.assertions(2)
-    const res = await agent.get(ACCOUNT_ID_API.replace(/:id/, accountId))
+    const res = await agent.get(Api.ACCOUNT_ID.replace(/:id/, accountId))
     expect(res.statusCode).toBe(200)
     expect(res.body.captain_status).toEqual('assign')
   })
@@ -240,7 +240,7 @@ describe('Accountant Base Operations', () => {
   test('Should update account by id', async () => {
     expect.assertions(2)
     const res = await agent
-      .put(ACCOUNT_ID_API.replace(/:id/, accountId))
+      .put(Api.ACCOUNT_ID.replace(/:id/, accountId))
       .send(modifiedDrivers)
     expect(res.statusCode).toBe(200)
     expect(res.body.principal.username).toBe('driver2_vehicle')
@@ -248,7 +248,7 @@ describe('Accountant Base Operations', () => {
 
   test('Should delete account by id', async () => {
     expect.assertions(2)
-    const res = await agent.delete(ACCOUNT_ID_API.replace(/:id/, accountId))
+    const res = await agent.delete(Api.ACCOUNT_ID.replace(/:id/, accountId))
     expect(res.statusCode).toBe(200)
     expect(res.body.active).toBeFalsy()
   })
@@ -256,7 +256,7 @@ describe('Accountant Base Operations', () => {
   test('Should change account status by id', async () => {
     expect.assertions(2)
     const res = await agent
-      .put(ACCOUNT_STATUS_API.replace(/:id/, accountId2))
+      .put(Api.ACCOUNT_STATUS.replace(/:id/, accountId2))
       .send({ accountant_status: 'pass' })
     expect(res.statusCode).toBe(200)
     expect(res.body.accountant_status).toEqual('pass')

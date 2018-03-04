@@ -45,10 +45,10 @@ const baseUser = {
   }
 }
 
-/*
-* vinfoUser Types extended from the baseUser Types,
-* add some properties relating to your project.
-*/
+/**
+ * vinfoUser Types extended from the baseUser Types,
+ * add some properties relating to your project.
+ */
 const vinfoUser = {
   ...baseUser,
   license: {

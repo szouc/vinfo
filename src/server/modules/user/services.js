@@ -1,6 +1,7 @@
 // @ flow
 
 import { Observable } from 'rxjs'
+import moment from 'moment'
 import { User } from './models'
 import * as Page from '../../utils/pagination'
 
@@ -27,18 +28,51 @@ const getUsersPagination = Page.producePagination(User)
 
 const getUsersData = Page.getModelSortedData(User, 'username')
 
-const getUsersWithPagination = (pageNumber, pageSize, ...rest) => {
-  let query = { active: true }
+const getUsersWithPg = (pageNumber, pageSize, values) => {
+  let active = { active: true }
+  let role = values.role ? { role: values.role } : {}
+  let beforeDate = values.before ? { $gte: moment(values.before).toDate() } : {}
+  let afterDate = values.after ? { $lte: moment(values.after).toDate() } : {}
+  let dateRange =
+    values.before || values.after
+      ? { create: { ...beforeDate, ...afterDate } }
+      : {}
+  let query = { ...active, ...role, ...dateRange }
+  console.log(query)
   return Page.addPagination(
     getUsersPagination(pageNumber, pageSize, query),
     getUsersData(pageNumber, pageSize, query)
   )
 }
 
+/**
+ * 获取相关权限用户
+ *
+ * @param {enum} role
+ * @returns Observable
+ */
 const getUsersByRole = role => getUsersByQuery({ role: role, active: true })
 
-const getUsersByRoleWithPagination = (pageNumber, pageSize, ...rest) => {
+/**
+ * 获取相关权限和相关页面的用户
+ *
+ * @param {int} pageNumber
+ * @param {int} pageSize
+ * @param {any} rest
+ * @returns Observable
+ */
+const getUsersByRoleWithPg = (pageNumber, pageSize, ...rest) => {
   let query = { active: true, role: rest[0] }
+  return Page.addPagination(
+    getUsersPagination(pageNumber, pageSize, query),
+    getUsersData(pageNumber, pageSize, query)
+  )
+}
+
+const getUsersByDateWithPg = (pageNumber, pageSize, ...rest) => {
+  let beforeDate = moment(rest[0]).toDate()
+  let afterDate = moment(rest[1]).toDate()
+  let query = { active: true, create: { $gte: beforeDate, $lte: afterDate } }
   return Page.addPagination(
     getUsersPagination(pageNumber, pageSize, query),
     getUsersData(pageNumber, pageSize, query)
@@ -90,10 +124,11 @@ const resetPassword = (username, password, callback) => {
 
 export {
   createUser,
-  getUsersWithPagination,
+  getUsersWithPg,
   getAllUsers,
   getUsersByRole,
-  getUsersByRoleWithPagination,
+  getUsersByRoleWithPg,
+  getUsersByDateWithPg,
   getUserByUsername,
   updateUserByUsername,
   deleteUserByUsername,

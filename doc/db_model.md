@@ -19,8 +19,14 @@
 
 ## 数据库接口 (\*/services.js)
 
-| 接口名          | 输入参数       | 输出       | 含义                     |
-| --------------- | -------------- | ---------- | ------------------------ |
-| createUser      | user, callback |            | 创建用户                 |
-| getUsersByQuery | query          | Observable | 根据查询条件批量获取用户 |
-| getUserByQuery  | query          | Observable | 根据查询条件获取单个用户 |
+| 接口名               | 输入参数                   | 输出       | 含义                       |
+| -------------------- | -------------------------- | ---------- | -------------------------- |
+| createUser           | user, callback             |            | 创建用户                   |
+| getUsersByQuery      | query                      | Observable | 根据查询条件批量获取用户   |
+| getUserByQuery       | query                      | Observable | 根据查询条件获取单个用户   |
+| getAllUsers          |                            | Observable | 获取所有用户               |
+| getUsersWithPg       | pageNumber, pageSize       | Observable | 获取相关页面的用户         |
+| getUsersByRoleWithPg | pageNumber, pageSize, role | Observable | 根据权限获取相关页面的用户 |
+| getUserByUsername    | username                   | Observable | 根据工号获取用户           |
+| deleteUserByUsername | username                   | Observable | 根据工号删除用户           |
+| updateUserByQuery    | query,update               | Observable | 根据工号更新用户           |

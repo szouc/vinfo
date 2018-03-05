@@ -66,11 +66,22 @@ const createObserver = (res, errHint) => ({
   }
 })
 
-const getUsersWithPagination = (req, res) => {
+const getUsersWithPg = (req, res) => {
+  let role = req.query.role
+  let before = req.query.before
+  let after = req.query.after
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  const getUsersWithPagination$ = Service.getUsersWithPagination(page, size)
-  getUsersWithPagination$.subscribe(createObserver(res, '没有找到相关用户。'))
+  if (req.query.role && !ROLES.includes(req.query.role)) {
+    return res.status(400).json({ ok: false, error: '没有该角色！' })
+  }
+  const getUsersWithPg$ = Service.getUsersWithPg(page, size, {
+    role,
+    before,
+    after
+  })
+
+  getUsersWithPg$.subscribe(createObserver(res, '没有找到相关用户。'))
 }
 
 const createUser = (req, res) => {
@@ -89,22 +100,30 @@ const getAllUsers = (req, res) => {
   getAllUsers$.subscribe(createObserver(res, '还没有用户，请添加。'))
 }
 
-const getUsersByRoleWithPagination = (req, res) => {
-  let role = req.params.role
-  let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
-  let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  if (!ROLES.includes(role)) {
-    return res.status(400).json({ ok: false, error: '没有该角色！' })
-  }
-  const getUsersByRoleWithPagination$ = Service.getUsersByRoleWithPagination(
-    page,
-    size,
-    role
-  )
-  getUsersByRoleWithPagination$.subscribe(
-    createObserver(res, '没找到相关用户。')
-  )
-}
+// const getUsersByRoleWithPg = (req, res) => {
+//   let role = req.query.role
+//   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
+//   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
+//   if (!ROLES.includes(role)) {
+//     return res.status(400).json({ ok: false, error: '没有该角色！' })
+//   }
+//   const getUsersByRoleWithPg$ = Service.getUsersByRoleWithPg(page, size, role)
+//   getUsersByRoleWithPg$.subscribe(createObserver(res, '没找到相关用户。'))
+// }
+
+// const getUsersByDateWithPg = (req, res) => {
+//   let beforeDate = req.body.before
+//   let afterDate = req.body.after
+//   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
+//   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
+//   const getUsersByDateWithPg$ = Service.getUsersByDateWithPg(
+//     page,
+//     size,
+//     beforeDate,
+//     afterDate
+//   )
+//   getUsersByDateWithPg$.subscribe(createObserver(res, '没找到相关用户。'))
+// }
 
 const getUserByUsername = (req, res) => {
   let username = req.params.username
@@ -143,9 +162,10 @@ export {
   getLicenseUrl,
   getIdFrontUrl,
   getIdBackUrl,
-  getUsersWithPagination,
+  getUsersWithPg,
   getAllUsers,
-  getUsersByRoleWithPagination,
+  // getUsersByRoleWithPg,
+  // getUsersByDateWithPg,
   updateUserByUsername,
   deleteUserByUsername,
   createUser,

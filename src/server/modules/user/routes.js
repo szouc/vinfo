@@ -3,7 +3,7 @@
 export const USER_ROOT = '/user'
 
 export const USER_ALL = '/all'
-export const USER_ROLE = '/role/:role'
+export const USER_ROLE = '/role'
 export const USER_ID = '/:username'
 export const USER_RESET_PASSWORD = '/reset_password'
 export const USER_LICENSE_UPLOAD = '/upload/license'

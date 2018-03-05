@@ -4,6 +4,7 @@ import app from '../../../app'
 import request from 'supertest'
 import * as Api from '../api'
 import { DRIVER } from '../constants'
+import moment from 'moment'
 
 describe('User Base Operations', () => {
   const agent = request.agent(app)
@@ -44,9 +45,23 @@ describe('User Base Operations', () => {
   test('Should fetch users by role and page_number = 1 and page_size = 20', async () => {
     expect.assertions(3)
     const res = await agent.get(
-      `${Api.USER_ROLE.replace(/:role/, DRIVER)}?page=1&size=20`
+      `${Api.USER_ROOT}?role=${DRIVER}&page=1&size=20`
     )
     expect(res.statusCode).toBe(200)
+    expect(res.body.result).toHaveLength(3)
+    expect(res.body.pagination.pageNumber).toBe(1)
+  })
+
+  test('Should fetch users by date and page_number = 1 and page_size = 20', async () => {
+    expect.assertions(3)
+    const res = await agent.get(
+      `${Api.USER_ROOT}?before=${moment(
+        '2017-12-01T02:50:22.583Z'
+      )}&after=${moment(
+        '2018-12-01T03:50:22.583Z'
+      )}&page=1&size=20`
+    )
+    expect(res).toBe(200)
     expect(res.body.result).toHaveLength(3)
     expect(res.body.pagination.pageNumber).toBe(1)
   })

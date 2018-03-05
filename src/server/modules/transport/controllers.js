@@ -75,12 +75,18 @@ const createTransport = (req, res) => {
 //   }
 // }
 
-const getTransportsWithPagination = (req, res) => {
+const getTransportsWithPg = (req, res) => {
+  let fromDate = req.query.from
+  let toDate = req.query.to
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   const getTransportsWithPagination$ = TransportService.getTransportsWithPg(
     page,
-    size
+    size,
+    {
+      fromDate,
+      toDate
+    }
   )
   getTransportsWithPagination$.subscribe(
     createObserver(res, '没有找到相关运输记录。')
@@ -189,7 +195,7 @@ const updateTransportStatusById = (req, res) => {
 
 export {
   createTransport,
-  getTransportsWithPagination,
+  getTransportsWithPg,
   getAllTransports,
   updateTransportById,
   deleteTransportById,

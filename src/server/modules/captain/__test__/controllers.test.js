@@ -174,7 +174,7 @@ describe('Captain Base Operations', () => {
   test('Should get all vehicle by username', async () => {
     expect.assertions(3)
     const res = await agent.get(
-      CAPTAIN_VEHICLE.replace(/:username/, data.captains[0].username)
+      `${CAPTAIN_VEHICLE.replace(/:username/, data.captains[0].username)}?page=1&size=20`
     )
     // expect(res.body).toBe(maintain0Id)
     expect(res.body.result).toHaveLength(2)

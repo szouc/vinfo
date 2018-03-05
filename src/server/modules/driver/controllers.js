@@ -32,13 +32,19 @@ const createObserver = (res, errHint) => ({
 })
 
 const getDriverTransports = (req, res) => {
+  let fromDate = req.query.from
+  let toDate = req.query.to
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   let username = req.params.username
-  const getDriverTransports$ = TransportService.getDriverTransportsWithPg(
+  const getDriverTransports$ = TransportService.getTransportsWithPg(
     page,
     size,
-    username
+    {
+      driver: username,
+      fromDate,
+      toDate
+    }
   )
   getDriverTransports$.subscribe(createObserver(res, '没有相关运输记录。'))
 }
@@ -67,14 +73,16 @@ const getDriverByUsername = (req, res) => {
 }
 
 const getDriverVehicles = (req, res) => {
+  let fromDate = req.query.from
+  let toDate = req.query.to
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   let username = req.params.username
-  const getDriverVehicles$ = VehicleService.getDriverVehiclesWithPg(
-    page,
-    size,
-    username
-  )
+  const getDriverVehicles$ = VehicleService.getVehiclesWithPg(page, size, {
+    driver: username,
+    fromDate,
+    toDate
+  })
   getDriverVehicles$.subscribe(createObserver(res, '还没有相关车辆信息。'))
 }
 

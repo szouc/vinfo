@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { Observable } from 'rxjs'
 import { Product } from './models'
 import * as Page from '../../utils/pagination'
@@ -24,8 +25,15 @@ const getProductsPagination = Page.producePagination(Product)
 
 const getProductsData = Page.getModelSortedData(Product, 'name')
 
-const getProductsWithPg = (pageNumber, pageSize, ...rest) => {
-  let query = { active: true }
+const getProductsWithPg = (pageNumber, pageSize, values = {}) => {
+  let active = { active: true }
+  let fromDate = values.fromDate ? { $gte: moment(values.fromDate) } : {}
+  let toDate = values.toDate ? { $lte: moment(values.toDate) } : {}
+  let dateRange =
+    values.fromDate || values.toDate
+      ? { created: { ...fromDate, ...toDate } }
+      : {}
+  let query = { ...active, ...dateRange }
   return Page.addPagination(
     getProductsPagination(pageNumber, pageSize, query),
     getProductsData(pageNumber, pageSize, query)

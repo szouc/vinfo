@@ -35,9 +35,14 @@ const createProduct = (req, res) => {
 }
 
 const getProductsWithPg = (req, res) => {
+  let fromDate = req.query.from
+  let toDate = req.query.to
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  const getProductsWithPg$ = Service.getProductsWithPg(page, size)
+  const getProductsWithPg$ = Service.getProductsWithPg(page, size, {
+    fromDate,
+    toDate
+  })
   getProductsWithPg$.subscribe(createObserver(res, '没有找到相关产品。'))
 }
 

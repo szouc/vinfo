@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { Observable } from 'rxjs'
 import { Vehicle } from './models'
 import * as Page from '../../utils/pagination'
@@ -12,31 +13,47 @@ const getVehiclesPagination = Page.producePagination(Vehicle)
 
 const getVehiclesData = Page.getModelSortedData(Vehicle, 'plate')
 
-const getVehiclesWithPg = (pageNumber, pageSize, ...rest) => {
-  let query = { active: true }
+const getVehiclesWithPg = (pageNumber, pageSize, values = {}) => {
+  let activeQuery = { active: true }
+  let driverQuery = values.driver ? { 'principal.username': values.driver } : {}
+  let captainQuery = values.captain
+    ? { 'captain.username': values.captain }
+    : {}
+  let fromDateQuery = values.fromDate ? { $gte: moment(values.fromDate) } : {}
+  let toDateQuery = values.toDate ? { $lte: moment(values.toDate) } : {}
+  let dateRangeQuery =
+    values.fromDate || values.toDate
+      ? { created: { ...fromDateQuery, ...toDateQuery } }
+      : {}
+  let query = {
+    ...activeQuery,
+    ...driverQuery,
+    ...captainQuery,
+    ...dateRangeQuery
+  }
   return Page.addPagination(
     getVehiclesPagination(pageNumber, pageSize, query),
     getVehiclesData(pageNumber, pageSize, query)
   )
 }
 
-const getDriverVehiclesWithPg = (pageNumber, pageSize, ...rest) => {
-  const [username] = rest
-  let query = { 'principal.username': username, active: true }
-  return Page.addPagination(
-    getVehiclesPagination(pageNumber, pageSize, query),
-    getVehiclesData(pageNumber, pageSize, query)
-  )
-}
+// const getDriverVehiclesWithPg = (pageNumber, pageSize, ...rest) => {
+//   const [username] = rest
+//   let query = { 'principal.username': username, active: true }
+//   return Page.addPagination(
+//     getVehiclesPagination(pageNumber, pageSize, query),
+//     getVehiclesData(pageNumber, pageSize, query)
+//   )
+// }
 
-const getCaptainVehiclesWithPg = (pageNumber, pageSize, ...rest) => {
-  const [username] = rest
-  let query = { 'captain.username': username }
-  return Page.addPagination(
-    getVehiclesPagination(pageNumber, pageSize, query),
-    getVehiclesData(pageNumber, pageSize, query)
-  )
-}
+// const getCaptainVehiclesWithPg = (pageNumber, pageSize, ...rest) => {
+//   const [username] = rest
+//   let query = { 'captain.username': username }
+//   return Page.addPagination(
+//     getVehiclesPagination(pageNumber, pageSize, query),
+//     getVehiclesData(pageNumber, pageSize, query)
+//   )
+// }
 
 const getVehicleByQuery = query =>
   Observable.fromPromise(Vehicle.findOne(query))
@@ -232,8 +249,8 @@ export {
   deleteFuelByQuery,
   createVehicle,
   getVehiclesWithPg,
-  getDriverVehiclesWithPg,
-  getCaptainVehiclesWithPg,
+  // getDriverVehiclesWithPg,
+  // getCaptainVehiclesWithPg,
   getVehiclesByQuery,
   getVehicleByQuery,
   getAllVehicles,

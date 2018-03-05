@@ -76,14 +76,16 @@ const changePasswordByUsername = (req, res) => {
 // }
 
 const getCaptainVehicles = (req, res) => {
+  let fromDate = req.query.from
+  let toDate = req.query.to
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   let username = req.params.username
-  const getCaptainVehicles$ = VehicleService.getCaptainVehiclesWithPg(
-    page,
-    size,
-    username
-  )
+  const getCaptainVehicles$ = VehicleService.getVehiclesWithPg(page, size, {
+    captain: username,
+    fromDate,
+    toDate
+  })
   getCaptainVehicles$.subscribe(createObserver(res, '没有找到相关车辆信息。'))
 }
 
@@ -141,13 +143,19 @@ const createTransport = (req, res) => {
 // }
 
 const getCaptainTransports = (req, res) => {
+  let fromDate = req.query.from
+  let toDate = req.query.to
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   let username = req.params.username
-  const getCaptainTransports$ = TransportService.getCaptainTransportsWithPg(
+  const getCaptainTransports$ = TransportService.getTransportsWithPg(
     page,
     size,
-    username
+    {
+      captain: username,
+      fromDate,
+      toDate
+    }
   )
   getCaptainTransports$.subscribe(createObserver(res, '没有相关运输记录。'))
 }

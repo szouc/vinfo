@@ -25,7 +25,7 @@ const getCompaniesPagination = Page.producePagination(Company)
 
 const getCompaniesData = Page.getModelSortedData(Company, 'name')
 
-const getCompaniesWithPg = (pageNumber, pageSize, values) => {
+const getCompaniesWithPg = (pageNumber, pageSize, values = {}) => {
   let active = { active: true }
   let fromDate = values.fromDate ? { $gte: moment(values.fromDate) } : {}
   let toDate = values.toDate ? { $lte: moment(values.toDate) } : {}

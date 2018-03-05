@@ -36,7 +36,7 @@ const getUsersData = Page.getModelSortedData(User, 'username')
  * @param {object: {role: enum, fromDate: moment, toDate: moment }} values
  * @returns Observable
  */
-const getUsersWithPg = (pageNumber, pageSize, values) => {
+const getUsersWithPg = (pageNumber, pageSize, values = {}) => {
   let active = { active: true }
   let role = values.role ? { role: values.role } : {}
   let fromDate = values.fromDate ? { $gte: moment(values.fromDate) } : {}

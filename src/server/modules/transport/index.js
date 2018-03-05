@@ -12,7 +12,7 @@ transportRouter
   .route('/')
   .all(permitManager)
   .post(Controller.createTransport)
-  .get(Controller.getTransportsWithPagination)
+  .get(Controller.getTransportsWithPg)
 
 transportRouter
   .route(Route.TRANSPORT_ALL)

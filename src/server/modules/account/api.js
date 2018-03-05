@@ -11,7 +11,16 @@ export const ACCOUNT_ID = createApiPath(
   Route.ACCOUNT_ID
 )
 
-export const ACCOUNT_STATUS = createApiPath(
+export const ACCOUNT_TRANSPORT = createApiPath(
   Route.ACCOUNT_ROOT,
-  Route.ACCOUNT_STATUS
+  Route.ACCOUNT_TRANSPORT
 )
+
+export const ACCOUNT_TRANSPORT_ID = createApiPath(
+  Route.ACCOUNT_ROOT,
+  Route.ACCOUNT_TRANSPORT_ID
+)
+// export const ACCOUNT_STATUS = createApiPath(
+//   Route.ACCOUNT_ROOT,
+//   Route.ACCOUNT_STATUS
+// )

@@ -9,17 +9,16 @@ import { permitAccountant } from './permissions'
 const accountRouter = express.Router()
 
 accountRouter
-  .route('/')
-  .get(permitAccountant, Controller.getAllAccounts)
+  .route(Route.ACCOUNT_TRANSPORT)
+  .get(permitAccountant, Controller.getAllTransports)
 
 // Dynamic route should put the last position
 accountRouter
-  .route(Route.ACCOUNT_ID)
+  .route(Route.ACCOUNT_TRANSPORT_ID)
   .get(permitAccountant, Controller.getAccountById)
-  .put(permitAccountant, Controller.updateAccountById)
   .delete(permitAccountant, Controller.deleteAccountById)
-
-accountRouter.route(Route.ACCOUNT_STATUS)
   .put(permitAccountant, Controller.updateAccountStatusById)
+
+// accountRouter.route(Route.ACCOUNT_STATUS)
 
 export default accountRouter

@@ -24,7 +24,7 @@ const getProductsPagination = Page.producePagination(Product)
 
 const getProductsData = Page.getModelSortedData(Product, 'name')
 
-const getProductsWithPagination = (pageNumber, pageSize, ...rest) => {
+const getProductsWithPg = (pageNumber, pageSize, ...rest) => {
   let query = { active: true }
   return Page.addPagination(
     getProductsPagination(pageNumber, pageSize, query),
@@ -84,7 +84,7 @@ export {
   createProduct,
   getProductByQuery,
   getProductsByQuery,
-  getProductsWithPagination,
+  getProductsWithPg,
   getAllProducts,
   getProductById,
   addProductPriceHistory,

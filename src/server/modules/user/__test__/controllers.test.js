@@ -5,6 +5,7 @@ import request from 'supertest'
 import * as Api from '../api'
 import { DRIVER } from '../constants'
 import moment from 'moment'
+import qs from 'querystring'
 
 describe('User Base Operations', () => {
   const agent = request.agent(app)
@@ -54,14 +55,14 @@ describe('User Base Operations', () => {
 
   test('Should fetch users by date and page_number = 1 and page_size = 20', async () => {
     expect.assertions(3)
-    const res = await agent.get(
-      `${Api.USER_ROOT}?before=${moment(
-        '2017-12-01T02:50:22.583Z'
-      )}&after=${moment(
-        '2018-12-01T03:50:22.583Z'
-      )}&page=1&size=20`
-    )
-    expect(res).toBe(200)
+    let role = DRIVER
+    let fromDate = moment('2017-12-01T02:50:22.583Z').toJSON()
+    let toDate = moment('2117-12-02T02:50:22.583Z').toISOString()
+    let page = 1
+    let size = 20
+    let query = qs.stringify({ role, from: fromDate, to: toDate, page, size })
+    const res = await agent.get(`${Api.USER_ROOT}?${query}`)
+    expect(res.status).toBe(200)
     expect(res.body.result).toHaveLength(3)
     expect(res.body.pagination.pageNumber).toBe(1)
   })

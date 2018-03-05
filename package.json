@@ -147,6 +147,9 @@
     "bail": true,
     "verbose": true,
     "roots": [
+      "<rootDir>/src/server/modules/vehicle",
+      "<rootDir>/src/server/modules/product",
+      "<rootDir>/src/server/modules/company",
       "<rootDir>/src/server/modules/user"
     ]
   }

@@ -1,4 +1,5 @@
 import { Company } from './models'
+import moment from 'moment'
 import { Observable } from 'rxjs'
 import * as Page from '../../utils/pagination'
 
@@ -24,8 +25,15 @@ const getCompaniesPagination = Page.producePagination(Company)
 
 const getCompaniesData = Page.getModelSortedData(Company, 'name')
 
-const getCompaniesWithPagination = (pageNumber, pageSize, ...rest) => {
-  let query = { active: true }
+const getCompaniesWithPg = (pageNumber, pageSize, values) => {
+  let active = { active: true }
+  let fromDate = values.fromDate ? { $gte: moment(values.fromDate) } : {}
+  let toDate = values.toDate ? { $lte: moment(values.toDate) } : {}
+  let dateRange =
+    values.fromDate || values.toDate
+      ? { created: { ...fromDate, ...toDate } }
+      : {}
+  let query = { ...active, ...dateRange }
   return Page.addPagination(
     getCompaniesPagination(pageNumber, pageSize, query),
     getCompaniesData(pageNumber, pageSize, query)
@@ -55,7 +63,7 @@ const deleteCompanyById = id =>
 
 export {
   createCompany,
-  getCompaniesWithPagination,
+  getCompaniesWithPg,
   getAllCompanies,
   getCompanyById,
   updateCompanyById,

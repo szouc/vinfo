@@ -28,17 +28,24 @@ const getUsersPagination = Page.producePagination(User)
 
 const getUsersData = Page.getModelSortedData(User, 'username')
 
+/**
+ * 根据查询获取用户
+ *
+ * @param {int} pageNumber
+ * @param {int} pageSize
+ * @param {object: {role: enum, fromDate: moment, toDate: moment }} values
+ * @returns Observable
+ */
 const getUsersWithPg = (pageNumber, pageSize, values) => {
   let active = { active: true }
   let role = values.role ? { role: values.role } : {}
-  let beforeDate = values.before ? { $gte: moment(values.before).toDate() } : {}
-  let afterDate = values.after ? { $lte: moment(values.after).toDate() } : {}
+  let fromDate = values.fromDate ? { $gte: moment(values.fromDate) } : {}
+  let toDate = values.toDate ? { $lte: moment(values.toDate) } : {}
   let dateRange =
-    values.before || values.after
-      ? { create: { ...beforeDate, ...afterDate } }
+    values.fromDate || values.toDate
+      ? { created: { ...fromDate, ...toDate } }
       : {}
   let query = { ...active, ...role, ...dateRange }
-  console.log(query)
   return Page.addPagination(
     getUsersPagination(pageNumber, pageSize, query),
     getUsersData(pageNumber, pageSize, query)

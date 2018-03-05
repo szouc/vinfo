@@ -29,16 +29,16 @@ const createCompany = (req, res) => {
   createCompany$.subscribe(createObserver(res, '公司没有创建。'))
 }
 
-const getCompaniesWithPagination = (req, res) => {
+const getCompaniesWithPg = (req, res) => {
+  let fromDate = req.query.from
+  let toDate = req.query.to
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  const getCompaniesWithPagination$ = Service.getCompaniesWithPagination(
-    page,
-    size
-  )
-  getCompaniesWithPagination$.subscribe(
-    createObserver(res, '没有找到相关公司。')
-  )
+  const getCompaniesWithPg$ = Service.getCompaniesWithPg(page, size, {
+    fromDate,
+    toDate
+  })
+  getCompaniesWithPg$.subscribe(createObserver(res, '没有找到相关公司。'))
 }
 
 const getAllCompanies = (req, res) => {
@@ -73,7 +73,7 @@ const getCompaniesByQuery = (req, res) => {
 
 export {
   createCompany,
-  getCompaniesWithPagination,
+  getCompaniesWithPg,
   getAllCompanies,
   getCompanyById,
   updateCompanyById,

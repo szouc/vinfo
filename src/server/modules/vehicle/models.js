@@ -45,7 +45,7 @@ const maintain = {
   },
   cost: {
     type: Number,
-    default: 0
+    required: true
   },
   mile: {
     type: Number

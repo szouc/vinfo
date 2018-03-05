@@ -34,16 +34,11 @@ const createProduct = (req, res) => {
   createProduct$.subscribe(createObserver(res, '无法创建产品。'))
 }
 
-const getProductsWithPagination = (req, res) => {
+const getProductsWithPg = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  const getProductsWithPagination$ = Service.getProductsWithPagination(
-    page,
-    size
-  )
-  getProductsWithPagination$.subscribe(
-    createObserver(res, '没有找到相关产品。')
-  )
+  const getProductsWithPg$ = Service.getProductsWithPg(page, size)
+  getProductsWithPg$.subscribe(createObserver(res, '没有找到相关产品。'))
 }
 
 const getAllProducts = (req, res) => {
@@ -92,7 +87,7 @@ const deleteProductById = (req, res) => {
 
 export {
   createProduct,
-  getProductsWithPagination,
+  getProductsWithPg,
   getAllProducts,
   getProductById,
   addProductPriceHistory,

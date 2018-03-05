@@ -68,17 +68,17 @@ const createObserver = (res, errHint) => ({
 
 const getUsersWithPg = (req, res) => {
   let role = req.query.role
-  let before = req.query.before
-  let after = req.query.after
+  let fromDate = req.query.from
+  let toDate = req.query.to
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  if (req.query.role && !ROLES.includes(req.query.role)) {
+  if (role && !ROLES.includes(role)) {
     return res.status(400).json({ ok: false, error: '没有该角色！' })
   }
   const getUsersWithPg$ = Service.getUsersWithPg(page, size, {
     role,
-    before,
-    after
+    fromDate,
+    toDate
   })
 
   getUsersWithPg$.subscribe(createObserver(res, '没有找到相关用户。'))

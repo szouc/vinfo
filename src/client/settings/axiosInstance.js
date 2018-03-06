@@ -1,8 +1,12 @@
 import axios from 'axios'
+import qs from 'querystring'
 import { WEB_ADDR } from './config'
 
 const axiosInstance = axios.create({
   baseURL: WEB_ADDR,
+  paramsSerializer: function(params) {
+    return qs.stringify(params)
+  },
   timeout: 3000,
   withCredentials: true,
   headers: {

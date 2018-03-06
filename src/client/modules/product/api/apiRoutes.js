@@ -1,8 +1,8 @@
 import { product } from '@server/exports/api'
 import addHostAddr from '@clientUtils/addHostAddr'
 
-export const PRODUCT_ROOT_API = addHostAddr(product.PRODUCT_ROOT_API)
-export const PRODUCT_ID_API = addHostAddr(product.PRODUCT_ID_API)
-export const PRODUCT_PRICE_HISTORY_API = addHostAddr(product.PRODUCT_PRICE_HISTORY_API)
-export const PRODUCT_PRICE_HISTORY_ID_API = addHostAddr(product.PRODUCT_PRICE_HISTORY_ID_API)
-export const PRODUCT_QUESRY_API = addHostAddr(product.PRODUCT_QUERY_API)
+export const PRODUCT_ROOT = addHostAddr(product.PRODUCT_ROOT)
+export const PRODUCT_ID = addHostAddr(product.PRODUCT_ID)
+export const PRODUCT_PRICE_HISTORY = addHostAddr(product.PRODUCT_PRICE_HISTORY)
+export const PRODUCT_PRICE_HISTORY_ID = addHostAddr(product.PRODUCT_PRICE_HISTORY_ID)
+export const PRODUCT_QUERY = addHostAddr(product.PRODUCT_QUERY)

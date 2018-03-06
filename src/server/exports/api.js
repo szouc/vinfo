@@ -6,7 +6,7 @@ import * as vehicle from '../modules/vehicle/api'
 import * as transport from '../modules/transport/api'
 // import * as account from '../modules/account/api'
 import * as driver from '../modules/driver/api'
-// import * as captain from '../modules/captain/api'
+import * as captain from '../modules/captain/api'
 
 export {
   auth,
@@ -16,6 +16,6 @@ export {
   vehicle,
   transport,
   // account,
-  // captain,
+  captain,
   driver
 }

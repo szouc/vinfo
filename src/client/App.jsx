@@ -1,10 +1,18 @@
-import React from 'react'
+import 'moment/locale/zh-cn'
+
+import { configureStore, history } from './redux/store'
+
 import BaseRoute from './route'
-import moment from 'moment'
+import { ConnectedRouter } from 'react-router-redux'
+import { Provider } from 'react-redux'
+import React from 'react'
+import { hot } from 'react-hot-loader'
 import localforage from 'localforage'
+import moment from 'moment'
+
+const store = configureStore()
 
 // 推荐在入口文件全局设置 locale
-import 'moment/locale/zh-cn'
 moment.locale('zh-cn')
 
 // This will force localStorage as the storage
@@ -15,6 +23,12 @@ localforage.config({
   name: 'auth'
 })
 
-const App = () => <BaseRoute />
+const App = () => (
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <BaseRoute />
+    </ConnectedRouter>
+  </Provider>
+)
 
-export default App
+export default hot(module)(App)

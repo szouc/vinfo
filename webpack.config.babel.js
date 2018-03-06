@@ -20,6 +20,7 @@ const sharedPath = path.resolve(__dirname, './src/shared')
 const outputPath = path.resolve(__dirname, './dist')
 const nodeModulesPath = path.resolve(__dirname, './node_modules')
 const clientUtilsPath = path.resolve(__dirname, './src/client/utils')
+const clientSettingsPath = path.resolve(__dirname, './src/client/settings')
 const clientModulesPath = path.resolve(__dirname, './src/client/modules')
 const clientModulesSharedPath = path.resolve(
   __dirname,
@@ -110,7 +111,6 @@ const clientConfig = {
       ? ['babel-polyfill', clientPath]
       : [
         'babel-polyfill',
-        'react-hot-loader/patch',
         clientPath
       ]
   },
@@ -134,7 +134,8 @@ const clientConfig = {
       '@shared': sharedPath,
       '@clientModules': clientModulesPath,
       '@clientModulesShared': clientModulesSharedPath,
-      '@clientUtils': clientUtilsPath
+      '@clientUtils': clientUtilsPath,
+      '@clientSettings': clientSettingsPath
     }
   },
 

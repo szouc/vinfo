@@ -5,13 +5,7 @@ import { fromJS } from 'immutable'
 import { replaceAll } from '@clientUtils/replaceAll'
 
 import { productNormalize, productArrayNormalize } from '../schema'
-import {
-  PRODUCT_ID_API,
-  // PRODUCT_QUESRY_API,
-  PRODUCT_PRICE_HISTORY_API,
-  PRODUCT_PRICE_HISTORY_ID_API,
-  PRODUCT_ROOT_API
-} from './apiRoutes'
+import * as Api from './apiRoutes'
 
 import fetch from '@clientUtils/fetch'
 
@@ -23,7 +17,7 @@ async function createProduct(payload: Immut): ?Immut {
     body: JSON.stringify(payload),
     headers: { 'Content-Type': 'application/json' }
   }
-  const response = await fetch(PRODUCT_ROOT_API, options)
+  const response = await fetch(Api.PRODUCT_ROOT, options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
     const product = productNormalize(data)
@@ -36,10 +30,10 @@ async function getAllProducts(): ?Immut {
   const options = {
     method: 'get'
   }
-  const response = await fetch(PRODUCT_ROOT_API, options)
+  const response = await fetch(Api.PRODUCT_ROOT, options)
   if (response.status === STATUS_OK) {
     const data = await response.json()
-    const products = productArrayNormalize(data)
+    const products = productArrayNormalize(data.result)
     return fromJS(products)
   }
   throw new Error('Something wrong at getAllCompanies Process')
@@ -53,7 +47,7 @@ async function createPriceHistory(payload: Immut): ?Immut {
     headers: { 'Content-Type': 'application/json' }
   }
   const response = await fetch(
-    PRODUCT_PRICE_HISTORY_API.replace(/:id/, productId),
+    Api.PRODUCT_PRICE_HISTORY.replace(/:id/, productId),
     options
   )
   if (response.status === STATUS_OK) {
@@ -68,7 +62,7 @@ async function deleteProductById(id: string) {
   const options = {
     method: 'delete'
   }
-  const response = await fetch(PRODUCT_ID_API.replace(/:id/, id), options)
+  const response = await fetch(Api.PRODUCT_ID.replace(/:id/, id), options)
   if (response.status === STATUS_OK) {
     return id
   }
@@ -84,7 +78,7 @@ async function deletePriceHistoryById(payload: Immut) {
     ':childId': payload.get('priceHistoryId')
   }
   const response = await fetch(
-    replaceAll(PRODUCT_PRICE_HISTORY_ID_API, mapObj),
+    replaceAll(Api.PRODUCT_PRICE_HISTORY_ID, mapObj),
     options
   )
   if (response.status === STATUS_OK) {
@@ -99,7 +93,7 @@ async function updateProductById(payload: Immut) {
     body: JSON.stringify(payload.get('values')),
     headers: { 'Content-Type': 'application/json' }
   }
-  const response = await fetch(PRODUCT_ID_API.replace(/:id/, payload.get('productId')), options)
+  const response = await fetch(Api.PRODUCT_ID.replace(/:id/, payload.get('productId')), options)
   if (response) {
     const data = await response.json()
     const product = productNormalize(data)

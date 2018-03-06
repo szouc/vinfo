@@ -13,6 +13,7 @@ module.name_mapper='^@shared' ->'<PROJECT_ROOT>/src/shared'
 module.name_mapper='^@clientModulesShared' ->'<PROJECT_ROOT>/src/client/modules/shared'
 module.name_mapper='^@clientModules' ->'<PROJECT_ROOT>/src/client/modules'
 module.name_mapper='^@clientUtils' ->'<PROJECT_ROOT>/src/client/utils'
+module.name_mapper='^@clientSettings' ->'<PROJECT_ROOT>/src/client/settings'
 
 [libs]
 .*/flow-typed/.*

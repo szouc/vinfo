@@ -19,6 +19,7 @@ const nodeModulesPath = path.resolve(__dirname, './node_modules')
 const dllConfig = {
   entry: {
     vendors: [
+      'axios',
       'babel-polyfill',
       'localforage',
       'react',

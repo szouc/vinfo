@@ -7,7 +7,7 @@ const CompanyTable = ({ companies, deleteCompanyById }) => {
   const columns = [
     {
       title: '公司名称',
-      key: 'name',
+      dataIndex: 'name',
       render: (text, record) => record.name
     },
     {

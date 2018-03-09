@@ -20,11 +20,13 @@ const dllConfig = {
   entry: {
     vendors: [
       'axios',
+      'ramda',
+      'moment',
       'babel-polyfill',
+      'history',
       'localforage',
       'react',
       'react-dom',
-      'history',
       'react-router',
       'react-router-dom',
       'react-router-redux',
@@ -32,13 +34,11 @@ const dllConfig = {
       'redux',
       'redux-immutable',
       'redux-actions',
-      'redux-saga/lib',
-      'redux-saga/es',
+      'redux-saga',
       'react-redux',
       'normalizr',
       'reselect',
-      'redux-form/es',
-      'redux-form/lib',
+      'redux-form',
       'redux-logger',
       'immutable'
     ]

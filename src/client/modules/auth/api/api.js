@@ -23,7 +23,7 @@ const getLocalUser = () => localforage.getItem('user')
 async function setLocalLogin(username: string) {
   await Promise.all([
     localforage.setItem('loggedIn', JSON.stringify(true)),
-    localforage.setItem('user', JSON.stringify(username))
+    localforage.setItem('user', username)
   ])
 }
 

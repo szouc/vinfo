@@ -37,8 +37,6 @@ async function validateUser(
     redirectToLogin()
   }
   if (localUser && stateUser !== localUser) {
-    console.log(stateUser)
-    console.log(localUser)
     fetchProfile(localUser)
   }
 }

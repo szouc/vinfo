@@ -40,9 +40,17 @@ export const companySchema = new schema.Entity(
   { idAttribute: '_id' }
 )
 
+export const priceHistorySchema = new schema.Entity(
+  'price_histories',
+  {},
+  { idAttribute: '_id' }
+)
+
 export const productSchema = new schema.Entity(
   'products',
-  {},
+  {
+    price_history: [priceHistorySchema]
+  },
   { idAttribute: '_id' }
 )
 
@@ -59,7 +67,8 @@ export const transportSchema = new schema.Entity(
     to: {
       company: companySchema
     },
-    product: productSchema
+    product: productSchema,
+    accountant: userSchema
   },
   { idAttribute: '_id' }
 )

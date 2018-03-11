@@ -2,7 +2,6 @@
 
 import {
   SET_LOADING,
-  REQUEST_ERROR,
   CREATE_COMPANY_SUCCESS,
   UPDATE_COMPANY_SUCCESS,
   DELETE_COMPANY_SUCCESS,
@@ -14,12 +13,10 @@ import immutable, { fromJS } from 'immutable'
 import { combineReducers } from 'redux-immutable'
 
 const InitialState = fromJS({
-  fetchListLoading: false,
   fetchLoading: false,
   createLoading: false,
   updateLoading: false,
   deleteLoading: false,
-  error: undefined,
   current: undefined,
   all: []
 })
@@ -60,8 +57,6 @@ const companyStatus = (
   switch (type) {
     case SET_LOADING:
       return state.set(`${payload.scope}Loading`, payload.loading)
-    case REQUEST_ERROR:
-      return state.set('error', payload)
     case FETCH_COMPANY_LIST_SUCCESS:
       return state.set('all', payload.get('result'))
     case CREATE_COMPANY_SUCCESS:

@@ -4,6 +4,12 @@ import { WEB_ADDR } from './config'
 
 const axiosInstance = axios.create({
   baseURL: WEB_ADDR,
+  transformRequest: [
+    function(data, headers) {
+      const reqData = JSON.stringify(data)
+      return reqData
+    }
+  ],
   paramsSerializer: function(params) {
     return qs.stringify(params)
   },

@@ -3,21 +3,14 @@
 import type { fromJS as Immut } from 'immutable'
 import { fromJS } from 'immutable'
 import { companyNormalize, companyArrayNormalize } from '@clientSettings/schema'
-import fetch from '@clientUtils/fetch'
-import * as URL from './urls'
 import * as Request from './request'
 
 const STATUS_OK = 200
 
 async function createCompany(payload: Immut): ?Immut {
-  const options = {
-    method: 'post',
-    body: JSON.stringify(payload),
-    headers: { 'Content-Type': 'application/json' }
-  }
-  const response = await fetch(URL.COMPANY_ROOT, options)
+  const response = await Request.createCompany(payload)
   if (response.status === STATUS_OK) {
-    const data = await response.json()
+    const data = response.data.result
     const company = companyNormalize(data)
     return fromJS(company)
   }
@@ -34,13 +27,25 @@ async function getAllCompanies(): ?Immut {
   throw new Error('Something wrong at getAllCompanies Process')
 }
 
+// async function getCompaniesWithPg(page, size, formDate, toDate): ?Immut {
+//   const response = await Request.getCompaniesWithPg(
+//     page,
+//     size,
+//     formDate,
+//     toDate
+//   )
+//   if (response.status === STATUS_OK) {
+//     const { result, pagination } = response.data
+//     const companies = companyArrayNormalize(result)
+//     return fromJS(companies)
+//   }
+//   throw new Error('Something wrong at getAllCompanies Process')
+// }
+
 async function getCompanyById(id: string): ?Immut {
-  const options = {
-    method: 'get'
-  }
-  const response = await fetch(URL.COMPANY_ID.replace(/:id/, id), options)
+  const response = await Request.getCompanyById(id)
   if (response.status === STATUS_OK) {
-    const data = await response.json()
+    const data = response.data.result
     const company = companyNormalize(data)
     return fromJS(company)
   }
@@ -48,13 +53,9 @@ async function getCompanyById(id: string): ?Immut {
 }
 
 async function updateCompanyById(id: string, payload: Immut): ?Immut {
-  const options = {
-    method: 'put',
-    body: JSON.stringify(payload)
-  }
-  const response = await fetch(URL.COMPANY_ID.replace(/:id/, id), options)
+  const response = await Request.updateCompanyById(id, payload)
   if (response.status === STATUS_OK) {
-    const data = await response.json()
+    const data = response.data.result
     const company = companyNormalize(data)
     return fromJS(company)
   }
@@ -62,13 +63,10 @@ async function updateCompanyById(id: string, payload: Immut): ?Immut {
 }
 
 async function deleteCompanyById(id: string) {
-  const options = {
-    method: 'delete'
-  }
-  const response = await fetch(URL.COMPANY_ID.replace(/:id/, id), options)
+  const response = await Request.deleteCompanyById(id)
   if (response.status === STATUS_OK) {
-    const data = await response.json()
-    const company = companyNormalize(data.result)
+    const data = response.data.result
+    const company = companyNormalize(data)
     return fromJS(company)
   }
   throw new Error('Something wrong at deleteCompanyById Process')

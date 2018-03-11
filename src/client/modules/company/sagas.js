@@ -1,70 +1,121 @@
 // @flow
 
-import {
-  SET_LOADING,
-  REQUEST_ERROR,
-  CREATE_COMPANY_REQUEST,
-  CREATE_COMPANY_SUCCESS,
-  DELETE_COMPANY_REQUEST,
-  DELETE_COMPANY_SUCCESS,
-  FETCH_COMPANY_LIST_REQUEST,
-  FETCH_COMPANY_LIST_SUCCESS
-} from './actionTypes'
+import * as Type from './actionTypes'
 
+import Machine from '@clientUtils/machine'
 import { call, put, take, fork } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
 // Use for redux-form/immutable
 import type { fromJS as Immut } from 'immutable'
 
 import * as Api from './api'
 
-function * clearLoadingAndError(scope) {
+const companyState = {
+  currentState: 'screen',
+  states: {
+    screen: {
+      fetch: 'loading',
+      create: 'loading',
+      delete: 'loading'
+    },
+    loading: {
+      success: 'screen',
+      failure: 'error'
+    },
+    error: {
+      retry: 'screen'
+    }
+  }
+}
+
+function * screenEffect(scope, data, pagination = {}) {
+  switch (scope) {
+    case 'create':
+      yield put({
+        type: Type.CREATE_COMPANY_SUCCESS,
+        payload: data
+      })
+      break
+    case 'fetch':
+      yield put({
+        type: Type.FETCH_COMPANY_LIST_SUCCESS,
+        payload: data
+      })
+      break
+    case 'delete':
+      yield put({
+        type: Type.DELETE_COMPANY_SUCCESS,
+        payload: data
+      })
+      break
+    default:
+      yield put({
+        type: Type.REQUEST_ERROR,
+        payload: '没有相应的操作。'
+      })
+      break
+  }
   yield put({
-    type: SET_LOADING,
+    type: Type.SET_LOADING,
     payload: { scope: scope, loading: false }
   })
-  yield delay(2000)
-  yield put({ type: REQUEST_ERROR, payload: '' })
 }
+
+function * loadingEffect(scope) {
+  yield put({
+    type: Type.SET_LOADING,
+    payload: { scope: scope, loading: true }
+  })
+}
+
+function * errorEffect(scope, error) {
+  yield put({ type: Type.REQUEST_ERROR, payload: error })
+  yield put({
+    type: Type.SET_LOADING,
+    payload: { scope: scope, loading: false }
+  })
+}
+
+const companyEffects = {
+  loading: loadingEffect,
+  error: errorEffect,
+  screen: screenEffect
+}
+
+const machine = new Machine(companyState, companyEffects)
+const fetchEffect = machine.getEffect('fetch')
+const createEffect = machine.getEffect('create')
+const deleteEffect = machine.getEffect('delete')
+const successEffect = machine.getEffect('success')
+const failureEffect = machine.getEffect('failure')
 
 function * createCompanyFlow() {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(
-      CREATE_COMPANY_REQUEST
+      Type.CREATE_COMPANY_REQUEST
     )
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'create', loading: true }
-    })
+    yield createEffect('create')
     try {
       const company = yield call(Api.createCompany, action.payload)
       if (company) {
-        yield put({ type: CREATE_COMPANY_SUCCESS, payload: company })
+        yield successEffect('create', company)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'create')
+      yield failureEffect('create', error)
     }
   }
 }
 
 function * fetchAllCompaniesFlow() {
   while (true) {
-    yield take(FETCH_COMPANY_LIST_REQUEST)
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'fetchList', loading: true }
-    })
+    yield take(Type.FETCH_COMPANY_LIST_REQUEST)
+    yield fetchEffect('fetch')
     try {
       const company = yield call(Api.getAllCompanies)
       if (company) {
-        yield put({ type: FETCH_COMPANY_LIST_SUCCESS, payload: company })
+        yield successEffect('fetch', company)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'fetchList')
+      yield failureEffect('fetch', error)
     }
   }
 }
@@ -72,25 +123,17 @@ function * fetchAllCompaniesFlow() {
 function * deleteCompanyByIdFlow() {
   while (true) {
     const action: { type: string, payload: string } = yield take(
-      DELETE_COMPANY_REQUEST
+      Type.DELETE_COMPANY_REQUEST
     )
     const { payload } = action
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'delete', loading: true }
-    })
+    yield deleteEffect('delete')
     try {
       const company = yield call(Api.deleteCompanyById, payload)
       if (company) {
-        yield put({
-          type: DELETE_COMPANY_SUCCESS,
-          payload: company.get('result')
-        })
+        yield successEffect('delete', payload)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'delete')
+      yield failureEffect('delete', error)
     }
   }
 }

@@ -1,11 +1,11 @@
 // import { MODULE_NAME } from './'
 
 const defineModule = module => (...constant) => {
-  const SEPARATOR = '/'
+  const SEPARATOR = '_'
   return [module, ...constant].join(SEPARATOR)
 }
 
-export const MODULE_NAME = 'company'
+export const MODULE_NAME = 'COMPANY'
 const defineConstant = defineModule(MODULE_NAME)
 
 /**

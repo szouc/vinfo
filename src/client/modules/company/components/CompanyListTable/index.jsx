@@ -1,22 +1,29 @@
-import React from 'react'
-import BaseComponent from '@clientModulesShared/BaseComponent'
+import React, { PureComponent } from 'react'
 import CompanyTable from './CompanyTable'
 
-class CompanyListTable extends BaseComponent {
+class CompanyListTable extends PureComponent {
   constructor(props) {
     super(props)
   }
 
   componentDidMount() {
-    this.props.getAllCompanies()
+    this.props.getCompanies()
   }
 
   render() {
-    const { companies, deleteCompanyById } = this.props
+    const {
+      companies,
+      pagination,
+      getCompanies,
+      deleteCompanyById
+    } = this.props
+    const { pageNumber, ...rest } = pagination
+    const newPag = { current: pageNumber, onChange: getCompanies, ...rest }
     return (
       <CompanyTable
         companies={companies}
         deleteCompanyById={deleteCompanyById}
+        pagination={newPag}
       />
     )
   }

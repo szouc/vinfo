@@ -28,7 +28,10 @@ export const history = createHistory()
 const browserRouterMiddleware = routerMiddleware(history)
 const sagaMiddleware = createSagaMiddleware()
 const logger = createLogger({
-  stateTransformer: state => ({ ...state.toJS() })
+  stateTransformer: state => {
+    if (Immutable.Iterable.isIterable(state)) return state.toJS()
+    else return state
+  }
 })
 
 const middleware = [sagaMiddleware, browserRouterMiddleware, logger]
@@ -54,7 +57,8 @@ export const configureStore = (state: Immut = initialState) => {
 
   sagaMiddleware.run(rootSagas)
   // persistStore(store, {
-  //   storage: localforage
+  //   storage: localforage,
+  //   whitelist: ['auth']
   // })
 
   return store

@@ -5,7 +5,7 @@ const defineModule = module => (...constant) => {
   return [module, ...constant].join(SEPARATOR)
 }
 
-export const MODULE_NAME = 'auth'
+export const MODULE_NAME = 'AUTH'
 const defineConstant = defineModule(MODULE_NAME)
 
 /**

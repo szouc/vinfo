@@ -2,8 +2,8 @@ import React from 'react'
 
 import { Table, Button } from 'antd'
 
-const CompanyTable = ({ companies, deleteCompanyById }) => {
-  const deleteCompany = (id) => () => deleteCompanyById(id)
+const CompanyTable = ({ companies, pagination, deleteCompanyById }) => {
+  const deleteCompany = id => () => deleteCompanyById(id)
   const columns = [
     {
       title: '公司名称',
@@ -32,7 +32,9 @@ const CompanyTable = ({ companies, deleteCompanyById }) => {
     }
   ]
 
-  return <Table columns={columns} dataSource={companies} />
+  return (
+    <Table columns={columns} dataSource={companies} pagination={pagination} />
+  )
 }
 
 export default CompanyTable

@@ -2,13 +2,13 @@ import { connect } from 'react-redux'
 
 import CompanySelect from '../components/CompanySelect'
 import { companyArraySelector } from '../selectors'
-import { fetchCompanyListRequest } from '../actions'
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import { fetchCompanyAllRequest } from '../actions'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
 
 const mapStateToProps = state => {
   const companies = companyArraySelector(
-    state.getIn(['company', 'companyEntity']),
-    state.getIn(['company', 'companyStatus', 'all'])
+    state.get('entities'),
+    state.getIn(['company', 'status', 'all'])
   )
   return {
     companies
@@ -18,7 +18,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getAllCompanies: () => {
-      dispatch(fetchCompanyListRequest())
+      dispatch(fetchCompanyAllRequest())
     }
   }
 }

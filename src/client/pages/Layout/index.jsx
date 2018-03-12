@@ -35,7 +35,7 @@ class BaseLayout extends React.PureComponent {
           </Content>
         </Layout>
         <Footer style={{ textAlign: 'center' }}>
-          Vehicle Infomation ©2017 Created by szouc
+          Vehicle Infomation ©2018 Created by szouc
         </Footer>
       </Layout>
     )

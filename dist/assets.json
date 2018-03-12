@@ -2,24 +2,6 @@
   "common-in-lazy": {
     "js": "http://localhost:7000/js/common-in-lazy.chunk.js"
   },
-  "many-used": {
-    "js": "http://localhost:7000/js/many-used.chunk.js"
-  },
-  "TransportComponent": {
-    "js": "http://localhost:7000/js/TransportComponent.chunk.js"
-  },
-  "VehicleComponent": {
-    "js": "http://localhost:7000/js/VehicleComponent.chunk.js"
-  },
-  "UserComponent": {
-    "js": "http://localhost:7000/js/UserComponent.chunk.js"
-  },
-  "ProductComponent": {
-    "js": "http://localhost:7000/js/ProductComponent.chunk.js"
-  },
-  "FuelComponent": {
-    "js": "http://localhost:7000/js/FuelComponent.chunk.js"
-  },
   "CompanyComponent": {
     "js": "http://localhost:7000/js/CompanyComponent.chunk.js"
   },

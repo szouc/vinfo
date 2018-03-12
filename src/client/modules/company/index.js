@@ -1,4 +1,4 @@
-import reducer from './reducers'
+import { companyEntity, companyReducer } from './reducers'
 import saga from './sagas'
 
-export { reducer, saga }
+export { companyEntity, companyReducer, saga }

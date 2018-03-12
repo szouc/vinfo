@@ -1,9 +1,8 @@
 // @flow
 
 import localforage from 'localforage'
-import fetch from '@clientUtils/fetch'
 import { fromJS } from 'immutable'
-import { LOGIN, LOGOUT, USER_ID } from './apiRoutes'
+import * as Request from './request'
 
 // response status
 const TRUE = true
@@ -54,37 +53,22 @@ async function login(payload: {
     return TRUE
   }
 
-  // Fetch options
-  let url = LOGIN
-  let options = {
-    method: 'post',
-    body: JSON.stringify(payload),
-    headers: { 'Content-Type': 'application/json' }
-  }
   // Logs a user in from the server API
-  let response = await fetch(url, options)
+  let response = await Request.login(payload)
   if (response.status === STATUS_OK) {
     await setLocalLogin(payload.username)
     return TRUE
   }
-  if (response.status === 401) {
-    await setLocalLogout()
-    throw new Error('用户名和密码有误')
-  }
   await setLocalLogout()
-  throw new Error('Something Wrong at Login Process')
+  throw new Error('用户名和密码有误')
 }
 
 /**
  * Logs the current user out
  */
 async function logout() {
-  // Fetch url & options
-  let url: string = LOGOUT
-  let options: { method: string } = { method: 'get' }
-
   // Logs a user out from the server API
-  let response = await fetch(url, options)
+  let response = await Request.logout()
   if (response.status === STATUS_OK) {
     await setLocalLogout()
     return TRUE
@@ -98,15 +82,11 @@ async function logout() {
  * @return user - The info of the user
  */
 async function fetchProfile(username: string) {
-  // Fetch url & options
-  let url: string = USER_ID.replace(/:username/, username)
-  let options: { method: string } = { method: 'get' }
-
   // Fetch a user info from the server API
-  let response = await fetch(url, options)
+  let response = await Request.fetchProfile(username)
   if (response.status === STATUS_OK) {
-    let user = await response.json()
-    return fromJS(user.result)
+    let user = response.data.result
+    return fromJS(user)
   }
   await setLocalLogout()
   throw new Error('Something Wrong at FetchProfile Process')

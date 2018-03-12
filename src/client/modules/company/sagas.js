@@ -1,6 +1,7 @@
 // @flow
 
 import * as Type from './actionTypes'
+import { SET_PAGINATION } from '@clientModulesShared/paginationReducer/actionTypes'
 
 import Machine from '@clientUtils/machine'
 import { call, put, take, fork } from 'redux-saga/effects'
@@ -14,6 +15,7 @@ const companyState = {
   states: {
     screen: {
       fetch: 'loading',
+      fetchAll: 'loading',
       create: 'loading',
       delete: 'loading'
     },
@@ -38,6 +40,16 @@ function * screenEffect(scope, data, pagination = {}) {
     case 'fetch':
       yield put({
         type: Type.FETCH_COMPANY_LIST_SUCCESS,
+        payload: data
+      })
+      yield put({
+        type: `COMPANY_${SET_PAGINATION}`,
+        payload: pagination
+      })
+      break
+    case 'fetchAll':
+      yield put({
+        type: Type.FETCH_COMPANY_ALL_SUCCESS,
         payload: data
       })
       break
@@ -83,6 +95,7 @@ const companyEffects = {
 
 const machine = new Machine(companyState, companyEffects)
 const fetchEffect = machine.getEffect('fetch')
+const fetchAllEffect = machine.getEffect('fetchAll')
 const createEffect = machine.getEffect('create')
 const deleteEffect = machine.getEffect('delete')
 const successEffect = machine.getEffect('success')
@@ -101,21 +114,43 @@ function * createCompanyFlow() {
       }
     } catch (error) {
       yield failureEffect('create', error)
+      machine.operation('retry')
     }
   }
 }
 
 function * fetchAllCompaniesFlow() {
   while (true) {
-    yield take(Type.FETCH_COMPANY_LIST_REQUEST)
-    yield fetchEffect('fetch')
+    yield take(Type.FETCH_COMPANY_ALL_REQUEST)
+    yield fetchAllEffect('fetchAll')
     try {
       const company = yield call(Api.getAllCompanies)
       if (company) {
-        yield successEffect('fetch', company)
+        yield successEffect('fetchAll', company)
+      }
+    } catch (error) {
+      yield failureEffect('fetchAll', error)
+      machine.operation('retry')
+    }
+  }
+}
+
+function * fetchCompaniesFlow() {
+  while (true) {
+    const action: { type: String, payload?: Immut } = yield take(
+      Type.FETCH_COMPANY_LIST_REQUEST
+    )
+    yield fetchEffect('fetch')
+    try {
+      const result = yield call(Api.getCompaniesWithPg, action.payload)
+      if (result) {
+        const company = result.get('company')
+        const pagination = result.get('pagination')
+        yield successEffect('fetch', company, pagination)
       }
     } catch (error) {
       yield failureEffect('fetch', error)
+      machine.operation('retry')
     }
   }
 }
@@ -130,10 +165,12 @@ function * deleteCompanyByIdFlow() {
     try {
       const company = yield call(Api.deleteCompanyById, payload)
       if (company) {
+        console.log(company)
         yield successEffect('delete', payload)
       }
     } catch (error) {
       yield failureEffect('delete', error)
+      machine.operation('retry')
     }
   }
 }
@@ -141,5 +178,6 @@ function * deleteCompanyByIdFlow() {
 export default function * rootSagas(): any {
   yield fork(createCompanyFlow)
   yield fork(fetchAllCompaniesFlow)
+  yield fork(fetchCompaniesFlow)
   yield fork(deleteCompanyByIdFlow)
 }

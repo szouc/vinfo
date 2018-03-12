@@ -1,16 +1,11 @@
 // @flow
 
-import {
-  SET_LOADING,
-  CREATE_COMPANY_SUCCESS,
-  UPDATE_COMPANY_SUCCESS,
-  DELETE_COMPANY_SUCCESS,
-  FETCH_COMPANY_LIST_SUCCESS
-} from './actionTypes'
+import * as Type from './actionTypes'
 
 import type { fromJS as Immut } from 'immutable'
 import immutable, { fromJS } from 'immutable'
 import { combineReducers } from 'redux-immutable'
+import { paginationReducerFor } from '@clientModulesShared/paginationReducer'
 
 const InitialState = fromJS({
   fetchLoading: false,
@@ -27,23 +22,16 @@ const companyEntity = (
 ) => {
   const { type, payload } = action
   switch (type) {
-    case FETCH_COMPANY_LIST_SUCCESS:
-      if (payload.get('entities')) {
-        return payload.get('entities')
-      }
-      return state
-    case CREATE_COMPANY_SUCCESS:
-      return state.mergeIn(
-        ['companies'],
-        payload.getIn(['entities', 'companies'])
-      )
-    case DELETE_COMPANY_SUCCESS:
-      return state.deleteIn(['companies', payload])
-    case UPDATE_COMPANY_SUCCESS:
-      return state.mergeIn(
-        ['companies'],
-        payload.getIn(['entities', 'companies'])
-      )
+    case Type.FETCH_COMPANY_ALL_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'companies']))
+    case Type.FETCH_COMPANY_LIST_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'companies']))
+    case Type.CREATE_COMPANY_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'companies']))
+    case Type.DELETE_COMPANY_SUCCESS:
+      return state.delete(payload)
+    case Type.UPDATE_COMPANY_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'companies']))
     default:
       return state
   }
@@ -55,14 +43,16 @@ const companyStatus = (
 ) => {
   const { type, payload } = action
   switch (type) {
-    case SET_LOADING:
+    case Type.SET_LOADING:
       return state.set(`${payload.scope}Loading`, payload.loading)
-    case FETCH_COMPANY_LIST_SUCCESS:
+    case Type.FETCH_COMPANY_ALL_SUCCESS:
       return state.set('all', payload.get('result'))
-    case CREATE_COMPANY_SUCCESS:
+    case Type.FETCH_COMPANY_LIST_SUCCESS:
+      return state.set('all', payload.get('result'))
+    case Type.CREATE_COMPANY_SUCCESS:
       const pushToAll = state.get('all').push(payload.get('result'))
       return state.set('current', payload.get('result')).set('all', pushToAll)
-    case DELETE_COMPANY_SUCCESS:
+    case Type.DELETE_COMPANY_SUCCESS:
       const popFromAll = state.get('all').pop(payload)
       return state.set('all', popFromAll)
     default:
@@ -70,9 +60,9 @@ const companyStatus = (
   }
 }
 
-const reducer = combineReducers({
-  companyStatus,
-  companyEntity
+const companyReducer = combineReducers({
+  status: companyStatus,
+  pagination: paginationReducerFor('COMPANY_')
 })
 
-export default reducer
+export { companyEntity, companyReducer }

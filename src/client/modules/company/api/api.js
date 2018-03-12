@@ -27,20 +27,20 @@ async function getAllCompanies(): ?Immut {
   throw new Error('Something wrong at getAllCompanies Process')
 }
 
-// async function getCompaniesWithPg(page, size, formDate, toDate): ?Immut {
-//   const response = await Request.getCompaniesWithPg(
-//     page,
-//     size,
-//     formDate,
-//     toDate
-//   )
-//   if (response.status === STATUS_OK) {
-//     const { result, pagination } = response.data
-//     const companies = companyArrayNormalize(result)
-//     return fromJS(companies)
-//   }
-//   throw new Error('Something wrong at getAllCompanies Process')
-// }
+async function getCompaniesWithPg(page, size, formDate, toDate): ?Immut {
+  const response = await Request.getCompaniesWithPg(
+    page,
+    size,
+    formDate,
+    toDate
+  )
+  if (response.status === STATUS_OK) {
+    const { result, pagination } = response.data
+    const companies = companyArrayNormalize(result)
+    return fromJS({ company: companies, pagination })
+  }
+  throw new Error('Something wrong at getAllCompanies Process')
+}
 
 async function getCompanyById(id: string): ?Immut {
   const response = await Request.getCompanyById(id)
@@ -75,6 +75,7 @@ async function deleteCompanyById(id: string) {
 export {
   createCompany,
   getAllCompanies,
+  getCompaniesWithPg,
   getCompanyById,
   updateCompanyById,
   deleteCompanyById

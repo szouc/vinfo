@@ -4,6 +4,7 @@ import { APP_CONTAINER_SELECTOR } from '../shared/config'
 import App from './App'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import 'babel-polyfill'
 
 const rootEl = document.querySelector(APP_CONTAINER_SELECTOR)
 

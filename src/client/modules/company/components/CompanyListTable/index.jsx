@@ -7,7 +7,7 @@ class CompanyListTable extends PureComponent {
   }
 
   componentDidMount() {
-    this.props.getCompanies()
+    this.props.getCompanies(1, 2)
   }
 
   render() {

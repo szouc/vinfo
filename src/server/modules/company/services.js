@@ -23,7 +23,7 @@ const getAllCompanies = () => getCompaniesByQuery({ active: true })
 
 const getCompaniesPagination = Page.producePagination(Company)
 
-const getCompaniesData = Page.getModelSortedData(Company, 'name')
+const getCompaniesData = Page.getModelSortedData(Company, 'created')
 
 const getCompaniesWithPg = (pageNumber, pageSize, values = {}) => {
   let active = { active: true }

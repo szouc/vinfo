@@ -1,4 +1,5 @@
 import React from 'react'
+import { hot } from 'react-hot-loader'
 import {
   CompanyCreateForm,
   CompanyListTable
@@ -26,4 +27,4 @@ class Company extends React.PureComponent {
   }
 }
 
-export default Company
+export default hot(module)(Company)

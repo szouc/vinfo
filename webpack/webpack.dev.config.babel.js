@@ -38,7 +38,6 @@ const clientConfig = {
     bundle:
        [
          'babel-polyfill',
-         'react-hot-loader/patch',
          clientPath
        ]
   },

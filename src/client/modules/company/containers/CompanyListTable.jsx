@@ -19,8 +19,10 @@ const mapDispatchToProps = dispatch => {
     deleteCompanyById: id => {
       dispatch(deleteCompanyRequest(id))
     },
-    getCompanies: pagination => {
-      dispatch(fetchCompanyListRequest(pagination))
+    getCompanies: (pageNumber, pageSize, fromDate, toDate) => {
+      dispatch(
+        fetchCompanyListRequest({ pageNumber, pageSize, fromDate, toDate })
+      )
     }
   }
 }

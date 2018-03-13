@@ -27,12 +27,17 @@ async function getAllCompanies(): ?Immut {
   throw new Error('Something wrong at getAllCompanies Process')
 }
 
-async function getCompaniesWithPg(page, size, formDate, toDate): ?Immut {
+async function getCompaniesWithPg(payload: {
+  pageNumber: Number,
+  pageSize: Number,
+  fromDate: String,
+  toDate: String
+}): ?Immut {
   const response = await Request.getCompaniesWithPg(
-    page,
-    size,
-    formDate,
-    toDate
+    payload.pageNumber,
+    payload.pageSize,
+    payload.formDate,
+    payload.toDate
   )
   if (response.status === STATUS_OK) {
     const { result, pagination } = response.data

@@ -50,7 +50,7 @@ const companyStatus = (
     case Type.FETCH_COMPANY_LIST_SUCCESS:
       return state.set('all', payload.get('result'))
     case Type.CREATE_COMPANY_SUCCESS:
-      const pushToAll = state.get('all').push(payload.get('result'))
+      const pushToAll = state.get('all').clear().unshift(payload.get('result'))
       return state.set('current', payload.get('result')).set('all', pushToAll)
     case Type.DELETE_COMPANY_SUCCESS:
       const popFromAll = state.get('all').pop(payload)

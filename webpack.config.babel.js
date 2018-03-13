@@ -107,12 +107,7 @@ const clientConfig = {
   target: 'web',
 
   entry: {
-    bundle: isProd
-      ? ['babel-polyfill', clientPath]
-      : [
-        'babel-polyfill',
-        clientPath
-      ]
+    bundle: ['babel-polyfill', clientPath]
   },
 
   output: {

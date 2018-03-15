@@ -18,3 +18,5 @@ node_modules
 
 # babel transform ES6 to ES5
 /lib/
+
+.eslintcache

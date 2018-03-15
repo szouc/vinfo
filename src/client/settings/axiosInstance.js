@@ -1,6 +1,7 @@
 import axios from 'axios'
 import qs from 'querystring'
 import { WEB_ADDR } from './config'
+import { fromJS } from 'immutable'
 
 const axiosInstance = axios.create({
   baseURL: WEB_ADDR,
@@ -28,6 +29,7 @@ axiosInstance.interceptors.response.use(
   },
   function(error) {
     if (error.response) {
+      console.log(error)
       switch (error.response.status) {
         case 400:
           // error.message = '查询错误'
@@ -48,7 +50,7 @@ axiosInstance.interceptors.response.use(
       }
     }
     // Do something with response error
-    return Promise.reject(error)
+    return Promise.reject(fromJS(error))
   }
 )
 

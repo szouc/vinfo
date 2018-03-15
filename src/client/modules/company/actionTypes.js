@@ -12,7 +12,6 @@ const defineConstant = defineModule(MODULE_NAME)
  * Generating async request suffix
  */
 export const SET_LOADING = defineConstant('SET_LOADING')
-export const REQUEST_ERROR = defineConstant('REQUEST_ERROR')
 export const SHOW_DETAIL_COMPANY = defineConstant('SHOW_DETAIL_COMPANY')
 export const FETCH_COMPANY_LIST_REQUEST = defineConstant('FETCH_COMPANY_LIST_REQUEST')
 export const FETCH_COMPANY_LIST_SUCCESS = defineConstant('FETCH_COMPANY_LIST_SUCCESS')

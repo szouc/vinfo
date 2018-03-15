@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux-immutable'
 import { reducer as formReducer } from 'redux-form/immutable'
+import { reducer as errorReducer } from '../modules/error'
 import { reducer as authReducer } from '../modules/auth'
 import { companyEntity, companyReducer } from '../modules/company'
 // import { reducer as productReducer } from '../modules/product'
@@ -15,6 +16,7 @@ const EntitiesReducer = combineReducers({
 const rootReducer = combineReducers({
   entities: EntitiesReducer,
   router: routerReducer,
+  error: errorReducer,
   auth: authReducer,
   company: companyReducer,
   // product: productReducer,

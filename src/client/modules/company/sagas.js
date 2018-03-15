@@ -1,12 +1,15 @@
 // @flow
 
 import * as Type from './actionTypes'
+import { REQUEST_ERROR, CLEAR_ERROR } from '../error/actionTypes'
 import { SET_PAGINATION } from '@clientModulesShared/paginationReducer/actionTypes'
 
 import Machine from '@clientUtils/machine'
 import { call, put, take, fork } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
 // Use for redux-form/immutable
 import type { fromJS as Immut } from 'immutable'
+import { fromJS } from 'immutable'
 
 import * as Api from './api'
 
@@ -61,8 +64,8 @@ function * screenEffect(scope, data, pagination = {}) {
       break
     default:
       yield put({
-        type: Type.REQUEST_ERROR,
-        payload: '没有相应的操作。'
+        type: REQUEST_ERROR,
+        payload: fromJS({ message: '没有相应的操作。' })
       })
       break
   }
@@ -80,11 +83,13 @@ function * loadingEffect(scope) {
 }
 
 function * errorEffect(scope, error) {
-  yield put({ type: Type.REQUEST_ERROR, payload: error })
+  yield put({ type: REQUEST_ERROR, payload: fromJS(error) })
   yield put({
     type: Type.SET_LOADING,
     payload: { scope: scope, loading: false }
   })
+  yield delay(3000)
+  yield put({ type: CLEAR_ERROR })
 }
 
 const companyEffects = {

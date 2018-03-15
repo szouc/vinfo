@@ -2,6 +2,7 @@ import React from 'react'
 import BaseHeader from '@clientModules/auth/containers/Header'
 import BaseSider from '../Sider'
 import BaseContent from '../Content'
+import ErrorMessage from '../ErrorMessage'
 import { Redirect } from 'react-router-dom'
 import { Layout } from 'antd'
 const { Header, Sider, Content, Footer } = Layout
@@ -15,6 +16,7 @@ class BaseLayout extends React.PureComponent {
   render() {
     return (
       <Layout>
+        <ErrorMessage />
         <Header>
           <BaseHeader />
         </Header>

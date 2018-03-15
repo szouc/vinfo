@@ -1,2 +1,2 @@
-import Login from '../../modules/auth/containers/Login'
+import Login from '@clientModules/auth/containers/Login'
 export default Login

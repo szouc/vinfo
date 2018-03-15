@@ -1,0 +1,2 @@
+export const REQUEST_ERROR = 'REQUEST_ERROR'
+export const CLEAR_ERROR = 'CLEAR_ERROR'

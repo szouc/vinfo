@@ -13,11 +13,13 @@ class UserListTable extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.getAllUsers()
+    this.props.getUsers(1, 2)
   }
 
   render() {
-    const { users, deleteUserByUsername } = this.props
+    const { users, pagination, getUsers, deleteUserByUsername } = this.props
+    const { pageNumber, ...rest } = pagination
+    const newPag = { current: pageNumber, onChange: getUsers, ...rest }
     const data = users
     const columns = [
       {
@@ -114,6 +116,7 @@ class UserListTable extends React.PureComponent {
         columns={columns}
         dataSource={data}
         rowKey={record => record.username}
+        pagination={newPag}
       />
     )
   }

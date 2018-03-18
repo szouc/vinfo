@@ -11,7 +11,7 @@ const PAGE_SIZE = 20 // default size of page
 const uploadImageUrl = path => (req, res) => {
   const file = req.file
   const imageUrl = `/static/uploads/${path}/${file.filename}`
-  res.status(200).json({ ok: true, result: imageUrl })
+  res.status(200).json(imageUrl)
 }
 
 // configuring Multer to use files directory for storing files

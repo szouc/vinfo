@@ -2,32 +2,15 @@
 
 import type { fromJS as Immut } from 'immutable'
 import { fromJS } from 'immutable'
-// import { replaceAll } from '@clientUtils/replaceAll'
-
-import {
-  userArrayNormalize,
-  userNormalize
-} from '../schema'
-
-import {
-  USER_ID_API,
-  // USER_LICENSE_UPLOAD_API,
-  USER_ROOT_API
-} from './apiRoutes'
-
-import fetch from '@clientUtils/fetch'
+import * as Request from './request'
+import { userNormalize, userArrayNormalize } from '@clientSettings/schema'
 
 const STATUS_OK = 200
 
 async function createUser(payload: Immut): ?Immut {
-  const options = {
-    method: 'post',
-    body: JSON.stringify(payload),
-    headers: { 'Content-Type': 'application/json' }
-  }
-  const response = await fetch(USER_ROOT_API, options)
+  const response = await Request.createUser(payload)
   if (response.status === STATUS_OK) {
-    const data = await response.json()
+    const data = response.data.result
     const user = userNormalize(data)
     return fromJS(user)
   }
@@ -35,75 +18,49 @@ async function createUser(payload: Immut): ?Immut {
 }
 
 async function getAllUsers(): ?Immut {
-  const options = {
-    method: 'get'
-  }
-  const response = await fetch(USER_ROOT_API, options)
+  const response = await Request.getAllUsers()
   if (response.status === STATUS_OK) {
-    const data = await response.json()
+    const data = response.data.result
     const user = userArrayNormalize(data)
     return fromJS(user)
   }
   throw new Error('Something wrong at getAllCompanies Process')
 }
 
-// async function createPriceHistory(payload: Immut): ?Immut {
-//   const productId = payload.get('productId')
-//   const options = {
-//     method: 'post',
-//     body: JSON.stringify(payload.getIn(['values', 'price_history'])),
-//     headers: { 'Content-Type': 'application/json' }
-//   }
-//   const response = await fetch(
-//     PRODUCT_PRICE_HISTORY_API.replace(/:id/, productId),
-//     options
-//   )
-//   if (response.status === STATUS_OK) {
-//     const data = await response.json()
-//     const product = productNormalize(data)
-//     return fromJS(product)
-//   }
-//   throw new Error('Couldnt create a new product')
-// }
+async function getUsersWithPg(payload: {
+  pageNumber: Number,
+  pageSize: Number,
+  fromDate: String,
+  toDate: String
+}): ?Immut {
+  const response = await Request.getUsersWithPg(
+    payload.pageNumber,
+    payload.pageSize,
+    payload.fromDate,
+    payload.toDate
+  )
+  if (response.status === STATUS_OK) {
+    const { result, pagination } = response.data
+    const users = userArrayNormalize(result)
+    return fromJS({ user: users, pagination })
+  }
+  throw new Error('Something wrong at getUsersWithPg Process')
+}
 
 async function deleteUserByUsername(username: string) {
-  const options = {
-    method: 'delete'
-  }
-  const response = await fetch(USER_ID_API.replace(/:username/, username), options)
+  const response = await Request.deleteUserByUsername(username)
   if (response.status === STATUS_OK) {
-    return username
+    return fromJS({ username: username })
   }
   throw new Error('Something wrong at deleteUserByUsername Process')
 }
 
-// async function deletePriceHistoryById(payload: Immut) {
-//   const options = {
-//     method: 'delete'
-//   }
-//   const mapObj = {
-//     ':id': payload.get('productId'),
-//     ':childId': payload.get('priceHistoryId')
-//   }
-//   const response = await fetch(
-//     replaceAll(PRODUCT_PRICE_HISTORY_ID_API, mapObj),
-//     options
-//   )
-//   if (response.status === STATUS_OK) {
-//     return payload
-//   }
-//   throw new Error('Something wrong at deletePriceHistoryById Process')
-// }
-
 async function updateUserByUsername(payload: Immut) {
-  const options = {
-    method: 'put',
-    body: JSON.stringify(payload.get('values')),
-    headers: { 'Content-Type': 'application/json' }
-  }
-  const response = await fetch(USER_ID_API.replace(/:username/, payload.get('username')), options)
+  const username = payload.get('username')
+  const update = payload.get('values')
+  const response = await Request.updateUserByUsername(username, update)
   if (response) {
-    const data = await response.json()
+    const data = response.data.result
     const user = userNormalize(data)
     return fromJS(user)
   }
@@ -112,9 +69,8 @@ async function updateUserByUsername(payload: Immut) {
 
 export {
   getAllUsers,
-  // createPriceHistory,
+  getUsersWithPg,
   deleteUserByUsername,
-  // deletePriceHistoryById,
   updateUserByUsername,
   createUser
 }

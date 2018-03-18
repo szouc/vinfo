@@ -56,7 +56,7 @@ class ImageUpload extends React.PureComponent {
   handleChange = info => {
     this.props.onChange(info.file.response)
     // if (info.file.status !== 'uploading') {
-    //   console.log(info.file, info.fileList)
+    // console.log(info.file, info.fileList)
     // }
     if (info.file.status === 'done') {
       message.success(`${info.file.name} 文件上传成功。`)

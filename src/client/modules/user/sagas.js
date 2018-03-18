@@ -1,72 +1,165 @@
 // @flow
 
-import {
-  SET_LOADING,
-  REQUEST_ERROR,
-  FETCH_USER_LIST_REQUEST,
-  FETCH_USER_LIST_SUCCESS,
-  DELETE_USER_REQUEST,
-  DELETE_USER_SUCCESS,
-  UPDATE_USER_REQUEST,
-  UPDATE_USER_SUCCESS,
-  CREATE_USER_REQUEST,
-  CREATE_USER_SUCCESS
-} from './actionTypes'
+import * as Type from './actionTypes'
+import { REQUEST_ERROR } from '../error/actionTypes'
+import { SET_PAGINATION } from '@clientModulesShared/paginationReducer/actionTypes'
+import Machine from '@clientUtils/machine'
 
 import { call, put, take, fork } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
 // Use for redux-form/immutable
 import type { fromJS as Immut } from 'immutable'
-
+import { fromJS } from 'immutable'
 import * as Api from './api'
 
-function * clearLoadingAndError(scope) {
+const userState = {
+  currentState: 'screen',
+  states: {
+    screen: {
+      fetch: 'loading',
+      create: 'loading',
+      fetchAll: 'loading',
+      update: 'loading',
+      delete: 'loading'
+    },
+    loading: {
+      success: 'screen',
+      failure: 'error'
+    },
+    error: {
+      retry: 'screen'
+    }
+  }
+}
+
+function * screenEffect(scope, action, data, pagination = {}) {
+  switch (action) {
+    case 'create':
+      yield put({
+        type: Type.CREATE_USER_SUCCESS,
+        payload: data
+      })
+      break
+    case 'fetch':
+      yield put({
+        type: Type.FETCH_USER_LIST_SUCCESS,
+        payload: data
+      })
+      yield put({
+        type: `USER_${SET_PAGINATION}`,
+        payload: pagination
+      })
+      break
+    case 'fetchAll':
+      yield put({
+        type: Type.FETCH_USER_ALL_SUCCESS,
+        payload: data
+      })
+      break
+    case 'delete':
+      yield put({
+        type: Type.DELETE_USER_SUCCESS,
+        payload: data
+      })
+      break
+    case 'update':
+      yield put({
+        type: Type.UPDATE_USER_SUCCESS,
+        payload: data
+      })
+      break
+    default:
+      yield put({
+        type: REQUEST_ERROR,
+        payload: fromJS({ message: '没有相应的操作。' })
+      })
+      break
+  }
   yield put({
-    type: SET_LOADING,
+    type: Type.SET_LOADING,
     payload: { scope: scope, loading: false }
   })
-  yield delay(2000)
-  yield put({ type: REQUEST_ERROR, payload: '' })
 }
+
+function * loadingEffect(scope) {
+  yield put({
+    type: Type.SET_LOADING,
+    payload: { scope: scope, loading: true }
+  })
+}
+
+function * errorEffect(scope, error) {
+  yield put({ type: REQUEST_ERROR, payload: fromJS(error) })
+  yield put({
+    type: Type.SET_LOADING,
+    payload: { scope: scope, loading: false }
+  })
+}
+
+const userEffects = {
+  loading: loadingEffect,
+  error: errorEffect,
+  screen: screenEffect
+}
+
+const machine = new Machine(userState, userEffects)
+const fetchEffect = machine.getEffect('fetch')
+const fetchAllEffect = machine.getEffect('fetchAll')
+const createEffect = machine.getEffect('create')
+const deleteEffect = machine.getEffect('delete')
+const updateEffect = machine.getEffect('update')
+const successEffect = machine.getEffect('success')
+const failureEffect = machine.getEffect('failure')
 
 function * createUserFlow() {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(
-      CREATE_USER_REQUEST
+      Type.CREATE_USER_REQUEST
     )
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'create', loading: true }
-    })
+    yield createEffect('form')
     try {
       const user = yield call(Api.createUser, action.payload)
       if (user) {
-        yield put({ type: CREATE_USER_SUCCESS, payload: user })
+        yield successEffect('form', 'create', user)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'create')
+      yield failureEffect('form', error)
+      machine.operation('retry')
     }
   }
 }
 
 function * fetchAllUsersFlow() {
   while (true) {
-    yield take(FETCH_USER_LIST_REQUEST)
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'fetchList', loading: true }
-    })
+    yield take(Type.FETCH_USER_ALL_REQUEST)
+    yield fetchAllEffect('list')
     try {
       const response = yield call(Api.getAllUsers)
       if (response) {
-        yield put({ type: FETCH_USER_LIST_SUCCESS, payload: response })
+        yield successEffect('list', 'fetchAll', response)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'fetchList')
+      yield failureEffect('list', error)
+      machine.operation('retry')
+    }
+  }
+}
+
+function * fetchUsersFlow() {
+  while (true) {
+    const action: { type: String, payload?: Immut } = yield take(
+      Type.FETCH_USER_LIST_REQUEST
+    )
+    yield fetchEffect('list')
+    try {
+      const result = yield call(Api.getUsersWithPg, action.payload)
+      if (result) {
+        const user = result.get('user')
+        const pagination = result.get('pagination')
+        yield successEffect('list', 'fetch', user, pagination)
+      }
+    } catch (error) {
+      yield failureEffect('list', error)
+      machine.operation('retry')
     }
   }
 }
@@ -74,99 +167,37 @@ function * fetchAllUsersFlow() {
 function * deleteUserByUsernameFlow() {
   while (true) {
     const action: { type: string, payload: string } = yield take(
-      DELETE_USER_REQUEST
+      Type.DELETE_USER_REQUEST
     )
     const { payload } = action
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'delete', loading: true }
-    })
+    yield deleteEffect('list')
     try {
       const response = yield call(Api.deleteUserByUsername, payload)
       if (response) {
-        yield put({
-          type: DELETE_USER_SUCCESS,
-          payload: response
-        })
+        yield successEffect('list', 'delete', response)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'delete')
+      yield failureEffect('list', error)
+      machine.operation('retry')
     }
   }
 }
 
-// function * createPriceHistoryFlow() {
-//   while (true) {
-//     const action: { type: string, payload: Immut } = yield take(
-//       CREATE_PRICE_HISTORY_REQUEST
-//     )
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'createPH', loading: true }
-//     })
-//     try {
-//       const product = yield call(Api.createPriceHistory, action.payload)
-//       if (product) {
-//         yield put({ type: CREATE_PRICE_HISTORY_SUCCESS, payload: product })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield fork(clearLoadingAndError, 'createPH')
-//     }
-//   }
-// }
-
-// function * deletePriceHistoryByIdFlow() {
-//   while (true) {
-//     const action: { type: string, payload: any } = yield take(
-//       DELETE_PRICE_HISTORY_REQUEST
-//     )
-//     const { payload } = action
-//     yield put({
-//       type: SET_LOADING,
-//       payload: { scope: 'deletePH', loading: true }
-//     })
-//     try {
-//       const product = yield call(Api.deletePriceHistoryById, payload)
-//       if (product) {
-//         yield put({
-//           type: DELETE_PRICE_HISTORY_SUCCESS,
-//           payload: product
-//         })
-//       }
-//     } catch (error) {
-//       yield put({ type: REQUEST_ERROR, payload: error.message })
-//     } finally {
-//       yield fork(clearLoadingAndError, 'deletePH')
-//     }
-//   }
-// }
-
 function * updateUserByUsernameFlow() {
   while (true) {
     const action: { type: string, payload: any } = yield take(
-      UPDATE_USER_REQUEST
+      Type.UPDATE_USER_REQUEST
     )
     const { payload } = action
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'update', loading: true }
-    })
+    yield updateEffect('formUpdate')
     try {
       const response = yield call(Api.updateUserByUsername, payload)
       if (response) {
-        yield put({
-          type: UPDATE_USER_SUCCESS,
-          payload: response
-        })
+        yield successEffect('formUpdate', 'update', response)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'update')
+      yield failureEffect('formUpdate', error)
+      machine.operation('retry')
     }
   }
 }
@@ -174,8 +205,7 @@ function * updateUserByUsernameFlow() {
 export default function * rootSagas(): any {
   yield fork(createUserFlow)
   yield fork(fetchAllUsersFlow)
-  // yield fork(createPriceHistoryFlow)
+  yield fork(fetchUsersFlow)
   yield fork(deleteUserByUsernameFlow)
-  // yield fork(deletePriceHistoryByIdFlow)
   yield fork(updateUserByUsernameFlow)
 }

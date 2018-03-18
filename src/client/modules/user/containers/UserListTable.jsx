@@ -1,20 +1,24 @@
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 
 import UserListTable from '../components/UserListTable'
 import { fetchUserListRequest, deleteUserRequest } from '../actions'
 
 import { userArraySelector } from '../selectors'
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
+import { withDelayLoading } from '@clientUtils/withLoading'
 
 const mapStateToProps = state => {
   const users = userArraySelector(state)
-  return { users }
+  const pagination = state.getIn(['user', 'pagination'])
+  const loading = state.getIn(['user', 'status', 'listLoading'])
+  return { users, pagination, loading }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllUsers: () => {
-      dispatch(fetchUserListRequest())
+    getUsers: (pageNumber, pageSize, fromDate, toDate) => {
+      dispatch(fetchUserListRequest({ pageNumber, pageSize, fromDate, toDate }))
     },
     deleteUserByUsername: username => () => {
       dispatch(deleteUserRequest(username))
@@ -22,6 +26,8 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  immutPropsToJS(UserListTable)
-)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  immutPropsToJS,
+  withDelayLoading
+)(UserListTable)

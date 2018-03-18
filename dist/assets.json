@@ -5,6 +5,9 @@
   "many-used": {
     "js": "http://localhost:7000/js/many-used.chunk.js"
   },
+  "UserComponent": {
+    "js": "http://localhost:7000/js/UserComponent.chunk.js"
+  },
   "ProductComponent": {
     "js": "http://localhost:7000/js/ProductComponent.chunk.js"
   },

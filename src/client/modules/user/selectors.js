@@ -1,20 +1,21 @@
 // @flow
 
-import { denormalizeUser, denormalizeUserArray } from './schema'
-import createImmutableSelector from '@clientModulesShared/createImmutableSelector'
+import createImmutableSelector from '@clientUtils/createImmutableSelector'
 
-const userEntity = state => state.getIn(['user', 'userEntity'])
-const userCurrent = state => state.getIn(['user', 'userStatus', 'current'])
-const userAll = state => state.getIn(['user', 'userStatus', 'all'])
+const userEntity = state => state.getIn(['entities', 'users'])
+const userCurrent = state => state.getIn(['user', 'status', 'current'])
+const userIds = state => state.getIn(['user', 'status', 'all'])
 
 const userSelector = createImmutableSelector(
   [userEntity, userCurrent],
-  (users, id) => denormalizeUser(users, id)
+  (user, current) => user.get(current)
 )
 
 const userArraySelector = createImmutableSelector(
-  [userEntity, userAll],
-  (users, all) => denormalizeUserArray(users, all)
+  [userEntity, userIds],
+  (user, ids) => {
+    return ids ? ids.map(item => user.get(item)) : []
+  }
 )
 
 const driverArraySelector = createImmutableSelector(
@@ -27,4 +28,9 @@ const captainArraySelector = createImmutableSelector(
   users => users.filter((user, i) => user.get('role') === 'captain')
 )
 
-export { userSelector, userArraySelector, driverArraySelector, captainArraySelector }
+export {
+  userSelector,
+  userArraySelector,
+  driverArraySelector,
+  captainArraySelector
+}

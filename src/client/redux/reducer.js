@@ -8,15 +8,24 @@ import {
   priceHistoryEntity,
   productReducer
 } from '../modules/product'
-// import { reducer as userReducer } from '../modules/user'
-// import { reducer as vehicleReducer } from '../modules/vehicle'
+import { userEntity, userReducer } from '../modules/user'
+// import {
+//   fuelsEntity,
+//   maintainEntity,
+//   vehicleEntity,
+//   vehicleReducer
+// } from '../modules/vehicle'
 // import { reducer as transportReducer } from '../modules/transport'
 import routerReducer from '../route/reducer' // hack the default to immutable routerReducer
 
 const EntitiesReducer = combineReducers({
   companies: companyEntity,
   products: productEntity,
-  price_histories: priceHistoryEntity
+  price_histories: priceHistoryEntity,
+  users: userEntity
+  // fuels: fuelsEntity,
+  // maintenance: maintainEntity,
+  // vehicles: vehicleEntity
 })
 
 const rootReducer = combineReducers({
@@ -26,7 +35,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   company: companyReducer,
   product: productReducer,
-  // user: userReducer,
+  user: userReducer,
   // vehicle: vehicleReducer,
   // transport: transportReducer,
   form: formReducer

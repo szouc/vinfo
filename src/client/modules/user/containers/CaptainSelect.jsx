@@ -4,7 +4,7 @@ import UserSelect from '../components/UserSelect'
 import { fetchUserListRequest } from '../actions'
 
 import { captainArraySelector } from '../selectors'
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
 
 const mapStateToProps = state => {
   const users = captainArraySelector(state)

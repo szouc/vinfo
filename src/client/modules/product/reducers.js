@@ -74,7 +74,7 @@ const InitialState = fromJS({
 
 const productStatus = (
   state: Immut = InitialState,
-  action: { type: string, payload: any }
+  action: { type: String, payload: any }
 ) => {
   const { type, payload } = action
   switch (type) {

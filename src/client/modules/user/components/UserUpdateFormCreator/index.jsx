@@ -7,11 +7,7 @@ import ImageUpload from '../ImageUpload'
 import GenderRadio from '../GenderRadio'
 import RoleRadio from '../RoleRadio'
 import formItemHOC from '@clientModulesShared/formItemHOC'
-import {
-  USER_LICENSE_UPLOAD_API,
-  USER_ID_FRONT_UPLOAD_API,
-  USER_ID_BACK_UPLOAD_API
-} from '../../api/apiRoutes'
+import { user as URL } from '@server/exports/api'
 
 const GenderRadioFormItem = formItemHOC(GenderRadio)
 const RoleRadioFormItem = formItemHOC(RoleRadio)
@@ -51,7 +47,7 @@ class UserUpdateForm extends React.PureComponent {
               name='id_front'
               component={ImageUploadFormItem}
               placeholder='身份证正面'
-              uploadUrl={USER_ID_FRONT_UPLOAD_API}
+              uploadUrl={URL.USER_ID_FRONT_UPLOAD}
               numberOfImage={1}
             />
           </Col>
@@ -60,7 +56,7 @@ class UserUpdateForm extends React.PureComponent {
               name='id_back'
               component={ImageUploadFormItem}
               placeholder='身份证反面'
-              uploadUrl={USER_ID_BACK_UPLOAD_API}
+              uploadUrl={URL.USER_ID_BACK_UPLOAD}
               numberOfImage={1}
             />
           </Col>
@@ -69,7 +65,7 @@ class UserUpdateForm extends React.PureComponent {
               name='license'
               component={ImageUploadFormItem}
               placeholder='驾驶证'
-              uploadUrl={USER_LICENSE_UPLOAD_API}
+              uploadUrl={URL.USER_LICENSE_UPLOAD}
               numberOfImage={1}
             />
           </Col>

@@ -13,10 +13,10 @@ const LoadableProduct = Loadable({
   loading: () => null
 })
 
-// const LoadableUser = Loadable({
-//   loader: () => import(/* webpackChunkName: "UserComponent" */ '../User'),
-//   loading: () => null
-// })
+const LoadableUser = Loadable({
+  loader: () => import(/* webpackChunkName: "UserComponent" */ '../User'),
+  loading: () => null
+})
 
 // const LoadableVehicle = Loadable({
 //   loader: () => import(/* webpackChunkName: "VehicleComponent" */ '../Vehicle'),
@@ -45,6 +45,7 @@ class BaseContent extends React.PureComponent {
         <Route path='/home' component={NotFound} />
         <Route path='/company' component={LoadableCompany} />
         <Route path='/product' component={LoadableProduct} />
+        <Route path='/user' component={LoadableUser} />
         <Route component={NotFound} />
       </Switch>
     )

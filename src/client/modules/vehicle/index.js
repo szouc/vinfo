@@ -1,6 +1,11 @@
-import reducer from './reducers'
+import {
+  fuelsEntity,
+  maintainEntity,
+  vehicleEntity,
+  vehicleReducer
+} from './reducers'
 import saga from './sagas'
 
-export const MODULE_NAME = 'vehicle'
+export const MODULE_NAME = 'VEHICLE'
 
-export { reducer, saga }
+export { fuelsEntity, maintainEntity, vehicleEntity, vehicleReducer, saga }

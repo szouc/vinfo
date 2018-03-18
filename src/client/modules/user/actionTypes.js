@@ -1,20 +1,21 @@
 // import { MODULE_NAME } from './'
 
 const defineModule = module => (...constant) => {
-  const SEPARATOR = '/'
+  const SEPARATOR = '_'
   return [module, ...constant].join(SEPARATOR)
 }
 
-export const MODULE_NAME = 'user'
+export const MODULE_NAME = 'USER'
 const defineConstant = defineModule(MODULE_NAME)
 
 /**
  * Generating async request suffix
  */
 export const SET_LOADING = defineConstant('SET_LOADING')
-export const REQUEST_ERROR = defineConstant('REQUEST_ERROR')
 export const SHOW_DETAIL_USER = defineConstant('SHOW_DETAIL_USER')
 
+export const FETCH_USER_ALL_REQUEST = defineConstant('FETCH_USER_ALL_REQUEST')
+export const FETCH_USER_ALL_SUCCESS = defineConstant('FETCH_USER_ALL_SUCCESS')
 export const FETCH_USER_LIST_REQUEST = defineConstant('FETCH_USER_LIST_REQUEST')
 export const FETCH_USER_LIST_SUCCESS = defineConstant('FETCH_USER_LIST_SUCCESS')
 export const FETCH_USER_REQUEST = defineConstant('FETCH_USER_REQUEST')

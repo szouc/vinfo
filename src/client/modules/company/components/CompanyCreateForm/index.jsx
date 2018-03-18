@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form/es/immutable'
-import { Button, Row, Col, Alert } from 'antd'
+import { Button, Row, Col } from 'antd'
 import { Input } from '@clientModulesShared/forms'
 
 import BaseComponent from '@clientModulesShared/BaseComponent'
@@ -22,20 +22,9 @@ class CompanyCreateForm extends BaseComponent {
   }
 
   render() {
-    const {
-      handleSubmit,
-      pristine,
-      reset,
-      submitting,
-      errorMessage
-    } = this.props
+    const { handleSubmit, pristine, reset, submitting } = this.props
     return (
       <form onSubmit={handleSubmit}>
-        {errorMessage ? (
-          <Row>
-            <Alert message={errorMessage} type='error' banner />
-          </Row>
-        ) : null}
         <Row type='flex' justify='space-between'>
           <Col span={8}>
             <Field name='name' component={Input} placeholder='公司名称' />

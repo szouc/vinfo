@@ -1,19 +1,21 @@
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 import { updateProductRequest } from '../actions'
 import { fromJS } from 'immutable'
 
 import ProductUpdateFormCreator from '../components/ProductUpdateFormCreator'
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
+import { withNoDelayLoading } from '@clientUtils/withLoading'
 
 const mapStateToProps = (state, ownProps) => {
-  const errorMessage = state.getIn(['product', 'productStatus', 'error'])
+  const loading = state.getIn(['product', 'status', 'formUpdateLoading'])
   const initialValues = {
     name: ownProps.product.name,
     specs: ownProps.product.specs,
     pricing: ownProps.product.pricing
   }
 
-  return { errorMessage, initialValues }
+  return { loading, initialValues }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -29,6 +31,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 export default productId =>
-  connect(mapStateToProps, mapDispatchToProps)(
-    immutPropsToJS(ProductUpdateFormCreator(productId))
-  )
+  compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    immutPropsToJS,
+    withNoDelayLoading
+  )(ProductUpdateFormCreator(productId))

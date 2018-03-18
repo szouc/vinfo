@@ -79,3 +79,5 @@ console.log(req)
 
 const page = {}
 console.log(Boolean(page))
+
+console.log(req.deleteIn(['assigner', -1]))

@@ -2,6 +2,12 @@
   "common-in-lazy": {
     "js": "http://localhost:7000/js/common-in-lazy.chunk.js"
   },
+  "many-used": {
+    "js": "http://localhost:7000/js/many-used.chunk.js"
+  },
+  "ProductComponent": {
+    "js": "http://localhost:7000/js/ProductComponent.chunk.js"
+  },
   "CompanyComponent": {
     "js": "http://localhost:7000/js/CompanyComponent.chunk.js"
   },

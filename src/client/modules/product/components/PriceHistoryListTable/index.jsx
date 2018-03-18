@@ -1,5 +1,4 @@
 import React from 'react'
-// import BaseComponent from '@clientModulesShared/BaseComponent'
 import moment from 'moment'
 
 import { Table, Button } from 'antd'
@@ -12,8 +11,8 @@ class PriceHistoryListTable extends React.PureComponent {
   }
 
   render() {
-    const { product, deletePriceHistoryById } = this.props
-    const data = product.price_history
+    const { product, priceHistories, deletePriceHistoryById } = this.props
+    const data = priceHistories
     const columns = [
       {
         title: '开始日期',

@@ -1,13 +1,15 @@
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 
 import ProductCreateForm from '../components/ProductCreateForm'
 import { createProductRequest } from '../actions'
 
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
+import { withNoDelayLoading } from '@clientUtils/withLoading'
 
 const mapStateToProps = state => {
-  const errorMessage = state.getIn(['product', 'productStatus', 'error'])
-  return { errorMessage }
+  const loading = state.getIn(['product', 'status', 'formLoading'])
+  return { loading }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -18,4 +20,8 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(immutPropsToJS(ProductCreateForm))
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  immutPropsToJS,
+  withNoDelayLoading
+)(ProductCreateForm)

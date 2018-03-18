@@ -2,6 +2,11 @@ import React from 'react'
 import { Iterable } from 'immutable'
 import { toPairs } from 'ramda'
 
+/**
+ * transform the immutable props to plain props
+ *
+ * @param {component} WrappedComponent
+ */
 const immutPropsToJS = WrappedComponent => wrappedComponentProps => {
   const KEY = 0
   const VALUE = 1

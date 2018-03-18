@@ -70,9 +70,7 @@ async function updateCompanyById(id: string, payload: Immut): ?Immut {
 async function deleteCompanyById(id: string) {
   const response = await Request.deleteCompanyById(id)
   if (response.status === STATUS_OK) {
-    const data = response.data.result
-    const company = companyNormalize(data)
-    return fromJS(company)
+    return fromJS({ companyId: id })
   }
   throw new Error('Something wrong at deleteCompanyById Process')
 }

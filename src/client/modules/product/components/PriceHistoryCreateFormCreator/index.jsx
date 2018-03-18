@@ -1,6 +1,6 @@
 import React from 'react'
 import { FieldArray, reduxForm } from 'redux-form/es/immutable'
-import { Button, Row, Col, Alert } from 'antd'
+import { Button, Row, Col } from 'antd'
 import PriceHistoryCreateField from '../PriceHistoryCreateField'
 
 // import BaseComponent from '@clientModulesShared/BaseComponent'
@@ -16,17 +16,6 @@ const validate = values => {
   return errors
 }
 
-const showError = errorMessage => {
-  if (!errorMessage) {
-    return null
-  }
-  return (
-    <Row>
-      <Alert message={errorMessage} type='error' banner />
-    </Row>
-  )
-}
-
 class PriceHistoryCreateForm extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -37,12 +26,10 @@ class PriceHistoryCreateForm extends React.PureComponent {
       handleSubmit,
       pristine,
       reset,
-      submitting,
-      errorMessage
+      submitting
     } = this.props
     return (
       <form onSubmit={handleSubmit}>
-        {showError(errorMessage)}
         <Row type='flex' justify='space-between'>
           <Col span={20}>
             <FieldArray

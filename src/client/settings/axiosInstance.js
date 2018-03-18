@@ -1,7 +1,6 @@
 import axios from 'axios'
 import qs from 'querystring'
 import { WEB_ADDR } from './config'
-import { fromJS } from 'immutable'
 
 const axiosInstance = axios.create({
   baseURL: WEB_ADDR,
@@ -32,25 +31,28 @@ axiosInstance.interceptors.response.use(
       console.log(error)
       switch (error.response.status) {
         case 400:
-          // error.message = '查询错误'
-          error.message = error.response.data.error
+          // error.response.message = '请求错误'
+          error.response.message = error.response.data.error
           break
         case 401:
-          error.message = '用户名或密码错误，请重新登录'
+          error.response.message = '用户名或密码错误，请重新登录'
           break
         case 403:
-          error.message = '拒绝访问'
+          error.response.message = '拒绝访问'
           break
         case 404:
-          error.message = `请求地址出错: ${error.response.config.url}`
+          error.response.message = `请求地址出错: ${error.response.config.url}`
           break
         case 500:
-          error.message = '服务器内部错误'
+          error.response.message = '服务器内部错误'
+          break
+        default:
+          error.response.message = '操作错误，请联系管理员。'
           break
       }
     }
     // Do something with response error
-    return Promise.reject(fromJS(error))
+    return Promise.reject(error.response)
   }
 )
 

@@ -48,12 +48,12 @@ const enhancer = compose(applyMiddleware(...middleware))
 export const configureStore = (state: Immut = initialState) => {
   const store = createStore(rootReducer, state, enhancer)
 
-  if (module.hot) {
-    // flow-disable-next-line
-    module.hot.accept('./reducer', () => {
-      store.replaceReducer(rootReducer)
-    })
-  }
+  // if (module.hot) {
+  //   // flow-disable-next-line
+  //   module.hot.accept('./reducer', () => {
+  //     store.replaceReducer(rootReducer)
+  //   })
+  // }
 
   sagaMiddleware.run(rootSagas)
   // persistStore(store, {

@@ -2,8 +2,8 @@ import { connect } from 'react-redux'
 
 import ProductSelect from '../components/ProductSelect'
 import { productArraySelector } from '../selectors'
-import { fetchProductListRequest } from '../actions'
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import { fetchProductAllRequest } from '../actions'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
 
 const mapStateToProps = state => {
   const products = productArraySelector(state)
@@ -15,7 +15,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getAllProducts: () => {
-      dispatch(fetchProductListRequest())
+      dispatch(fetchProductAllRequest())
     }
   }
 }

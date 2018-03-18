@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 import { fromJS } from 'immutable'
 
 import ProductListTable from '../components/ProductListTable'
@@ -8,17 +9,22 @@ import {
   deletePriceHistoryRequest
 } from '../actions'
 import { productArraySelector } from '../selectors'
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
+import { withDelayLoading } from '@clientUtils/withLoading'
 
 const mapStateToProps = state => {
   const products = productArraySelector(state)
-  return { products }
+  const pagination = state.getIn(['product', 'pagination'])
+  const loading = state.getIn(['product', 'status', 'listLoading'])
+  return { products, pagination, loading }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllProducts: () => {
-      dispatch(fetchProductListRequest())
+    getProducts: (pageNumber, pageSize, fromDate, toDate) => {
+      dispatch(
+        fetchProductListRequest({ pageNumber, pageSize, fromDate, toDate })
+      )
     },
     deleteProductById: id => () => {
       dispatch(deleteProductRequest(id))
@@ -29,6 +35,8 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  immutPropsToJS(ProductListTable)
-)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  immutPropsToJS,
+  withDelayLoading
+)(ProductListTable)

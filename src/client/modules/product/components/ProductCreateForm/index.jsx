@@ -53,7 +53,11 @@ class ProductCreateForm extends React.PureComponent {
             <Field name='specs' component={Input} placeholder='物品规格' />
           </Col>
           <Col span={4}>
-            <Field name='pricing' component={InputNumber} placeholder='当前价格' />
+            <Field
+              name='pricing'
+              component={InputNumber}
+              placeholder='当前价格'
+            />
           </Col>
           <Col span={4}>
             <Button

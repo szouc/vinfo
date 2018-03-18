@@ -1,13 +1,15 @@
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 import { fromJS } from 'immutable'
 
 import PriceHistoryCreateFormCreator from '../components/PriceHistoryCreateFormCreator'
 import { createPriceHistoryRequest } from '../actions'
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
+import { withNoDelayLoading } from '@clientUtils/withLoading'
 
 const mapStateToProps = state => {
-  const errorMessage = state.getIn(['product', 'productStatus', 'error'])
-  return { errorMessage }
+  const loading = state.getIn(['product', 'status', 'formPHLoading'])
+  return { loading }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -26,6 +28,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 export default productId =>
-  connect(mapStateToProps, mapDispatchToProps)(
-    immutPropsToJS(PriceHistoryCreateFormCreator(productId))
-  )
+  compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    immutPropsToJS,
+    withNoDelayLoading
+  )(PriceHistoryCreateFormCreator(productId))

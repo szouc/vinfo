@@ -1,6 +1,6 @@
-import reducer from './reducers'
+import { productEntity, priceHistoryEntity, productReducer } from './reducers'
 import saga from './sagas'
 
 export const MODULE_NAME = 'product'
 
-export { reducer, saga }
+export { productEntity, priceHistoryEntity, productReducer, saga }

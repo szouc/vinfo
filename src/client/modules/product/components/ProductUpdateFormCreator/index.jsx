@@ -2,7 +2,7 @@ import React from 'react'
 import { Field, reduxForm } from 'redux-form/es/immutable'
 import Input from '@clientModulesShared/forms/Input'
 import InputNumber from '@clientModulesShared/forms/InputNumber'
-import { Button, Row, Col, Alert } from 'antd'
+import { Button, Row, Col } from 'antd'
 
 // import BaseComponent from '@clientModulesShared/BaseComponent'
 
@@ -17,17 +17,6 @@ const validate = values => {
   return errors
 }
 
-const showError = errorMessage => {
-  if (!errorMessage) {
-    return null
-  }
-  return (
-    <Row>
-      <Alert message={errorMessage} type='error' banner />
-    </Row>
-  )
-}
-
 class ProductUpdateForm extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -38,12 +27,10 @@ class ProductUpdateForm extends React.PureComponent {
       handleSubmit,
       pristine,
       reset,
-      submitting,
-      errorMessage
+      submitting
     } = this.props
     return (
       <form onSubmit={handleSubmit}>
-        {showError(errorMessage)}
         <Row type='flex' justify='space-between'>
           <Col span={8}>
             <Field name='name' component={Input} placeholder='物品名称' />

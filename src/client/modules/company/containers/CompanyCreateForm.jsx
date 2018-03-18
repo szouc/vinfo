@@ -1,13 +1,16 @@
 import { connect } from 'react-redux'
+import { compose } from 'redux'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
+import { withNoDelayLoading } from '@clientUtils/withLoading'
 
 import CompanyCreateForm from '../components/CompanyCreateForm'
 import { createCompanyRequest } from '../actions'
 
 const mapStateToProps = state => {
-  const errorMessage = state.getIn(['company', 'companyStatus', 'error'])
-  return { errorMessage }
+  return {
+    loading: state.getIn(['company', 'status', 'formLoading'])
+  }
 }
-
 const mapDispatchToProps = dispatch => {
   return {
     onSubmit: values => {
@@ -16,4 +19,8 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompanyCreateForm)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  immutPropsToJS,
+  withNoDelayLoading
+)(CompanyCreateForm)

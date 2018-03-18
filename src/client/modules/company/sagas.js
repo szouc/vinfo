@@ -1,12 +1,11 @@
 // @flow
 
 import * as Type from './actionTypes'
-import { REQUEST_ERROR, CLEAR_ERROR } from '../error/actionTypes'
+import { REQUEST_ERROR } from '../error/actionTypes'
 import { SET_PAGINATION } from '@clientModulesShared/paginationReducer/actionTypes'
 
 import Machine from '@clientUtils/machine'
 import { call, put, take, fork } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
 // Use for redux-form/immutable
 import type { fromJS as Immut } from 'immutable'
 import { fromJS } from 'immutable'
@@ -32,8 +31,16 @@ const companyState = {
   }
 }
 
-function * screenEffect(scope, data, pagination = {}) {
-  switch (scope) {
+/**
+ * The effects which will be execute when status transforms to the 'screen' status.
+ *
+ * @param {String} scope - the loading scope
+ * @param {String} action - the action of the page
+ * @param {Object} data - the result of the action
+ * @param {Object} [pagination={}]
+ */
+function * screenEffect(scope, action, data, pagination = {}) {
+  switch (action) {
     case 'create':
       yield put({
         type: Type.CREATE_COMPANY_SUCCESS,
@@ -88,8 +95,6 @@ function * errorEffect(scope, error) {
     type: Type.SET_LOADING,
     payload: { scope: scope, loading: false }
   })
-  yield delay(3000)
-  yield put({ type: CLEAR_ERROR })
 }
 
 const companyEffects = {
@@ -111,14 +116,14 @@ function * createCompanyFlow() {
     const action: { type: string, payload: Immut } = yield take(
       Type.CREATE_COMPANY_REQUEST
     )
-    yield createEffect('create')
+    yield createEffect('form')
     try {
       const company = yield call(Api.createCompany, action.payload)
       if (company) {
-        yield successEffect('create', company)
+        yield successEffect('form', 'create', company)
       }
     } catch (error) {
-      yield failureEffect('create', error)
+      yield failureEffect('form', error)
       machine.operation('retry')
     }
   }
@@ -127,14 +132,14 @@ function * createCompanyFlow() {
 function * fetchAllCompaniesFlow() {
   while (true) {
     yield take(Type.FETCH_COMPANY_ALL_REQUEST)
-    yield fetchAllEffect('fetchAll')
+    yield fetchAllEffect('list')
     try {
       const company = yield call(Api.getAllCompanies)
       if (company) {
-        yield successEffect('fetchAll', company)
+        yield successEffect('list', 'fetchAll', company)
       }
     } catch (error) {
-      yield failureEffect('fetchAll', error)
+      yield failureEffect('list', error)
       machine.operation('retry')
     }
   }
@@ -145,16 +150,16 @@ function * fetchCompaniesFlow() {
     const action: { type: String, payload?: Immut } = yield take(
       Type.FETCH_COMPANY_LIST_REQUEST
     )
-    yield fetchEffect('fetch')
+    yield fetchEffect('list')
     try {
       const result = yield call(Api.getCompaniesWithPg, action.payload)
       if (result) {
         const company = result.get('company')
         const pagination = result.get('pagination')
-        yield successEffect('fetch', company, pagination)
+        yield successEffect('list', 'fetch', company, pagination)
       }
     } catch (error) {
-      yield failureEffect('fetch', error)
+      yield failureEffect('list', error)
       machine.operation('retry')
     }
   }
@@ -166,15 +171,14 @@ function * deleteCompanyByIdFlow() {
       Type.DELETE_COMPANY_REQUEST
     )
     const { payload } = action
-    yield deleteEffect('delete')
+    yield deleteEffect('list')
     try {
-      const company = yield call(Api.deleteCompanyById, payload)
-      if (company) {
-        console.log(company)
-        yield successEffect('delete', payload)
+      const companyId = yield call(Api.deleteCompanyById, payload)
+      if (companyId) {
+        yield successEffect('list', 'delete', companyId)
       }
     } catch (error) {
-      yield failureEffect('delete', error)
+      yield failureEffect('list', error)
       machine.operation('retry')
     }
   }

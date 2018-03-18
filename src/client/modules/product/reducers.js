@@ -1,34 +1,11 @@
 // @flow
 
-import {
-  SET_LOADING,
-  REQUEST_ERROR,
-  CREATE_PRODUCT_SUCCESS,
-  // FETCH_PRODUCT_SUCCESS,
-  UPDATE_PRODUCT_SUCCESS,
-  DELETE_PRODUCT_SUCCESS,
-  FETCH_PRODUCT_LIST_SUCCESS,
-  CREATE_PRICE_HISTORY_SUCCESS,
-  DELETE_PRICE_HISTORY_SUCCESS
-} from './actionTypes'
+import * as Type from './actionTypes'
 
 import type { fromJS as Immut } from 'immutable'
 import immutable, { fromJS } from 'immutable'
 import { combineReducers } from 'redux-immutable'
-
-const InitialState = fromJS({
-  fetchListLoading: false,
-  fetchLoading: false,
-  createLoading: false,
-  updateLoading: false,
-  deleteLoading: false,
-  fetchPHLoading: false,
-  createPHLoading: false,
-  deletePHLoading: false,
-  error: undefined,
-  current: undefined,
-  all: []
-})
+import { paginationReducerFor } from '@clientModulesShared/paginationReducer'
 
 const priceHistoryEntity = (
   state: Immut = immutable.Map({}),
@@ -36,23 +13,18 @@ const priceHistoryEntity = (
 ) => {
   const { type, payload } = action
   switch (type) {
-    case CREATE_PRODUCT_SUCCESS:
-      return state.mergeIn(
-        ['price_histories'],
-        payload.getIn(['entities', 'price_histories'])
-      )
-    case UPDATE_PRODUCT_SUCCESS:
-      return state.mergeIn(
-        ['price_histories'],
-        payload.getIn(['entities', 'price_histories'])
-      )
-    case CREATE_PRICE_HISTORY_SUCCESS:
-      return state.mergeIn(
-        ['price_histories'],
-        payload.getIn(['entities', 'price_histories'])
-      )
-    case DELETE_PRICE_HISTORY_SUCCESS:
-      return state.deleteIn(['price_histories', payload.get('priceHistoryId')])
+    case Type.FETCH_PRODUCT_ALL_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'price_histories']))
+    case Type.FETCH_PRODUCT_LIST_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'price_histories']))
+    case Type.CREATE_PRODUCT_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'price_histories']))
+    case Type.UPDATE_PRODUCT_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'price_histories']))
+    case Type.CREATE_PRICE_HISTORY_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'price_histories']))
+    case Type.DELETE_PRICE_HISTORY_SUCCESS:
+      return state.delete(payload.get('priceHistoryId'))
     default:
       return state
   }
@@ -64,42 +36,41 @@ const productEntity = (
 ) => {
   const { type, payload } = action
   switch (type) {
-    case FETCH_PRODUCT_LIST_SUCCESS:
-      if (payload.get('entities')) {
-        return payload.get('entities')
-      }
-      return state
-    case CREATE_PRODUCT_SUCCESS:
-      return priceHistoryEntity(state, action).mergeIn(
-        ['products'],
-        payload.getIn(['entities', 'products'])
-      )
-    case DELETE_PRODUCT_SUCCESS:
-      return state.deleteIn(['products', payload])
-    case UPDATE_PRODUCT_SUCCESS:
-      return priceHistoryEntity(state, action).mergeIn(
-        ['products'],
-        payload.getIn(['entities', 'products'])
-      )
-    case CREATE_PRICE_HISTORY_SUCCESS:
-      return priceHistoryEntity(state, action).mergeIn(
-        ['products'],
-        payload.getIn(['entities', 'products'])
-      )
-    case DELETE_PRICE_HISTORY_SUCCESS:
-      const priceHistoryPosition = state
-        .getIn(['products', payload.get('productId'), 'price_history'])
+    case Type.FETCH_PRODUCT_ALL_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'products']))
+    case Type.FETCH_PRODUCT_LIST_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'products']))
+    case Type.CREATE_PRODUCT_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'products']))
+    case Type.DELETE_PRODUCT_SUCCESS:
+      return state.delete(payload.get('productId'))
+    case Type.UPDATE_PRODUCT_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'products']))
+    case Type.CREATE_PRICE_HISTORY_SUCCESS:
+      return state.merge(payload.getIn(['entities', 'products']))
+    case Type.DELETE_PRICE_HISTORY_SUCCESS:
+      const phPosition = state
+        .getIn([payload.get('productId'), 'price_history'])
         .indexOf(payload.get('priceHistoryId'))
-      return priceHistoryEntity(state, action).deleteIn([
-        'products',
+      return state.deleteIn([
         payload.get('productId'),
         'price_history',
-        priceHistoryPosition
+        phPosition
       ])
     default:
       return state
   }
 }
+
+const InitialState = fromJS({
+  formLoading: false,
+  listLoading: false,
+  formPHLoading: false,
+  listPHLoading: false,
+  formUpdateLoading: false,
+  current: undefined,
+  all: []
+})
 
 const productStatus = (
   state: Immut = InitialState,
@@ -107,26 +78,28 @@ const productStatus = (
 ) => {
   const { type, payload } = action
   switch (type) {
-    case SET_LOADING:
+    case Type.SET_LOADING:
       return state.set(`${payload.scope}Loading`, payload.loading)
-    case REQUEST_ERROR:
-      return state.set('error', payload)
-    case FETCH_PRODUCT_LIST_SUCCESS:
+    case Type.FETCH_PRODUCT_ALL_SUCCESS:
       return state.set('all', payload.get('result'))
-    case CREATE_PRODUCT_SUCCESS:
-      const pushToAll = state.get('all').push(payload.get('result'))
+    case Type.FETCH_PRODUCT_LIST_SUCCESS:
+      return state.set('all', payload.get('result'))
+    case Type.CREATE_PRODUCT_SUCCESS:
+      const pushToAll = state.get('all').unshift(payload.get('result'))
       return state.set('current', payload.get('result')).set('all', pushToAll)
-    case DELETE_PRODUCT_SUCCESS:
-      const productPosition = state.get('all').indexOf(payload)
+    case Type.UPDATE_PRODUCT_SUCCESS:
+      return state.set('current', payload.get('result'))
+    case Type.DELETE_PRODUCT_SUCCESS:
+      const productPosition = state.get('all').indexOf(payload.get('productId'))
       return state.deleteIn(['all', productPosition])
     default:
       return state
   }
 }
 
-const reducer = combineReducers({
-  productStatus,
-  productEntity
+const productReducer = combineReducers({
+  status: productStatus,
+  pagination: paginationReducerFor('PRODUCT_')
 })
 
-export default reducer
+export { productEntity, priceHistoryEntity, productReducer }

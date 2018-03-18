@@ -1,5 +1,5 @@
 import React from 'react'
-import { v4 } from 'node-uuid'
+import v4 from 'uuid/v4'
 // import BaseComponent from '@clientModulesShared/BaseComponent'
 import { Field } from 'redux-form/es/immutable'
 

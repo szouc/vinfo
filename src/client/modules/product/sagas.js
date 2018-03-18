@@ -1,76 +1,182 @@
 // @flow
 
-import {
-  SET_LOADING,
-  REQUEST_ERROR,
-  FETCH_PRODUCT_LIST_REQUEST,
-  FETCH_PRODUCT_LIST_SUCCESS,
-  DELETE_PRODUCT_REQUEST,
-  DELETE_PRODUCT_SUCCESS,
-  UPDATE_PRODUCT_REQUEST,
-  UPDATE_PRODUCT_SUCCESS,
-  CREATE_PRODUCT_REQUEST,
-  CREATE_PRODUCT_SUCCESS,
-  DELETE_PRICE_HISTORY_REQUEST,
-  DELETE_PRICE_HISTORY_SUCCESS,
-  CREATE_PRICE_HISTORY_REQUEST,
-  CREATE_PRICE_HISTORY_SUCCESS
-} from './actionTypes'
+import * as Type from './actionTypes'
+import { REQUEST_ERROR } from '../error/actionTypes'
+import { SET_PAGINATION } from '@clientModulesShared/paginationReducer/actionTypes'
+import Machine from '@clientUtils/machine'
 
 import { call, put, take, fork } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
 // Use for redux-form/immutable
 import type { fromJS as Immut } from 'immutable'
+import { fromJS } from 'immutable'
 
 import * as Api from './api'
 
-function * clearLoadingAndError(scope) {
+const productState = {
+  currentState: 'screen',
+  states: {
+    screen: {
+      fetch: 'loading',
+      fetchAll: 'loading',
+      create: 'loading',
+      delete: 'loading',
+      createPH: 'loading',
+      deletePH: 'loading',
+      update: 'loading'
+    },
+    loading: {
+      success: 'screen',
+      failure: 'error'
+    },
+    error: {
+      retry: 'screen'
+    }
+  }
+}
+
+function * screenEffect(scope, action, data, pagination = {}) {
+  switch (action) {
+    case 'create':
+      yield put({
+        type: Type.CREATE_PRODUCT_SUCCESS,
+        payload: data
+      })
+      break
+    case 'fetch':
+      yield put({
+        type: Type.FETCH_PRODUCT_LIST_SUCCESS,
+        payload: data
+      })
+      yield put({
+        type: `PRODUCT_${SET_PAGINATION}`,
+        payload: pagination
+      })
+      break
+    case 'fetchAll':
+      yield put({
+        type: Type.FETCH_PRODUCT_ALL_SUCCESS,
+        payload: data
+      })
+      break
+    case 'delete':
+      yield put({
+        type: Type.DELETE_PRODUCT_SUCCESS,
+        payload: data
+      })
+      break
+    case 'update':
+      yield put({
+        type: Type.UPDATE_PRODUCT_SUCCESS,
+        payload: data
+      })
+      break
+    case 'createPH':
+      yield put({
+        type: Type.CREATE_PRICE_HISTORY_SUCCESS,
+        payload: data
+      })
+      break
+    case 'deletePH':
+      yield put({
+        type: Type.DELETE_PRICE_HISTORY_SUCCESS,
+        payload: data
+      })
+      break
+    default:
+      yield put({
+        type: REQUEST_ERROR,
+        payload: fromJS({ message: '没有相应的操作。' })
+      })
+      break
+  }
   yield put({
-    type: SET_LOADING,
+    type: Type.SET_LOADING,
     payload: { scope: scope, loading: false }
   })
-  yield delay(2000)
-  yield put({ type: REQUEST_ERROR, payload: '' })
 }
+
+function * loadingEffect(scope) {
+  yield put({
+    type: Type.SET_LOADING,
+    payload: { scope: scope, loading: true }
+  })
+}
+
+function * errorEffect(scope, error) {
+  yield put({ type: REQUEST_ERROR, payload: fromJS(error) })
+  yield put({
+    type: Type.SET_LOADING,
+    payload: { scope: scope, loading: false }
+  })
+}
+
+const productEffects = {
+  loading: loadingEffect,
+  error: errorEffect,
+  screen: screenEffect
+}
+
+const machine = new Machine(productState, productEffects)
+const fetchEffect = machine.getEffect('fetch')
+const fetchAllEffect = machine.getEffect('fetchAll')
+const createEffect = machine.getEffect('create')
+const deleteEffect = machine.getEffect('delete')
+const updateEffect = machine.getEffect('update')
+const createPHEffect = machine.getEffect('createPH')
+const deletePHEffect = machine.getEffect('deletePH')
+const successEffect = machine.getEffect('success')
+const failureEffect = machine.getEffect('failure')
 
 function * createProductFlow() {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(
-      CREATE_PRODUCT_REQUEST
+      Type.CREATE_PRODUCT_REQUEST
     )
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'create', loading: true }
-    })
+    yield createEffect('form')
     try {
       const product = yield call(Api.createProduct, action.payload)
       if (product) {
-        yield put({ type: CREATE_PRODUCT_SUCCESS, payload: product })
+        yield successEffect('form', 'create', product)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'create')
+      yield failureEffect('from', error)
+      machine.operation('retry')
     }
   }
 }
 
 function * fetchAllProductsFlow() {
   while (true) {
-    yield take(FETCH_PRODUCT_LIST_REQUEST)
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'fetchList', loading: true }
-    })
+    yield take(Type.FETCH_PRODUCT_ALL_REQUEST)
+    yield fetchAllEffect('list')
     try {
       const product = yield call(Api.getAllProducts)
       if (product) {
-        yield put({ type: FETCH_PRODUCT_LIST_SUCCESS, payload: product })
+        yield successEffect('list', 'fetchAll', product)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'fetchList')
+      yield failureEffect('list', error)
+      machine.operation('retry')
+    }
+  }
+}
+
+function * fetchProductsFlow() {
+  while (true) {
+    const action: { type: String, payload?: Immut } = yield take(
+      Type.FETCH_PRODUCT_LIST_REQUEST
+    )
+    yield fetchEffect('list')
+    try {
+      const result = yield call(Api.getProductsWithPg, action.payload)
+      if (result) {
+        const product = result.get('product')
+        const pagination = result.get('pagination')
+        yield successEffect('list', 'fetch', product, pagination)
+      }
+    } catch (error) {
+      yield failureEffect('list', error)
+      machine.operation('retry')
     }
   }
 }
@@ -78,25 +184,17 @@ function * fetchAllProductsFlow() {
 function * deleteProductByIdFlow() {
   while (true) {
     const action: { type: string, payload: string } = yield take(
-      DELETE_PRODUCT_REQUEST
+      Type.DELETE_PRODUCT_REQUEST
     )
-    const { payload } = action
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'delete', loading: true }
-    })
+    yield deleteEffect('list')
     try {
-      const productId = yield call(Api.deleteProductById, payload)
+      const productId = yield call(Api.deleteProductById, action.payload)
       if (productId) {
-        yield put({
-          type: DELETE_PRODUCT_SUCCESS,
-          payload: productId
-        })
+        yield successEffect('list', 'delete', productId)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'delete')
+      yield failureEffect('list', error)
+      machine.operation('retry')
     }
   }
 }
@@ -104,21 +202,17 @@ function * deleteProductByIdFlow() {
 function * createPriceHistoryFlow() {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(
-      CREATE_PRICE_HISTORY_REQUEST
+      Type.CREATE_PRICE_HISTORY_REQUEST
     )
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'createPH', loading: true }
-    })
+    yield createPHEffect('formPH')
     try {
       const product = yield call(Api.createPriceHistory, action.payload)
       if (product) {
-        yield put({ type: CREATE_PRICE_HISTORY_SUCCESS, payload: product })
+        yield successEffect('formPH', 'createPH', product)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'createPH')
+      yield failureEffect('formPH', error)
+      machine.operation('retry')
     }
   }
 }
@@ -126,25 +220,17 @@ function * createPriceHistoryFlow() {
 function * deletePriceHistoryByIdFlow() {
   while (true) {
     const action: { type: string, payload: any } = yield take(
-      DELETE_PRICE_HISTORY_REQUEST
+      Type.DELETE_PRICE_HISTORY_REQUEST
     )
-    const { payload } = action
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'deletePH', loading: true }
-    })
+    yield deletePHEffect('listPH')
     try {
-      const product = yield call(Api.deletePriceHistoryById, payload)
-      if (product) {
-        yield put({
-          type: DELETE_PRICE_HISTORY_SUCCESS,
-          payload: product
-        })
+      const productId = yield call(Api.deletePriceHistoryById, action.payload)
+      if (productId) {
+        yield successEffect('listPH', 'deletePH', productId)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'deletePH')
+      yield failureEffect('listPH', error)
+      machine.operation('retry')
     }
   }
 }
@@ -152,25 +238,17 @@ function * deletePriceHistoryByIdFlow() {
 function * updateProductByIdFlow() {
   while (true) {
     const action: { type: string, payload: any } = yield take(
-      UPDATE_PRODUCT_REQUEST
+      Type.UPDATE_PRODUCT_REQUEST
     )
-    const { payload } = action
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'update', loading: true }
-    })
+    yield updateEffect('formUpdate')
     try {
-      const product = yield call(Api.updateProductById, payload)
+      const product = yield call(Api.updateProductById, action.payload)
       if (product) {
-        yield put({
-          type: UPDATE_PRODUCT_SUCCESS,
-          payload: product
-        })
+        yield successEffect('formUpdate', 'update', product)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'update')
+      yield failureEffect('formUpdate', error)
+      machine.operation('retry')
     }
   }
 }
@@ -178,6 +256,7 @@ function * updateProductByIdFlow() {
 export default function * rootSagas(): any {
   yield fork(createProductFlow)
   yield fork(fetchAllProductsFlow)
+  yield fork(fetchProductsFlow)
   yield fork(createPriceHistoryFlow)
   yield fork(deleteProductByIdFlow)
   yield fork(deletePriceHistoryByIdFlow)

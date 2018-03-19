@@ -1,32 +1,39 @@
-// import { MODULE_NAME } from './'
-
-const defineModule = module => (...constant) => {
-  const SEPARATOR = '_'
-  return [module, ...constant].join(SEPARATOR)
-}
+import addPrefix from '@clientUtils/addPrefix'
 
 export const MODULE_NAME = 'PRODUCT'
-const defineConstant = defineModule(MODULE_NAME)
+const addProductPrefix = addPrefix(MODULE_NAME)
 
 /**
  * Generating async request suffix
  */
-export const SET_LOADING = defineConstant('SET_LOADING')
-export const SHOW_DETAIL_PRODUCT = defineConstant('SHOW_DETAIL_PRODUCT')
-
-export const FETCH_PRODUCT_LIST_REQUEST = defineConstant('FETCH_PRODUCT_LIST_REQUEST')
-export const FETCH_PRODUCT_LIST_SUCCESS = defineConstant('FETCH_PRODUCT_LIST_SUCCESS')
-export const FETCH_PRODUCT_ALL_REQUEST = defineConstant('FETCH_PRODUCT_ALL_REQUEST')
-export const FETCH_PRODUCT_ALL_SUCCESS = defineConstant('FETCH_PRODUCT_ALL_SUCCESS')
-export const CREATE_PRODUCT_REQUEST = defineConstant('CREATE_PRODUCT_REQUEST')
-export const CREATE_PRODUCT_SUCCESS = defineConstant('CREATE_PRODUCT_SUCCESS')
-export const UPDATE_PRODUCT_REQUEST = defineConstant('UPDATE_PRODUCT_REQUEST')
-export const UPDATE_PRODUCT_SUCCESS = defineConstant('UPDATE_PRODUCT_SUCCESS')
-export const DELETE_PRODUCT_REQUEST = defineConstant('DELETE_PRODUCT_REQUEST')
-export const DELETE_PRODUCT_SUCCESS = defineConstant('DELETE_PRODUCT_SUCCESS')
-export const FETCH_PRICE_HISTORY_LIST_SUCCESS = defineConstant('FETCH_PRICE_HISTORY_LIST_SUCCESS')
-export const FETCH_PRICE_HISTORY_LIST_REQUEST = defineConstant('FETCH_PRICE_HISTORY_LIST_REQUEST')
-export const CREATE_PRICE_HISTORY_REQUEST = defineConstant('CREATE_PRICE_HISTORY_REQUEST')
-export const CREATE_PRICE_HISTORY_SUCCESS = defineConstant('CREATE_PRICE_HISTORY_SUCCESS')
-export const DELETE_PRICE_HISTORY_REQUEST = defineConstant('DELETE_PRICE_HISTORY_REQUEST')
-export const DELETE_PRICE_HISTORY_SUCCESS = defineConstant('DELETE_PRICE_HISTORY_SUCCESS')
+export const SET_LOADING = addProductPrefix('SET_LOADING')
+export const SHOW_DETAIL_ = addProductPrefix('SHOW_DETAIL_')
+export const SET_PAGINATION = addProductPrefix('SET_PAGINATION')
+export const FETCH_LIST_REQUEST = addProductPrefix('FETCH_LIST_REQUEST')
+export const FETCH_LIST_SUCCESS = addProductPrefix('FETCH_LIST_SUCCESS')
+export const FETCH_ALL_REQUEST = addProductPrefix('FETCH_ALL_REQUEST')
+export const FETCH_ALL_SUCCESS = addProductPrefix('FETCH_ALL_SUCCESS')
+export const CREATE_REQUEST = addProductPrefix('CREATE_REQUEST')
+export const CREATE_SUCCESS = addProductPrefix('CREATE_SUCCESS')
+export const UPDATE_REQUEST = addProductPrefix('UPDATE_REQUEST')
+export const UPDATE_SUCCESS = addProductPrefix('UPDATE_SUCCESS')
+export const DELETE_REQUEST = addProductPrefix('DELETE_REQUEST')
+export const DELETE_SUCCESS = addProductPrefix('DELETE_SUCCESS')
+export const FETCH_PRICE_HISTORY_LIST_SUCCESS = addProductPrefix(
+  'FETCH_PRICE_HISTORY_LIST_SUCCESS'
+)
+export const FETCH_PRICE_HISTORY_LIST_REQUEST = addProductPrefix(
+  'FETCH_PRICE_HISTORY_LIST_REQUEST'
+)
+export const CREATE_PRICE_HISTORY_REQUEST = addProductPrefix(
+  'CREATE_PRICE_HISTORY_REQUEST'
+)
+export const CREATE_PRICE_HISTORY_SUCCESS = addProductPrefix(
+  'CREATE_PRICE_HISTORY_SUCCESS'
+)
+export const DELETE_PRICE_HISTORY_REQUEST = addProductPrefix(
+  'DELETE_PRICE_HISTORY_REQUEST'
+)
+export const DELETE_PRICE_HISTORY_SUCCESS = addProductPrefix(
+  'DELETE_PRICE_HISTORY_SUCCESS'
+)

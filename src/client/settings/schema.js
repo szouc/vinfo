@@ -1,13 +1,22 @@
 import { schema, normalize } from 'normalizr'
 
+export const COMPANY_STATE_KEY = 'companies'
+export const USER_STATE_KEY = 'users'
+export const PRODUCT_STATE_KEY = 'products'
+export const FUEL_STATE_KEY = 'fuels'
+export const MAINTAIN_STATE_KEY = 'maintenance'
+export const PRICE_HISTORY_STATE_KEY = 'price_histories'
+export const VEHICLE_STATE_KEY = 'vehicles'
+export const TRANSPORT_STATE_KEY = 'transports'
+
 export const userSchema = new schema.Entity(
-  'users',
+  USER_STATE_KEY,
   {},
   { idAttribute: 'username' }
 )
 
 export const fuelSchema = new schema.Entity(
-  'fuels',
+  FUEL_STATE_KEY,
   {
     applicant: userSchema
   },
@@ -15,7 +24,7 @@ export const fuelSchema = new schema.Entity(
 )
 
 export const maintainSchema = new schema.Entity(
-  'maintenance',
+  MAINTAIN_STATE_KEY,
   {
     applicant: userSchema
   },
@@ -23,7 +32,7 @@ export const maintainSchema = new schema.Entity(
 )
 
 export const vehicleSchema = new schema.Entity(
-  'vehicles',
+  VEHICLE_STATE_KEY,
   {
     captain: userSchema,
     principal: userSchema,
@@ -35,19 +44,19 @@ export const vehicleSchema = new schema.Entity(
 )
 
 export const companySchema = new schema.Entity(
-  'companies',
+  COMPANY_STATE_KEY,
   {},
   { idAttribute: '_id' }
 )
 
 export const priceHistorySchema = new schema.Entity(
-  'price_histories',
+  PRICE_HISTORY_STATE_KEY,
   {},
   { idAttribute: '_id' }
 )
 
 export const productSchema = new schema.Entity(
-  'products',
+  PRODUCT_STATE_KEY,
   {
     price_history: [priceHistorySchema]
   },
@@ -55,7 +64,7 @@ export const productSchema = new schema.Entity(
 )
 
 export const transportSchema = new schema.Entity(
-  'transports',
+  TRANSPORT_STATE_KEY,
   {
     assigner: userSchema,
     vehicle: vehicleSchema,

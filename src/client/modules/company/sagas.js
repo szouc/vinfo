@@ -1,16 +1,17 @@
 // @flow
 
+import * as Api from './api'
 import * as Type from './actionTypes'
-import { REQUEST_ERROR } from '../error/actionTypes'
-import { SET_PAGINATION } from '@clientModulesShared/paginationReducer/actionTypes'
 
-import Machine from '@clientUtils/machine'
-import { call, put, take, fork } from 'redux-saga/effects'
+import { ADD_COMPANY_ENTITY, DELETE_ENTITY } from '../entity/actionTypes'
+import { call, fork, put, take } from 'redux-saga/effects'
+
+import { COMPANY_STATE_KEY } from '@clientSettings/schema'
 // Use for redux-form/immutable
 import type { fromJS as Immut } from 'immutable'
+import Machine from '@clientUtils/machine'
+import { REQUEST_ERROR } from '../error/actionTypes'
 import { fromJS } from 'immutable'
-
-import * as Api from './api'
 
 const companyState = {
   currentState: 'screen',
@@ -43,30 +44,46 @@ function * screenEffect(scope, action, data, pagination = {}) {
   switch (action) {
     case 'create':
       yield put({
-        type: Type.CREATE_COMPANY_SUCCESS,
-        payload: data
+        type: ADD_COMPANY_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.CREATE_SUCCESS,
+        payload: data.get('result')
       })
       break
     case 'fetch':
       yield put({
-        type: Type.FETCH_COMPANY_LIST_SUCCESS,
-        payload: data
+        type: ADD_COMPANY_ENTITY,
+        payload: data.get('entities')
       })
       yield put({
-        type: `COMPANY_${SET_PAGINATION}`,
+        type: Type.FETCH_LIST_SUCCESS,
+        payload: data.get('result')
+      })
+      yield put({
+        type: Type.SET_PAGINATION,
         payload: pagination
       })
       break
     case 'fetchAll':
       yield put({
-        type: Type.FETCH_COMPANY_ALL_SUCCESS,
-        payload: data
+        type: ADD_COMPANY_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.FETCH_ALL_SUCCESS,
+        payload: data.get('result')
       })
       break
     case 'delete':
       yield put({
-        type: Type.DELETE_COMPANY_SUCCESS,
-        payload: data
+        type: Type.DELETE_SUCCESS,
+        payload: data.get('id')
+      })
+      yield put({
+        type: DELETE_ENTITY,
+        payload: { stateKey: COMPANY_STATE_KEY, id: data.get('id') }
       })
       break
     default:
@@ -114,7 +131,7 @@ const failureEffect = machine.getEffect('failure')
 function * createCompanyFlow() {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(
-      Type.CREATE_COMPANY_REQUEST
+      Type.CREATE_REQUEST
     )
     yield createEffect('form')
     try {
@@ -131,7 +148,7 @@ function * createCompanyFlow() {
 
 function * fetchAllCompaniesFlow() {
   while (true) {
-    yield take(Type.FETCH_COMPANY_ALL_REQUEST)
+    yield take(Type.FETCH_ALL_REQUEST)
     yield fetchAllEffect('list')
     try {
       const company = yield call(Api.getAllCompanies)
@@ -148,7 +165,7 @@ function * fetchAllCompaniesFlow() {
 function * fetchCompaniesFlow() {
   while (true) {
     const action: { type: String, payload?: Immut } = yield take(
-      Type.FETCH_COMPANY_LIST_REQUEST
+      Type.FETCH_LIST_REQUEST
     )
     yield fetchEffect('list')
     try {
@@ -168,7 +185,7 @@ function * fetchCompaniesFlow() {
 function * deleteCompanyByIdFlow() {
   while (true) {
     const action: { type: string, payload: string } = yield take(
-      Type.DELETE_COMPANY_REQUEST
+      Type.DELETE_REQUEST
     )
     const { payload } = action
     yield deleteEffect('list')

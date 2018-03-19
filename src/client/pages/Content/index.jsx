@@ -45,8 +45,8 @@ class BaseContent extends React.PureComponent {
         <Route path='/home' component={NotFound} />
         <Route path='/company' component={LoadableCompany} />
         <Route path='/product' component={LoadableProduct} />
-        <Route path='/vehicle' component={LoadableVehicle} />
         <Route path='/user' component={LoadableUser} />
+        <Route path='/vehicle' component={LoadableVehicle} />
         <Route component={NotFound} />
       </Switch>
     )

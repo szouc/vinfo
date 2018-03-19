@@ -62,7 +62,7 @@ async function createPriceHistory(payload: Immut): ?Immut {
 async function deleteProductById(id: string) {
   const response = await Request.deleteProductById(id)
   if (response.status === STATUS_OK) {
-    return fromJS({ productId: id })
+    return fromJS({ id })
   }
   throw new Error('Something wrong at deleteProductById Process')
 }
@@ -75,7 +75,9 @@ async function deletePriceHistoryById(payload: Immut) {
     priceHistoryId
   )
   if (response.status === STATUS_OK) {
-    return fromJS({ productId, priceHistoryId })
+    const data = response.data.result
+    const product = productNormalize(data)
+    return fromJS(product)
   }
   throw new Error('Something wrong at deletePriceHistoryById Process')
 }

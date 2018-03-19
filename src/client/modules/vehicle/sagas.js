@@ -1,16 +1,18 @@
 // @flow
 
+import * as Api from './api'
 import * as Type from './actionTypes'
-import { REQUEST_ERROR } from '../error/actionTypes'
-import { SET_PAGINATION } from '@clientModulesShared/paginationReducer/actionTypes'
-import Machine from '@clientUtils/machine'
 
-import { call, put, take, fork } from 'redux-saga/effects'
-// Use for redux-form/immutable
+import { ADD_VEHICLE_ENTITY, DELETE_ENTITY } from '../entity/actionTypes'
+import { call, fork, put, take } from 'redux-saga/effects'
+
+import { VEHICLE_STATE_KEY } from '@clientSettings/schema'
 import type { fromJS as Immut } from 'immutable'
+import Machine from '@clientUtils/machine'
+import { REQUEST_ERROR } from '../error/actionTypes'
 import { fromJS } from 'immutable'
 
-import * as Api from './api'
+// Use for redux-form/immutable
 
 const vehicleState = {
   currentState: 'screen',
@@ -38,48 +40,68 @@ function * screenEffect(scope, action, data, pagination = {}) {
   switch (action) {
     case 'create':
       yield put({
-        type: Type.CREATE_VEHICLE_SUCCESS,
-        payload: data
+        type: ADD_VEHICLE_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.CREATE_SUCCESS,
+        payload: data.get('result')
       })
       break
     case 'fetch':
       yield put({
-        type: Type.FETCH_VEHICLE_LIST_SUCCESS,
-        payload: data
+        type: ADD_VEHICLE_ENTITY,
+        payload: data.get('entities')
       })
       yield put({
-        type: `VEHICLE_${SET_PAGINATION}`,
+        type: Type.FETCH_LIST_SUCCESS,
+        payload: data.get('result')
+      })
+      yield put({
+        type: Type.SET_PAGINATION,
         payload: pagination
       })
       break
     case 'fetchAll':
       yield put({
-        type: Type.FETCH_VEHICLE_ALL_SUCCESS,
-        payload: data
+        type: ADD_VEHICLE_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.FETCH_ALL_SUCCESS,
+        payload: data.get('result')
       })
       break
     case 'delete':
       yield put({
-        type: Type.DELETE_VEHICLE_SUCCESS,
-        payload: data
+        type: DELETE_ENTITY,
+        payload: { stateKey: VEHICLE_STATE_KEY, id: data.get('id') }
+      })
+      yield put({
+        type: Type.DELETE_SUCCESS,
+        payload: data.get('id')
       })
       break
     case 'update':
       yield put({
-        type: Type.UPDATE_VEHICLE_SUCCESS,
-        payload: data
+        type: ADD_VEHICLE_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.UPDATE_SUCCESS,
+        payload: data.get('result')
       })
       break
     case 'createFuel':
       yield put({
         type: Type.CREATE_FUEL_SUCCESS,
-        payload: data
+        payload: data.get('result')
       })
       break
     case 'createMaintain':
       yield put({
         type: Type.CREATE_MAINTAIN_SUCCESS,
-        payload: data
+        payload: data.get('result')
       })
       break
     default:
@@ -130,7 +152,7 @@ const failureEffect = machine.getEffect('failure')
 function * createVehicleFlow() {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(
-      Type.CREATE_VEHICLE_REQUEST
+      Type.CREATE_REQUEST
     )
     yield createEffect('form')
     try {
@@ -147,7 +169,7 @@ function * createVehicleFlow() {
 
 function * fetchAllVehiclesFlow() {
   while (true) {
-    yield take(Type.FETCH_VEHICLE_ALL_REQUEST)
+    yield take(Type.FETCH_ALL_REQUEST)
     yield fetchAllEffect('list')
     try {
       const response = yield call(Api.getAllVehicles)
@@ -164,7 +186,7 @@ function * fetchAllVehiclesFlow() {
 function * fetchVehiclesFlow() {
   while (true) {
     const action: { type: String, payload?: Immut } = yield take(
-      Type.FETCH_VEHICLE_LIST_REQUEST
+      Type.FETCH_LIST_REQUEST
     )
     yield fetchEffect('list')
     try {
@@ -184,7 +206,7 @@ function * fetchVehiclesFlow() {
 function * deleteVehicleByIdFlow() {
   while (true) {
     const action: { type: string, payload: string } = yield take(
-      Type.DELETE_VEHICLE_REQUEST
+      Type.DELETE_REQUEST
     )
     const { payload } = action
     yield deleteEffect('list')
@@ -203,7 +225,7 @@ function * deleteVehicleByIdFlow() {
 function * updateVehicleByIdFlow() {
   while (true) {
     const action: { type: string, payload: any } = yield take(
-      Type.UPDATE_VEHICLE_REQUEST
+      Type.UPDATE_REQUEST
     )
     const { payload } = action
     yield updateEffect('formUpdate')

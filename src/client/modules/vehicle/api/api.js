@@ -52,7 +52,7 @@ async function getVehiclesWithPg(payload: {
 async function deleteVehicleById(id: string) {
   const response = await Request.deleteVehicleById(id)
   if (response.status === STATUS_OK) {
-    return fromJS({ vehicleId: id })
+    return fromJS({ id: id })
   }
   throw new Error('Something wrong at deleteVehicleById Process')
 }

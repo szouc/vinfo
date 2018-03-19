@@ -29,7 +29,7 @@ const paginationReducerFor = (prefix: string) => {
   ) => {
     const { type, payload } = action
     switch (type) {
-      case prefix + SET_PAGINATION:
+      case `${prefix}_${SET_PAGINATION}`:
         return state.merge(payload)
       default:
         return state

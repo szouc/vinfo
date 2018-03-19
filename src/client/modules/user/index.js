@@ -1,6 +1,4 @@
-import { userEntity, userReducer } from './reducers'
+import reducer from './reducers'
 import saga from './sagas'
 
-export const MODULE_NAME = 'USER'
-
-export { userEntity, userReducer, saga }
+export { reducer, saga }

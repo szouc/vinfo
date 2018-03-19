@@ -2,8 +2,9 @@
 
 import * as Type from './actionTypes'
 import { REQUEST_ERROR } from '../error/actionTypes'
-import { SET_PAGINATION } from '@clientModulesShared/paginationReducer/actionTypes'
 import Machine from '@clientUtils/machine'
+import { ADD_PRODUCT_ENTITY, DELETE_ENTITY } from '../entity/actionTypes'
+import { PRODUCT_STATE_KEY } from '@clientSettings/schema'
 
 import { call, put, take, fork } from 'redux-saga/effects'
 // Use for redux-form/immutable
@@ -38,49 +39,84 @@ function * screenEffect(scope, action, data, pagination = {}) {
   switch (action) {
     case 'create':
       yield put({
-        type: Type.CREATE_PRODUCT_SUCCESS,
-        payload: data
+        type: ADD_PRODUCT_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.CREATE_SUCCESS,
+        payload: data.get('result')
       })
       break
     case 'fetch':
       yield put({
-        type: Type.FETCH_PRODUCT_LIST_SUCCESS,
-        payload: data
+        type: ADD_PRODUCT_ENTITY,
+        payload: data.get('entities')
       })
       yield put({
-        type: `PRODUCT_${SET_PAGINATION}`,
+        type: Type.FETCH_LIST_SUCCESS,
+        payload: data.get('result')
+      })
+      yield put({
+        type: Type.SET_PAGINATION,
         payload: pagination
       })
       break
     case 'fetchAll':
       yield put({
-        type: Type.FETCH_PRODUCT_ALL_SUCCESS,
-        payload: data
+        type: ADD_PRODUCT_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.FETCH_ALL_SUCCESS,
+        payload: data.get('result')
       })
       break
     case 'delete':
       yield put({
-        type: Type.DELETE_PRODUCT_SUCCESS,
-        payload: data
+        type: Type.DELETE_SUCCESS,
+        payload: data.get('id')
+      })
+      yield put({
+        type: DELETE_ENTITY,
+        payload: { stateKey: PRODUCT_STATE_KEY, id: data.get('id') }
       })
       break
     case 'update':
       yield put({
-        type: Type.UPDATE_PRODUCT_SUCCESS,
-        payload: data
+        type: ADD_PRODUCT_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.UPDATE_SUCCESS,
+        payload: data.get('result')
       })
       break
     case 'createPH':
       yield put({
-        type: Type.CREATE_PRICE_HISTORY_SUCCESS,
-        payload: data
+        type: ADD_PRODUCT_ENTITY,
+        payload: data.get('entities')
       })
+      // yield put({
+      //   type: Type.CREATE_PRICE_HISTORY_SUCCESS,
+      //   payload: data.get('result')
+      // })
       break
     case 'deletePH':
       yield put({
-        type: Type.DELETE_PRICE_HISTORY_SUCCESS,
-        payload: data
+        type: ADD_PRODUCT_ENTITY,
+        payload: data.get('entities')
       })
+      // yield put({
+      //   type: DELETE_ENTITY,
+      //   payload: {
+      //     stateKey: PRICE_HISTORY_STATE_KEY,
+      //     id: data.get('priceHistoryId')
+      //   }
+      // })
+      // yield put({
+      //   type: Type.DELETE_PRICE_HISTORY_SUCCESS,
+      //   payload: data.get('priceHistoryId')
+      // })
       break
     default:
       yield put({
@@ -130,7 +166,7 @@ const failureEffect = machine.getEffect('failure')
 function * createProductFlow() {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(
-      Type.CREATE_PRODUCT_REQUEST
+      Type.CREATE_REQUEST
     )
     yield createEffect('form')
     try {
@@ -147,7 +183,7 @@ function * createProductFlow() {
 
 function * fetchAllProductsFlow() {
   while (true) {
-    yield take(Type.FETCH_PRODUCT_ALL_REQUEST)
+    yield take(Type.FETCH_ALL_REQUEST)
     yield fetchAllEffect('list')
     try {
       const product = yield call(Api.getAllProducts)
@@ -164,7 +200,7 @@ function * fetchAllProductsFlow() {
 function * fetchProductsFlow() {
   while (true) {
     const action: { type: String, payload?: Immut } = yield take(
-      Type.FETCH_PRODUCT_LIST_REQUEST
+      Type.FETCH_LIST_REQUEST
     )
     yield fetchEffect('list')
     try {
@@ -184,7 +220,7 @@ function * fetchProductsFlow() {
 function * deleteProductByIdFlow() {
   while (true) {
     const action: { type: string, payload: string } = yield take(
-      Type.DELETE_PRODUCT_REQUEST
+      Type.DELETE_REQUEST
     )
     yield deleteEffect('list')
     try {
@@ -238,7 +274,7 @@ function * deletePriceHistoryByIdFlow() {
 function * updateProductByIdFlow() {
   while (true) {
     const action: { type: string, payload: any } = yield take(
-      Type.UPDATE_PRODUCT_REQUEST
+      Type.UPDATE_REQUEST
     )
     yield updateEffect('formUpdate')
     try {

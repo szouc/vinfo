@@ -1,15 +1,17 @@
 // @flow
 
+import * as Api from './api'
 import * as Type from './actionTypes'
-import { REQUEST_ERROR } from '../error/actionTypes'
-import { SET_PAGINATION } from '@clientModulesShared/paginationReducer/actionTypes'
-import Machine from '@clientUtils/machine'
 
-import { call, put, take, fork } from 'redux-saga/effects'
+import { ADD_USER_ENTITY, DELETE_ENTITY } from '../entity/actionTypes'
+import { call, fork, put, take } from 'redux-saga/effects'
+
 // Use for redux-form/immutable
 import type { fromJS as Immut } from 'immutable'
+import Machine from '@clientUtils/machine'
+import { REQUEST_ERROR } from '../error/actionTypes'
+import { USER_STATE_KEY } from '@clientSettings/schema'
 import { fromJS } from 'immutable'
-import * as Api from './api'
 
 const userState = {
   currentState: 'screen',
@@ -35,36 +37,56 @@ function * screenEffect(scope, action, data, pagination = {}) {
   switch (action) {
     case 'create':
       yield put({
-        type: Type.CREATE_USER_SUCCESS,
-        payload: data
+        type: ADD_USER_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.CREATE_SUCCESS,
+        payload: data.get('result')
       })
       break
     case 'fetch':
       yield put({
-        type: Type.FETCH_USER_LIST_SUCCESS,
-        payload: data
+        type: ADD_USER_ENTITY,
+        payload: data.get('entities')
       })
       yield put({
-        type: `USER_${SET_PAGINATION}`,
+        type: Type.FETCH_LIST_SUCCESS,
+        payload: data.get('result')
+      })
+      yield put({
+        type: Type.SET_PAGINATION,
         payload: pagination
       })
       break
     case 'fetchAll':
       yield put({
-        type: Type.FETCH_USER_ALL_SUCCESS,
-        payload: data
+        type: ADD_USER_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.FETCH_ALL_SUCCESS,
+        payload: data.get('result')
       })
       break
     case 'delete':
       yield put({
-        type: Type.DELETE_USER_SUCCESS,
-        payload: data
+        type: DELETE_ENTITY,
+        payload: { stateKey: USER_STATE_KEY, username: data.get('username') }
+      })
+      yield put({
+        type: Type.DELETE_SUCCESS,
+        payload: data.get('username')
       })
       break
     case 'update':
       yield put({
-        type: Type.UPDATE_USER_SUCCESS,
-        payload: data
+        type: ADD_USER_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.UPDATE_SUCCESS,
+        payload: data.get('result')
       })
       break
     default:
@@ -113,7 +135,7 @@ const failureEffect = machine.getEffect('failure')
 function * createUserFlow() {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(
-      Type.CREATE_USER_REQUEST
+      Type.CREATE_REQUEST
     )
     yield createEffect('form')
     try {
@@ -130,7 +152,7 @@ function * createUserFlow() {
 
 function * fetchAllUsersFlow() {
   while (true) {
-    yield take(Type.FETCH_USER_ALL_REQUEST)
+    yield take(Type.FETCH_ALL_REQUEST)
     yield fetchAllEffect('list')
     try {
       const response = yield call(Api.getAllUsers)
@@ -147,7 +169,7 @@ function * fetchAllUsersFlow() {
 function * fetchUsersFlow() {
   while (true) {
     const action: { type: String, payload?: Immut } = yield take(
-      Type.FETCH_USER_LIST_REQUEST
+      Type.FETCH_LIST_REQUEST
     )
     yield fetchEffect('list')
     try {
@@ -167,7 +189,7 @@ function * fetchUsersFlow() {
 function * deleteUserByUsernameFlow() {
   while (true) {
     const action: { type: string, payload: string } = yield take(
-      Type.DELETE_USER_REQUEST
+      Type.DELETE_REQUEST
     )
     const { payload } = action
     yield deleteEffect('list')
@@ -186,7 +208,7 @@ function * deleteUserByUsernameFlow() {
 function * updateUserByUsernameFlow() {
   while (true) {
     const action: { type: string, payload: any } = yield take(
-      Type.UPDATE_USER_REQUEST
+      Type.UPDATE_REQUEST
     )
     const { payload } = action
     yield updateEffect('formUpdate')

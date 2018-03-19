@@ -10,11 +10,13 @@ class VehicleListTable extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.getAllVehicles()
+    this.props.getVehicles(1, 2)
   }
 
   render() {
-    const { vehicles, deleteVehicleById } = this.props
+    const { vehicles, pagination, getVehicles, deleteVehicleById } = this.props
+    const { pageNumber, ...rest } = pagination
+    const newPag = { current: pageNumber, onChange: getVehicles, ...rest }
     const data = vehicles
     const columns = [
       {
@@ -76,7 +78,10 @@ class VehicleListTable extends React.PureComponent {
           <span>
             <VehicleUpdateFormModal vehicle={record} />
             <span className='ant-divider' />
-            <Popconfirm title='确认删除？' onConfirm={deleteVehicleById(record._id)}>
+            <Popconfirm
+              title='确认删除？'
+              onConfirm={deleteVehicleById(record._id)}
+            >
               <Button type='danger' size='small'>
                 删除
               </Button>
@@ -90,6 +95,7 @@ class VehicleListTable extends React.PureComponent {
       <Table
         columns={columns}
         dataSource={data}
+        pagination={newPag}
         rowKey={record => record._id}
       />
     )

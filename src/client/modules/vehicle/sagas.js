@@ -147,7 +147,7 @@ function * createVehicleFlow() {
 
 function * fetchAllVehiclesFlow() {
   while (true) {
-    yield take(Type.FETCH_VEHICLE_LIST_REQUEST)
+    yield take(Type.FETCH_VEHICLE_ALL_REQUEST)
     yield fetchAllEffect('list')
     try {
       const response = yield call(Api.getAllVehicles)

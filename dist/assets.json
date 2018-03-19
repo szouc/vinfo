@@ -5,14 +5,17 @@
   "many-used": {
     "js": "http://localhost:7000/js/many-used.chunk.js"
   },
-  "UserComponent": {
-    "js": "http://localhost:7000/js/UserComponent.chunk.js"
+  "VehicleComponent": {
+    "js": "http://localhost:7000/js/VehicleComponent.chunk.js"
   },
   "ProductComponent": {
     "js": "http://localhost:7000/js/ProductComponent.chunk.js"
   },
   "CompanyComponent": {
     "js": "http://localhost:7000/js/CompanyComponent.chunk.js"
+  },
+  "UserComponent": {
+    "js": "http://localhost:7000/js/UserComponent.chunk.js"
   },
   "vendor": {
     "js": "http://localhost:7000/js/vendor.js"

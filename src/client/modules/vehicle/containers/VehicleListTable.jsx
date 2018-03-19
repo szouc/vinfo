@@ -1,20 +1,26 @@
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 
 import VehicleListTable from '../components/VehicleListTable'
 import { fetchVehicleListRequest, deleteVehicleRequest } from '../actions'
 
 import { vehicleArraySelector } from '../selectors'
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
+import { withDelayLoading } from '@clientUtils/withLoading'
 
 const mapStateToProps = state => {
+  const loading = state.getIn(['vehicle', 'status', 'listLoading'])
+  const pagination = state.getIn(['vehicle', 'pagination'])
   const vehicles = vehicleArraySelector(state)
-  return { vehicles }
+  return { loading, pagination, vehicles }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllVehicles: () => {
-      dispatch(fetchVehicleListRequest())
+    getVehicles: (pageNumber, pageSize, fromDate, toDate) => {
+      dispatch(
+        fetchVehicleListRequest({ pageNumber, pageSize, fromDate, toDate })
+      )
     },
     deleteVehicleById: id => () => {
       dispatch(deleteVehicleRequest(id))
@@ -22,6 +28,8 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  immutPropsToJS(VehicleListTable)
-)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  immutPropsToJS,
+  withDelayLoading
+)(VehicleListTable)

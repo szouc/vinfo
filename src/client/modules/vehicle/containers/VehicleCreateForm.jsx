@@ -1,10 +1,18 @@
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 
 import VehicleCreateForm from '../components/VehicleCreateForm'
 import { createVehicleRequest } from '../actions'
 
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
+import { withNoDelayLoading } from '@clientUtils/withLoading'
 import { fromJS } from 'immutable'
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    loading: state.getIn(['vehicle', 'status', 'formLoading'])
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -36,6 +44,8 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(
-  immutPropsToJS(VehicleCreateForm)
-)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  immutPropsToJS,
+  withNoDelayLoading
+)(VehicleCreateForm)

@@ -1,15 +1,14 @@
 // @flow
 
 import { denormalizeVehicle, denormalizeVehicleArray } from './schema'
-import createImmutableSelector from '@clientModulesShared/createImmutableSelector'
+import createImmutableSelector from '@clientUtils/createImmutableSelector'
 import moment from 'moment'
 import { getFormValues } from 'redux-form/immutable'
 import { fromJS } from 'immutable'
 
-const vehicleEntity = state => state.getIn(['vehicle', 'vehicleEntity'])
-const vehicleCurrent = state =>
-  state.getIn(['vehicle', 'vehicleStatus', 'current'])
-const vehicleAll = state => state.getIn(['vehicle', 'vehicleStatus', 'all'])
+const vehicleEntity = state => state.getIn(['entities', 'vehicles'])
+const vehicleCurrent = state => state.getIn(['vehicle', 'status', 'current'])
+const vehicleIds = state => state.getIn(['vehicle', 'status', 'all'])
 const vehicleInitialValues = ownProps => fromJS(ownProps.vehicle)
 const currentUser = state => state.getIn(['auth', 'user', 'username'])
 const selectedAssginer = state => {
@@ -25,8 +24,8 @@ const vehicleSelector = createImmutableSelector(
 )
 
 const vehicleArraySelector = createImmutableSelector(
-  [vehicleEntity, vehicleAll],
-  (vehicles, all) => denormalizeVehicleArray(vehicles, all)
+  [vehicleEntity, vehicleIds],
+  (vehicles, ids) => (ids ? ids.map(item => vehicles.get(item)) : [])
 )
 
 // const makeVehicleInitialValuesSelector = () =>
@@ -112,9 +111,7 @@ const availableVehicleByCaptainSelector = createImmutableSelector(
   (vehicles, assigner) =>
     vehicles.filter((vehicle, i) => {
       const assignerUsername = assigner ? assigner.split('@@')[0] : assigner
-      return (
-        vehicle.getIn(['captain', 'username']) === assignerUsername
-      )
+      return vehicle.getIn(['captain', 'username']) === assignerUsername
     })
 )
 

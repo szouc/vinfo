@@ -73,15 +73,11 @@ const vehicleEntity = (
 }
 
 const InitialState = fromJS({
-  fetchLoading: false,
-  fetchAllLoading: false,
-  createLoading: false,
-  updateLoading: false,
-  deleteLoading: false,
-  createFuelLoading: false,
-  deleteFuelLoading: false,
-  createMaintainLoading: false,
-  deleteMaintainLoading: false,
+  formLoading: false,
+  listLoading: false,
+  formFuelLoading: false,
+  formMaintainLoading: false,
+  formUpdateLoading: false,
   current: undefined,
   all: []
 })

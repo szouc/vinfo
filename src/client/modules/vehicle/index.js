@@ -1,5 +1,5 @@
 import {
-  fuelsEntity,
+  fuelEntity,
   maintainEntity,
   vehicleEntity,
   vehicleReducer
@@ -8,4 +8,4 @@ import saga from './sagas'
 
 export const MODULE_NAME = 'VEHICLE'
 
-export { fuelsEntity, maintainEntity, vehicleEntity, vehicleReducer, saga }
+export { fuelEntity, maintainEntity, vehicleEntity, vehicleReducer, saga }

@@ -2,7 +2,7 @@ import React from 'react'
 import { Field } from 'redux-form/es/immutable'
 import { Row, Col, Button } from 'antd'
 import { Input } from '@clientModulesShared/forms'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid/v4'
 
 export default class FuelCreateFormItem extends React.PureComponent {
   constructor(props) {

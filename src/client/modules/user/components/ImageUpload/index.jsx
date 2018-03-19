@@ -1,5 +1,6 @@
 import React from 'react'
 import { Upload, message, Icon, Modal } from 'antd'
+import addHostAddr from '@clientUtils/addHostAddr'
 import './style.css'
 
 function beforeUpload(file) {
@@ -33,7 +34,7 @@ class ImageUpload extends React.PureComponent {
         formData.append(this.props.name, file, file[name])
         return formData
       },
-      action: this.props.uploadUrl,
+      action: addHostAddr(this.props.uploadUrl),
       withCredentials: true,
       listType: 'picture-card'
     }

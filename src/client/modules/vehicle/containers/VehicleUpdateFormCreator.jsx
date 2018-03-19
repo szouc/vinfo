@@ -3,7 +3,7 @@ import { updateVehicleRequest } from '../actions'
 import { fromJS } from 'immutable'
 
 import VehicleUpdateFormCreator from '../components/VehicleUpdateFormCreator'
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
 import { makeVehicleInitialValuesSelector } from '../selectors'
 
 const makeMapStateToProps = () => {

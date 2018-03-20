@@ -7,18 +7,8 @@ import { reducer as companyReducer } from '../modules/company'
 import { reducer as productReducer } from '../modules/product'
 import { reducer as userReducer } from '../modules/user'
 import { reducer as vehicleReducer } from '../modules/vehicle'
-// import { reducer as transportReducer } from '../modules/transport'
+import { reducer as transportReducer } from '../modules/transport'
 import routerReducer from '../route/reducer' // hack the default to immutable routerReducer
-
-// const EntitiesReducer = combineReducers({
-//   companies: companyEntity,
-//   products: productEntity,
-//   price_histories: priceHistoryEntity,
-//   users: userEntity,
-//   fuels: fuelEntity,
-//   maintenance: maintainEntity,
-//   vehicles: vehicleEntity
-// })
 
 const rootReducer = combineReducers({
   entities: entityReducer,
@@ -29,7 +19,7 @@ const rootReducer = combineReducers({
   product: productReducer,
   user: userReducer,
   vehicle: vehicleReducer,
-  // transport: transportReducer,
+  transport: transportReducer,
   form: formReducer
 })
 export default rootReducer

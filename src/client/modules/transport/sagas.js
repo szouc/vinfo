@@ -1,52 +1,151 @@
 // @flow
 
-import {
-  SET_LOADING,
-  REQUEST_ERROR,
-  // FETCH_TRANSPORT_TRANSPORTQUEST,
-  // FETCH_TRANSPORT_LIST_SUCCESS,
-  // DELETE_TRANSPORT_REQUEST,
-  // DELETE_TRANSPORT_SUCCESS,
-  // FETCH_TRANSPORT_REQUEST,
-  // FETCH_TRANSPORT_SUCCESS,
-  CREATE_TRANSPORT_REQUEST,
-  CREATE_TRANSPORT_SUCCESS
-} from './actionTypes'
+import * as Api from './api'
+import * as Type from './actionTypes'
 
-import { call, put, take, fork } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
+import { ADD_TRANSPORT_ENTITY, DELETE_ENTITY } from '../entity/actionTypes'
+import { call, fork, put, take } from 'redux-saga/effects'
+
 // Use for redux-form/immutable
 import type { fromJS as Immut } from 'immutable'
+import { fromJS } from 'immutable'
+import Machine from '@clientUtils/machine'
+import { REQUEST_ERROR } from '../error/actionTypes'
+import { TRANSPORT_STATE_KEY } from '@clientSettings/schema'
 
-import * as Api from './api'
+const transportState = {
+  currentState: 'screen',
+  states: {
+    screen: {
+      create: 'loading',
+      fetch: 'loading',
+      fetchAll: 'loading',
+      update: 'loading',
+      delete: 'loading'
+    },
+    loading: {
+      success: 'screen',
+      failure: 'error'
+    },
+    error: {
+      retry: 'screen'
+    }
+  }
+}
 
-function * clearLoadingAndError(scope) {
+function * screenEffect(scope, action, data, pagination = {}) {
+  switch (action) {
+    case 'create':
+      yield put({
+        type: ADD_TRANSPORT_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.CREATE_SUCCESS,
+        payload: data.get('result')
+      })
+      break
+    case 'fetch':
+      yield put({
+        type: ADD_TRANSPORT_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.FETCH_LIST_SUCCESS,
+        payload: data.get('result')
+      })
+      yield put({
+        type: Type.SET_PAGINATION,
+        payload: pagination
+      })
+      break
+    case 'fetchAll':
+      yield put({
+        type: ADD_TRANSPORT_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.FETCH_ALL_SUCCESS,
+        payload: data.get('result')
+      })
+      break
+    case 'delete':
+      yield put({
+        type: Type.DELETE_SUCCESS,
+        payload: data.get('id')
+      })
+      yield put({
+        type: DELETE_ENTITY,
+        payload: { stateKey: TRANSPORT_STATE_KEY, id: data.get('id') }
+      })
+      break
+    case 'update':
+      yield put({
+        type: ADD_TRANSPORT_ENTITY,
+        payload: data.get('entities')
+      })
+      yield put({
+        type: Type.UPDATE_SUCCESS,
+        payload: data.get('result')
+      })
+      break
+    default:
+      yield put({
+        type: REQUEST_ERROR,
+        payload: fromJS({ message: '没有相应的操作。' })
+      })
+      break
+  }
   yield put({
-    type: SET_LOADING,
+    type: Type.SET_LOADING,
     payload: { scope: scope, loading: false }
   })
-  yield delay(2000)
-  yield put({ type: REQUEST_ERROR, payload: '' })
 }
+
+function * loadingEffect(scope) {
+  yield put({
+    type: Type.SET_LOADING,
+    payload: { scope: scope, loading: true }
+  })
+}
+
+function * errorEffect(scope, error) {
+  yield put({ type: REQUEST_ERROR, payload: fromJS(error) })
+  yield put({
+    type: Type.SET_LOADING,
+    payload: { scope: scope, loading: false }
+  })
+}
+
+const transportEffects = {
+  loading: loadingEffect,
+  error: errorEffect,
+  screen: screenEffect
+}
+
+const machine = new Machine(transportState, transportEffects)
+// const fetchEffect = machine.getEffect('fetch')
+// const fetchAllEffect = machine.getEffect('fetchAll')
+const createEffect = machine.getEffect('create')
+// const deleteEffect = machine.getEffect('delete')
+// const updateEffect = machine.getEffect('update')
+const successEffect = machine.getEffect('success')
+const failureEffect = machine.getEffect('failure')
 
 function * createTransportFlow() {
   while (true) {
     const action: { type: string, payload: Immut } = yield take(
-      CREATE_TRANSPORT_REQUEST
+      Type.CREATE_REQUEST
     )
-    yield put({
-      type: SET_LOADING,
-      payload: { scope: 'create', loading: true }
-    })
+    yield createEffect('form')
     try {
       const response = yield call(Api.createTransport, action.payload)
       if (response) {
-        yield put({ type: CREATE_TRANSPORT_SUCCESS, payload: response })
+        yield successEffect('from', 'create', response)
       }
     } catch (error) {
-      yield put({ type: REQUEST_ERROR, payload: error.message })
-    } finally {
-      yield fork(clearLoadingAndError, 'create')
+      yield failureEffect('form', error)
+      machine.operation('retry')
     }
   }
 }

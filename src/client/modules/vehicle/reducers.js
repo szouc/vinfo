@@ -101,7 +101,7 @@ const vehicleStatus = (
       return state.set('current', payload)
     case Type.DELETE_SUCCESS:
       const vehiclePosition = state.get('all').indexOf(payload)
-      return state.deleteIn(['all', vehiclePosition])
+      return state.deleteIn(['all', vehiclePosition]).delete('current')
     default:
       return state
   }

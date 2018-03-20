@@ -13,23 +13,26 @@ class UserSelect extends React.PureComponent {
     placeholder: '请选择人员'
   }
 
-  componentDidMount() {
-    this.props.getAllUsers()
-  }
+  // componentDidMount() {
+  //   this.props.getAllUsers()
+  // }
 
   render() {
-    const { users, placeholder, ...rest } = this.props
+    const { users, placeholder, getAllUsers, ...rest } = this.props
     const options = users
     const optionsList = options.map(user => {
       return (
-        <Option key={user.username} value={`${user.username}@@${user.fullname}`}>
+        <Option
+          key={user.username}
+          value={`${user.username}@@${user.fullname}`}
+        >
           {user.fullname}({user.username})
         </Option>
       )
     })
 
     return (
-      <Select {...rest}>
+      <Select {...rest} onFocus={getAllUsers}>
         <Option value='' className='first-option' disabled>
           {placeholder}
         </Option>

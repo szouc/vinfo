@@ -71,12 +71,12 @@ function * screenEffect(scope, action, data, pagination = {}) {
       break
     case 'delete':
       yield put({
-        type: DELETE_ENTITY,
-        payload: { stateKey: USER_STATE_KEY, username: data.get('username') }
-      })
-      yield put({
         type: Type.DELETE_SUCCESS,
         payload: data.get('username')
+      })
+      yield put({
+        type: DELETE_ENTITY,
+        payload: { stateKey: USER_STATE_KEY, username: data.get('username') }
       })
       break
     case 'update':

@@ -3,36 +3,54 @@
 import type { fromJS as Immut } from 'immutable'
 import { fromJS } from 'immutable'
 // import { replaceAll } from '@clientUtils/replaceAll'
+import * as Request from './request'
 
 import {
-  // transportArrayNormalize,
+  transportArrayNormalize,
   transportNormalize
-} from '../schema'
-
-import {
-  // TRANSPORT_ID_API,
-  TRANSPORT_ROOT_API
-} from './apiRoutes'
-
-import fetch from '@clientUtils/fetch'
+} from '@clientSettings/schema'
 
 const STATUS_OK = 200
 
 async function createTransport(payload: Immut): ?Immut {
-  const options = {
-    method: 'post',
-    body: JSON.stringify(payload),
-    headers: { 'Content-Type': 'application/json' }
-  }
-  const response = await fetch(TRANSPORT_ROOT_API, options)
+  const response = await Request.createTransport(payload)
   if (response.status === STATUS_OK) {
-    const data = await response.json()
+    const data = response.data.result
     const transport = transportNormalize(data[0])
     return fromJS(transport)
   }
   throw new Error('Couldnt create a new transport')
 }
 
+async function getAllTransports(): ?Immut {
+  const response = await Request.getAllTransports()
+  if (response.status === STATUS_OK) {
+    const data = response.data.result
+    const transports = transportArrayNormalize(data)
+    return fromJS(transports)
+  }
+  throw new Error('Something wrong in getAllTransports Process.')
+}
+
+async function getTransportsWithPg(payload: {
+  pageNumber: Number,
+  pageSize: Number,
+  fromDate: String,
+  toDate: String
+}): ?Immut {
+  const response = await Request.getTransportsWithPg(
+    payload.pageNumber,
+    payload.pageSize,
+    payload.fromDate,
+    payload.toDate
+  )
+  if (response.status === STATUS_OK) {
+    const { result, pagination } = response.data
+    const transport = transportArrayNormalize(result)
+    return fromJS({ transport, pagination })
+  }
+  throw new Error('Something wrong in getTransportsWithPg Process.')
+}
 // async function getAllVehicles(): ?Immut {
 //   const options = {
 //     method: 'get'
@@ -109,6 +127,4 @@ async function createTransport(payload: Immut): ?Immut {
 //   throw new Error('Something wrong at deletePriceHistoryById Process')
 // }
 
-export {
-  createTransport
-}
+export { createTransport, getAllTransports, getTransportsWithPg }

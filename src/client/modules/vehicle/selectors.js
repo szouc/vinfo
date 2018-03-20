@@ -1,6 +1,5 @@
 // @flow
 
-import { denormalizeVehicle, denormalizeVehicleArray } from './schema'
 import createImmutableSelector from '@clientUtils/createImmutableSelector'
 import moment from 'moment'
 import { getFormValues } from 'redux-form/immutable'
@@ -11,6 +10,7 @@ const vehicleCurrent = state => state.getIn(['vehicle', 'status', 'current'])
 const vehicleIds = state => state.getIn(['vehicle', 'status', 'all'])
 const vehicleInitialValues = ownProps => fromJS(ownProps.vehicle)
 const currentUser = state => state.getIn(['auth', 'user', 'username'])
+const userEntity = state => state.getIn(['entities', 'users'])
 const selectedAssginer = state => {
   if (getFormValues('transportCreateForm')(state)) {
     return getFormValues('transportCreateForm')(state).get('assigner')
@@ -19,13 +19,31 @@ const selectedAssginer = state => {
 }
 
 const vehicleSelector = createImmutableSelector(
-  [vehicleEntity, vehicleCurrent],
-  (vehicles, id) => denormalizeVehicle(vehicles, id)
+  [vehicleEntity, vehicleCurrent, userEntity],
+  (vehicle, current, user) =>
+    current
+      ? vehicle.get(current).withMutations(value =>
+        value
+          .updateIn(['captain'], value => user.get(value))
+          .updateIn(['principal'], value => user.get(value))
+          .updateIn(['secondary'], value => user.get(value))
+      )
+      : {}
 )
 
 const vehicleArraySelector = createImmutableSelector(
-  [vehicleEntity, vehicleIds],
-  (vehicles, ids) => (ids ? ids.map(item => vehicles.get(item)) : [])
+  [vehicleEntity, vehicleIds, userEntity],
+  (vehicles, ids, user) =>
+    ids
+      ? ids.map(item =>
+        vehicles.get(item).withMutations(value =>
+          value
+            .updateIn(['captain'], value => user.get(value))
+            .updateIn(['principal'], value => user.get(value))
+            .updateIn(['secondary'], value => user.get(value))
+        )
+      )
+      : []
 )
 
 // const makeVehicleInitialValuesSelector = () =>
@@ -69,7 +87,7 @@ const makeVehicleInitialValuesSelector = () =>
         `${vehicle.getIn(['principal', 'username'])}@@${vehicle.getIn([
           'principal',
           'fullname'
-        ])}`
+        ])})`
       )
       : vehicle.get('principal')
     const secondary = vehicle.get('secondary')
@@ -77,7 +95,7 @@ const makeVehicleInitialValuesSelector = () =>
         `${vehicle.getIn(['secondary', 'username'])}@@${vehicle.getIn([
           'secondary',
           'fullname'
-        ])}`
+        ])})`
       )
       : vehicle.get('secondary')
     return vehicle

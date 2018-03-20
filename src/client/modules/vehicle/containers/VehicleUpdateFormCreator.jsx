@@ -1,16 +1,20 @@
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 import { updateVehicleRequest } from '../actions'
 import { fromJS } from 'immutable'
 
 import VehicleUpdateFormCreator from '../components/VehicleUpdateFormCreator'
 import immutPropsToJS from '@clientUtils/immutPropsToJS'
+import { withNoDelayLoading } from '@clientUtils/withLoading'
 import { makeVehicleInitialValuesSelector } from '../selectors'
 
 const makeMapStateToProps = () => {
   const vehicleInitialValuesSelector = makeVehicleInitialValuesSelector()
   const mapStateToProps = (state, ownProps) => {
+    const loading = state.getIn(['vehicle', 'status', 'formUpdateLoading'])
     const initialValues = vehicleInitialValuesSelector(ownProps)
-    return { initialValues }
+    console.log(initialValues.toJS())
+    return { loading, initialValues }
   }
   return mapStateToProps
 }
@@ -50,6 +54,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 export default vehicleId =>
-  connect(makeMapStateToProps, mapDispatchToProps)(
-    immutPropsToJS(VehicleUpdateFormCreator(vehicleId))
-  )
+  compose(
+    connect(makeMapStateToProps, mapDispatchToProps),
+    immutPropsToJS,
+    withNoDelayLoading
+  )(VehicleUpdateFormCreator(vehicleId))

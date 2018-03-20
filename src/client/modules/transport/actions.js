@@ -1,16 +1,11 @@
 // @flow
 
 import { createAction } from 'redux-actions'
-import {
-  FETCH_TRANSPORT_REQUEST,
-  FETCH_TRANSPORT_LIST_REQUEST,
-  UPDATE_TRANSPORT_REQUEST,
-  CREATE_TRANSPORT_REQUEST,
-  DELETE_TRANSPORT_REQUEST
-} from './actionTypes'
+import * as Type from './actionTypes'
 
-export const fetchTransportRequest = createAction(FETCH_TRANSPORT_REQUEST)
-export const fetchTransportListRequest = createAction(FETCH_TRANSPORT_LIST_REQUEST)
-export const updateTransportRequest = createAction(UPDATE_TRANSPORT_REQUEST)
-export const createTransportRequest = createAction(CREATE_TRANSPORT_REQUEST)
-export const deleteTransportRequest = createAction(DELETE_TRANSPORT_REQUEST)
+export const fetchTransportRequest = createAction(Type.FETCH_REQUEST)
+export const fetchTransportListRequest = createAction(Type.FETCH_LIST_REQUEST)
+export const fetchTransportAllRequest = createAction(Type.FETCH_ALL_REQUEST)
+export const updateTransportRequest = createAction(Type.UPDATE_REQUEST)
+export const createTransportRequest = createAction(Type.CREATE_REQUEST)
+export const deleteTransportRequest = createAction(Type.DELETE_REQUEST)

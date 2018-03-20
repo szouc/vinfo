@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import TransportCreateForm from '../components/TransportCreateForm'
 import { createTransportRequest } from '../actions'
 
-import immutPropsToJS from '@clientModulesShared/immutPropsToJS'
+import immutPropsToJS from '@clientUtils/immutPropsToJS'
 import { fromJS } from 'immutable'
 
 const mapDispatchToProps = dispatch => {

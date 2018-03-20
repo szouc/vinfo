@@ -12,23 +12,26 @@ class VehicleSelect extends React.PureComponent {
     placeholder: '请选择车辆'
   }
 
-  componentDidMount() {
-    this.props.getAllVehicles()
-  }
+  // componentDidMount() {
+  //   this.props.getAllVehicles()
+  // }
 
   render() {
-    const { vehicles, placeholder, ...rest } = this.props
+    const { vehicles, placeholder, getAllVehicles, ...rest } = this.props
     const options = vehicles
     const optionsList = options.map(vehicle => {
       return (
-        <Option key={vehicle._id} value={`${vehicle._id}@@${vehicle.plate}@@${vehicle.engine}`}>
+        <Option
+          key={vehicle._id}
+          value={`${vehicle._id}@@${vehicle.plate}@@${vehicle.engine}`}
+        >
           {vehicle.plate}
         </Option>
       )
     })
 
     return (
-      <Select {...rest}>
+      <Select {...rest} onFocus={getAllVehicles}>
         <Option value='' className='first-option' disabled>
           {placeholder}
         </Option>

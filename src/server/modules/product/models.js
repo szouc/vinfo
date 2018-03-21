@@ -53,4 +53,4 @@ ProductSchema.index({ name: 1, specs: 1 }, { unique: true })
 
 const Product = db.model('Product', ProductSchema)
 
-export { Product }
+export { ProductSchema, Product }

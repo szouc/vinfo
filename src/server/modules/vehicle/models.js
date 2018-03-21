@@ -6,7 +6,11 @@ const Schema = mongoose.Schema
 const fuel = {
   applicant: {
     username: { type: String, required: true },
-    fullname: { type: String, required: true }
+    fullname: { type: String, required: true },
+    gender: { type: String, required: true },
+    role: { type: String, required: true },
+    created: { type: Date, required: true },
+    active: { type: Boolean, required: true }
   },
   litre: {
     type: Number,
@@ -37,7 +41,11 @@ const FuelSchema = new Schema(fuel)
 const maintain = {
   applicant: {
     username: { type: String, required: true },
-    fullname: { type: String, required: true }
+    fullname: { type: String, required: true },
+    gender: { type: String, required: true },
+    role: { type: String, required: true },
+    created: { type: Date, required: true },
+    active: { type: Boolean, required: true }
   },
   reason: {
     type: String,
@@ -90,17 +98,29 @@ const baseVehicle = {
   },
   principal: {
     username: { type: String },
-    fullname: { type: String }
+    fullname: { type: String },
+    gender: { type: String },
+    role: { type: String },
+    created: { type: Date },
+    active: { type: Boolean }
   },
   secondary: {
     username: { type: String },
-    fullname: { type: String }
+    fullname: { type: String },
+    gender: { type: String },
+    role: { type: String },
+    created: { type: Date },
+    active: { type: Boolean }
   },
   captain: {
     username: { type: String },
-    fullname: { type: String }
+    fullname: { type: String },
+    gender: { type: String },
+    role: { type: String },
+    created: { type: Date },
+    active: { type: Boolean }
   },
-  assigned: { type: Boolean, required: true, default: false },
+  assigned: { type: Boolean, default: false },
   active: {
     type: Boolean,
     default: true
@@ -119,4 +139,4 @@ VehicleSchema.index({ plate: 1, engine: 1 }, { unique: true })
 
 const Vehicle = db.model('Vehicle', VehicleSchema)
 
-export { Vehicle }
+export { VehicleSchema, Vehicle }

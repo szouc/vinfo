@@ -125,6 +125,5 @@ describe('User Base Operations', () => {
       .post(Api.USER_LICENSE_UPLOAD)
       .attach('license', data.images[0].license, 'license.png')
     expect(res.statusCode).toBe(200)
-    expect(res.body.ok).toBeTruthy()
   })
 })

@@ -39,4 +39,4 @@ CompanySchema.index({ name: 1, addr: 1 }, { unique: true })
 
 const Company = db.model('Company', CompanySchema)
 
-export { Company }
+export { CompanySchema, Company }

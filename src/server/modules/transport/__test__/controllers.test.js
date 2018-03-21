@@ -283,7 +283,7 @@ describe('Transport Base Operations', () => {
     const res = await agent
       .put(Api.TRANSPORT_ID.replace(/:id/, transportId))
       .send(modifiedDrivers)
-    expect(res.statusCode).toBe(200)
+    expect(res).toBe(200)
     expect(res.body.result.principal.username).toBe('driver2_vehicle')
   })
 

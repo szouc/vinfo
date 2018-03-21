@@ -14,6 +14,7 @@ describe('Vehicle Base Operations', () => {
   beforeAll(async () => {
     await agent.post('/auth/register').send(data.drivers[0])
     await agent.post('/auth/register').send(data.drivers[1])
+    await agent.post('/auth/register').send(data.captains[0])
     await agent.post('/auth/register').send(data.managers[0])
   })
 

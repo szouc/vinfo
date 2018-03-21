@@ -116,14 +116,11 @@ describe('Captain Base Operations', () => {
     maintain0Id = resMaintain.body.result.maintenance[0]._id
     await agent.post('/auth/login').send(data.captains[0])
     transport = {
-      assigner: {
-        username: data.captains[0].username,
-        fullname: data.captains[0].fullname
-      },
-      vehicle: { _id: vehicle0Id },
-      from: { company: { _id: company0Id } },
-      to: { company: { _id: company1Id } },
-      product: { _id: product0Id }
+      assigner: data.captains[0],
+      vehicle: data.vehicles[0],
+      from: { company: data.companies[0] },
+      to: { company: data.companies[1] },
+      product: data.products[0]
     }
     transport1 = {
       assigner: {
@@ -222,8 +219,8 @@ describe('Captain Base Operations', () => {
     const res = await agent
       .post(CAPTAIN_TRANSPORT.replace(/:username/, data.captains[0].username))
       .send(transport)
-    transport0Id = res.body.result[0]._id
-    expect(res.statusCode).toBe(200)
+    // transport0Id = res.body.result[0]._id
+    expect(res).toBe(200)
   })
 
   test('Should get all transports', async () => {

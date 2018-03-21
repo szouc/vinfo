@@ -8,43 +8,98 @@ const Schema = mongoose.Schema
 const baseTransport = {
   assigner: {
     username: { type: String, required: true },
-    fullname: { type: String, required: true }
+    fullname: { type: String, required: true },
+    gender: { type: String, required: true },
+    role: { type: String, required: true },
+    created: { type: Date, required: true },
+    active: { type: Boolean, required: true }
   },
   vehicle: {
-    _id: { type: Schema.Types.ObjectId, required: true, ref: 'Vehicle' },
-    plate: { type: String },
-    engine: { type: String }
+    _id: { type: Schema.Types.ObjectId, required: true },
+    plate: { type: String, required: true },
+    engine: { type: String, required: true },
+    model: { type: String },
+    purchase_date: { type: Date },
+    init_mile: { type: Number },
+    principal: {
+      username: { type: String },
+      fullname: { type: String },
+      gender: { type: String },
+      role: { type: String },
+      created: { type: Date },
+      active: { type: Boolean }
+    },
+    secondary: {
+      username: { type: String },
+      fullname: { type: String },
+      gender: { type: String },
+      role: { type: String },
+      created: { type: Date },
+      active: { type: Boolean }
+    },
+    captain: {
+      username: { type: String, required: true },
+      fullname: { type: String, required: true },
+      gender: { type: String, required: true },
+      role: { type: String, required: true },
+      created: { type: Date, required: true },
+      active: { type: Boolean, required: true }
+    },
+    assigned: { type: Boolean, required: true },
+    created: { type: Date, required: true },
+    active: { type: Boolean, required: true }
   },
   principal: {
-    username: { type: String, required: true },
-    fullname: { type: String, required: true }
+    username: { type: String },
+    fullname: { type: String },
+    gender: { type: String },
+    role: { type: String },
+    created: { type: Date },
+    active: { type: Boolean }
   },
   secondary: {
-    username: { type: String, required: true },
-    fullname: { type: String, required: true }
+    username: { type: String },
+    fullname: { type: String },
+    gender: { type: String },
+    role: { type: String },
+    created: { type: Date },
+    active: { type: Boolean }
   },
   from: {
     company: {
-      _id: { type: Schema.Types.ObjectId, required: true, ref: 'Company' },
-      name: { type: String },
-      addr: { type: String }
+      _id: { type: Schema.Types.ObjectId, required: true },
+      name: { type: String, required: true },
+      addr: { type: String, required: true },
+      phone: { type: String },
+      legal_person: { type: String },
+      tax_number: { type: String },
+      created: { type: Date, required: true },
+      active: { type: Boolean, required: true }
     },
     weight: { type: Number, default: 0 },
     date: { type: Date, default: Date.now() }
   },
   to: {
     company: {
-      _id: { type: Schema.Types.ObjectId, required: true, ref: 'Company' },
-      name: { type: String },
-      addr: { type: String }
+      _id: { type: Schema.Types.ObjectId, required: true },
+      name: { type: String, required: true },
+      addr: { type: String, required: true },
+      phone: { type: String },
+      legal_person: { type: String },
+      tax_number: { type: String },
+      created: { type: Date, required: true },
+      active: { type: Boolean, required: true }
     },
     weight: { type: Number, default: 0 },
     date: { type: Date, default: Date.now() }
   },
   product: {
-    _id: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
-    name: { type: String },
-    specs: { type: String }
+    _id: { type: Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true },
+    specs: { type: String, required: true },
+    pricing: { type: String },
+    created: { type: Date, required: true },
+    active: { type: Boolean, required: true }
   },
   captain_status: {
     type: String,
@@ -62,7 +117,11 @@ const baseTransport = {
   },
   accountant: {
     username: { type: String },
-    fullname: { type: String }
+    fullname: { type: String },
+    gender: { type: String },
+    role: { type: String },
+    created: { type: Date },
+    active: { type: Boolean }
   },
   accountant_info: { type: String },
   active: { type: Boolean, default: true },
@@ -77,4 +136,4 @@ TransportSchema.plugin(AutoIncrement, { inc_field: 'num' })
 
 const Transport = db.model('Transport', TransportSchema)
 
-export { Transport }
+export { TransportSchema, Transport }

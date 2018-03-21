@@ -77,4 +77,4 @@ const plmOptions = {
 UserSchema.plugin(passportLocalMongoose, plmOptions)
 
 const User = db.model('User', UserSchema)
-export { User }
+export { UserSchema, User }

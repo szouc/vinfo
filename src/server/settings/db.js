@@ -7,15 +7,15 @@ mongoose.Promise = global.Promise
 
 // Set up default mongoose connection
 const options = isTest
-  ? {}
+  ? {
+    autoIndex: true
+  }
   : {
     autoReconnect: true,
     keepAlive: true,
     socketTimeoutMS: 0,
     reconnectTries: 30,
-    config: {
-      autoIndex: !isProd
-    }
+    autoIndex: !isProd
   }
 
 const URI = isTest ? TEST_URI : DB_URI

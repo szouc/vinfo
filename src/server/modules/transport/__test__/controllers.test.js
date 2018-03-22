@@ -1,5 +1,3 @@
-import moment from 'moment'
-import mongoose from 'mongoose'
 import { Transport } from '../models'
 import { User } from '../../user/models'
 import { Vehicle } from '../../vehicle/models'
@@ -15,18 +13,15 @@ describe('Transport Base Operations', () => {
   let num
   let transportId
   let vehicle0
+  let vehicle1
   // let transportId2
   const agent = request.agent(app)
   beforeAll(async () => {
-    await agent.post('/auth/register').send(data.drivers[0])
-    await agent.post('/auth/register').send(data.drivers[1])
     await agent.post('/auth/register').send(data.managers[0])
-    await agent.post('/api/product').send(data.products[0])
     const res = await agent.post('/api/vehicle').send(data.vehicles[0])
     vehicle0 = res.body.result
-    await agent.post('/api/vehicle').send(data.vehicles[1])
-    await agent.post('/api/company').send(data.companies[0])
-    await agent.post('/api/company').send(data.companies[1])
+    const res1 = await agent.post('/api/vehicle').send(data.vehicles[1])
+    vehicle1 = res1.body.result
   })
 
   afterAll(async () => {
@@ -46,11 +41,12 @@ describe('Transport Base Operations', () => {
     expect(res.body.result[0].principal.username).toBe(
       data.transports[0].vehicle.principal.username
     )
-    expect(res.body.result[0].assigned).toBeFalsy()
+    expect(res.body.result[1].assigned).toBeTruthy()
   })
 
   test('Should create another transport', async () => {
     expect.assertions(2)
+    data.transports[1].vehicle = vehicle1
     const res = await agent.post(Api.TRANSPORT_ROOT).send(data.transports[1])
     const re = num + 1
     expect(res.statusCode).toBe(200)
@@ -67,12 +63,12 @@ describe('Transport Base Operations', () => {
 
   test('Should not create a transport', async () => {
     expect.assertions(2)
-    const res = await agent.post(Api.TRANSPORT_ROOT).send(transport2)
+    const res = await agent.post(Api.TRANSPORT_ROOT).send(data.transports[0])
     expect(res.statusCode).toBe(400)
     expect(res.body.error).toEqual('车辆不存在或已分配。')
   })
 
-  test('Should fecth all transports', async () => {
+  test('Should fetch all transports', async () => {
     expect.assertions(1)
     const res = await agent.get(Api.TRANSPORT_ROOT)
     transportId = res.body.result[1]._id
@@ -101,9 +97,9 @@ describe('Transport Base Operations', () => {
     expect.assertions(2)
     const res = await agent
       .put(Api.TRANSPORT_ID.replace(/:id/, transportId))
-      .send(modifiedDrivers)
-    expect(res).toBe(200)
-    expect(res.body.result.principal.username).toBe('driver2_vehicle')
+      .send({ principal: data.drivers[0] })
+    expect(res.statusCode).toBe(200)
+    expect(res.body.result.principal.username).toBe(data.drivers[0].username)
   })
 
   test('Should delete transport by id', async () => {

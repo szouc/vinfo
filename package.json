@@ -146,13 +146,5 @@
     "env": [
       "jest"
     ]
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "bail": true,
-    "verbose": true,
-    "roots": [
-      "<rootDir>/src/server/modules/transport"
-    ]
   }
 }

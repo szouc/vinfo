@@ -60,7 +60,9 @@ const accountantEntity = {
 const companyTemplate = {
   name: '@ctitle(5,10)',
   addr: '@county(true)',
-  phone: '@natural(13000000000, 17299999999)'
+  phone: '@natural(13000000000, 17299999999)',
+  legal_person: '@ctitle(5,10)',
+  tax_number: '@natural(10000,30000)'
 }
 
 const companyEntity = {
@@ -99,7 +101,10 @@ const fuelTemplate = {
   applicant: driverEntity,
   litre: '@natural(30, 50)',
   cost: '@natural(100, 500)',
-  mile: '@natural(12345, 34352)'
+  mile: '@natural(12345, 34352)',
+  date: '@date',
+  is_check: '@boolean',
+  info: '@cparagraph(2,5)'
 }
 
 const fuelEntity = {
@@ -111,7 +116,10 @@ const maintainTemplate = {
   applicant: driverEntity,
   reason: '@cparagraph(2,5)',
   cost: '@natural(100, 500)',
-  mile: '@natural(12345, 34352)'
+  mile: '@natural(12345, 34352)',
+  date: '@date',
+  is_check: '@boolean',
+  info: '@cparagraph(2,5)'
 }
 
 const maintainEntity = {
@@ -123,9 +131,12 @@ const vehicleTemplate = {
   plate: '@string("upper", 7)',
   engine: '@string("number", 11)',
   model: '@string("lower", 7)',
+  purchase_date: '@date',
+  init_mile: '@natural(100, 999)',
   principal: driverEntity,
   secondary: driverEntity,
   captain: captainEntity,
+  assigned: false,
   'fuels|3': [fuelEntity],
   'maintenance|3': [maintainEntity]
 }

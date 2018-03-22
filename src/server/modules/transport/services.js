@@ -41,7 +41,6 @@ const getTransportsWithPg = (pageNumber, pageSize, values = {}) => {
     ...accountantQuery,
     ...dateRangeQuery
   }
-  console.log(query)
   return Page.addPagination(
     getTransportsPagination(pageNumber, pageSize, query),
     getTransportsData(pageNumber, pageSize, query)

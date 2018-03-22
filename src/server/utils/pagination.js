@@ -19,7 +19,7 @@ const producePagination = Model => (pageNumber, pageSize, query) =>
     }
   })
 
-const getModelSortedData = (Model, sortField) => (
+const getModelSortedData = (Model, projection, sortField) => (
   pageNumber,
   pageSize,
   query
@@ -29,6 +29,7 @@ const getModelSortedData = (Model, sortField) => (
       .skip((pageNumber - 1) * pageSize)
       .limit(pageSize)
       .sort(sortField)
+      .select(projection)
       .lean()
       .exec()
   )

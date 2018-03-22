@@ -5,9 +5,13 @@ import moment from 'moment'
 import { User } from './models'
 import * as Page from '../../utils/pagination'
 
-const getUsersByQuery = query => Observable.fromPromise(User.find(query))
+const PROJECTION = 'username fullname gender role created active'
 
-const getUserByQuery = query => Observable.fromPromise(User.findOne(query))
+const getUsersByQuery = query =>
+  Observable.fromPromise(User.find(query, PROJECTION))
+
+const getUserByQuery = query =>
+  Observable.fromPromise(User.findOne(query, PROJECTION))
 
 const createUser = (user, callback) => {
   // Register must pass the callback function
@@ -26,7 +30,7 @@ const getAllUsers = () => getUsersByQuery({ active: true })
 
 const getUsersPagination = Page.producePagination(User)
 
-const getUsersData = Page.getModelSortedData(User, 'username')
+const getUsersData = Page.getModelSortedData(User, PROJECTION, 'username')
 
 /**
  * 根据查询获取用户
@@ -96,7 +100,9 @@ const deleteUserByUsername = username =>
   Observable.fromPromise(User.remove({ username: username }))
 
 const updateUserByQuery = (query, update) =>
-  Observable.fromPromise(User.findOneAndUpdate(query, update, { new: true }))
+  Observable.fromPromise(
+    User.findOneAndUpdate(query, update, { new: true }).select(PROJECTION)
+  )
 
 const updateUserByUsername = (username, update) =>
   updateUserByQuery({ username: username }, update)

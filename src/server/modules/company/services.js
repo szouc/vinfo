@@ -3,18 +3,21 @@ import moment from 'moment'
 import { Observable } from 'rxjs'
 import * as Page from '../../utils/pagination'
 
-const createCompany = company => Observable.fromPromise(Company.create(company))
+const PROJECTION = 'name addr phone legal_person tax_number created active'
+
+const createCompany = company =>
+  Observable.fromPromise(Company.create(company))
 
 const getCompanyByQuery = query =>
   Observable.fromPromise(
-    Company.findOne(query)
+    Company.findOne(query, PROJECTION)
       .lean()
       .exec()
   )
 
 const getCompaniesByQuery = query =>
   Observable.fromPromise(
-    Company.find(query)
+    Company.find(query, PROJECTION)
       .lean()
       .exec()
   )
@@ -23,7 +26,7 @@ const getAllCompanies = () => getCompaniesByQuery({ active: true })
 
 const getCompaniesPagination = Page.producePagination(Company)
 
-const getCompaniesData = Page.getModelSortedData(Company, 'created')
+const getCompaniesData = Page.getModelSortedData(Company, PROJECTION, 'created')
 
 const getCompaniesWithPg = (pageNumber, pageSize, values = {}) => {
   let active = { active: true }
@@ -42,7 +45,7 @@ const getCompaniesWithPg = (pageNumber, pageSize, values = {}) => {
 
 const getCompanyById = id =>
   Observable.fromPromise(
-    Company.findById(id)
+    Company.findById(id, PROJECTION)
       .lean()
       .exec()
   )
@@ -50,6 +53,7 @@ const getCompanyById = id =>
 const updateCompanyById = (id, update) =>
   Observable.fromPromise(
     Company.findByIdAndUpdate(id, { $set: update }, { new: true })
+      .select(PROJECTION)
       .lean()
       .exec()
   )
@@ -57,6 +61,7 @@ const updateCompanyById = (id, update) =>
 const deleteCompanyById = id =>
   Observable.fromPromise(
     Company.findByIdAndUpdate(id, { active: false }, { new: true })
+      .select(PROJECTION)
       .lean()
       .exec()
   )

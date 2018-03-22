@@ -9,208 +9,24 @@ import app from '../../../app'
 import request from 'supertest'
 // import { replaceAll } from '../../../utils/replaceAll'
 import * as Api from '../api'
-
-const manager = {
-  username: 'manager_vehicle',
-  password: '123',
-  fullname: 'test manager',
-  role: 'manager',
-  gender: 'male',
-  active: true
-}
-
-const driver1 = {
-  username: 'driver1_vehicle',
-  password: '123',
-  fullname: 'test manager',
-  role: 'driver',
-  gender: 'male',
-  active: true
-}
-
-const driver2 = {
-  username: 'driver2_vehicle',
-  password: '123',
-  fullname: 'test manager',
-  role: 'driver',
-  gender: 'male',
-  active: true
-}
-
-const fuel = {
-  applicant: {
-    username: 'driver1_vehicle',
-    fullname: 'test manager'
-  },
-  litre: 20,
-  cost: 600,
-  mile: 14435
-}
-
-const maintain = {
-  applicant: {
-    username: 'driver1_vehicle',
-    fullname: 'test manager'
-  },
-  reason: '换轮胎',
-  cost: 1000,
-  mile: 17333
-}
-
-const vehicle = {
-  _id: mongoose.Types.ObjectId('59acecec3884881aa3333333'),
-  plate: '鲁B 12345',
-  engine: 'L23421342345',
-  model: '解放',
-  purchase_date: moment('01/12/2017', 'MM/DD/YYYY', true),
-  init_mile: 123456,
-  principal: {
-    username: 'driver1_vehicle',
-    fullname: 'test manager'
-  },
-  secondary: {
-    username: 'driver2_vehicle',
-    fullname: 'test manager'
-  },
-  assign: false,
-  fuels: [fuel],
-  maintenance: [maintain]
-}
-
-const vehicle1 = {
-  _id: mongoose.Types.ObjectId('59acecec3884881aa4444444'),
-  plate: '鲁B 54321',
-  engine: 'L23421343fs5',
-  model: '东风',
-  purchase_date: moment('01/12/2017', 'MM/DD/YYYY', true),
-  init_mile: 123456,
-  principal: {
-    username: 'driver1_vehicle',
-    fullname: 'test manager'
-  },
-  secondary: {
-    username: 'driver2_vehicle',
-    fullname: 'test manager'
-  },
-  assign: false,
-  fuels: [fuel],
-  maintenance: [maintain]
-}
-
-const product = {
-  _id: mongoose.Types.ObjectId('59acecec3884881aa5555555'),
-  name: '硫酸',
-  specs: '98%',
-  pricing: '200'
-}
-
-const company1 = {
-  _id: mongoose.Types.ObjectId('59acecec3884881aa6666666'),
-  name: '青岛利特1',
-  addr: '市北区黑龙江路'
-}
-
-const company2 = {
-  _id: mongoose.Types.ObjectId('59acecec3884881aa7777777'),
-  name: '青岛利特2',
-  addr: '市北区黑龙江路'
-}
-
-const transport = {
-  assigner: {
-    username: 'driver1_vehicle',
-    fullname: 'test manager'
-  },
-  vehicle: {
-    _id: mongoose.Types.ObjectId('59acecec3884881aa3333333'),
-    plate: '鲁B 12345',
-    engine: 'L23421342345'
-  },
-  from: {
-    company: {
-      _id: mongoose.Types.ObjectId('59acecec3884881aa6666666'),
-      name: '青岛利特1',
-      addr: '市北区黑龙江路'
-    },
-    weight: 200,
-    date: moment('2017/09/22', 'YYYY/MM/DD')
-  },
-  to: {
-    company: {
-      _id: mongoose.Types.ObjectId('59acecec3884881aa7777777'),
-      name: '青岛利特2',
-      addr: '市北区黑龙江路'
-    },
-    weight: 200,
-    date: moment('2017/09/22', 'YYYY/MM/DD')
-  },
-  product: {
-    _id: mongoose.Types.ObjectId('59acecec3884881aa5555555'),
-    name: '硫酸',
-    specs: '98%'
-  }
-}
-
-const transport2 = {
-  assigner: {
-    username: 'driver1_vehicle',
-    fullname: 'test manager'
-  },
-  vehicle: {
-    _id: mongoose.Types.ObjectId('59acecec3884881aa4444444'),
-    plate: '鲁B 54321',
-    engine: 'L23421343fs5'
-  },
-  from: {
-    company: {
-      _id: mongoose.Types.ObjectId('59acecec3884881aa6666666'),
-      name: '青岛利特1',
-      addr: '市北区黑龙江路'
-    },
-    weight: 100,
-    date: moment('2017/09/12', 'YYYY/MM/DD')
-  },
-  to: {
-    company: {
-      _id: mongoose.Types.ObjectId('59acecec3884881aa7777777'),
-      name: '青岛利特2',
-      addr: '市北区黑龙江路'
-    },
-    weight: 100,
-    date: moment('2017/09/12', 'YYYY/MM/DD')
-  },
-  product: {
-    _id: mongoose.Types.ObjectId('59acecec3884881aa5555555'),
-    name: '硫酸',
-    specs: '98%'
-  }
-}
-
-const modifiedDrivers = {
-  secondary: {
-    username: 'driver1_vehicle',
-    fullname: 'test manager'
-  },
-  principal: {
-    username: 'driver2_vehicle',
-    fullname: 'test manager'
-  }
-}
+import { data } from '../../../utils/mockData'
 
 describe('Transport Base Operations', () => {
   let num
   let transportId
+  let vehicle0
   // let transportId2
   const agent = request.agent(app)
   beforeAll(async () => {
-    await agent.post('/auth/register').send(driver1)
-    await agent.post('/auth/register').send(driver2)
-    await agent.post('/auth/register').send(manager)
-    await agent.post('/api/product').send(product)
-    await agent.post('/api/vehicle').send(vehicle)
-    await agent.post('/api/vehicle').send(vehicle1)
-    await agent.post('/api/company').send(company1)
-    await agent.post('/api/company').send(company2)
+    await agent.post('/auth/register').send(data.drivers[0])
+    await agent.post('/auth/register').send(data.drivers[1])
+    await agent.post('/auth/register').send(data.managers[0])
+    await agent.post('/api/product').send(data.products[0])
+    const res = await agent.post('/api/vehicle').send(data.vehicles[0])
+    vehicle0 = res.body.result
+    await agent.post('/api/vehicle').send(data.vehicles[1])
+    await agent.post('/api/company').send(data.companies[0])
+    await agent.post('/api/company').send(data.companies[1])
   })
 
   afterAll(async () => {
@@ -223,16 +39,19 @@ describe('Transport Base Operations', () => {
 
   test('Should create a transport', async () => {
     expect.assertions(3)
-    const res = await agent.post(Api.TRANSPORT_ROOT).send(transport)
+    data.transports[0].vehicle = vehicle0
+    const res = await agent.post(Api.TRANSPORT_ROOT).send(data.transports[0])
     num = res.body.result[0].num
     expect(res.statusCode).toBe(200)
-    expect(res.body.result[0].principal.username).toBe('driver1_vehicle')
-    expect(res.body.result[1].assigned).toBeTruthy()
+    expect(res.body.result[0].principal.username).toBe(
+      data.transports[0].vehicle.principal.username
+    )
+    expect(res.body.result[0].assigned).toBeFalsy()
   })
 
   test('Should create another transport', async () => {
     expect.assertions(2)
-    const res = await agent.post(Api.TRANSPORT_ROOT).send(transport2)
+    const res = await agent.post(Api.TRANSPORT_ROOT).send(data.transports[1])
     const re = num + 1
     expect(res.statusCode).toBe(200)
     expect(res.body.result[0].num).toEqual(re)

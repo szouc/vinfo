@@ -120,7 +120,7 @@ describe('User Base Operations', () => {
   })
 
   test('Should get the image url', async () => {
-    expect.assertions(2)
+    expect.assertions(1)
     const res = await agent
       .post(Api.USER_LICENSE_UPLOAD)
       .attach('license', data.images[0].license, 'license.png')

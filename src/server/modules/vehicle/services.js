@@ -3,15 +3,19 @@ import { Observable } from 'rxjs'
 import { Vehicle } from './models'
 import * as Page from '../../utils/pagination'
 
+const PROJECTION =
+  'plate engine model purchase_date init_mile principal secondary captain fuels maintenance assigned created active'
+
 const createVehicle = vehicle => Observable.fromPromise(Vehicle.create(vehicle))
 
-const getVehiclesByQuery = query => Observable.fromPromise(Vehicle.find(query))
+const getVehiclesByQuery = query =>
+  Observable.fromPromise(Vehicle.find(query, PROJECTION))
 
 const getAllVehicles = () => getVehiclesByQuery({ active: true })
 
 const getVehiclesPagination = Page.producePagination(Vehicle)
 
-const getVehiclesData = Page.getModelSortedData(Vehicle, 'plate')
+const getVehiclesData = Page.getModelSortedData(Vehicle, PROJECTION, 'plate')
 
 const getVehiclesWithPg = (pageNumber, pageSize, values = {}) => {
   let activeQuery = { active: true }
@@ -56,7 +60,7 @@ const getVehiclesWithPg = (pageNumber, pageSize, values = {}) => {
 // }
 
 const getVehicleByQuery = query =>
-  Observable.fromPromise(Vehicle.findOne(query))
+  Observable.fromPromise(Vehicle.findOne(query, PROJECTION))
 
 /**
  * Why not use 'getVehicleByQuery', see differences of the 'findOne' and 'findById':
@@ -67,16 +71,23 @@ const getVehicleByQuery = query =>
  * However, mongoose translates findById(undefined) into findOne({ _id: null }).
  **/
 
-const getVehicleById = id => Observable.fromPromise(Vehicle.findById(id))
+const getVehicleById = id =>
+  Observable.fromPromise(Vehicle.findById(id, PROJECTION))
 
 const deleteVehicleById = id =>
   Observable.fromPromise(
-    Vehicle.findByIdAndUpdate(id, { $set: { active: false } }, { new: true })
+    Vehicle.findByIdAndUpdate(
+      id,
+      { $set: { active: false } },
+      { new: true }
+    ).select(PROJECTION)
   )
 
 const updateVehicleById = (id, update) =>
   Observable.fromPromise(
-    Vehicle.findByIdAndUpdate(id, { $set: update }, { new: true })
+    Vehicle.findByIdAndUpdate(id, { $set: update }, { new: true }).select(
+      PROJECTION
+    )
   )
 
 const addVehicleFuel = (id, fuelArray) =>
@@ -87,7 +98,7 @@ const addVehicleFuel = (id, fuelArray) =>
         $addToSet: { fuels: { $each: fuelArray } }
       },
       { new: true }
-    )
+    ).select(PROJECTION)
   )
 
 const addVehicleMaintain = (id, maintainArray) =>
@@ -98,11 +109,11 @@ const addVehicleMaintain = (id, maintainArray) =>
         $addToSet: { maintenance: { $each: maintainArray } }
       },
       { new: true }
-    )
+    ).select(PROJECTION)
   )
 
 const deleteFuelByQuery = (query, fuelId) =>
-  Observable.fromPromise(Vehicle.findOne(query))
+  Observable.fromPromise(Vehicle.findOne(query, PROJECTION))
     .do(doc => {
       if (doc) {
         doc.fuels.id(fuelId).remove()
@@ -149,7 +160,7 @@ const deleteOwnFuel = (username, fuelId) => {
 }
 
 const deleteMaintainByQuery = (query, maintainId) =>
-  Observable.fromPromise(Vehicle.findOne(query))
+  Observable.fromPromise(Vehicle.findOne(query, PROJECTION))
     .do(doc => {
       if (doc) {
         doc.maintenance.id(maintainId).remove()
@@ -214,7 +225,7 @@ const checkFuelById = (username, fuelId) =>
       {
         new: true
       }
-    )
+    ).select(PROJECTION)
   )
 
 const checkMaintainById = (username, maintainId) =>
@@ -237,7 +248,7 @@ const checkMaintainById = (username, maintainId) =>
       {
         new: true
       }
-    )
+    ).select(PROJECTION)
   )
 
 export {

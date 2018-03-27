@@ -9,54 +9,33 @@ import * as Api from '../api'
 import { data } from '../../../utils/mockData'
 
 describe('Driver Base Operations', () => {
-  let vehicle0Id
+  let vehicle0
+  let vehicle1
+  let driver2
   let fuel0Id
   let maintain0Id
-  let transport
-  let transport0Id
-  let company0Id
-  let company1Id
-  let product0Id
+  let transport0
   const agent = request.agent(app)
   beforeAll(async () => {
-    await agent.post('/auth/register').send(data.drivers[0])
-    await agent.post('/auth/register').send(data.drivers[1])
-    await agent.post('/auth/register').send(data.captains[0])
     await agent.post('/auth/register').send(data.managers[0])
+    await agent.post('/api/user').send(data.drivers[0])
+    await agent.post('/api/user').send(data.drivers[1])
+    const res1 = await agent.post('/api/user').send(data.drivers[2])
+    driver2 = res1.body.result
+    await agent.post('/api/user').send(data.captains[0])
+    data.vehicles[0].principal = driver2
     const res = await agent.post('/api/vehicle').send(data.vehicles[0])
-    vehicle0Id = res.body.result._id
-    await agent.post('/api/vehicle').send(data.vehicles[1])
+    vehicle0 = res.body.result
+    const res3 = await agent.post('/api/vehicle').send(data.vehicles[1])
+    vehicle1 = res3.body.result
     await agent.post('/api/vehicle').send(data.vehicles[2])
-    await agent.put(`/api/vehicle/${vehicle0Id}`).send({
-      principal: {
-        username: data.drivers[2].username,
-        fullname: data.drivers[2].fullname
-      },
-      secondary: {
-        username: data.drivers[1].username,
-        fullname: data.drivers[1].fullname
-      }
-    })
-    const resCompany0 = await agent.post('/api/company').send(data.companies[0])
-    company0Id = resCompany0.body.result._id
-    const resCompany1 = await agent.post('/api/company').send(data.companies[1])
-    company1Id = resCompany1.body.result._id
-    const resProduct0 = await agent.post('/api/product').send(data.products[0])
-    product0Id = resProduct0.body.result._id
-
-    transport = {
-      assigner: {
-        username: data.captains[0].username,
-        fullname: data.captains[0].fullname
-      },
-      vehicle: { _id: vehicle0Id },
-      from: { company: { _id: company0Id } },
-      to: { company: { _id: company1Id } },
-      product: { _id: product0Id }
-    }
-    const resTransport = await agent.post('/api/transport').send(transport)
-    transport0Id = resTransport.body.result[0]._id
-    await agent.post('/auth/register').send(data.drivers[2])
+    data.transports[0].principal = driver2
+    data.transports[0].vehicle = vehicle0
+    data.transports[1].principal = driver2
+    data.transports[1].vehicle = vehicle1
+    await agent.post('/api/transport').send(data.transports[0])
+    await agent.post('/api/transport').send(data.transports[1])
+    await agent.post('/auth/login').send(data.drivers[2])
   })
 
   afterAll(async () => {
@@ -95,10 +74,13 @@ describe('Driver Base Operations', () => {
   test('Should fetch a vehicle by username', async () => {
     expect.assertions(3)
     const res = await agent.get(
-      `${Api.DRIVER_VEHICLE.replace(/:username/, data.drivers[2].username)}?page=1&size=2`
+      `${Api.DRIVER_VEHICLE.replace(
+        /:username/,
+        data.drivers[2].username
+      )}?page=1&size=2`
     )
     expect(res.statusCode).toBe(200)
-    expect(res.body.result[0]._id).toBe(vehicle0Id)
+    expect(res.body.result[0]._id).toBe(vehicle0._id)
     expect(res.body.pagination.pageNumber).toBe(1)
   })
 
@@ -107,15 +89,12 @@ describe('Driver Base Operations', () => {
     const values = [
       {
         ...data.fuels[1],
-        applicant: {
-          username: data.drivers[2].username,
-          fullname: data.drivers[2].fullname
-        }
+        applicant: driver2
       }
     ]
     const res = await agent
       .post(Api.DRIVER_FUEL.replace(/:username/, data.drivers[2].username))
-      .send({ vehicleId: vehicle0Id, values: values })
+      .send({ vehicleId: vehicle0._id, values: values })
     let fuelArray = res.body.result.fuels
     let fuel = fuelArray.filter(
       item => item.applicant.username === data.drivers[2].username
@@ -130,22 +109,16 @@ describe('Driver Base Operations', () => {
     const values = [
       {
         ...data.maintains[1],
-        applicant: {
-          username: data.drivers[2].username,
-          fullname: data.drivers[2].fullname
-        }
+        applicant: driver2
       },
       {
         ...data.maintains[2],
-        applicant: {
-          username: data.drivers[2].username,
-          fullname: data.drivers[2].fullname
-        }
+        applicant: driver2
       }
     ]
     const res = await agent
       .post(Api.DRIVER_MAINTAIN.replace(/:username/, data.drivers[2].username))
-      .send({ vehicleId: vehicle0Id, values: values })
+      .send({ vehicleId: vehicle0._id, values: values })
     let maintainArray = res.body.result.maintenance
     let maintain = maintainArray.filter(
       item => item.applicant.username === data.drivers[2].username
@@ -161,7 +134,7 @@ describe('Driver Base Operations', () => {
       `${Api.DRIVER_FUEL.replace(
         /:username/,
         data.drivers[2].username
-      )}?vehicleId=${vehicle0Id}`
+      )}?vehicleId=${vehicle0._id}`
     )
     expect(res.statusCode).toBe(200)
     expect(res.body.result).toHaveLength(1)
@@ -173,7 +146,7 @@ describe('Driver Base Operations', () => {
       `${Api.DRIVER_MAINTAIN.replace(
         /:username/,
         data.drivers[2].username
-      )}?vehicleId=${vehicle0Id}`
+      )}?vehicleId=${vehicle0._id}`
     )
     expect(res.statusCode).toBe(200)
     expect(res.body.result).toHaveLength(2)
@@ -206,6 +179,7 @@ describe('Driver Base Operations', () => {
     const res = await agent.get(
       Api.DRIVER_TRANSPORT.replace(/:username/, data.drivers[2].username)
     )
+    transport0 = res.body.result[0]
     expect(res.statusCode).toBe(200)
   })
 
@@ -213,7 +187,7 @@ describe('Driver Base Operations', () => {
     expect.assertions(1)
     const mapObj = {
       ':username': data.drivers[2].username,
-      ':childId': transport0Id
+      ':childId': transport0._id
     }
     const res = await agent
       .put(replaceAll(Api.DRIVER_TRANSPORT_ID, mapObj))

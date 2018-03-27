@@ -9,22 +9,23 @@ import * as Api from '../api'
 import { data } from '../../../utils/mockData'
 
 describe('Captain Base Operations', () => {
+  let vehicle1
+  let vehicle2
+  let transport0Id
+  let captain0
   const agent = request.agent(app)
   beforeAll(async () => {
-    await agent.post('/auth/register').send(data.drivers[0])
-    await agent.post('/auth/register').send(data.drivers[1])
-    await agent.post('/auth/register').send(data.drivers[2])
-    await agent.post('/auth/register').send(data.captains[0])
-    await agent.post('/auth/register').send(data.captains[1])
     await agent.post('/auth/register').send(data.managers[0])
-    await agent.post('/api/company').send(data.companies[0])
-    await agent.post('/api/company').send(data.companies[1])
-    await agent.post('/api/product').send(data.products[0])
-    data.vehicles[0].captain = data.captains[0]
-    data.vehicles[1].captain = data.captains[0]
+    const res1 = await agent.post('/api/user').send(data.captains[0])
+    captain0 = res1.body.result
+    await agent.post('/api/user').send(data.captains[1])
+    data.vehicles[0].captain = captain0
+    data.vehicles[1].captain = captain0
     await agent.post('/api/vehicle').send(data.vehicles[0])
-    await agent.post('/api/vehicle').send(data.vehicles[1])
-    await agent.post('/api/vehicle').send(data.vehicles[2])
+    const res = await agent.post('/api/vehicle').send(data.vehicles[1])
+    vehicle1 = res.body.result
+    const res2 = await agent.post('/api/vehicle').send(data.vehicles[2])
+    vehicle2 = res2.body.result
     await agent.post('/auth/login').send(data.captains[0])
   })
 
@@ -70,13 +71,12 @@ describe('Captain Base Operations', () => {
         data.captains[0].username
       )}?page=1&size=20`
     )
-    expect(res.statusCode).toBe(200)
+    expect(res.status).toBe(200)
     expect(res.body.result).toHaveLength(2)
   })
 
   test('Should update a fuel by id', async () => {
     expect.assertions(2)
-    console.log(data.vehicles[0])
     const mapObj = {
       ':username': data.captains[0].username,
       ':childId': data.vehicles[0].fuels[0]._id
@@ -90,35 +90,35 @@ describe('Captain Base Operations', () => {
     expect.assertions(2)
     const mapObj = {
       ':username': data.captains[0].username,
-      ':childId': maintain0Id
+      ':childId': data.vehicles[0].maintenance[0]._id
     }
-    const res = await agent
-      .put(replaceAll(Api.CAPTAIN_MAINTAIN_ID, mapObj))
-      .send({
-        is_check: true
-      })
+    const res = await agent.put(replaceAll(Api.CAPTAIN_MAINTAIN_ID, mapObj))
     expect(res.statusCode).toBe(200)
     expect(res.body.result.maintenance[0].is_check).toBeTruthy()
   })
 
   test('Should create a transport', async () => {
     expect.assertions(1)
+    data.transports[0].assigner = captain0
+    data.transports[0].vehicle = vehicle1
     const res = await agent
       .post(
         Api.CAPTAIN_TRANSPORT.replace(/:username/, data.captains[0].username)
       )
       .send(data.transports[0])
-    // transport0Id = res.body.result[0]._id
-    expect(res).toBe(200)
+    transport0Id = res.body.result[0]._id
+    expect(res.statusCode).toBe(200)
   })
 
   test('Should get all transports', async () => {
     expect.assertions(3)
+    data.transports[1].assigner = captain0
+    data.transports[1].vehicle = vehicle2
     await agent
       .post(
         Api.CAPTAIN_TRANSPORT.replace(/:username/, data.captains[0].username)
       )
-      .send(transport1)
+      .send(data.transports[1])
     const res = await agent.get(
       Api.CAPTAIN_TRANSPORT.replace(/:username/, data.captains[0].username)
     )

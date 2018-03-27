@@ -19,24 +19,28 @@ class BaseLayout extends React.PureComponent {
           <BaseHeader />
         </Header>
         <Layout>
-          <Sider width={200} style={{ background: '#fff' }}>
+          <Sider
+            width={200}
+            style={{ overflow: 'auto', height: '100vh', position: 'fixed' }}
+          >
             <BaseSider />
           </Sider>
-          <Content
-            style={{
-              background: '#fff',
-              padding: 24,
-              margin: 0,
-              minHeight: 280
-            }}
-          >
-            <Redirect to='/home' />
-            <BaseContent />
-          </Content>
+          <Layout style={{ marginLeft: 200 }}>
+            <Content
+              style={{
+                background: '#fff',
+                padding: 24,
+                minHeight: 280
+              }}
+            >
+              <Redirect to='/home' />
+              <BaseContent />
+            </Content>
+            <Footer style={{ textAlign: 'center' }}>
+              Vehicle Infomation ©2018 Created by szouc
+            </Footer>
+          </Layout>
         </Layout>
-        <Footer style={{ textAlign: 'center' }}>
-          Vehicle Infomation ©2018 Created by szouc
-        </Footer>
       </Layout>
     )
   }

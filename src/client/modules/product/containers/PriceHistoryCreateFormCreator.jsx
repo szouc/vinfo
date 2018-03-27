@@ -15,11 +15,22 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onSubmit: values => {
+      const filterValue = values.update('price_history', value =>
+        value.filter(
+          item => item.get('start') && item.get('end') && item.get('price')
+        )
+      )
+      // const filterPH = values
+      //   .get('price_history')
+      //   .filter(
+      //     item => item.get('start') && item.get('end') && item.get('price')
+      //   )
+      // const filterValue = values.set('price_history', filterPH)
       dispatch(
         createPriceHistoryRequest(
           fromJS({
             productId: ownProps.product._id,
-            values
+            values: filterValue
           })
         )
       )

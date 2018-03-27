@@ -5,7 +5,7 @@ import moment from 'moment'
 import { User } from './models'
 import * as Page from '../../utils/pagination'
 
-const PROJECTION = 'username fullname gender role created active'
+const PROJECTION = 'username fullname gender role created active license cert cert_expired id_front id_back'
 
 const getUsersByQuery = query =>
   Observable.fromPromise(User.find(query, PROJECTION))

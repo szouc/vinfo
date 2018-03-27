@@ -24,6 +24,14 @@ class VehicleCreateForm extends React.PureComponent {
     super(props)
   }
 
+  getUserFromSelect = value => {
+    return this.props.users[value]
+  }
+
+  setUserToSelect = value => {
+    return value ? value.username : ''
+  }
+
   render() {
     const { handleSubmit, pristine, reset, submitting } = this.props
     return (
@@ -31,23 +39,33 @@ class VehicleCreateForm extends React.PureComponent {
         <Field name='plate' component={Input} placeholder='车牌号' autoFocus />
         <Field name='engine' component={Input} placeholder='发动机号' />
         <Field name='model' component={Input} placeholder='车型' />
-        <Field name='purchase_date' component={DatePicker} placeholder='购买日期' />
+        <Field
+          name='purchase_date'
+          component={DatePicker}
+          placeholder='购买日期'
+        />
         <Field name='init_mile' component={Input} placeholder='初始里程' />
         <Field
           name='captain'
           component={CaptainSelectFormItem}
+          format={this.setUserToSelect}
+          parse={this.getUserFromSelect}
           placeholder='所属队长'
           showSearch
         />
         <Field
           name='principal'
           component={DriverSelectFormItem}
+          format={this.setUserToSelect}
+          parse={this.getUserFromSelect}
           placeholder='第一司机'
           showSearch
         />
         <Field
           name='secondary'
           component={DriverSelectFormItem}
+          format={this.setUserToSelect}
+          parse={this.getUserFromSelect}
           placeholder='第二司机'
           showSearch
         />

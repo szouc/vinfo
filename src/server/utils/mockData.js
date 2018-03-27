@@ -103,7 +103,7 @@ const fuelTemplate = {
   cost: '@natural(100, 500)',
   mile: '@natural(12345, 34352)',
   date: '@date',
-  is_check: '@boolean',
+  is_check: false,
   info: '@cparagraph(2,5)'
 }
 
@@ -118,7 +118,7 @@ const maintainTemplate = {
   cost: '@natural(100, 500)',
   mile: '@natural(12345, 34352)',
   date: '@date',
-  is_check: '@boolean',
+  is_check: false,
   info: '@cparagraph(2,5)'
 }
 

@@ -74,35 +74,7 @@ const makeVehicleInitialValuesSelector = () =>
     const purchase = vehicle.get('purchase_date')
       ? fromJS(moment(vehicle.get('purchase_date')))
       : vehicle.get('purchase_date')
-    const captain = vehicle.get('captain')
-      ? fromJS(
-        `${vehicle.getIn(['captain', 'username'])}@@${vehicle.getIn([
-          'captain',
-          'fullname'
-        ])}`
-      )
-      : vehicle.get('captain')
-    const principal = vehicle.get('principal')
-      ? fromJS(
-        `${vehicle.getIn(['principal', 'username'])}@@${vehicle.getIn([
-          'principal',
-          'fullname'
-        ])})`
-      )
-      : vehicle.get('principal')
-    const secondary = vehicle.get('secondary')
-      ? fromJS(
-        `${vehicle.getIn(['secondary', 'username'])}@@${vehicle.getIn([
-          'secondary',
-          'fullname'
-        ])})`
-      )
-      : vehicle.get('secondary')
-    return vehicle
-      .set('captain', captain)
-      .set('purchase_date', purchase)
-      .set('principal', principal)
-      .set('secondary', secondary)
+    return vehicle.set('purchase_date', purchase)
   })
 
 const vehicleArrayByUserSelector = createImmutableSelector(
@@ -128,8 +100,9 @@ const availableVehicleByCaptainSelector = createImmutableSelector(
   [availableVehicleSelector, selectedAssginer],
   (vehicles, assigner) =>
     vehicles.filter((vehicle, i) => {
-      const assignerUsername = assigner ? assigner.split('@@')[0] : assigner
-      return vehicle.getIn(['captain', 'username']) === assignerUsername
+      return assigner
+        ? vehicle.getIn(['captain', 'username']) === assigner.get('username')
+        : true
     })
 )
 

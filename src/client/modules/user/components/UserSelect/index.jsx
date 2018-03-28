@@ -19,13 +19,10 @@ class UserSelect extends React.PureComponent {
 
   render() {
     const { users, placeholder, ...rest } = this.props
-    const options = users
+    const options = users || []
     const optionsList = options.map(user => {
       return (
-        <Option
-          key={user.username}
-          value={user.username}
-        >
+        <Option key={user.username} value={user.username}>
           {user.fullname}({user.username})
         </Option>
       )

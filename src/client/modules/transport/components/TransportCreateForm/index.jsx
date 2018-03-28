@@ -38,6 +38,23 @@ class TransportCreateForm extends React.PureComponent {
     super(props)
   }
 
+  getValueFromSelect = propsKey => value => {
+    return this.props[propsKey][value]
+  }
+
+  setValueToSelect = valueKey => value => {
+    return value ? value[valueKey] : ''
+  }
+
+  getUserFromSelect = this.getValueFromSelect('users')
+  setUserToSelect = this.setValueToSelect('username')
+  getCompanyFromSelect = this.getValueFromSelect('companies')
+  setCompanyToSelect = this.setValueToSelect('_id')
+  getProductFromSelect = this.getValueFromSelect('products')
+  setProductToSelect = this.setValueToSelect('_id')
+  getVehicleFromSelect = this.getValueFromSelect('vehicles')
+  setVehicleToSelect = this.setValueToSelect('_id')
+
   render() {
     const { handleSubmit, pristine, reset, submitting } = this.props
     return (
@@ -45,30 +62,40 @@ class TransportCreateForm extends React.PureComponent {
         <Field
           name='assigner'
           component={CaptainSelectFormItem}
+          format={this.setUserToSelect}
+          parse={this.getUserFromSelect}
           placeholder='派单队长'
           showSearch
         />
         <Field
           name='vehicle'
           component={VehicleSelectFormItem}
+          format={this.setVehicleToSelect}
+          parse={this.getVehicleFromSelect}
           placeholder='指派车辆'
           showSearch
         />
         <Field
           name='from.company'
           component={CompanySelectFormItem}
+          format={this.setCompanyToSelect}
+          parse={this.getCompanyFromSelect}
           placeholder='出发公司'
           showSearch
         />
         <Field
           name='to.company'
           component={CompanySelectFormItem}
+          format={this.setCompanyToSelect}
+          parse={this.getCompanyFromSelect}
           placeholder='到达公司'
           showSearch
         />
         <Field
           name='product'
           component={ProductSelectFormItem}
+          format={this.setProductToSelect}
+          parse={this.getProductFromSelect}
           placeholder='运输产品'
           showSearch
         />

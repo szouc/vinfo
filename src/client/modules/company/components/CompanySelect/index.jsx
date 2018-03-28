@@ -21,7 +21,7 @@ class CompanySelect extends React.PureComponent {
     const { companies, placeholder, ...rest } = this.props
     const options = companies || []
     const optionsList = options.map(company => (
-      <Option key={company._id} value={`${company._id}@@${company.name}@@${company.addr}`}>
+      <Option key={company._id} value={company._id}>
         {company.name}({company.addr})
       </Option>
     ))

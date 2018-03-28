@@ -19,9 +19,9 @@ class ProductSelect extends React.PureComponent {
 
   render() {
     const { products, placeholder, ...rest } = this.props
-    const options = products
+    const options = products || []
     const optionsList = options.map(product => (
-      <Option key={product._id} value={`${product._id}@@${product.name}@@${product.specs}`}>
+      <Option key={product._id} value={product._id}>
         {product.name}({product.specs})
       </Option>
     ))

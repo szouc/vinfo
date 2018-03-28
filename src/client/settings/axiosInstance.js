@@ -28,7 +28,6 @@ axiosInstance.interceptors.response.use(
   },
   function(error) {
     if (error.response) {
-      console.log(error)
       switch (error.response.status) {
         case 400:
           // error.response.message = '请求错误'

@@ -38,12 +38,12 @@ const baseTransport = {
       active: { type: Boolean }
     },
     captain: {
-      username: { type: String, required: true },
-      fullname: { type: String, required: true },
-      gender: { type: String, required: true },
-      role: { type: String, required: true },
-      created: { type: Date, required: true },
-      active: { type: Boolean, required: true }
+      username: { type: String },
+      fullname: { type: String },
+      gender: { type: String },
+      role: { type: String },
+      created: { type: Date },
+      active: { type: Boolean }
     },
     assigned: { type: Boolean, required: true },
     created: { type: Date, required: true },

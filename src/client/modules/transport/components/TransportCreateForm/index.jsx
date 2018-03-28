@@ -6,6 +6,7 @@ import { NotAssignedVehicleSelect } from '@clientModules/vehicle/containers'
 import { CompanySelect } from '@clientModules/company/containers'
 import { ProductSelect } from '@clientModules/product/containers'
 import formItemHOC from '@clientModulesShared/formItemHOC'
+import { fromJS } from 'immutable'
 
 const CaptainSelectFormItem = formItemHOC(CaptainSelect)
 const CompanySelectFormItem = formItemHOC(CompanySelect)
@@ -39,11 +40,11 @@ class TransportCreateForm extends React.PureComponent {
   }
 
   getValueFromSelect = propsKey => value => {
-    return this.props[propsKey][value]
+    return fromJS(this.props[propsKey][value])
   }
 
   setValueToSelect = valueKey => value => {
-    return value ? value[valueKey] : ''
+    return value ? value.get(valueKey) : ''
   }
 
   getUserFromSelect = this.getValueFromSelect('users')

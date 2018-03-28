@@ -14,7 +14,6 @@ const makeMapStateToProps = () => {
     const loading = state.getIn(['vehicle', 'status', 'formUpdateLoading'])
     const users = state.getIn(['entities', 'users'])
     const initialValues = vehicleInitialValuesSelector(ownProps)
-    console.log(initialValues.toJS())
     return { loading, users, initialValues }
   }
   return mapStateToProps

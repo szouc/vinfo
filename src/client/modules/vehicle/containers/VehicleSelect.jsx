@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import VehicleSelect from '../components/VehicleSelect'
-import { fetchVehicleListRequest } from '../actions'
+import { fetchVehicleAllRequest } from '../actions'
 
 import { vehicleArraySelector } from '../selectors'
 import immutPropsToJS from '@clientUtils/immutPropsToJS'
@@ -14,7 +14,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getAllVehicles: () => {
-      dispatch(fetchVehicleListRequest())
+      dispatch(fetchVehicleAllRequest())
     }
   }
 }

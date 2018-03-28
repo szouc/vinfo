@@ -11,11 +11,11 @@ const vehicleIds = state => state.getIn(['vehicle', 'status', 'all'])
 const vehicleInitialValues = ownProps => fromJS(ownProps.vehicle)
 const currentUser = state => state.getIn(['auth', 'user', 'username'])
 const userEntity = state => state.getIn(['entities', 'users'])
-const selectedAssginer = state => {
+const selectedAssigner = state => {
   if (getFormValues('transportCreateForm')(state)) {
     return getFormValues('transportCreateForm')(state).get('assigner')
   }
-  return getFormValues('transportCreateForm')(state)
+  return null
 }
 
 const vehicleSelector = createImmutableSelector(
@@ -28,7 +28,7 @@ const vehicleSelector = createImmutableSelector(
           .updateIn(['principal'], value => user.get(value))
           .updateIn(['secondary'], value => user.get(value))
       )
-      : {}
+      : fromJS({})
 )
 
 const vehicleArraySelector = createImmutableSelector(
@@ -43,31 +43,8 @@ const vehicleArraySelector = createImmutableSelector(
             .updateIn(['secondary'], value => user.get(value))
         )
       )
-      : []
+      : fromJS([])
 )
-
-// const makeVehicleInitialValuesSelector = () =>
-//   createImmutableSelector([vehicleInitialValues], vehicle => ({
-//     plate: vehicle.get('plate'),
-//     engine: vehicle.get('engine'),
-//     model: vehicle.get('model'),
-//     purchase_date: vehicle.get('purchase_date')
-//       ? moment(vehicle.get('purchase_date'))
-//       : vehicle.get('purchase_date'),
-//     init_mile: vehicle.get('init_mile'),
-//     principal: vehicle.get('principal')
-//       ? `${vehicle.getIn(['principal', 'fullname'])}@@${vehicle.getIn([
-//         'principal',
-//         'username'
-//       ])}`
-//       : vehicle.get('principal'),
-//     secondary: vehicle.get('secondary')
-//       ? `${vehicle.getIn(['secondary', 'fullname'])}@@${vehicle.getIn([
-//         'secondary',
-//         'username'
-//       ])}`
-//       : vehicle.get('secondary')
-//   }))
 
 const makeVehicleInitialValuesSelector = () =>
   createImmutableSelector([vehicleInitialValues], vehicle => {
@@ -97,7 +74,7 @@ const availableVehicleSelector = createImmutableSelector(
 )
 
 const availableVehicleByCaptainSelector = createImmutableSelector(
-  [availableVehicleSelector, selectedAssginer],
+  [availableVehicleSelector, selectedAssigner],
   (vehicles, assigner) =>
     vehicles.filter((vehicle, i) => {
       return assigner

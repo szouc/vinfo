@@ -141,7 +141,7 @@ function * createTransportFlow() {
     try {
       const response = yield call(Api.createTransport, action.payload)
       if (response) {
-        yield successEffect('from', 'create', response)
+        yield successEffect('form', 'create', response)
       }
     } catch (error) {
       yield failureEffect('form', error)

@@ -1,4 +1,4 @@
-import { schema, normalize } from 'normalizr'
+import { schema, normalize, denormalize } from 'normalizr'
 
 export const COMPANY_STATE_KEY = 'companies'
 export const USER_STATE_KEY = 'users'
@@ -83,15 +83,38 @@ export const transportSchema = new schema.Entity(
 )
 
 const userNormalize = data => normalize(data, userSchema)
+const userDenormalize = (id, entities) => denormalize(id, userSchema, entities)
 const userArrayNormalize = data => normalize(data, [userSchema])
+const userArrayDenormalize = (ids, entities) =>
+  denormalize(ids, [userSchema], entities)
+
 const companyNormalize = data => normalize(data, companySchema)
+const companyDenormalize = (id, entities) =>
+  denormalize(id, companySchema, entities)
 const companyArrayNormalize = data => normalize(data, [companySchema])
+const companyArrayDenormalize = (ids, entities) =>
+  denormalize(ids, [companySchema], entities)
+
 const productNormalize = data => normalize(data, productSchema)
+const productDenormalize = (id, entities) =>
+  denormalize(id, productSchema, entities)
 const productArrayNormalize = data => normalize(data, [productSchema])
+const productArrayDenormalize = (ids, entities) =>
+  denormalize(ids, [productSchema], entities)
+
 const vehicleNormalize = data => normalize(data, vehicleSchema)
+const vehicleDenormalize = (id, entities) =>
+  denormalize(id, vehicleSchema, entities)
 const vehicleArrayNormalize = data => normalize(data, [vehicleSchema])
+const vehicleArrayDenormalize = (ids, entities) =>
+  denormalize(ids, [vehicleSchema], entities)
+
 const transportNormalize = data => normalize(data, transportSchema)
+const transportDenormalize = (id, entities) =>
+  denormalize(id, transportSchema, entities)
 const transportArrayNormalize = data => normalize(data, [transportSchema])
+const transportArrayDenormalize = (ids, entities) =>
+  denormalize(ids, [transportSchema], entities)
 
 export {
   userNormalize,
@@ -103,5 +126,15 @@ export {
   vehicleNormalize,
   vehicleArrayNormalize,
   transportNormalize,
-  transportArrayNormalize
+  transportArrayNormalize,
+  userDenormalize,
+  userArrayDenormalize,
+  companyDenormalize,
+  companyArrayDenormalize,
+  productDenormalize,
+  productArrayDenormalize,
+  vehicleDenormalize,
+  vehicleArrayDenormalize,
+  transportDenormalize,
+  transportArrayDenormalize
 }

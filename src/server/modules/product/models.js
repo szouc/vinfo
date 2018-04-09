@@ -42,7 +42,7 @@ const baseProduct = {
   },
   created: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   }
 }
 

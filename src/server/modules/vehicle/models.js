@@ -25,7 +25,7 @@ const fuel = {
   },
   date: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   },
   is_check: {
     type: Boolean,
@@ -60,7 +60,7 @@ const maintain = {
   },
   date: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   },
   detail: {
     type: String
@@ -127,7 +127,7 @@ const baseVehicle = {
   },
   created: {
     type: Date,
-    default: Date.now()
+    default: Date.now
   },
   fuels: [FuelSchema],
   maintenance: [MaintainSchema]

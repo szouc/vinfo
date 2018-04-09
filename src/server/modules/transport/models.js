@@ -77,7 +77,7 @@ const baseTransport = {
       active: { type: Boolean, required: true }
     },
     weight: { type: Number, default: 0 },
-    date: { type: Date, default: Date.now() }
+    date: { type: Date, default: Date.now }
   },
   to: {
     company: {
@@ -91,7 +91,7 @@ const baseTransport = {
       active: { type: Boolean, required: true }
     },
     weight: { type: Number, default: 0 },
-    date: { type: Date, default: Date.now() }
+    date: { type: Date, default: Date.now }
   },
   product: {
     _id: { type: Schema.Types.ObjectId, required: true },
@@ -125,7 +125,7 @@ const baseTransport = {
   },
   accountant_info: { type: String },
   active: { type: Boolean, default: true },
-  created: { type: Date, default: Date.now() }
+  created: { type: Date, default: Date.now }
 }
 
 const TransportSchema = new Schema(baseTransport)

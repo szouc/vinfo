@@ -84,6 +84,14 @@ const updateTransportStatus = (transportId, updateStatus) => {
   return updateTransportByQuery(query, update)
 }
 
+const updateTransportByDriver = (username, transportId, update) => {
+  let query = {
+    _id: transportId,
+    'principal.username': username
+  }
+  return updateTransportByQuery(query, update)
+}
+
 const updateStatusByDriver = (username, transportId, updateStatus) => {
   let query = {
     _id: transportId,
@@ -132,6 +140,7 @@ export {
   updateTransportByQuery,
   updateTransportById,
   updateTransportStatus,
+  updateTransportByDriver,
   updateStatusByDriver,
   deleteTransportById,
   checkTransportById,

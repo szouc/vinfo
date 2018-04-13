@@ -183,7 +183,19 @@ describe('Driver Base Operations', () => {
     expect(res.statusCode).toBe(200)
   })
 
-  test('Should update transport status', async () => {
+  test('Should update transport status to accept', async () => {
+    expect.assertions(1)
+    const mapObj = {
+      ':username': data.drivers[2].username,
+      ':childId': transport0._id
+    }
+    const res = await agent
+      .put(replaceAll(Api.DRIVER_TRANSPORT_ID_STATUS, mapObj))
+      .send({ status: 'accept' })
+    expect(res.statusCode).toBe(200)
+  })
+
+  test('Should update transport', async () => {
     expect.assertions(1)
     const mapObj = {
       ':username': data.drivers[2].username,
@@ -191,7 +203,7 @@ describe('Driver Base Operations', () => {
     }
     const res = await agent
       .put(replaceAll(Api.DRIVER_TRANSPORT_ID, mapObj))
-      .send({ status: 'accept' })
+      .send({ 'from.company': data.companies[0] })
     expect(res.statusCode).toBe(200)
   })
 })

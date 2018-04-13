@@ -66,6 +66,20 @@ const updateTransportStatus = (req, res) => {
   )
 }
 
+const updateTransport = (req, res) => {
+  let username = req.params.username
+  let transportId = req.params.childId
+  let update = req.body
+  const updateTransport$ = TransportService.updateTransportByDriver(
+    username,
+    transportId,
+    update
+  )
+  updateTransport$.subscribe(
+    createObserver(res, '没有找到相关运输记录。')
+  )
+}
+
 const getDriverByUsername = (req, res) => {
   let username = req.params.username
   const getDriverByUsername$ = UserService.getUserByUsername(username)
@@ -219,6 +233,7 @@ export {
   deleteVehicleMaintain,
   deleteVehicleFuel,
   getDriverTransports,
+  updateTransport,
   updateTransportStatus,
   changePasswordByUsername,
   getDriverVehicles,

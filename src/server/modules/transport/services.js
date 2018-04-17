@@ -4,20 +4,22 @@ import { Observable } from 'rxjs'
 import * as Page from '../../utils/pagination'
 import { ASSIGN, ACCEPT, SUBMIT } from './constants'
 
+const PROJECTION = 'assigner vehicle principal secondary from to product captain_status captain_info price accountant_status accountant accountant_info active created'
+
 const createTransport = transport =>
   Observable.fromPromise(Transport.create(transport))
 
 const getTransportByQuery = query =>
-  Observable.fromPromise(Transport.findOne(query))
+  Observable.fromPromise(Transport.findOne(query, PROJECTION))
 
 const getTransportsByQuery = query =>
-  Observable.fromPromise(Transport.find(query))
+  Observable.fromPromise(Transport.find(query, PROJECTION))
 
 const getAllTransports = () => getTransportsByQuery({ active: true })
 
 const getTransportsPagination = Page.producePagination(Transport)
 
-const getTransportsData = Page.getModelSortedData(Transport, '-created')
+const getTransportsData = Page.getModelSortedData(Transport, PROJECTION, '-created')
 
 const getTransportsWithPg = (pageNumber, pageSize, values = {}) => {
   let activeQuery = { active: true }
@@ -65,11 +67,11 @@ const getTransportsWithPg = (pageNumber, pageSize, values = {}) => {
 //   )
 // }
 
-const getTransportById = id => Observable.fromPromise(Transport.findById(id))
+const getTransportById = id => Observable.fromPromise(Transport.findById(id, PROJECTION))
 
 const updateTransportByQuery = (query, update) =>
   Observable.fromPromise(
-    Transport.findOneAndUpdate(query, update, { new: true })
+    Transport.findOneAndUpdate(query, update, { new: true }).select(PROJECTION)
   )
 
 const updateTransportById = (id, update) =>
@@ -103,7 +105,7 @@ const updateStatusByDriver = (username, transportId, updateStatus) => {
 }
 
 const deleteTransportById = id =>
-  Observable.fromPromise(Transport.findByIdAndRemove(id))
+  Observable.fromPromise(Transport.findByIdAndRemove(id, PROJECTION))
 
 const checkTransportById = (username, transportId, updateStatus) => {
   let query = {

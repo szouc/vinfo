@@ -4,7 +4,8 @@ import { Observable } from 'rxjs'
 import * as Page from '../../utils/pagination'
 import { ASSIGN, ACCEPT, SUBMIT } from './constants'
 
-const PROJECTION = 'assigner vehicle principal secondary from to product captain_status captain_info price accountant_status accountant accountant_info active created'
+const PROJECTION =
+  'num assigner vehicle principal secondary from to product captain_status captain_info price accountant_status accountant accountant_info active created'
 
 const createTransport = transport =>
   Observable.fromPromise(Transport.create(transport))
@@ -19,13 +20,23 @@ const getAllTransports = () => getTransportsByQuery({ active: true })
 
 const getTransportsPagination = Page.producePagination(Transport)
 
-const getTransportsData = Page.getModelSortedData(Transport, PROJECTION, '-created')
+const getTransportsData = Page.getModelSortedData(
+  Transport,
+  PROJECTION,
+  '-created'
+)
 
 const getTransportsWithPg = (pageNumber, pageSize, values = {}) => {
   let activeQuery = { active: true }
   let driverQuery = values.driver ? { 'principal.username': values.driver } : {}
   let captainQuery = values.captain
     ? { 'assigner.username': values.captain }
+    : {}
+  let captainStatusQuery = values.captainStatus
+    ? { captain_status: values.captainStatus }
+    : {}
+  let accountantStatusQuery = values.accountantStatus
+    ? { accountant_status: values.accountantStatus }
     : {}
   let accountantQuery = values.accountant
     ? { 'accountant.username': values.accountant }
@@ -39,6 +50,8 @@ const getTransportsWithPg = (pageNumber, pageSize, values = {}) => {
   let query = {
     ...activeQuery,
     ...driverQuery,
+    ...captainStatusQuery,
+    ...accountantStatusQuery,
     ...captainQuery,
     ...accountantQuery,
     ...dateRangeQuery
@@ -67,7 +80,8 @@ const getTransportsWithPg = (pageNumber, pageSize, values = {}) => {
 //   )
 // }
 
-const getTransportById = id => Observable.fromPromise(Transport.findById(id, PROJECTION))
+const getTransportById = id =>
+  Observable.fromPromise(Transport.findById(id, PROJECTION))
 
 const updateTransportByQuery = (query, update) =>
   Observable.fromPromise(

@@ -49,6 +49,26 @@ const getDriverTransports = (req, res) => {
   getDriverTransports$.subscribe(createObserver(res, '没有相关运输记录。'))
 }
 
+const getStatusTransports = (req, res) => {
+  let fromDate = req.query.from
+  let toDate = req.query.to
+  let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
+  let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
+  let username = req.params.username
+  let captainStatus = req.query.captain_status
+  const getDriverTransports$ = TransportService.getTransportsWithPg(
+    page,
+    size,
+    {
+      driver: username,
+      captainStatus,
+      fromDate,
+      toDate
+    }
+  )
+  getDriverTransports$.subscribe(createObserver(res, '没有相关运输记录。'))
+}
+
 const updateTransportStatus = (req, res) => {
   let username = req.params.username
   let transportId = req.params.childId
@@ -75,9 +95,7 @@ const updateTransport = (req, res) => {
     transportId,
     update
   )
-  updateTransport$.subscribe(
-    createObserver(res, '没有找到相关运输记录。')
-  )
+  updateTransport$.subscribe(createObserver(res, '没有找到相关运输记录。'))
 }
 
 const getDriverByUsername = (req, res) => {
@@ -233,6 +251,7 @@ export {
   deleteVehicleMaintain,
   deleteVehicleFuel,
   getDriverTransports,
+  getStatusTransports,
   updateTransport,
   updateTransportStatus,
   changePasswordByUsername,

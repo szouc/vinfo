@@ -73,12 +73,12 @@ describe('Driver Base Operations', () => {
 
   test('Should fetch a vehicle by username', async () => {
     expect.assertions(3)
-    const res = await agent.get(
-      `${Api.DRIVER_VEHICLE.replace(
-        /:username/,
-        data.drivers[2].username
-      )}?page=1&size=2`
-    )
+    const res = await agent
+      .get(Api.DRIVER_VEHICLE.replace(/:username/, data.drivers[2].username))
+      .query({
+        page: 1,
+        size: 2
+      })
     expect(res.statusCode).toBe(200)
     expect(res.body.result[0]._id).toBe(vehicle0._id)
     expect(res.body.pagination.pageNumber).toBe(1)
@@ -130,12 +130,9 @@ describe('Driver Base Operations', () => {
 
   test('Should list fuels by username', async () => {
     expect.assertions(2)
-    const res = await agent.get(
-      `${Api.DRIVER_FUEL.replace(
-        /:username/,
-        data.drivers[2].username
-      )}?vehicleId=${vehicle0._id}`
-    )
+    const res = await agent
+      .get(Api.DRIVER_FUEL.replace(/:username/, data.drivers[2].username))
+      .query({ vehicleId: vehicle0._id })
     expect(res.statusCode).toBe(200)
     expect(res.body.result).toHaveLength(1)
   })
@@ -193,6 +190,20 @@ describe('Driver Base Operations', () => {
       .put(replaceAll(Api.DRIVER_TRANSPORT_ID_STATUS, mapObj))
       .send({ status: 'accept' })
     expect(res.statusCode).toBe(200)
+  })
+
+  test('Should get accept transports by username', async () => {
+    expect.assertions(2)
+    const res = await agent
+      .get(
+        Api.DRIVER_TRANSPORT_STATUS.replace(
+          /:username/,
+          data.drivers[2].username
+        )
+      )
+      .query({ captain_status: 'accept' })
+    expect(res.statusCode).toBe(200)
+    expect(res.body.result[0]._id).toBe(transport0._id)
   })
 
   test('Should update transport', async () => {

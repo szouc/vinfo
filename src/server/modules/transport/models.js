@@ -1,7 +1,7 @@
 import { db } from '../../settings/db'
 import mongoose from 'mongoose'
 import incrementCreator from 'mongoose-sequence'
-import { CAPTAIN_STATUS, ACCOUNT_STATUS } from './constants'
+import { CAPTAIN_STATUS, ACCOUNT_STATUS, ASSIGN, SUBMIT } from './constants'
 
 const Schema = mongoose.Schema
 
@@ -104,7 +104,7 @@ const baseTransport = {
   captain_status: {
     type: String,
     enum: CAPTAIN_STATUS,
-    default: CAPTAIN_STATUS[0],
+    default: ASSIGN,
     required: true
   },
   captain_info: { type: String },
@@ -112,7 +112,7 @@ const baseTransport = {
   accountant_status: {
     type: String,
     enum: ACCOUNT_STATUS,
-    default: ACCOUNT_STATUS[0],
+    default: SUBMIT,
     required: true
   },
   accountant: {

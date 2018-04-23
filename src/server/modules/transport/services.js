@@ -119,9 +119,7 @@ const updateStatusByDriver = (username, transportId, updateStatus) => {
 }
 
 const deleteTransportById = id =>
-  Observable.fromPromise(
-    Transport.findByIdAndRemove(id, { select: PROJECTION })
-  )
+  Observable.fromPromise(Transport.findByIdAndRemove(id).select(PROJECTION))
 
 const checkTransportById = (username, transportId, updateStatus) => {
   let query = {

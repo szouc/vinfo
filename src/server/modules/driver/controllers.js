@@ -95,9 +95,7 @@ const updateTransport = (req, res) => {
     transportId,
     update
   )
-  updateTransport$.subscribe(
-    createObserver(res, '没有找到相关运输记录。')
-  )
+  updateTransport$.subscribe(createObserver(res, '没有找到相关运输记录。'))
 }
 
 const getDriverByUsername = (req, res) => {

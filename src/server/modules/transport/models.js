@@ -76,8 +76,8 @@ const baseTransport = {
       created: { type: Date, required: true },
       active: { type: Boolean, required: true }
     },
-    weight: { type: Number, default: 0 },
-    date: { type: Date, default: Date.now }
+    weight: { type: Number },
+    date: { type: Date }
   },
   to: {
     company: {
@@ -90,8 +90,8 @@ const baseTransport = {
       created: { type: Date, required: true },
       active: { type: Boolean, required: true }
     },
-    weight: { type: Number, default: 0 },
-    date: { type: Date, default: Date.now }
+    weight: { type: Number },
+    date: { type: Date }
   },
   product: {
     _id: { type: Schema.Types.ObjectId, required: true },

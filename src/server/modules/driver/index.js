@@ -47,10 +47,10 @@ driverRouter
   .all(isOwner)
   .get(Controller.getDriverTransports)
 
-driverRouter
-  .route(Route.DRIVER_TRANSPORT_STATUS)
-  .all(isOwner)
-  .get(Controller.getStatusTransports)
+// driverRouter
+//   .route(Route.DRIVER_TRANSPORT_STATUS)
+//   .all(isOwner)
+//   .get(Controller.getStatusTransports)
 
 driverRouter
   .route(Route.DRIVER_TRANSPORT_ID)

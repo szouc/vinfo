@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs'
 import * as TransportService from '../transport/services'
 import * as UserService from '../user/services'
 import * as VehicleService from '../vehicle/services'
@@ -37,24 +38,6 @@ const getDriverTransports = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   let username = req.params.username
-  const getDriverTransports$ = TransportService.getTransportsWithPg(
-    page,
-    size,
-    {
-      driver: username,
-      fromDate,
-      toDate
-    }
-  )
-  getDriverTransports$.subscribe(createObserver(res, '没有相关运输记录。'))
-}
-
-const getStatusTransports = (req, res) => {
-  let fromDate = req.query.from
-  let toDate = req.query.to
-  let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
-  let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-  let username = req.params.username
   let captainStatus = req.query.captain_status
   const getDriverTransports$ = TransportService.getTransportsWithPg(
     page,
@@ -69,6 +52,26 @@ const getStatusTransports = (req, res) => {
   getDriverTransports$.subscribe(createObserver(res, '没有相关运输记录。'))
 }
 
+// const getStatusTransports = (req, res) => {
+//   let fromDate = req.query.from
+//   let toDate = req.query.to
+//   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
+//   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
+//   let username = req.params.username
+//   let captainStatus = req.query.captain_status
+//   const getDriverTransports$ = TransportService.getTransportsWithPg(
+//     page,
+//     size,
+//     {
+//       driver: username,
+//       captainStatus,
+//       fromDate,
+//       toDate
+//     }
+//   )
+//   getDriverTransports$.subscribe(createObserver(res, '没有相关运输记录。'))
+// }
+
 const updateTransportStatus = (req, res) => {
   let username = req.params.username
   let transportId = req.params.childId
@@ -81,9 +84,19 @@ const updateTransportStatus = (req, res) => {
     transportId,
     updateStatus
   )
-  updateTransportStatus$.subscribe(
-    createObserver(res, '没有找到相关运输记录。')
-  )
+  updateTransportStatus$
+    .switchMap(transport => {
+      if (!transport) {
+        return Observable.throw({ message: '运输记录不存在。' })
+      }
+      if (updateStatus !== 'accept') {
+        return Observable.of([transport, null])
+      }
+      return VehicleService.updateVehicleById(transport.vehicle._id, {
+        assigned: false
+      }).map(vehicle => [transport, vehicle])
+    })
+    .subscribe(createObserver(res, '没有找到相关运输记录。'))
 }
 
 const updateTransport = (req, res) => {
@@ -251,7 +264,7 @@ export {
   deleteVehicleMaintain,
   deleteVehicleFuel,
   getDriverTransports,
-  getStatusTransports,
+  // getStatusTransports,
   updateTransport,
   updateTransportStatus,
   changePasswordByUsername,

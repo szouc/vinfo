@@ -195,7 +195,7 @@ describe('Driver Base Operations', () => {
   test('Should get accept transports by username', async () => {
     expect.assertions(2)
     const res = await agent
-      .get(Api.DRIVER_TRANSPORT_STATUS.replace(/:username/, data.drivers[2].username))
+      .get(Api.DRIVER_TRANSPORT.replace(/:username/, data.drivers[2].username))
       .query({ captain_status: 'accept' })
     expect(res.statusCode).toBe(200)
     expect(res.body.result[0]._id).toBe(transport0._id)

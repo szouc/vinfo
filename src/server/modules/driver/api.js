@@ -20,10 +20,10 @@ export const DRIVER_TRANSPORT = createApiPath(
   Route.DRIVER_ROOT,
   Route.DRIVER_TRANSPORT
 )
-export const DRIVER_TRANSPORT_STATUS = createApiPath(
-  Route.DRIVER_ROOT,
-  Route.DRIVER_TRANSPORT_STATUS
-)
+// export const DRIVER_TRANSPORT_STATUS = createApiPath(
+//   Route.DRIVER_ROOT,
+//   Route.DRIVER_TRANSPORT_STATUS
+// )
 export const DRIVER_FUEL_ID = createApiPath(
   Route.DRIVER_ROOT,
   Route.DRIVER_FUEL_ID

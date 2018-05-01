@@ -38,7 +38,7 @@ const getDriverTransports = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   let username = req.params.username
-  let captainStatus = req.query.captain_status
+  let captainStatus = req.query.captainStatus
   const getDriverTransports$ = TransportService.getTransportsWithPg(
     page,
     size,
@@ -58,7 +58,7 @@ const getDriverTransports = (req, res) => {
 //   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
 //   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
 //   let username = req.params.username
-//   let captainStatus = req.query.captain_status
+//   let captainStatus = req.query.captainStatus
 //   const getDriverTransports$ = TransportService.getTransportsWithPg(
 //     page,
 //     size,

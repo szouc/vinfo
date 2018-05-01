@@ -58,7 +58,7 @@ export const priceHistorySchema = new schema.Entity(
 export const productSchema = new schema.Entity(
   PRODUCT_STATE_KEY,
   {
-    price_history: [priceHistorySchema]
+    priceHistory: [priceHistorySchema]
   },
   { idAttribute: '_id' }
 )

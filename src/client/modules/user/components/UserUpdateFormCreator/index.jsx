@@ -44,7 +44,7 @@ class UserUpdateForm extends React.PureComponent {
         <Row>
           <Col span={8}>
             <Field
-              name='id_front'
+              name='idFront'
               component={ImageUploadFormItem}
               placeholder='身份证正面'
               uploadUrl={URL.USER_ID_FRONT_UPLOAD}
@@ -53,7 +53,7 @@ class UserUpdateForm extends React.PureComponent {
           </Col>
           <Col span={8}>
             <Field
-              name='id_back'
+              name='idBack'
               component={ImageUploadFormItem}
               placeholder='身份证反面'
               uploadUrl={URL.USER_ID_BACK_UPLOAD}

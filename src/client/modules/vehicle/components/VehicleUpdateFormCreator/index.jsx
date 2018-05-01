@@ -40,11 +40,11 @@ class VehicleUpdateForm extends React.PureComponent {
         <Field name='engine' component={Input} placeholder='发动机号' />
         <Field name='model' component={Input} placeholder='车型' />
         <Field
-          name='purchase_date'
+          name='purchaseDate'
           component={DatePicker}
           placeholder='购买日期'
         />
-        <Field name='init_mile' component={Input} placeholder='初始里程' />
+        <Field name='initMile' component={Input} placeholder='初始里程' />
         <Field
           name='captain'
           component={CaptainSelectFormItem}

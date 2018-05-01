@@ -4,7 +4,7 @@ import { db } from '../../settings/db'
 // const db = conn.getConnection()
 const Schema = mongoose.Schema
 
-const basePriceHistory = {
+const priceHistoryFields = {
   price: {
     type: Number,
     required: true
@@ -19,9 +19,9 @@ const basePriceHistory = {
   }
 }
 
-const PriceHistorySchema = new Schema(basePriceHistory)
+const PriceHistorySchema = new Schema(priceHistoryFields, { timestamps: true })
 
-const baseProduct = {
+const productFields = {
   name: {
     type: String,
     trim: true,
@@ -32,21 +32,23 @@ const baseProduct = {
     trim: true,
     required: true
   },
+  image: {
+    type: String
+  },
+  category: {
+    type: String
+  },
   pricing: {
     type: Number
   },
-  price_history: [PriceHistorySchema],
+  priceHistory: [PriceHistorySchema],
   active: {
     type: Boolean,
     default: true
-  },
-  created: {
-    type: Date,
-    default: Date.now
   }
 }
 
-const ProductSchema = new Schema(baseProduct)
+const ProductSchema = new Schema(productFields, { timestamps: true })
 
 // Add unique index: {name, specs}
 ProductSchema.index({ name: 1, specs: 1 }, { unique: true })

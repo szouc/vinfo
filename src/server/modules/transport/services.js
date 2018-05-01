@@ -5,7 +5,7 @@ import * as Page from '../../utils/pagination'
 import { ASSIGN, ACCEPT, SUBMIT } from './constants'
 
 const PROJECTION =
-  'num assigner vehicle principal secondary from to product captain_status captain_info price accountant_status accountant accountant_info active created'
+  'num assigner assignerName vehicle plate engine principal principalName secondary secondaryName from to product productName productSpecs captainStatus captainInfo price accountantStatus accountant accountantName accountantInfo active createdAt'
 
 const createTransport = transport =>
   Observable.fromPromise(Transport.create(transport))
@@ -23,17 +23,17 @@ const getTransportsPagination = Page.producePagination(Transport)
 const getTransportsData = Page.getModelSortedData(
   Transport,
   PROJECTION,
-  '-created'
+  '-createdAt'
 )
 
 const getTransportsWithPg = (pageNumber, pageSize, values = {}) => {
   let activeQuery = { active: true }
   let driverQuery = values.driver ? { 'principal.username': values.driver } : {}
   let captainStatusQuery = values.captainStatus
-    ? { captain_status: values.captainStatus }
+    ? { captainStatus: values.captainStatus }
     : {}
   let accountantStatusQuery = values.accountantStatus
-    ? { accountant_status: values.accountantStatus }
+    ? { accountantStatus: values.accountantStatus }
     : {}
   let captainQuery = values.captain
     ? { 'assigner.username': values.captain }
@@ -45,7 +45,7 @@ const getTransportsWithPg = (pageNumber, pageSize, values = {}) => {
   let toDateQuery = values.toDate ? { $lte: moment(values.toDate) } : {}
   let dateRangeQuery =
     values.fromDate || values.toDate
-      ? { created: { ...fromDateQuery, ...toDateQuery } }
+      ? { createdAt: { ...fromDateQuery, ...toDateQuery } }
       : {}
   let query = {
     ...activeQuery,
@@ -94,9 +94,9 @@ const updateTransportById = (id, update) =>
 const updateTransportStatus = (transportId, updateStatus) => {
   let query = {
     _id: transportId,
-    captain_status: { $in: [ASSIGN, ACCEPT] }
+    captainStatus: { $in: [ASSIGN, ACCEPT] }
   }
-  let update = { captain_status: updateStatus }
+  let update = { captainStatus: updateStatus }
   return updateTransportByQuery(query, update)
 }
 
@@ -112,9 +112,9 @@ const updateStatusByDriver = (username, transportId, updateStatus) => {
   let query = {
     _id: transportId,
     'principal.username': username,
-    captain_status: { $in: [ASSIGN, ACCEPT] }
+    captainStatus: { $in: [ASSIGN, ACCEPT] }
   }
-  let update = { $set: { captain_status: updateStatus } }
+  let update = { $set: { captainStatus: updateStatus } }
   return updateTransportByQuery(query, update)
 }
 
@@ -125,10 +125,10 @@ const checkTransportById = (username, transportId, updateStatus) => {
   let query = {
     'assigner.username': username,
     _id: transportId,
-    captain_status: { $in: [ASSIGN, ACCEPT, SUBMIT] }
+    captainStatus: { $in: [ASSIGN, ACCEPT, SUBMIT] }
   }
   let update = {
-    $set: { captain_status: updateStatus }
+    $set: { captainStatus: updateStatus }
   }
   return updateTransportByQuery(query, update)
 }
@@ -137,10 +137,10 @@ const checkAccountById = (username, transportId, updateStatus) => {
   let query = {
     'accountant.username': username,
     _id: transportId,
-    accountant_status: { $in: [SUBMIT] }
+    accountantStatus: { $in: [SUBMIT] }
   }
   let update = {
-    $set: { accountant_status: updateStatus }
+    $set: { accountantStatus: updateStatus }
   }
   return updateTransportByQuery(query, update)
 }

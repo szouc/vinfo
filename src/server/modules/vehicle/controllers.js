@@ -6,11 +6,11 @@ const PAGE_SIZE = 20 // default size of page
 const createObserver = (res, errHint) => ({
   next: data => {
     if (!data) {
-      return res.status(400).json({ ok: false, error: errHint })
+      return res.status(200).json({ ok: false, error: errHint })
     }
     if (data.doc) {
       if (data.doc.length === 0) {
-        return res.status(400).json({ ok: false, error: errHint })
+        return res.status(200).json({ ok: false, error: errHint })
       }
       return res
         .status(200)
@@ -18,7 +18,7 @@ const createObserver = (res, errHint) => ({
     }
     if (data.ok) {
       if (data.n === 0) {
-        return res.status(400).json({ ok: false, error: errHint })
+        return res.status(200).json({ ok: false, error: errHint })
       }
     }
     return res.status(200).json({ ok: true, result: data })

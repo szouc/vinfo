@@ -9,10 +9,6 @@ export const USER_ALL = createApiPath(
   Route.USER_ROOT,
   Route.USER_ALL
 )
-export const USER_ROLE = createApiPath(
-  Route.USER_ROOT,
-  Route.USER_ROLE
-)
 export const USER_ID = createApiPath(
   Route.USER_ROOT,
   Route.USER_ID

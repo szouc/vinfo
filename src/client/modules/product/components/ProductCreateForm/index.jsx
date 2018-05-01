@@ -80,7 +80,7 @@ class ProductCreateForm extends React.PureComponent {
         </Row>
         <Row>
           <FieldArray
-            name='price_history'
+            name='priceHistory'
             component={PriceHistoryCreateField}
           />
         </Row>

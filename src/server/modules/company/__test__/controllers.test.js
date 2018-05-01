@@ -54,11 +54,12 @@ describe('Company Basic Operations', () => {
   })
 
   test('Should not get company by a wrong id', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const res = await agent.get(
       Api.COMPANY_ID.replace(/:id/, '59a25d39082e0f3954207953')
     )
-    expect(res.statusCode).toBe(400)
+    expect(res.statusCode).toBe(200)
+    expect(res.body.ok).toBeFalsy()
   })
 
   test('Should modify a company', async () => {
@@ -71,11 +72,12 @@ describe('Company Basic Operations', () => {
   })
 
   test('Should not modify a company by a wrong id', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const res = await agent
       .put(Api.COMPANY_ID.replace(/:id/, '59a25d39082e0f3954207953'))
       .send(data.companies[2])
-    expect(res.statusCode).toBe(400)
+    expect(res.statusCode).toBe(200)
+    expect(res.body.ok).toBeFalsy()
   })
 
   test('Should delete a company', async () => {
@@ -86,11 +88,12 @@ describe('Company Basic Operations', () => {
   })
 
   test('Should not delete a company by a wrong id', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const res = await agent.delete(
       Api.COMPANY_ID.replace(/:id/, '59a25d39082e0f3954207953')
     )
-    expect(res.statusCode).toBe(400)
+    expect(res.statusCode).toBe(200)
+    expect(res.body.ok).toBeFalsy()
   })
 
   test('Should find some company according to query', async () => {

@@ -83,7 +83,7 @@ describe('Captain Base Operations', () => {
     }
     const res = await agent.put(replaceAll(Api.CAPTAIN_FUEL_ID, mapObj))
     expect(res.statusCode).toBe(200)
-    expect(res.body.result.fuels[0].is_check).toBeTruthy()
+    expect(res.body.result.fuels[0].isCheck).toBeTruthy()
   })
 
   test('Should update a maintain by id', async () => {
@@ -94,7 +94,7 @@ describe('Captain Base Operations', () => {
     }
     const res = await agent.put(replaceAll(Api.CAPTAIN_MAINTAIN_ID, mapObj))
     expect(res.statusCode).toBe(200)
-    expect(res.body.result.maintenance[0].is_check).toBeTruthy()
+    expect(res.body.result.maintenance[0].isCheck).toBeTruthy()
   })
 
   test('Should create a transport', async () => {
@@ -138,6 +138,6 @@ describe('Captain Base Operations', () => {
       .put(replaceAll(Api.CAPTAIN_TRANSPORT_ID, mapObj))
       .send({ status: 'pass' })
     expect(res.statusCode).toBe(200)
-    expect(res.body.result.captain_status).toEqual('pass')
+    expect(res.body.result.captainStatus).toEqual('pass')
   })
 })

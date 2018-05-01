@@ -25,11 +25,6 @@ userRouter
   .put(Controller.updateUserByUsername)
   .delete(Controller.deleteUserByUsername)
 
-// userRouter
-//   .route(Route.USER_ROLE)
-//   .all(permitManager)
-//   .get(Controller.getUsersByRoleWithPg)
-
 userRouter
   .route(Route.USER_LICENSE_UPLOAD)
   .post(permitManager, Controller.uploadLicense, Controller.getLicenseUrl)

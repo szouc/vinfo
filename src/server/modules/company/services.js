@@ -3,30 +3,26 @@ import moment from 'moment'
 import { Observable } from 'rxjs'
 import * as Page from '../../utils/pagination'
 
-const PROJECTION = 'name addr phone legal_person tax_number created active'
+const PROJECTION =
+  'name addr abbr phone legalPerson taxNumber createdAt updatedAt active'
 
-const createCompany = company =>
-  Observable.fromPromise(Company.create(company))
+const createCompany = company => Observable.fromPromise(Company.create(company))
 
 const getCompanyByQuery = query =>
-  Observable.fromPromise(
-    Company.findOne(query, PROJECTION)
-      .lean()
-      .exec()
-  )
+  Observable.fromPromise(Company.findOne(query, PROJECTION).lean())
 
 const getCompaniesByQuery = query =>
-  Observable.fromPromise(
-    Company.find(query, PROJECTION)
-      .lean()
-      .exec()
-  )
+  Observable.fromPromise(Company.find(query, PROJECTION).lean())
 
 const getAllCompanies = () => getCompaniesByQuery({ active: true })
 
 const getCompaniesPagination = Page.producePagination(Company)
 
-const getCompaniesData = Page.getModelSortedData(Company, PROJECTION, 'created')
+const getCompaniesData = Page.getModelSortedData(
+  Company,
+  PROJECTION,
+  'createdAt'
+)
 
 const getCompaniesWithPg = (pageNumber, pageSize, values = {}) => {
   let active = { active: true }
@@ -34,7 +30,7 @@ const getCompaniesWithPg = (pageNumber, pageSize, values = {}) => {
   let toDate = values.toDate ? { $lte: moment(values.toDate) } : {}
   let dateRange =
     values.fromDate || values.toDate
-      ? { created: { ...fromDate, ...toDate } }
+      ? { createdAt: { ...fromDate, ...toDate } }
       : {}
   let query = { ...active, ...dateRange }
   return Page.addPagination(
@@ -44,18 +40,13 @@ const getCompaniesWithPg = (pageNumber, pageSize, values = {}) => {
 }
 
 const getCompanyById = id =>
-  Observable.fromPromise(
-    Company.findById(id, PROJECTION)
-      .lean()
-      .exec()
-  )
+  Observable.fromPromise(Company.findById(id, PROJECTION).lean())
 
 const updateCompanyById = (id, update) =>
   Observable.fromPromise(
     Company.findByIdAndUpdate(id, { $set: update }, { new: true })
       .select(PROJECTION)
       .lean()
-      .exec()
   )
 
 const deleteCompanyById = id =>
@@ -63,7 +54,6 @@ const deleteCompanyById = id =>
     Company.findByIdAndUpdate(id, { active: false }, { new: true })
       .select(PROJECTION)
       .lean()
-      .exec()
   )
 
 export {

@@ -81,3 +81,6 @@ const page = {}
 console.log(Boolean(page))
 
 console.log(req.deleteIn(['assigner', -1]))
+
+const now = Date(12)
+console.log(now)

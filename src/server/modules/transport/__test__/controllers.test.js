@@ -12,16 +12,42 @@ import { data } from '../../../utils/mockData'
 describe('Transport Base Operations', () => {
   let num
   let transportId
-  let vehicle0
-  let vehicle1
-  // let transportId2
+  let d0, d1, c0, v0, v1, cm0, cm1, p0
   const agent = request.agent(app)
   beforeAll(async () => {
     await agent.post('/auth/register').send(data.managers[0])
-    const res = await agent.post('/api/vehicle').send(data.vehicles[0])
-    vehicle0 = res.body.result
-    const res1 = await agent.post('/api/vehicle').send(data.vehicles[1])
-    vehicle1 = res1.body.result
+    const d0Res = await agent.post('/api/user').send(data.drivers[0])
+    d0 = d0Res.body.result
+    const d1Res = await agent.post('/api/user').send(data.drivers[1])
+    d1 = d1Res.body.result
+    const c0Res = await agent.post('/api/user').send(data.captains[0])
+    c0 = c0Res.body.result
+    const v0Res = await agent.post('/api/vehicle').send({
+      ...data.vehicles[0],
+      captain: c0.username,
+      captainName: c0.fullname,
+      principal: d0.username,
+      principalName: d0.fullname,
+      secondary: d1.username,
+      secondaryName: d1.fullname
+    })
+    v0 = v0Res.body.result
+    const v1Res = await agent.post('/api/vehicle').send({
+      ...data.vehicles[1],
+      captain: c0.username,
+      captainName: c0.fullname,
+      principal: d0.username,
+      principalName: d0.fullname,
+      secondary: d1.username,
+      secondaryName: d1.fullname
+    })
+    v1 = v1Res.body.result
+    const cm0Res = await agent.post('/api/company').send(data.companies[0])
+    cm0 = cm0Res.body.result
+    const cm1Res = await agent.post('/api/company').send(data.companies[1])
+    cm1 = cm1Res.body.result
+    const p0Res = await agent.post('/api/product').send(data.products[0])
+    p0 = p0Res.body.result
   })
 
   afterAll(async () => {
@@ -34,20 +60,62 @@ describe('Transport Base Operations', () => {
 
   test('Should create a transport', async () => {
     expect.assertions(3)
-    data.transports[0].vehicle = vehicle0
-    const res = await agent.post(Api.TRANSPORT_ROOT).send(data.transports[0])
+    const res = await agent.post(Api.TRANSPORT_ROOT).send({
+      assigner: c0.username,
+      assignerName: c0.fullname,
+      vehicle: v1._id,
+      plate: v1.plate,
+      engine: v1.engine,
+      // principal: d0.username,
+      // principalName: d0.fullname,
+      // secondary: d1.username,
+      // secondaryName: d1.fullname,
+      from: {
+        company: cm0._id,
+        name: cm0.name,
+        addr: cm0.addr
+      },
+      to: {
+        company: cm1._id,
+        name: cm1.name,
+        addr: cm1.addr
+      },
+      product: p0._id,
+      productName: p0.name,
+      productSpecs: p0.specs
+    })
     num = res.body.result[0].num
     expect(res.statusCode).toBe(200)
-    expect(res.body.result[0].principal.username).toBe(
-      data.transports[0].vehicle.principal.username
-    )
+    expect(res.body.result[0].principalName).toBe(v0.principalName)
     expect(res.body.result[1].assigned).toBeTruthy()
   })
 
   test('Should create another transport', async () => {
     expect.assertions(2)
-    data.transports[1].vehicle = vehicle1
-    const res = await agent.post(Api.TRANSPORT_ROOT).send(data.transports[1])
+    const res = await agent.post(Api.TRANSPORT_ROOT).send({
+      assigner: c0.username,
+      assignerName: c0.fullname,
+      vehicle: v0._id,
+      plate: v0.plate,
+      engine: v0.engine,
+      // principal: d0.username,
+      // principalName: d0.fullname,
+      // secondary: d1.username,
+      // secondaryName: d1.fullname,
+      from: {
+        company: cm0._id,
+        name: cm0.name,
+        addr: cm0.addr
+      },
+      to: {
+        company: cm1._id,
+        name: cm1.name,
+        addr: cm1.addr
+      },
+      product: p0._id,
+      productName: p0.name,
+      productSpecs: p0.specs
+    })
     const re = num + 1
     expect(res.statusCode).toBe(200)
     expect(res.body.result[0].num).toEqual(re)
@@ -63,7 +131,30 @@ describe('Transport Base Operations', () => {
 
   test('Should not create a transport', async () => {
     expect.assertions(2)
-    const res = await agent.post(Api.TRANSPORT_ROOT).send(data.transports[0])
+    const res = await agent.post(Api.TRANSPORT_ROOT).send({
+      assigner: c0.username,
+      assignerName: c0.fullname,
+      vehicle: v0._id,
+      plate: v0.plate,
+      engine: v0.engine,
+      // principal: d0.username,
+      // principalName: d0.fullname,
+      // secondary: d1.username,
+      // secondaryName: d1.fullname,
+      from: {
+        company: cm0._id,
+        name: cm0.name,
+        addr: cm0.addr
+      },
+      to: {
+        company: cm1._id,
+        name: cm1.name,
+        addr: cm1.addr
+      },
+      product: p0._id,
+      productName: p0.name,
+      productSpecs: p0.specs
+    })
     expect(res.statusCode).toBe(400)
     expect(res.body.error).toEqual('车辆不存在或已分配。')
   })
@@ -80,16 +171,16 @@ describe('Transport Base Operations', () => {
     expect.assertions(2)
     const res = await agent.get(Api.TRANSPORT_ID.replace(/:id/, transportId))
     expect(res.statusCode).toBe(200)
-    expect(res.body.result.captain_status).toEqual('assign')
+    expect(res.body.result.captainStatus).toEqual('assign')
   })
 
   test('Should change the transport status by id', async () => {
     expect.assertions(3)
     const res = await agent
       .put(Api.TRANSPORT_STATUS.replace(/:id/, transportId))
-      .send({ captain_status: 'submit' })
+      .send({ captainStatus: 'accept' })
     expect(res.statusCode).toBe(200)
-    expect(res.body.result[0].captain_status).toBe('submit')
+    expect(res.body.result[0].captainStatus).toBe('accept')
     expect(res.body.result[1].assigned).toBeFalsy()
   })
 
@@ -97,9 +188,9 @@ describe('Transport Base Operations', () => {
     expect.assertions(2)
     const res = await agent
       .put(Api.TRANSPORT_ID.replace(/:id/, transportId))
-      .send({ principal: data.drivers[0] })
+      .send({ principal: d1.username })
     expect(res.statusCode).toBe(200)
-    expect(res.body.result.principal.username).toBe(data.drivers[0].username)
+    expect(res.body.result.principal).toBe(d1.username)
   })
 
   test('Should delete transport by id', async () => {

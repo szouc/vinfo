@@ -36,16 +36,16 @@ class VehicleListTable extends React.PureComponent {
       },
       {
         title: '购买日期',
-        key: 'purchase_date',
+        key: 'purchaseDate',
         render: (text, record) =>
-          record.purchase_date
-            ? moment(record.purchase_date).format('LL')
-            : record.purchase_date
+          record.purchaseDate
+            ? moment(record.purchaseDate).format('LL')
+            : record.purchaseDate
       },
       {
         title: '初始里程',
-        key: 'init_mile',
-        render: (text, record) => record.init_mile
+        key: 'initMile',
+        render: (text, record) => record.initMile
       },
       {
         title: '所属队长',

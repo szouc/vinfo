@@ -5,13 +5,14 @@ import moment from 'moment'
 import { User } from './models'
 import * as Page from '../../utils/pagination'
 
-const PROJECTION = 'username fullname gender role created active license cert cert_expired id_front id_back'
+const PROJECTION =
+  'username fullname gender role phone avatar active detail createdAt updatedAt'
 
 const getUsersByQuery = query =>
-  Observable.fromPromise(User.find(query, PROJECTION))
+  Observable.fromPromise(User.find(query, PROJECTION).lean())
 
 const getUserByQuery = query =>
-  Observable.fromPromise(User.findOne(query, PROJECTION))
+  Observable.fromPromise(User.findOne(query, PROJECTION).lean())
 
 const createUser = (user, callback) => {
   // Register must pass the callback function
@@ -47,7 +48,7 @@ const getUsersWithPg = (pageNumber, pageSize, values = {}) => {
   let toDate = values.toDate ? { $lte: moment(values.toDate) } : {}
   let dateRange =
     values.fromDate || values.toDate
-      ? { created: { ...fromDate, ...toDate } }
+      ? { createdAt: { ...fromDate, ...toDate } }
       : {}
   let query = { ...active, ...role, ...dateRange }
   return Page.addPagination(
@@ -83,7 +84,7 @@ const getUsersByRoleWithPg = (pageNumber, pageSize, ...rest) => {
 const getUsersByDateWithPg = (pageNumber, pageSize, ...rest) => {
   let beforeDate = moment(rest[0]).toDate()
   let afterDate = moment(rest[1]).toDate()
-  let query = { active: true, create: { $gte: beforeDate, $lte: afterDate } }
+  let query = { active: true, createdAt: { $gte: beforeDate, $lte: afterDate } }
   return Page.addPagination(
     getUsersPagination(pageNumber, pageSize, query),
     getUsersData(pageNumber, pageSize, query)
@@ -97,11 +98,11 @@ const getUserByUsername = username => getUserByQuery({ username: username })
  * In mongoose v5 returns the {'n': 0, 'ok': 1}
  **/
 const deleteUserByUsername = username =>
-  Observable.fromPromise(User.remove({ username: username }))
+  Observable.fromPromise(User.remove({ username: username }).lean())
 
 const updateUserByQuery = (query, update) =>
   Observable.fromPromise(
-    User.findOneAndUpdate(query, update, { new: true }).select(PROJECTION)
+    User.findOneAndUpdate(query, update, { new: true }).select(PROJECTION).lean()
   )
 
 const updateUserByUsername = (username, update) =>

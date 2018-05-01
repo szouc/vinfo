@@ -25,7 +25,7 @@ const acceptTransportById = (username, transportId, update, callback) => {
     {
       'principal.username': username,
       _id: transportId,
-      captain_status: { $in: [ASSIGN, ACCEPT] }
+      captainStatus: { $in: [ASSIGN, ACCEPT] }
     },
     {
       $set: update
@@ -163,7 +163,7 @@ function deleteFuel(req, res) {
       $elemMatch: {
         _id: req.params.childId,
         'applicant.username': req.params.username,
-        is_check: false
+        isCheck: false
       }
     }
   })
@@ -189,7 +189,7 @@ function deleteMaintain(req, res) {
       $elemMatch: {
         _id: req.params.childId,
         'applicant.username': req.params.username,
-        is_check: false
+        isCheck: false
       }
     }
   })

@@ -8,7 +8,7 @@ const productCurrent = state => state.getIn(['product', 'status', 'current'])
 const productIds = state => state.getIn(['product', 'status', 'all'])
 const priceHistoryEntity = (state, props) =>
   state.getIn(['entities', 'price_histories'])
-const priceHistoryIds = (state, props) => fromJS(props.product.price_history)
+const priceHistoryIds = (state, props) => fromJS(props.product.priceHistory)
 
 const productSelector = createImmutableSelector(
   [productEntity, productCurrent],

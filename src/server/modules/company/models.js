@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
 
-const baseCompany = {
+const companyFields = {
   name: {
     type: String,
     trim: true,
@@ -14,26 +14,29 @@ const baseCompany = {
     trim: true,
     required: true
   },
+  abbr: {
+    type: String,
+    trim: true
+  },
+  logo: {
+    type: String
+  },
   phone: {
     type: String
   },
-  legal_person: {
+  legalPerson: {
     type: String
   },
-  tax_number: {
+  taxNumber: {
     type: String
   },
   active: {
     type: Boolean,
     default: true
-  },
-  created: {
-    type: Date,
-    default: Date.now
   }
 }
 
-const CompanySchema = new Schema(baseCompany)
+const CompanySchema = new Schema(companyFields, { timestamps: true })
 
 CompanySchema.index({ name: 1, addr: 1 }, { unique: true })
 

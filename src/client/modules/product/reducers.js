@@ -50,11 +50,11 @@ import { paginationReducerFor } from '@clientModulesShared/paginationReducer'
 //       return state.merge(payload.getIn(['entities', 'products']))
 //     case Type.DELETE_PRICE_HISTORY_SUCCESS:
 //       const phPosition = state
-//         .getIn([payload.get('productId'), 'price_history'])
+//         .getIn([payload.get('productId'), 'priceHistory'])
 //         .indexOf(payload.get('priceHistoryId'))
 //       return state.deleteIn([
 //         payload.get('productId'),
-//         'price_history',
+//         'priceHistory',
 //         phPosition
 //       ])
 //     default:

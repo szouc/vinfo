@@ -15,8 +15,8 @@ const mapStateToProps = (state, ownProps) => {
     gender: ownProps.user.gender,
     role: ownProps.user.role,
     licence: ownProps.user.licence,
-    id_front: ownProps.user.id_front,
-    id_back: ownProps.user.id_back,
+    idFront: ownProps.user.idFront,
+    idBack: ownProps.user.idBack,
     cert: ownProps.user.cert,
     cert_expired: ownProps.user.cert_expired
       ? moment(ownProps.user.cert_expired)

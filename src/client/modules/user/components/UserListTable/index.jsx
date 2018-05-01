@@ -44,21 +44,21 @@ class UserListTable extends React.PureComponent {
       },
       {
         title: '身份证正面',
-        key: 'id_front',
+        key: 'idFront',
         render: (text, record) => {
-          if (record.id_front) {
-            return <ImageModal imageUrl={addHostAddr(record.id_front)} />
+          if (record.idFront) {
+            return <ImageModal imageUrl={addHostAddr(record.idFront)} />
           } else {
-            return record.id_front
+            return record.idFront
           }
         }
       },
       {
         title: '身份证反面',
-        key: 'id_back',
+        key: 'idBack',
         render: (text, record) => {
-          if (record.id_back) {
-            return <ImageModal imageUrl={addHostAddr(record.id_back)} />
+          if (record.idBack) {
+            return <ImageModal imageUrl={addHostAddr(record.idBack)} />
           } else {
             return record.idback_
           }

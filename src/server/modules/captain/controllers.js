@@ -187,13 +187,13 @@ const checkFuelById = (req, res) => {
 //       fuels: {
 //         $elemMatch: {
 //           _id: req.params.childId,
-//           is_check: false
+//           isCheck: false
 //         }
 //       }
 //     },
 //     {
 //       $set: {
-//         'fuels.$.is_check': true
+//         'fuels.$.isCheck': true
 //       }
 //     },
 //     {
@@ -229,13 +229,13 @@ const checkMaintainById = (req, res) => {
 //       maintenance: {
 //         $elemMatch: {
 //           _id: req.params.childId,
-//           is_check: false
+//           isCheck: false
 //         }
 //       }
 //     },
 //     {
 //       $set: {
-//         'maintenance.$.is_check': true
+//         'maintenance.$.isCheck': true
 //       }
 //     },
 //     {
@@ -274,7 +274,7 @@ const checkTransportById = (req, res) => {
 //     {
 //       'assigner.username': req.params.username,
 //       _id: req.params.childId,
-//       captain_status: { $in: [ASSIGN, ACCEPT, SUBMIT] }
+//       captainStatus: { $in: [ASSIGN, ACCEPT, SUBMIT] }
 //     },
 //     {
 //       $set: req.body
@@ -301,7 +301,7 @@ const checkTransportById = (req, res) => {
 //       $elemMatch: {
 //         _id: req.params.childId,
 //         'applicant.username': req.params.username,
-//         is_check: false
+//         isCheck: false
 //       }
 //     }
 //   })

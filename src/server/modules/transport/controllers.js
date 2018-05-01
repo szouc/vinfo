@@ -32,14 +32,16 @@ const createObserver = (res, errHint) => ({
 })
 
 const createTransport = (req, res) => {
-  const transport = req.body
-  const vehicleId = transport.vehicle._id
+  let transport = req.body
+  const vehicleId = transport.vehicle
   const getVehicleById$ = VehicleService.getVehicleById(vehicleId)
   getVehicleById$
     .do(vehicle => {
       if (vehicle && !vehicle.assigned) {
         transport.principal = vehicle.principal
+        transport.principalName = vehicle.principalName
         transport.secondary = vehicle.secondary
+        transport.secondaryName = vehicle.secondaryName
       }
     })
     .switchMap(vehicle => {
@@ -122,8 +124,8 @@ const deleteTransportById = (req, res) => {
       if (!transport) {
         return Observable.throw({ message: '运输记录不存在。' })
       }
-      if (transport.captain_status === ASSIGN) {
-        return VehicleService.updateVehicleById(transport.vehicle._id, {
+      if (transport.captainStatus === ASSIGN) {
+        return VehicleService.updateVehicleById(transport.vehicle, {
           assigned: false
         }).map(vehicle => [transport, vehicle])
       }
@@ -139,7 +141,7 @@ const deleteTransportById = (req, res) => {
 //     if (!transport) {
 //       return res.status(400).json({ ok: false, error: '运输记录不存在。' })
 //     }
-//     if (transport.captain_status === ASSIGN) {
+//     if (transport.captainStatus === ASSIGN) {
 //       const vehicle = await VehicleService.updateVehicleById(
 //         transport.vehicle._id,
 //         { assigned: false }
@@ -165,7 +167,7 @@ const updateTransportStatusById = (req, res) => {
       if (!transport) {
         return Observable.throw({ message: '运输记录不存在。' })
       }
-      return VehicleService.updateVehicleById(transport.vehicle._id, {
+      return VehicleService.updateVehicleById(transport.vehicle, {
         assigned: false
       }).map(vehicle => [transport, vehicle])
     })

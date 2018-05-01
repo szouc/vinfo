@@ -71,8 +71,8 @@ const vehicle = {
   plate: '鲁B 12345',
   engine: 'L23421342345',
   model: '解放',
-  purchase_date: moment('01/12/2017', 'MM/DD/YYYY', true),
-  init_mile: 123456,
+  purchaseDate: moment('01/12/2017', 'MM/DD/YYYY', true),
+  initMile: 123456,
   principal: {
     username: 'driver1_vehicle',
     fullname: 'test manager'
@@ -91,8 +91,8 @@ const vehicle1 = {
   plate: '鲁B 54321',
   engine: 'L23421343fs5',
   model: '东风',
-  purchase_date: moment('01/12/2017', 'MM/DD/YYYY', true),
-  init_mile: 123456,
+  purchaseDate: moment('01/12/2017', 'MM/DD/YYYY', true),
+  initMile: 123456,
   principal: {
     username: 'driver1_vehicle',
     fullname: 'test manager'
@@ -249,7 +249,7 @@ describe('Accountant Base Operations', () => {
     expect.assertions(2)
     const res = await agent.get(Api.ACCOUNT_TRANSPORT_ID.replace(/:id/, accountId))
     expect(res.statusCode).toBe(200)
-    expect(res.body.result.captain_status).toEqual('assign')
+    expect(res.body.result.captainStatus).toEqual('assign')
   })
 
   // test('Should update account by id', async () => {
@@ -273,6 +273,6 @@ describe('Accountant Base Operations', () => {
       .put(Api.ACCOUNT_STATUS.replace(/:id/, accountId2))
       .send({ status: 'pass' })
     expect(res.statusCode).toBe(200)
-    expect(res.body.result.accountant_status).toEqual('pass')
+    expect(res.body.result.accountantStatus).toEqual('pass')
   })
 })

@@ -49,14 +49,14 @@ async function getProductsWithPg(payload: {
 
 async function createPriceHistory(payload: Immut): ?Immut {
   const productId = payload.get('productId')
-  const priceHistory = payload.getIn(['values', 'price_history'])
+  const priceHistory = payload.getIn(['values', 'priceHistory'])
   const response = await Request.createPriceHistory(productId, priceHistory)
   if (response.status === STATUS_OK) {
     const data = response.data.result
     const product = productNormalize(data)
     return fromJS(product)
   }
-  throw new Error('Couldnt create a new price_history')
+  throw new Error('Couldnt create a new priceHistory')
 }
 
 async function deleteProductById(id: string) {

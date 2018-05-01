@@ -12,8 +12,8 @@ const user = {
   license: 'ADBDE12345',
   cert: '1234123541sdfasdf',
   cert_expired: '2017-08-05',
-  id_front: './hello',
-  id_back: './End'
+  idFront: './hello',
+  idBack: './End'
 }
 
 describe('Authenticate', () => {

@@ -7,7 +7,7 @@ import PriceHistoryCreateField from '../PriceHistoryCreateField'
 
 const validate = values => {
   const errors = {}
-  const requiredFields = ['price_history']
+  const requiredFields = ['priceHistory']
   requiredFields.forEach(field => {
     if (!values.get(field)) {
       errors[field] = '必填'
@@ -33,7 +33,7 @@ class PriceHistoryCreateForm extends React.PureComponent {
         <Row type='flex' justify='space-between'>
           <Col span={20}>
             <FieldArray
-              name='price_history'
+              name='priceHistory'
               component={PriceHistoryCreateField}
             />
           </Col>

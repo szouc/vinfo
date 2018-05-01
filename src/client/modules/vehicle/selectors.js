@@ -48,10 +48,10 @@ const vehicleArraySelector = createImmutableSelector(
 
 const makeVehicleInitialValuesSelector = () =>
   createImmutableSelector([vehicleInitialValues], vehicle => {
-    const purchase = vehicle.get('purchase_date')
-      ? fromJS(moment(vehicle.get('purchase_date')))
-      : vehicle.get('purchase_date')
-    return vehicle.set('purchase_date', purchase)
+    const purchase = vehicle.get('purchaseDate')
+      ? fromJS(moment(vehicle.get('purchaseDate')))
+      : vehicle.get('purchaseDate')
+    return vehicle.set('purchaseDate', purchase)
   })
 
 const vehicleArrayByUserSelector = createImmutableSelector(

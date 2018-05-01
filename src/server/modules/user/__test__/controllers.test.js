@@ -56,8 +56,8 @@ describe('User Base Operations', () => {
   test('Should fetch users by date and page_number = 1 and page_size = 20', async () => {
     expect.assertions(3)
     let role = DRIVER
-    let fromDate = moment('2017-12-01T02:50:22.583Z').toJSON()
-    let toDate = moment('2117-12-02T02:50:22.583Z').toISOString()
+    let fromDate = moment('2017-12-01T02:50:22.583Z').format('YYYY-MM-DD')
+    let toDate = moment('2117-12-02T02:50:22.583Z').format()
     let page = 1
     let size = 20
     let query = qs.stringify({ role, from: fromDate, to: toDate, page, size })
@@ -79,7 +79,7 @@ describe('User Base Operations', () => {
   test('Should not get a user by username', async () => {
     expect.assertions(2)
     const res = await agent.get(Api.USER_ID.replace(/:username/, 'anonymous'))
-    expect(res.statusCode).toBe(400)
+    expect(res.statusCode).toBe(200)
     expect(res.body.error).toBe('没有找到用户。')
   })
 
@@ -97,7 +97,7 @@ describe('User Base Operations', () => {
     const res = await agent.delete(
       Api.USER_ID.replace(/:username/, data.drivers[4].username)
     )
-    expect(res.statusCode).toBe(400)
+    expect(res.statusCode).toBe(200)
     expect(res.body.ok).toBeFalsy()
   })
 
@@ -122,8 +122,8 @@ describe('User Base Operations', () => {
   test('Should get the image url', async () => {
     expect.assertions(1)
     const res = await agent
-      .post(Api.USER_LICENSE_UPLOAD)
-      .attach('license', data.images[0].license, 'license.png')
+      .post(Api.USER_ID_BACK_UPLOAD)
+      .attach('id_back', data.images[0].license, 'license.png')
     expect(res.statusCode).toBe(200)
   })
 })

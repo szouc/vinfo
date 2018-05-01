@@ -16,7 +16,7 @@ describe('Product Base Operations', () => {
 
   afterAll(async () => {
     await User.remove()
-    await Product.remove()
+    // await Product.remove()
   })
 
   test('Should create a product', async () => {
@@ -56,11 +56,12 @@ describe('Product Base Operations', () => {
   })
 
   test('Should not get product by id', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const res = await agent.get(
       Api.PRODUCT_ID.replace(/:id/, '59a25d39082e0f3954207953')
     )
-    expect(res.statusCode).toBe(400)
+    expect(res.statusCode).toBe(200)
+    expect(res.body.ok).toBeFalsy()
   })
 
   test('Should update product by id', async () => {
@@ -75,30 +76,30 @@ describe('Product Base Operations', () => {
   test('Should add single price history to a specific product', async () => {
     expect.assertions(2)
     const res1 = await agent.get(Api.PRODUCT_ID.replace(/:id/, productId))
-    let countOfPH = res1.body.result.price_history.length
+    let countOfPH = res1.body.result.priceHistory.length
     const res = await agent
       .post(Api.PRODUCT_PRICE_HISTORY.replace(/:id/, productId))
       .send([data.priceHistories[0]])
     expect(res.statusCode).toBe(200)
-    expect(res.body.result.price_history).toHaveLength(countOfPH + 1)
+    expect(res.body.result.priceHistory).toHaveLength(countOfPH + 1)
   })
 
   test('Should add multi price histories to a specific product document', async () => {
     expect.assertions(2)
     const res1 = await agent.get(Api.PRODUCT_ID.replace(/:id/, productId))
-    let countOfPH = res1.body.result.price_history.length
+    let countOfPH = res1.body.result.priceHistory.length
     const res = await agent
       .post(Api.PRODUCT_PRICE_HISTORY.replace(/:id/, productId))
       .send([data.priceHistories[1], data.priceHistories[2]])
     expect(res.statusCode).toBe(200)
-    expect(res.body.result.price_history).toHaveLength(countOfPH + 2)
+    expect(res.body.result.priceHistory).toHaveLength(countOfPH + 2)
   })
 
   test('Should delete a price history from the specific product', async () => {
     expect.assertions(2)
     const res = await agent.get(Api.PRODUCT_ID.replace(/:id/, productId))
-    let countOfPH = res.body.result.price_history.length
-    priceHistoryId = res.body.result.price_history[0]._id
+    let countOfPH = res.body.result.priceHistory.length
+    priceHistoryId = res.body.result.priceHistory[0]._id
     const mapObj = {
       ':id': productId,
       ':childId': priceHistoryId
@@ -107,7 +108,7 @@ describe('Product Base Operations', () => {
       replaceAll(Api.PRODUCT_PRICE_HISTORY_ID, mapObj)
     )
     expect(res2.statusCode).toBe(200)
-    expect(res2.body.result.price_history).toHaveLength(countOfPH - 1)
+    expect(res2.body.result.priceHistory).toHaveLength(countOfPH - 1)
   })
 
   test('Should delete product by id', async () => {

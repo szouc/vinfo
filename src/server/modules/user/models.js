@@ -10,7 +10,7 @@ const Schema = mongoose.Schema
 * baseUser Types
 * password property set in passport-local-mongoose
 */
-const baseUser = {
+const userFields = {
   username: {
     type: String,
     trim: true,
@@ -35,41 +35,50 @@ const baseUser = {
   phone: {
     type: String
   },
+  avatar: {
+    type: String
+  },
+  detail: {
+    licenseNo: {
+      type: String,
+      trim: true
+    },
+    licensePic: {
+      type: String
+    },
+    certNo: {
+      type: String,
+      trim: true
+    },
+    certExpired: {
+      type: Date
+    },
+    idNo: {
+      type: String,
+      trim: true
+    },
+    idFrontPic: {
+      type: String
+    },
+    idBackPic: {
+      type: String
+    },
+    QQ: {
+      type: String,
+      trim: true
+    },
+    Email: {
+      type: String,
+      trim: true
+    }
+  },
   active: {
     type: Boolean,
     default: true
-  },
-  created: {
-    type: Date,
-    default: Date.now
   }
 }
 
-/**
- * vinfoUser Types extended from the baseUser Types,
- * add some properties relating to your project.
- */
-const vinfoUser = {
-  ...baseUser,
-  license: {
-    type: String
-  },
-  cert: {
-    type: String,
-    trim: true
-  },
-  cert_expired: {
-    type: Date
-  },
-  id_front: {
-    type: String
-  },
-  id_back: {
-    type: String
-  }
-}
-
-const UserSchema = new Schema(vinfoUser)
+const UserSchema = new Schema(userFields, { timestamps: true })
 
 const plmOptions = {
   limitAttempts: true

@@ -4,12 +4,12 @@ import { Vehicle } from './models'
 import * as Page from '../../utils/pagination'
 
 const PROJECTION =
-  'plate engine model purchase_date init_mile principal secondary captain fuels maintenance assigned created active'
+  'plate engine model image purchaseDate initMile principal principalName secondary secondaryName captain captainName fuels maintenance assigned createdAt active'
 
 const createVehicle = vehicle => Observable.fromPromise(Vehicle.create(vehicle))
 
 const getVehiclesByQuery = query =>
-  Observable.fromPromise(Vehicle.find(query, PROJECTION))
+  Observable.fromPromise(Vehicle.find(query, PROJECTION).lean())
 
 const getAllVehicles = () => getVehiclesByQuery({ active: true })
 
@@ -27,7 +27,7 @@ const getVehiclesWithPg = (pageNumber, pageSize, values = {}) => {
   let toDateQuery = values.toDate ? { $lte: moment(values.toDate) } : {}
   let dateRangeQuery =
     values.fromDate || values.toDate
-      ? { created: { ...fromDateQuery, ...toDateQuery } }
+      ? { createdAt: { ...fromDateQuery, ...toDateQuery } }
       : {}
   let query = {
     ...activeQuery,
@@ -60,7 +60,7 @@ const getVehiclesWithPg = (pageNumber, pageSize, values = {}) => {
 // }
 
 const getVehicleByQuery = query =>
-  Observable.fromPromise(Vehicle.findOne(query, PROJECTION))
+  Observable.fromPromise(Vehicle.findOne(query, PROJECTION).lean())
 
 /**
  * Why not use 'getVehicleByQuery', see differences of the 'findOne' and 'findById':
@@ -72,22 +72,20 @@ const getVehicleByQuery = query =>
  **/
 
 const getVehicleById = id =>
-  Observable.fromPromise(Vehicle.findById(id, PROJECTION))
+  Observable.fromPromise(Vehicle.findById(id, PROJECTION).lean())
 
 const deleteVehicleById = id =>
   Observable.fromPromise(
-    Vehicle.findByIdAndUpdate(
-      id,
-      { $set: { active: false } },
-      { new: true }
-    ).select(PROJECTION)
+    Vehicle.findByIdAndUpdate(id, { $set: { active: false } }, { new: true })
+      .select(PROJECTION)
+      .lean()
   )
 
 const updateVehicleById = (id, update) =>
   Observable.fromPromise(
-    Vehicle.findByIdAndUpdate(id, { $set: update }, { new: true }).select(
-      PROJECTION
-    )
+    Vehicle.findByIdAndUpdate(id, { $set: update }, { new: true })
+      .select(PROJECTION)
+      .lean()
   )
 
 const addVehicleFuel = (id, fuelArray) =>
@@ -98,7 +96,9 @@ const addVehicleFuel = (id, fuelArray) =>
         $addToSet: { fuels: { $each: fuelArray } }
       },
       { new: true }
-    ).select(PROJECTION)
+    )
+      .select(PROJECTION)
+      .lean()
   )
 
 const addVehicleMaintain = (id, maintainArray) =>
@@ -109,7 +109,9 @@ const addVehicleMaintain = (id, maintainArray) =>
         $addToSet: { maintenance: { $each: maintainArray } }
       },
       { new: true }
-    ).select(PROJECTION)
+    )
+      .select(PROJECTION)
+      .lean()
   )
 
 const deleteFuelByQuery = (query, fuelId) =>
@@ -152,7 +154,7 @@ const deleteOwnFuel = (username, fuelId) => {
       $elemMatch: {
         _id: fuelId,
         'applicant.username': username,
-        is_check: false
+        isCheck: false
       }
     }
   }
@@ -198,7 +200,7 @@ const deleteOwnMaintain = (username, maintainId) => {
       $elemMatch: {
         _id: maintainId,
         'applicant.username': username,
-        is_check: false
+        isCheck: false
       }
     }
   }
@@ -213,19 +215,21 @@ const checkFuelById = (username, fuelId) =>
         fuels: {
           $elemMatch: {
             _id: fuelId,
-            is_check: false
+            isCheck: false
           }
         }
       },
       {
         $set: {
-          'fuels.$.is_check': true
+          'fuels.$.isCheck': true
         }
       },
       {
         new: true
       }
-    ).select(PROJECTION)
+    )
+      .select(PROJECTION)
+      .lean()
   )
 
 const checkMaintainById = (username, maintainId) =>
@@ -236,19 +240,21 @@ const checkMaintainById = (username, maintainId) =>
         maintenance: {
           $elemMatch: {
             _id: maintainId,
-            is_check: false
+            isCheck: false
           }
         }
       },
       {
         $set: {
-          'maintenance.$.is_check': true
+          'maintenance.$.isCheck': true
         }
       },
       {
         new: true
       }
-    ).select(PROJECTION)
+    )
+      .select(PROJECTION)
+      .lean()
   )
 
 export {

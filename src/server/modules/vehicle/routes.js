@@ -1,6 +1,7 @@
 // @flow
 
 export const VEHICLE_ROOT = '/vehicle'
+
 export const VEHICLE_ALL = '/all'
 export const VEHICLE_ID = '/:id'
 export const VEHICLE_FUEL = '/:id/fuel'

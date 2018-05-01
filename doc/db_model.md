@@ -14,8 +14,8 @@
 | license      | String  |      |      |            | 驾驶证号       |
 | cert         | String  |      |      |            | 上岗证号       |
 | cert_expired | Date    |      |      |            | 上岗证过期日期 |
-| id_front     | String  |      |      |            | 身份证正面     |
-| id_back      | String  |      |      |            | 身份证反面     |
+| idFront     | String  |      |      |            | 身份证正面     |
+| idBack      | String  |      |      |            | 身份证反面     |
 
 ## 数据库接口 (\*/services.js)
 
@@ -40,8 +40,8 @@
 | name         | String  | yes  |      |            | 公司名称     |
 | addr         | String  | yes  |      |            | 公司地址     |
 | phone        | String  |      |      |            | 公司电话     |
-| legal_person | String  |      |      |            | 公司法人代表 |
-| tax_number   | String  |      |      |            | 纳税号       |
+| legalPerson | String  |      |      |            | 公司法人代表 |
+| taxNumber   | String  |      |      |            | 纳税号       |
 | active       | Boolean |      |      |            | 活跃         |
 | created      | Date    |      |      | Date.now() | 创建日期     |
 
@@ -65,7 +65,7 @@
 | name          | String             | yes  |      |            | 产品名称 |
 | specs         | String             | yes  |      |            | 产品规格 |
 | pricing       | Number             |      |      |            | 当前价格 |
-| price_history | [**priceHistory**] |      |      |            | 历史价格 |
+| priceHistory | [**priceHistory**] |      |      |            | 历史价格 |
 | active        | Boolean            |      |      |            | 活跃     |
 | created       | Date               |      |      | Date.now() | 创建日期 |
 
@@ -99,8 +99,8 @@
 | plate         | String         | yes  |      |            | 车辆车牌 |
 | engine        | String         | yes  |      |            | 发动机号 |
 | model         | String         |      |      |            | 车辆型号 |
-| purchase_date | Date           |      |      |            | 购买时间 |
-| init_mile     | Number         |      |      | 0          | 初始里程 |
+| purchaseDate | Date           |      |      |            | 购买时间 |
+| initMile     | Number         |      |      | 0          | 初始里程 |
 | principal     | **User**       |      |      |            | 第一司机 |
 | secondary     | **User**       |      |      |            | 第二司机 |
 | captain       | **User**       |      |      |            | 所属队长 |
@@ -119,7 +119,7 @@
 | cost      | Number   | yes  |      |            | 加油开销 |
 | mile      | Number   |      |      |            | 里程数   |
 | date      | Date     |      |      | Date.now() | 加油日期 |
-| is_check  | Boolean  |      |      | false      | 是否审核 |
+| isCheck  | Boolean  |      |      | false      | 是否审核 |
 | info      | String   |      |      |            | 情况说明 |
 
 ### Maintain 子模型
@@ -132,7 +132,7 @@
 | mile      | Number   |      |      |            | 里程数   |
 | date      | Date     |      |      | Date.now() | 维修日期 |
 | detail    | String   |      |      | 维修原因   |
-| is_check  | Boolean  |      |      | false      | 是否审核 |
+| isCheck  | Boolean  |      |      | false      | 是否审核 |
 | info      | String   |      |      |            | 情况说明 |
 
 ## 数据库接口 (\*/services.js)
@@ -171,12 +171,12 @@
 | to:<br>weight     | Number      |      |      | 0          | 送达重量     |
 | to:<br>date       | Date        |      |      | Date.now() | 送达日期     |
 | product           | **Product** |      |      |            | 产品信息     |
-| captain_status    | String      |      |      | ASSIGN     | 队长运输状态 |
-| captain_info      | String      |      |      |            | 队长说明     |
+| captainStatus    | String      |      |      | ASSIGN     | 队长运输状态 |
+| captainInfo      | String      |      |      |            | 队长说明     |
 | price             | Number      | yes  |      | 0          | 运输价格     |
-| accountant_status | String      | yes  |      | SUBMIT     | 会计运输状态 |
+| accountantStatus | String      | yes  |      | SUBMIT     | 会计运输状态 |
 | accountant        | **User**    |      |      |            | 会计信息     |
-| accountant_info   | String      |      |      |            | 会计说明     |
+| accountantInfo   | String      |      |      |            | 会计说明     |
 | active            | Boolean     |      |      | true       | 是否活跃     |
 | created           | Date        |      |      | Date.now() | 创建日期     |
 

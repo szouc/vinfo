@@ -13,7 +13,7 @@
 | created      | Date    |      |      | Date.now() | 创建日期       |
 | license      | String  |      |      |            | 驾驶证号       |
 | cert         | String  |      |      |            | 上岗证号       |
-| cert_expired | Date    |      |      |            | 上岗证过期日期 |
+| certExpired | Date    |      |      |            | 上岗证过期日期 |
 | idFront     | String  |      |      |            | 身份证正面     |
 | idBack      | String  |      |      |            | 身份证反面     |
 

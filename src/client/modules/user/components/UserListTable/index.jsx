@@ -46,10 +46,10 @@ class UserListTable extends React.PureComponent {
         title: '身份证正面',
         key: 'idFront',
         render: (text, record) => {
-          if (record.idFront) {
-            return <ImageModal imageUrl={addHostAddr(record.idFront)} />
+          if (record.detail && record.detail.idFront) {
+            return <ImageModal imageUrl={addHostAddr(record.detail.idFront)} />
           } else {
-            return record.idFront
+            return null
           }
         }
       },
@@ -57,10 +57,10 @@ class UserListTable extends React.PureComponent {
         title: '身份证反面',
         key: 'idBack',
         render: (text, record) => {
-          if (record.idBack) {
-            return <ImageModal imageUrl={addHostAddr(record.idBack)} />
+          if (record.detail && record.detail.idBack) {
+            return <ImageModal imageUrl={addHostAddr(record.detail.idBack)} />
           } else {
-            return record.idback_
+            return null
           }
         }
       },
@@ -68,26 +68,26 @@ class UserListTable extends React.PureComponent {
         title: '驾驶证',
         key: 'license',
         render: (text, record) => {
-          if (record.license) {
-            return <ImageModal imageUrl={addHostAddr(record.license)} />
+          if (record.detail && record.detail.license) {
+            return <ImageModal imageUrl={addHostAddr(record.detail.license)} />
           } else {
-            return record.license
+            return null
           }
         }
       },
       {
         title: '运输证号',
         key: 'cert',
-        render: (text, record) => record.cert
+        render: (text, record) => record.detail && record.detail.cert
       },
       {
         title: '运输证到期日期',
-        key: 'cert_expired',
+        key: 'certExpired',
         render: (text, record) => {
-          if (record.cert_expired) {
-            return moment(record.cert_expired).format('LL')
+          if (record.detail && record.detail.certExpired) {
+            return moment(record.detail.certExpired).format('LL')
           } else {
-            return record.cert_expired
+            return null
           }
         }
       },

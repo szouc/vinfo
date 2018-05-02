@@ -43,10 +43,10 @@ const userFields = {
       type: String,
       trim: true
     },
-    licensePic: {
+    license: {
       type: String
     },
-    certNo: {
+    cert: {
       type: String,
       trim: true
     },
@@ -57,10 +57,10 @@ const userFields = {
       type: String,
       trim: true
     },
-    idFrontPic: {
+    idFront: {
       type: String
     },
-    idBackPic: {
+    idBack: {
       type: String
     },
     QQ: {

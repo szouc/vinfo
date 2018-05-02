@@ -5,11 +5,9 @@ import { fromJS } from 'immutable'
 import * as Request from './request'
 import { userNormalize, userArrayNormalize } from '@clientSettings/schema'
 
-const STATUS_OK = 200
-
 async function createUser(payload: Immut): ?Immut {
   const response = await Request.createUser(payload)
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const data = response.data.result
     const user = userNormalize(data)
     return fromJS(user)
@@ -19,7 +17,7 @@ async function createUser(payload: Immut): ?Immut {
 
 async function getAllUsers(): ?Immut {
   const response = await Request.getAllUsers()
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const data = response.data.result
     const user = userArrayNormalize(data)
     return fromJS(user)
@@ -39,7 +37,7 @@ async function getUsersWithPg(payload: {
     payload.fromDate,
     payload.toDate
   )
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const { result, pagination } = response.data
     const users = userArrayNormalize(result)
     return fromJS({ user: users, pagination })
@@ -49,7 +47,7 @@ async function getUsersWithPg(payload: {
 
 async function deleteUserByUsername(username: string) {
   const response = await Request.deleteUserByUsername(username)
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     return fromJS({ username: username })
   }
   throw new Error('Something wrong at deleteUserByUsername Process')
@@ -59,7 +57,7 @@ async function updateUserByUsername(payload: Immut) {
   const username = payload.get('username')
   const update = payload.get('values')
   const response = await Request.updateUserByUsername(username, update)
-  if (response) {
+  if (response.data.ok) {
     const data = response.data.result
     const user = userNormalize(data)
     return fromJS(user)

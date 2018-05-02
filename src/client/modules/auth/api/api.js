@@ -47,12 +47,6 @@ async function login(payload: {
   username: string,
   password: string
 }): Promise<boolean> {
-  // Gets log info from localStorage
-  let loggedIn = await getLocalLoggedIn()
-  if (loggedIn) {
-    return TRUE
-  }
-
   // Logs a user in from the server API
   let response = await Request.login(payload)
   if (response.status === STATUS_OK) {

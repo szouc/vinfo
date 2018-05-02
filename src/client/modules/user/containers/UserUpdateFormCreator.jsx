@@ -14,13 +14,16 @@ const mapStateToProps = (state, ownProps) => {
     fullname: ownProps.user.fullname,
     gender: ownProps.user.gender,
     role: ownProps.user.role,
-    licence: ownProps.user.licence,
-    idFront: ownProps.user.idFront,
-    idBack: ownProps.user.idBack,
-    cert: ownProps.user.cert,
-    cert_expired: ownProps.user.cert_expired
-      ? moment(ownProps.user.cert_expired)
-      : null
+    idNo: ownProps.user.detail && ownProps.user.detail.idNo,
+    licenseNo: ownProps.user.detail && ownProps.user.detail.licenseNo,
+    license: ownProps.user.detail && ownProps.user.detail.license,
+    idFront: ownProps.user.detail && ownProps.user.detail.idFront,
+    idBack: ownProps.user.detail && ownProps.user.detail.idBack,
+    cert: ownProps.user.detail && ownProps.user.detail.cert,
+    certExpired:
+      ownProps.user.detail && ownProps.user.detail.certExpired
+        ? moment(ownProps.user.detail.certExpired)
+        : null
   }
 
   return { loading, initialValues }

@@ -29,13 +29,13 @@ const LICENSE_UPLOAD_PATH = 'license'
 const ID_FRONT_UPLOAD_PATH = 'id_front'
 const ID_BACK_UPLOAD_PATH = 'id_back'
 const uploadLicense = multer(storageCreator(LICENSE_UPLOAD_PATH)).single(
-  LICENSE_UPLOAD_PATH
+  'detail.license'
 )
 const uploadIdFront = multer(storageCreator(ID_FRONT_UPLOAD_PATH)).single(
-  ID_FRONT_UPLOAD_PATH
+  'detail.idFront'
 )
 const uploadIdBack = multer(storageCreator(ID_BACK_UPLOAD_PATH)).single(
-  ID_BACK_UPLOAD_PATH
+  'detail.idBack'
 )
 const getLicenseUrl = uploadImageUrl(LICENSE_UPLOAD_PATH)
 const getIdFrontUrl = uploadImageUrl(ID_FRONT_UPLOAD_PATH)

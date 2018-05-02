@@ -12,9 +12,9 @@ import { fetchProfileRequest } from '../actions'
  * @param {any} stateLoggedIn - the loggedIn value in the state
  * @param {any} redirectToLogin - dispatch a redirect action
  */
-async function validateLogged(location, stateLoggedIn, redirectToLogin) {
+async function validateLogged(location, redirectToLogin) {
   const loggedIn = await getLocalLoggedIn()
-  if ((!loggedIn || !stateLoggedIn) && location.pathname !== '/login') {
+  if (!JSON.parse(loggedIn) && location.pathname !== '/login') {
     redirectToLogin()
   }
 }
@@ -48,7 +48,7 @@ async function validate(
   fetchProfile,
   redirectToLogin
 ) {
-  await validateLogged(location, stateLoggedIn, redirectToLogin)
+  await validateLogged(location, redirectToLogin)
   await validateUser(stateUsername, location, fetchProfile, redirectToLogin)
 }
 

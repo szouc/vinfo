@@ -13,7 +13,7 @@ import { fetchProfileRequest } from '../actions'
  */
 async function validateLogged(location, stateLoggedIn, redirectToLogin) {
   const loggedIn = await getLocalLoggedIn()
-  if ((!loggedIn || !stateLoggedIn) && location.pathname !== '/login') {
+  if (!JSON.parse(loggedIn) && location.pathname !== '/login') {
     redirectToLogin()
   }
 }

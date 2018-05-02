@@ -9,11 +9,13 @@ const user = {
   role: 'driver',
   gender: 'male',
   active: true,
-  license: 'ADBDE12345',
-  cert: '1234123541sdfasdf',
-  cert_expired: '2017-08-05',
-  idFront: './hello',
-  idBack: './End'
+  detail: {
+    license: 'ADBDE12345',
+    cert: '1234123541sdfasdf',
+    certExpired: '2017-08-05',
+    idFront: './hello',
+    idBack: './End'
+  }
 }
 
 describe('Authenticate', () => {

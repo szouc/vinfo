@@ -68,32 +68,6 @@ const getUsersWithPg = (
  */
 const getUsersByRole = role => getUsersByQuery({ role: role, active: true })
 
-/**
- * 获取相关权限和相关页面的用户
- *
- * @param {int} pageNumber
- * @param {int} pageSize
- * @param {any} rest
- * @returns Observable
- */
-const getUsersByRoleWithPg = (pageNumber, pageSize, ...rest) => {
-  let query = { active: true, role: rest[0] }
-  return Page.addPagination(
-    getUsersPagination(pageNumber, pageSize, query),
-    getUsersData(pageNumber, pageSize, query)
-  )
-}
-
-const getUsersByDateWithPg = (pageNumber, pageSize, ...rest) => {
-  let beforeDate = moment(rest[0]).toDate()
-  let afterDate = moment(rest[1]).toDate()
-  let query = { active: true, createdAt: { $gte: beforeDate, $lte: afterDate } }
-  return Page.addPagination(
-    getUsersPagination(pageNumber, pageSize, query),
-    getUsersData(pageNumber, pageSize, query)
-  )
-}
-
 const getUserByUsername = username => getUserByQuery({ username: username })
 
 /** In mongoose v4 if user is not exist,
@@ -146,8 +120,6 @@ export {
   getUsersWithPg,
   getAllUsers,
   getUsersByRole,
-  getUsersByRoleWithPg,
-  getUsersByDateWithPg,
   getUserByUsername,
   updateUserByUsername,
   deleteUserByUsername,

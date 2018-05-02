@@ -13,7 +13,7 @@ import { data } from '../../../utils/mockData'
 describe('Driver Base Operations', () => {
   let fuel0Id
   let maintain0Id
-  let d0, d1, c0, v0, v1, cm0, cm1, p0, t0, t1
+  let d0, d1, c0, v0, v1, cm0, cm1, p0, t0
   const agent = request.agent(app)
   beforeAll(async () => {
     await agent.post('/auth/register').send(data.managers[0])
@@ -70,7 +70,7 @@ describe('Driver Base Operations', () => {
       productSpecs: p0.specs
     })
     t0 = t0Res.body.result[0]
-    const t1Res = await agent.post('/api/transport').send({
+    await agent.post('/api/transport').send({
       assigner: c0.username,
       assignerName: c0.fullname,
       vehicle: v0._id,
@@ -90,7 +90,6 @@ describe('Driver Base Operations', () => {
       productName: p0.name,
       productSpecs: p0.specs
     })
-    t1 = t1Res.body.result[0]
     await agent
       .post('/auth/login')
       .send({ username: d0.username, password: '123' })

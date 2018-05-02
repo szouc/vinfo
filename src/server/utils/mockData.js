@@ -1,9 +1,6 @@
 import Mock from 'mockjs'
-import Chance from 'chance'
 
 import { DRIVER, CAPTAIN, ACCOUNTANT, MANAGER } from '../modules/user/constants'
-
-const chance = new Chance()
 
 const driverTemplate = {
   // username: () => String(Mock.Random.natural(10000, 99999)),

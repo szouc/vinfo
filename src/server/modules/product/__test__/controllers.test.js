@@ -16,7 +16,7 @@ describe('Product Base Operations', () => {
 
   afterAll(async () => {
     await User.remove()
-    // await Product.remove()
+    await Product.remove()
   })
 
   test('Should create a product', async () => {

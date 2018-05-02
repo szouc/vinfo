@@ -100,31 +100,6 @@ const getAllUsers = (req, res) => {
   getAllUsers$.subscribe(createObserver(res, '还没有用户，请添加。'))
 }
 
-// const getUsersByRoleWithPg = (req, res) => {
-//   let role = req.query.role
-//   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
-//   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-//   if (!ROLES.includes(role)) {
-//     return res.status(400).json({ ok: false, error: '没有该角色！' })
-//   }
-//   const getUsersByRoleWithPg$ = Service.getUsersByRoleWithPg(page, size, role)
-//   getUsersByRoleWithPg$.subscribe(createObserver(res, '没找到相关用户。'))
-// }
-
-// const getUsersByDateWithPg = (req, res) => {
-//   let beforeDate = req.body.before
-//   let afterDate = req.body.after
-//   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
-//   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
-//   const getUsersByDateWithPg$ = Service.getUsersByDateWithPg(
-//     page,
-//     size,
-//     beforeDate,
-//     afterDate
-//   )
-//   getUsersByDateWithPg$.subscribe(createObserver(res, '没找到相关用户。'))
-// }
-
 const getUserByUsername = (req, res) => {
   let username = req.params.username
   const getUserByUsername$ = Service.getUserByUsername(username)

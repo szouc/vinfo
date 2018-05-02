@@ -195,16 +195,16 @@ const transport2 = {
   }
 }
 
-const modifiedDrivers = {
-  secondary: {
-    username: 'driver1_vehicle',
-    fullname: 'test manager'
-  },
-  principal: {
-    username: 'driver2_vehicle',
-    fullname: 'test manager'
-  }
-}
+// const modifiedDrivers = {
+//   secondary: {
+//     username: 'driver1_vehicle',
+//     fullname: 'test manager'
+//   },
+//   principal: {
+//     username: 'driver2_vehicle',
+//     fullname: 'test manager'
+//   }
+// }
 
 let accountId
 let accountId2

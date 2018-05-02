@@ -29,10 +29,6 @@ const createUser = (user, callback) => {
 
 const getAllUsers = () => getUsersByQuery({ active: true })
 
-const getUsersPagination = Page.producePagination(User)
-
-const getUsersData = Page.getModelSortedData(User, PROJECTION, 'username')
-
 /**
  * 根据查询获取用户
  *
@@ -41,7 +37,14 @@ const getUsersData = Page.getModelSortedData(User, PROJECTION, 'username')
  * @param {object: {role: enum, fromDate: moment, toDate: moment }} values
  * @returns Observable
  */
-const getUsersWithPg = (pageNumber, pageSize, values = {}) => {
+const getUsersWithPg = (
+  pageNumber,
+  pageSize,
+  values = {},
+  projection = PROJECTION
+) => {
+  const getUsersPagination = Page.producePagination(User)
+  const getUsersData = Page.getModelSortedData(User, projection, 'username')
   let active = { active: true }
   let role = values.role ? { role: values.role } : {}
   let fromDate = values.fromDate ? { $gte: moment(values.fromDate) } : {}
@@ -102,7 +105,9 @@ const deleteUserByUsername = username =>
 
 const updateUserByQuery = (query, update) =>
   Observable.fromPromise(
-    User.findOneAndUpdate(query, update, { new: true }).select(PROJECTION).lean()
+    User.findOneAndUpdate(query, update, { new: true })
+      .select(PROJECTION)
+      .lean()
   )
 
 const updateUserByUsername = (username, update) =>

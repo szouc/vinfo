@@ -42,7 +42,7 @@ describe('Authenticate', () => {
     expect(res.statusCode).toBe(200)
   })
 
-  test('user (driver) cannt reset password', async () => {
+  test('user (driver) cannot reset password', async () => {
     expect.assertions(1)
     const res = await agent
       .post('/auth/reset_password')

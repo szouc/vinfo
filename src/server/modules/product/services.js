@@ -15,11 +15,14 @@ const getProductsByQuery = query =>
 
 const getAllProducts = () => getProductsByQuery({ active: true })
 
-const getProductsPagination = Page.producePagination(Product)
-
-const getProductsData = Page.getModelSortedData(Product, PROJECTION, 'name')
-
-const getProductsWithPg = (pageNumber, pageSize, values = {}) => {
+const getProductsWithPg = (
+  pageNumber,
+  pageSize,
+  values = {},
+  projection = PROJECTION
+) => {
+  const getProductsPagination = Page.producePagination(Product)
+  const getProductsData = Page.getModelSortedData(Product, projection, 'name')
   let active = { active: true }
   let fromDate = values.fromDate ? { $gte: moment(values.fromDate) } : {}
   let toDate = values.toDate ? { $lte: moment(values.toDate) } : {}

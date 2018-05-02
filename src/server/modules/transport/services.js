@@ -18,28 +18,29 @@ const getTransportsByQuery = query =>
 
 const getAllTransports = () => getTransportsByQuery({ active: true })
 
-const getTransportsPagination = Page.producePagination(Transport)
-
-const getTransportsData = Page.getModelSortedData(
-  Transport,
-  PROJECTION,
-  '-createdAt'
-)
-
-const getTransportsWithPg = (pageNumber, pageSize, values = {}) => {
+const getTransportsWithPg = (
+  pageNumber,
+  pageSize,
+  values = {},
+  projection = PROJECTION
+) => {
+  const getTransportsPagination = Page.producePagination(Transport)
+  const getTransportsData = Page.getModelSortedData(
+    Transport,
+    projection,
+    '-createdAt'
+  )
   let activeQuery = { active: true }
-  let driverQuery = values.driver ? { 'principal.username': values.driver } : {}
+  let driverQuery = values.driver ? { principal: values.driver } : {}
   let captainStatusQuery = values.captainStatus
     ? { captainStatus: values.captainStatus }
     : {}
   let accountantStatusQuery = values.accountantStatus
     ? { accountantStatus: values.accountantStatus }
     : {}
-  let captainQuery = values.captain
-    ? { 'assigner.username': values.captain }
-    : {}
+  let captainQuery = values.captain ? { assigner: values.captain } : {}
   let accountantQuery = values.accountant
-    ? { 'accountant.username': values.accountant }
+    ? { accountant: values.accountant }
     : {}
   let fromDateQuery = values.fromDate ? { $gte: moment(values.fromDate) } : {}
   let toDateQuery = values.toDate ? { $lte: moment(values.toDate) } : {}
@@ -94,7 +95,7 @@ const updateTransportById = (id, update) =>
 const updateTransportStatus = (transportId, updateStatus) => {
   let query = {
     _id: transportId,
-    captainStatus: { $in: [ASSIGN, ACCEPT] }
+    captainStatus: { $in: [ASSIGN, ACCEPT, SUBMIT] }
   }
   let update = { captainStatus: updateStatus }
   return updateTransportByQuery(query, update)
@@ -103,7 +104,7 @@ const updateTransportStatus = (transportId, updateStatus) => {
 const updateTransportByDriver = (username, transportId, update) => {
   let query = {
     _id: transportId,
-    'principal.username': username
+    'principal': username
   }
   return updateTransportByQuery(query, update)
 }
@@ -111,7 +112,7 @@ const updateTransportByDriver = (username, transportId, update) => {
 const updateStatusByDriver = (username, transportId, updateStatus) => {
   let query = {
     _id: transportId,
-    'principal.username': username,
+    'principal': username,
     captainStatus: { $in: [ASSIGN, ACCEPT] }
   }
   let update = { $set: { captainStatus: updateStatus } }

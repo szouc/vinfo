@@ -13,15 +13,20 @@ const getVehiclesByQuery = query =>
 
 const getAllVehicles = () => getVehiclesByQuery({ active: true })
 
-const getVehiclesPagination = Page.producePagination(Vehicle)
-
-const getVehiclesData = Page.getModelSortedData(Vehicle, PROJECTION, 'plate')
-
-const getVehiclesWithPg = (pageNumber, pageSize, values = {}) => {
+const getVehiclesWithPg = (
+  pageNumber,
+  pageSize,
+  values = {},
+  projection = PROJECTION
+) => {
+  const getVehiclesPagination = Page.producePagination(Vehicle)
+  const getVehiclesData = Page.getModelSortedData(Vehicle, projection, 'plate')
   let activeQuery = { active: true }
-  let driverQuery = values.driver ? { 'principal.username': values.driver } : {}
+  let driverQuery = values.driver
+    ? { 'principal': values.driver }
+    : {}
   let captainQuery = values.captain
-    ? { 'captain.username': values.captain }
+    ? { 'captain': values.captain }
     : {}
   let fromDateQuery = values.fromDate ? { $gte: moment(values.fromDate) } : {}
   let toDateQuery = values.toDate ? { $lte: moment(values.toDate) } : {}
@@ -153,7 +158,7 @@ const deleteOwnFuel = (username, fuelId) => {
     fuels: {
       $elemMatch: {
         _id: fuelId,
-        'applicant.username': username,
+        'applicant': username,
         isCheck: false
       }
     }
@@ -199,7 +204,7 @@ const deleteOwnMaintain = (username, maintainId) => {
     maintenance: {
       $elemMatch: {
         _id: maintainId,
-        'applicant.username': username,
+        'applicant': username,
         isCheck: false
       }
     }
@@ -211,7 +216,7 @@ const checkFuelById = (username, fuelId) =>
   Observable.fromPromise(
     Vehicle.findOneAndUpdate(
       {
-        'captain.username': username,
+        'captain': username,
         fuels: {
           $elemMatch: {
             _id: fuelId,
@@ -236,7 +241,7 @@ const checkMaintainById = (username, maintainId) =>
   Observable.fromPromise(
     Vehicle.findOneAndUpdate(
       {
-        'captain.username': username,
+        'captain': username,
         maintenance: {
           $elemMatch: {
             _id: maintainId,

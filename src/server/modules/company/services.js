@@ -16,15 +16,18 @@ const getCompaniesByQuery = query =>
 
 const getAllCompanies = () => getCompaniesByQuery({ active: true })
 
-const getCompaniesPagination = Page.producePagination(Company)
-
-const getCompaniesData = Page.getModelSortedData(
-  Company,
-  PROJECTION,
-  'createdAt'
-)
-
-const getCompaniesWithPg = (pageNumber, pageSize, values = {}) => {
+const getCompaniesWithPg = (
+  pageNumber,
+  pageSize,
+  values = {},
+  projection = PROJECTION
+) => {
+  const getCompaniesPagination = Page.producePagination(Company)
+  const getCompaniesData = Page.getModelSortedData(
+    Company,
+    projection,
+    'createdAt'
+  )
   let active = { active: true }
   let fromDate = values.fromDate ? { $gte: moment(values.fromDate) } : {}
   let toDate = values.toDate ? { $lte: moment(values.toDate) } : {}

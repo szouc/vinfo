@@ -92,7 +92,7 @@ const updateTransportStatus = (req, res) => {
       if (updateStatus !== 'accept') {
         return Observable.of([transport, null])
       }
-      return VehicleService.updateVehicleById(transport.vehicle._id, {
+      return VehicleService.updateVehicleById(transport.vehicle, {
         assigned: false
       }).map(vehicle => [transport, vehicle])
     })
@@ -123,11 +123,16 @@ const getDriverVehicles = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   let username = req.params.username
-  const getDriverVehicles$ = VehicleService.getVehiclesWithPg(page, size, {
-    driver: username,
-    fromDate,
-    toDate
-  })
+  const getDriverVehicles$ = VehicleService.getVehiclesWithPg(
+    page,
+    size,
+    {
+      driver: username,
+      fromDate,
+      toDate
+    },
+    'plate engine'
+  )
   getDriverVehicles$.subscribe(createObserver(res, '还没有相关车辆信息。'))
 }
 
@@ -181,7 +186,7 @@ const getVehicleFuels = (req, res) => {
     .map(vehicle => {
       if (vehicle) {
         const { fuels } = vehicle
-        return fuels.filter(item => item.applicant.username === username)
+        return fuels.filter(item => item.applicant === username)
       }
     })
     .subscribe(createObserver(res, '没有找到相关车辆。'))
@@ -213,7 +218,7 @@ const getVehicleMaintains = (req, res) => {
     .map(vehicle => {
       if (vehicle) {
         const { maintenance } = vehicle
-        return maintenance.filter(item => item.applicant.username === username)
+        return maintenance.filter(item => item.applicant === username)
       }
     })
     .subscribe(createObserver(res, '没有找到相关车辆。'))

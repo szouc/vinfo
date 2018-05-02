@@ -31,7 +31,6 @@ const getModelSortedData = (Model, projection, sortField) => (
       .sort(sortField)
       .select(projection)
       .lean()
-      .exec()
   )
 
 const addPagination = (pageObservable, dataObservable) => {

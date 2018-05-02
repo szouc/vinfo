@@ -1,6 +1,7 @@
 // @flow
 
 export const DRIVER_ROOT = '/driver'
+
 export const DRIVER_ALL = '/all'
 export const DRIVER_ID = '/:username'
 export const DRIVER_VEHICLE = '/:username/vehicle'

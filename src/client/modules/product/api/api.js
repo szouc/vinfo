@@ -13,6 +13,9 @@ async function createProduct(payload: Immut): ?Immut {
     const product = productNormalize(data)
     return fromJS(product)
   }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
+  }
   throw new Error('Couldnt create a new product')
 }
 
@@ -22,6 +25,9 @@ async function getAllProducts(): ?Immut {
     const data = response.data.result
     const products = productArrayNormalize(data)
     return fromJS(products)
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Something wrong at getAllProducts Process')
 }
@@ -43,6 +49,9 @@ async function getProductsWithPg(payload: {
     const products = productArrayNormalize(result)
     return fromJS({ product: products, pagination })
   }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
+  }
   throw new Error('Something wrong at getProductsWithPg Process')
 }
 
@@ -55,6 +64,9 @@ async function createPriceHistory(payload: Immut): ?Immut {
     const product = productNormalize(data)
     return fromJS(product)
   }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
+  }
   throw new Error('Couldnt create a new priceHistory')
 }
 
@@ -62,6 +74,9 @@ async function deleteProductById(id: string) {
   const response = await Request.deleteProductById(id)
   if (response.data.ok) {
     return fromJS({ id })
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Something wrong at deleteProductById Process')
 }
@@ -78,6 +93,9 @@ async function deletePriceHistoryById(payload: Immut) {
     const product = productNormalize(data)
     return fromJS(product)
   }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
+  }
   throw new Error('Something wrong at deletePriceHistoryById Process')
 }
 
@@ -89,6 +107,9 @@ async function updateProductById(payload: Immut) {
     const data = response.data.result
     const product = productNormalize(data)
     return fromJS(product)
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Couldnt update a product by Id')
 }

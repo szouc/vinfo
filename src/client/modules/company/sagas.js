@@ -4,7 +4,8 @@ import * as Api from './api'
 import * as Type from './actionTypes'
 
 import { ADD_COMPANY_ENTITY, DELETE_ENTITY } from '../entity/actionTypes'
-import { call, fork, put, take } from 'redux-saga/effects'
+import { call, fork, put, takeLatest } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
 
 import { COMPANY_STATE_KEY } from '@clientSettings/schema'
 // Use for redux-form/immutable
@@ -107,7 +108,10 @@ function * loadingEffect(scope) {
 }
 
 function * errorEffect(scope, error) {
-  yield put({ type: REQUEST_ERROR, payload: fromJS(error) })
+  yield put({
+    type: REQUEST_ERROR,
+    payload: fromJS({ errorScope: 'Company', message: error.message })
+  })
   yield put({
     type: Type.SET_LOADING,
     payload: { scope: scope, loading: false }
@@ -128,82 +132,68 @@ const deleteEffect = machine.getEffect('delete')
 const successEffect = machine.getEffect('success')
 const failureEffect = machine.getEffect('failure')
 
-function * createCompanyFlow() {
-  while (true) {
-    const action: { type: string, payload: Immut } = yield take(
-      Type.CREATE_REQUEST
-    )
-    yield createEffect('form')
-    try {
-      const company = yield call(Api.createCompany, action.payload)
-      if (company) {
-        yield successEffect('form', 'create', company)
-      }
-    } catch (error) {
-      yield failureEffect('form', error)
-      machine.operation('retry')
+function * createCompanyFlow(action) {
+  yield createEffect('form')
+  try {
+    const company = yield call(Api.createCompany, action.payload)
+    if (company) {
+      yield successEffect('form', 'create', company)
     }
+  } catch (error) {
+    yield failureEffect('form', error)
+    machine.operation('retry')
   }
 }
 
 function * fetchAllCompaniesFlow() {
-  while (true) {
-    yield take(Type.FETCH_ALL_REQUEST)
-    yield fetchAllEffect('list')
-    try {
-      const company = yield call(Api.getAllCompanies)
-      if (company) {
-        yield successEffect('list', 'fetchAll', company)
-      }
-    } catch (error) {
-      yield failureEffect('list', error)
-      machine.operation('retry')
+  yield fetchAllEffect('list')
+  try {
+    const company = yield call(Api.getAllCompanies)
+    if (company) {
+      yield successEffect('list', 'fetchAll', company)
     }
+  } catch (error) {
+    yield failureEffect('list', error)
+    machine.operation('retry')
   }
 }
 
-function * fetchCompaniesFlow() {
-  while (true) {
-    const action: { type: String, payload?: Immut } = yield take(
-      Type.FETCH_LIST_REQUEST
-    )
-    yield fetchEffect('list')
-    try {
-      const result = yield call(Api.getCompaniesWithPg, action.payload)
-      if (result) {
-        const company = result.get('company')
-        const pagination = result.get('pagination')
-        yield successEffect('list', 'fetch', company, pagination)
-      }
-    } catch (error) {
-      yield failureEffect('list', error)
-      machine.operation('retry')
+function * fetchCompaniesFlow(action) {
+  yield fetchEffect('list')
+  try {
+    const result = yield call(Api.getCompaniesWithPg, action.payload)
+    if (result) {
+      const company = result.get('company')
+      const pagination = result.get('pagination')
+      yield successEffect('list', 'fetch', company, pagination)
     }
+  } catch (error) {
+    yield failureEffect('list', error)
+    machine.operation('retry')
   }
 }
 
-function * deleteCompanyByIdFlow() {
-  while (true) {
-    const action: { type: string, payload: string } = yield take(
-      Type.DELETE_REQUEST
-    )
-    const { payload } = action
-    yield deleteEffect('list')
-    try {
-      const companyId = yield call(Api.deleteCompanyById, payload)
-      if (companyId) {
-        yield successEffect('list', 'delete', companyId)
-      }
-    } catch (error) {
-      yield failureEffect('list', error)
-      machine.operation('retry')
+function * deleteCompanyByIdFlow(action) {
+  const { payload } = action
+  yield deleteEffect('list')
+  try {
+    const companyId = yield call(Api.deleteCompanyById, payload)
+    if (companyId) {
+      yield successEffect('list', 'delete', companyId)
     }
+  } catch (error) {
+    yield failureEffect('list', error)
+    machine.operation('retry')
   }
 }
 
 export default function * rootSagas(): any {
-  yield fork(createCompanyFlow)
-  yield fork(fetchAllCompaniesFlow)
-  yield fork(fetchCompaniesFlow)
-  yield fork(deleteCompanyByIdFlow)
+  // yield fork(createCompanyFlow)
+  // yield fork(fetchAllCompaniesFlow)
+  // yield fork(fetchCompaniesFlow)
+  // yield fork(deleteCompanyByIdFlow)
+  yield takeLatest(Type.CREATE_REQUEST, createCompanyFlow)
+  yield takeLatest(Type.FETCH_ALL_REQUEST, fetchAllCompaniesFlow)
+  yield takeLatest(Type.FETCH_LIST_REQUEST, fetchCompaniesFlow)
+  yield takeLatest(Type.DELETE_REQUEST, deleteCompanyByIdFlow)
 }

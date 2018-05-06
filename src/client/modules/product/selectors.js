@@ -18,7 +18,7 @@ const productSelector = createImmutableSelector(
 const productArraySelector = createImmutableSelector(
   [productEntity, productIds],
   (product, ids) => {
-    return ids ? ids.map(item => product.get(item)) : []
+    return ids.map(item => product.get(item))
   }
 )
 
@@ -26,7 +26,7 @@ const makePHSelector = () => {
   return createImmutableSelector(
     [priceHistoryEntity, priceHistoryIds],
     (priceHistory, ids) => {
-      return ids ? ids.map(item => priceHistory.get(item)) : []
+      return ids.map(item => priceHistory.get(item))
     }
   )
 }

@@ -68,19 +68,8 @@ console.log('expensive2(state)', somethingExpensive2Selector(state))
 state = state.set('keyword', 'helldsfs')
 console.log('expensive2(state)', somethingExpensive2Selector(state))
 
-const values = fromJS({ assigner: '12324@@你好' })
+const values = fromJS({ assigner: [] })
 
-const req = values.withMutations(value =>
-  value
-    .set('assigner', fromJS({ username: '12345', fullname: '你好' }))
-    .set('vehicle', fromJS({ plate: '12345', engine: 'L21342354' }))
-)
-console.log(req)
+const name = values.get('assigner').map(item => item)
 
-const page = {}
-console.log(Boolean(page))
-
-console.log(req.deleteIn(['assigner', -1]))
-
-const now = Date(12)
-console.log(now)
+console.log(name)

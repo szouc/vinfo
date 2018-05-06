@@ -10,24 +10,28 @@ import {
   transportNormalize
 } from '@clientSettings/schema'
 
-const STATUS_OK = 200
-
 async function createTransport(payload: Immut): ?Immut {
   const response = await Request.createTransport(payload)
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const data = response.data.result
     const transport = transportNormalize(data[0])
     return fromJS(transport)
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Couldnt create a new transport')
 }
 
 async function getAllTransports(): ?Immut {
   const response = await Request.getAllTransports()
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const data = response.data.result
     const transports = transportArrayNormalize(data)
     return fromJS(transports)
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Something wrong in getAllTransports Process.')
 }
@@ -44,10 +48,13 @@ async function getTransportsWithPg(payload: {
     payload.fromDate,
     payload.toDate
   )
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const { result, pagination } = response.data
     const transport = transportArrayNormalize(result)
     return fromJS({ transport, pagination })
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Something wrong in getTransportsWithPg Process.')
 }
@@ -56,7 +63,7 @@ async function getTransportsWithPg(payload: {
 //     method: 'get'
 //   }
 //   const response = await fetch(VEHICLE_ROOT_API, options)
-//   if (response.status === STATUS_OK) {
+//   if (response.data.ok) {
 //     const data = await response.json()
 //     const vehicles = vehicleArrayNormalize(data)
 //     return fromJS(vehicles)
@@ -69,7 +76,7 @@ async function getTransportsWithPg(payload: {
 //     method: 'delete'
 //   }
 //   const response = await fetch(VEHICLE_ID_API.replace(/:id/, id), options)
-//   if (response.status === STATUS_OK) {
+//   if (response.data.ok) {
 //     return id
 //   }
 //   throw new Error('Something wrong at deleteVehicleById Process')
@@ -101,7 +108,7 @@ async function getTransportsWithPg(payload: {
 //     VEHICLE_FUEL_API.replace(/:id/, vehicleId),
 //     options
 //   )
-//   if (response.status === STATUS_OK) {
+//   if (response.data.ok) {
 //     const data = await response.json()
 //     const vehicle = vehicleNormalize(data)
 //     return fromJS(vehicle)
@@ -121,7 +128,7 @@ async function getTransportsWithPg(payload: {
 //     replaceAll(PRODUCT_PRICE_HISTORY_ID_API, mapObj),
 //     options
 //   )
-//   if (response.status === STATUS_OK) {
+//   if (response.data.ok) {
 //     return payload
 //   }
 //   throw new Error('Something wrong at deletePriceHistoryById Process')

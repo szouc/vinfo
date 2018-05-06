@@ -12,6 +12,9 @@ async function createUser(payload: Immut): ?Immut {
     const user = userNormalize(data)
     return fromJS(user)
   }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
+  }
   throw new Error('Couldnt create a new user')
 }
 
@@ -21,6 +24,9 @@ async function getAllUsers(): ?Immut {
     const data = response.data.result
     const user = userArrayNormalize(data)
     return fromJS(user)
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Something wrong at getAllCompanies Process')
 }
@@ -42,6 +48,9 @@ async function getUsersWithPg(payload: {
     const users = userArrayNormalize(result)
     return fromJS({ user: users, pagination })
   }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
+  }
   throw new Error('Something wrong at getUsersWithPg Process')
 }
 
@@ -49,6 +58,9 @@ async function deleteUserByUsername(username: string) {
   const response = await Request.deleteUserByUsername(username)
   if (response.data.ok) {
     return fromJS({ username: username })
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Something wrong at deleteUserByUsername Process')
 }
@@ -61,6 +73,9 @@ async function updateUserByUsername(payload: Immut) {
     const data = response.data.result
     const user = userNormalize(data)
     return fromJS(user)
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Couldnt update a user by Id')
 }

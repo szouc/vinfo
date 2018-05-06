@@ -14,7 +14,7 @@ const userSelector = createImmutableSelector(
 const userArraySelector = createImmutableSelector(
   [userEntity, userIds],
   (user, ids) => {
-    return ids ? ids.map(item => user.get(item)) : []
+    return ids.map(item => user.get(item))
   }
 )
 

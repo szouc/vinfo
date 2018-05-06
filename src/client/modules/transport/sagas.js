@@ -110,7 +110,10 @@ function * loadingEffect(scope) {
 }
 
 function * errorEffect(scope, error) {
-  yield put({ type: REQUEST_ERROR, payload: fromJS(error) })
+  yield put({
+    type: REQUEST_ERROR,
+    payload: fromJS({ errorScope: 'Transport', message: error.message })
+  })
   yield put({
     type: Type.SET_LOADING,
     payload: { scope: scope, loading: false }

@@ -123,7 +123,7 @@ describe('User Base Operations', () => {
     expect.assertions(1)
     const res = await agent
       .post(Api.USER_ID_BACK_UPLOAD)
-      .attach('id_back', data.images[0].license, 'license.png')
+      .attach('detail.idBack', data.images[0].license, 'license.png')
     expect(res.statusCode).toBe(200)
   })
 })

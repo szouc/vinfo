@@ -9,7 +9,7 @@ const companyEntities = state => state.getIn(['entities', 'companies'])
 const companyArraySelector = createImmutableSelector(
   [companyEntities, companyIds],
   (company, ids) => {
-    return ids ? ids.map(item => company.get(item)) : []
+    return ids.map(item => company.get(item))
   }
 )
 

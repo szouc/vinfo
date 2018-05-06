@@ -66,15 +66,15 @@ class UserUpdateForm extends React.PureComponent {
               />
             </Col>
           </Row>
+          <Field name='idNo' component={Input} placeholder='身份证号' />
+          <Field name='licenseNo' component={Input} placeholder='驾驶证号' />
+          <Field name='cert' component={Input} placeholder='运输证号' />
+          <Field
+            name='certExpired'
+            component={DatePicker}
+            placeholder='运输证到期日期'
+          />
         </FormSection>
-        <Field name='idNo' component={Input} placeholder='身份证号' />
-        <Field name='licenseNo' component={Input} placeholder='驾驶证号' />
-        <Field name='cert' component={Input} placeholder='运输证号' />
-        <Field
-          name='certExpired'
-          component={DatePicker}
-          placeholder='运输证到期日期'
-        />
         <Row type='flex' justify='space-between'>
           <Button
             size='large'

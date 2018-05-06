@@ -10,7 +10,6 @@ const vehicleCurrent = state => state.getIn(['vehicle', 'status', 'current'])
 const vehicleIds = state => state.getIn(['vehicle', 'status', 'all'])
 const vehicleInitialValues = ownProps => fromJS(ownProps.vehicle)
 const currentUser = state => state.getIn(['auth', 'user', 'username'])
-const userEntity = state => state.getIn(['entities', 'users'])
 const selectedAssigner = state => {
   if (getFormValues('transportCreateForm')(state)) {
     return getFormValues('transportCreateForm')(state).get('assigner')
@@ -19,31 +18,13 @@ const selectedAssigner = state => {
 }
 
 const vehicleSelector = createImmutableSelector(
-  [vehicleEntity, vehicleCurrent, userEntity],
-  (vehicle, current, user) =>
-    current
-      ? vehicle.get(current).withMutations(value =>
-        value
-          .updateIn(['captain'], value => user.get(value))
-          .updateIn(['principal'], value => user.get(value))
-          .updateIn(['secondary'], value => user.get(value))
-      )
-      : fromJS({})
+  [vehicleEntity, vehicleCurrent],
+  (vehicle, current) => vehicle.get(current)
 )
 
 const vehicleArraySelector = createImmutableSelector(
-  [vehicleEntity, vehicleIds, userEntity],
-  (vehicles, ids, user) =>
-    ids
-      ? ids.map(item =>
-        vehicles.get(item).withMutations(value =>
-          value
-            .updateIn(['captain'], value => user.get(value))
-            .updateIn(['principal'], value => user.get(value))
-            .updateIn(['secondary'], value => user.get(value))
-        )
-      )
-      : fromJS([])
+  [vehicleEntity, vehicleIds],
+  (vehicles, ids) => ids.map(item => vehicles.get(item))
 )
 
 const makeVehicleInitialValuesSelector = () =>
@@ -78,7 +59,7 @@ const availableVehicleByCaptainSelector = createImmutableSelector(
   (vehicles, assigner) =>
     vehicles.filter((vehicle, i) => {
       return assigner
-        ? vehicle.getIn(['captain', 'username']) === assigner.get('username')
+        ? vehicle.getIn(['captain', 'username']) === assigner
         : true
     })
 )

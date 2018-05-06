@@ -7,24 +7,28 @@ import * as Request from './request'
 
 import { vehicleArrayNormalize, vehicleNormalize } from '@clientSettings/schema'
 
-const STATUS_OK = 200
-
 async function createVehicle(payload: Immut): ?Immut {
   const response = await Request.createVehicle(payload)
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const data = response.data.result
     const vehicle = vehicleNormalize(data)
     return fromJS(vehicle)
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Couldnt create a new vehicle')
 }
 
 async function getAllVehicles(): ?Immut {
   const response = await Request.getAllVehicles()
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const data = response.data.result
     const vehicles = vehicleArrayNormalize(data)
     return fromJS(vehicles)
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Something wrong at getAllVehicles Process')
 }
@@ -41,18 +45,24 @@ async function getVehiclesWithPg(payload: {
     payload.fromDate,
     payload.toDate
   )
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const { result, pagination } = response.data
     const vehicles = vehicleArrayNormalize(result)
     return fromJS({ vehicle: vehicles, pagination })
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Something wrong at getVehiclesWithPg process')
 }
 
 async function deleteVehicleById(id: string) {
   const response = await Request.deleteVehicleById(id)
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     return fromJS({ id: id })
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Something wrong at deleteVehicleById Process')
 }
@@ -66,6 +76,9 @@ async function updateVehicleById(payload: Immut) {
     const vehicle = vehicleNormalize(data)
     return fromJS(vehicle)
   }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
+  }
   throw new Error('Couldnt update a vehicle by Id')
 }
 
@@ -73,10 +86,13 @@ async function createVehicleFuel(payload: Immut): ?Immut {
   const vehicleId = payload.get('vehicleId')
   const fuel = payload.getIn(['values', 'fuels'])
   const response = await Request.createVehicleFuel(vehicleId, fuel)
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const data = response.data.result
     const vehicle = vehicleNormalize(data)
     return fromJS(vehicle)
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Couldnt create a new fuel')
 }
@@ -85,10 +101,13 @@ async function createVehicleMaintain(payload: Immut): ?Immut {
   const vehicleId = payload.get('vehicleId')
   const maintain = payload.getIn(['values', 'maintain'])
   const response = await Request.createVehicleMaintain(vehicleId, maintain)
-  if (response.status === STATUS_OK) {
+  if (response.data.ok) {
     const data = response.data.result
     const vehicle = vehicleNormalize(data)
     return fromJS(vehicle)
+  }
+  if (!response.data.ok) {
+    throw new Error(response.data.error)
   }
   throw new Error('Couldnt create a new maintain')
 }
@@ -104,7 +123,7 @@ async function createVehicleMaintain(payload: Immut): ?Immut {
 //     replaceAll(PRODUCT_PRICE_HISTORY_ID_API, mapObj),
 //     options
 //   )
-//   if (response.status === STATUS_OK) {
+//   if (response.data.ok) {
 //     return payload
 //   }
 //   throw new Error('Something wrong at deletePriceHistoryById Process')

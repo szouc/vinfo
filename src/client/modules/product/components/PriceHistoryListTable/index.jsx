@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 
-import { Table, Button } from 'antd'
+import { Table, Button, Popconfirm } from 'antd'
 import PriceHistoryCreateFormCreator from '../../containers/PriceHistoryCreateFormCreator'
 import ProductUpdateFormCreator from '../../containers/ProductUpdateFormCreator'
 
@@ -34,12 +34,15 @@ class PriceHistoryListTable extends React.PureComponent {
         key: 'action',
         render: (text, record) => (
           <span>
-            <Button
-              size='small'
-              onClick={deletePriceHistoryById(product._id, record._id)}
+            <span className='ant-divider' />
+            <Popconfirm
+              title='确认删除？'
+              onConfirm={deletePriceHistoryById(product._id, record._id)}
             >
-              删除
-            </Button>
+              <Button type='danger' size='small'>
+                删除
+              </Button>
+            </Popconfirm>
           </span>
         )
       }

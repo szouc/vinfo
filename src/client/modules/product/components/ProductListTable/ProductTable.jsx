@@ -1,7 +1,7 @@
 import React from 'react'
 import PriceHistoryListTable from '../../containers/PriceHistoryListTable'
 
-import { Table, Button } from 'antd'
+import { Table, Button, Popconfirm } from 'antd'
 
 const ProductTable = props => {
   const {
@@ -32,13 +32,15 @@ const ProductTable = props => {
       key: 'action',
       render: (text, record) => (
         <span>
-          <Button
-            type='danger'
-            size='small'
-            onClick={deleteProductById(record._id)}
+          <span className='ant-divider' />
+          <Popconfirm
+            title='确认删除？'
+            onConfirm={deleteProductById(record._id)}
           >
-            删除
-          </Button>
+            <Button type='danger' size='small'>
+              删除
+            </Button>
+          </Popconfirm>
         </span>
       )
     }

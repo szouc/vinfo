@@ -68,8 +68,33 @@ console.log('expensive2(state)', somethingExpensive2Selector(state))
 state = state.set('keyword', 'helldsfs')
 console.log('expensive2(state)', somethingExpensive2Selector(state))
 
-const values = fromJS({ assigner: [] })
+const data = {
+  theme: {
+    dark: {
+      color: '#e8e',
+      font: '1'
+    },
+    light: {
+      color: '#8e8',
+      font: '2'
+    }
+  },
+  another: 'aaa'
+}
 
-const name = values.get('assigner').map(item => item)
+const newData = { ...data }
 
-console.log(name)
+const data1 = fromJS(data)
+const newData1 = data1.setIn(['theme', 'light', 'font'], '3')
+
+newData.theme.light.font = '3'
+
+console.log(data === newData)
+console.log(data.theme.light === newData.theme.light)
+console.log(data.another === newData.another)
+
+console.log(data1 === newData1)
+console.log(
+  data1.getIn(['theme', 'light']) === newData1.getIn(['theme', 'light'])
+)
+console.log(data1.get('another') === newData1.get('another'))

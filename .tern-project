@@ -1,0 +1,10 @@
+{
+  "libs": [
+    "react",
+    "redux"
+  ],
+  "plugins": {
+    "node": {},
+    "es_modules": {}
+  }
+}

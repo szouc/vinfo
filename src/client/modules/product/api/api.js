@@ -7,7 +7,6 @@ import { productNormalize, productArrayNormalize } from '@clientSettings/schema'
 
 async function createProduct(payload: Immut): ?Immut {
   const response = await Request.createProduct(payload)
-  console.log(typeof response.data.ok)
   if (response.data.ok) {
     const data = response.data.result
     const product = productNormalize(data)

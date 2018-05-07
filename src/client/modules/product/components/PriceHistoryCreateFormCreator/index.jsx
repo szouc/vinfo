@@ -7,12 +7,29 @@ import PriceHistoryCreateField from '../PriceHistoryCreateField'
 
 const validate = values => {
   const errors = {}
-  const requiredFields = ['priceHistory']
-  requiredFields.forEach(field => {
-    if (!values.get(field)) {
-      errors[field] = '必填'
+  if (!values.get('priceHistory')) {
+    errors.priceHistory = '必填'
+  } else {
+    const phArrayErrors = []
+    values.get('priceHistory').forEach((ph, phIndex) => {
+      const phErrors = {}
+      if (!ph || !ph.get('start')) {
+        phErrors.start = '必填'
+        phArrayErrors[phIndex] = phErrors
+      }
+      if (!ph || !ph.get('end')) {
+        phErrors.end = '必填'
+        phArrayErrors[phIndex] = phErrors
+      }
+      if (!ph || !ph.get('price')) {
+        phErrors.price = '必填'
+        phArrayErrors[phIndex] = phErrors
+      }
+    })
+    if (phArrayErrors.length) {
+      errors.priceHistory = phArrayErrors
     }
-  })
+  }
   return errors
 }
 
@@ -22,12 +39,7 @@ class PriceHistoryCreateForm extends React.PureComponent {
   }
 
   render() {
-    const {
-      handleSubmit,
-      pristine,
-      reset,
-      submitting
-    } = this.props
+    const { handleSubmit, pristine, reset, submitting } = this.props
     return (
       <form onSubmit={handleSubmit}>
         <Row type='flex' justify='space-between'>

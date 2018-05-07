@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, FieldArray, reduxForm } from 'redux-form/es/immutable'
-import { Button, Row, Col, Alert } from 'antd'
+import { Button, Row, Col } from 'antd'
 import Input from '@clientModulesShared/forms/Input'
 import InputNumber from '@clientModulesShared/forms/InputNumber'
 import PriceHistoryCreateField from '../PriceHistoryCreateField'
@@ -15,18 +15,30 @@ const validate = values => {
       errors[field] = '必填'
     }
   })
-  return errors
-}
-
-const showError = errorMessage => {
-  if (!errorMessage) {
-    return null
+  if (!values.get('priceHistory')) {
+    errors.priceHistory = '必填'
+  } else {
+    const phArrayErrors = []
+    values.get('priceHistory').forEach((ph, phIndex) => {
+      const phErrors = {}
+      if (!ph || !ph.get('start')) {
+        phErrors.start = '必填'
+        phArrayErrors[phIndex] = phErrors
+      }
+      if (!ph || !ph.get('end')) {
+        phErrors.end = '必填'
+        phArrayErrors[phIndex] = phErrors
+      }
+      if (!ph || !ph.get('price')) {
+        phErrors.price = '必填'
+        phArrayErrors[phIndex] = phErrors
+      }
+    })
+    if (phArrayErrors.length) {
+      errors.priceHistory = phArrayErrors
+    }
   }
-  return (
-    <Row>
-      <Alert message={errorMessage} type='error' banner />
-    </Row>
-  )
+  return errors
 }
 
 class ProductCreateForm extends React.PureComponent {
@@ -35,16 +47,9 @@ class ProductCreateForm extends React.PureComponent {
   }
 
   render() {
-    const {
-      handleSubmit,
-      pristine,
-      reset,
-      submitting,
-      errorMessage
-    } = this.props
+    const { handleSubmit, pristine, reset, submitting } = this.props
     return (
       <form onSubmit={handleSubmit}>
-        {showError(errorMessage)}
         <Row type='flex' justify='space-between'>
           <Col span={8}>
             <Field name='name' component={Input} placeholder='物品名称' />
@@ -79,10 +84,7 @@ class ProductCreateForm extends React.PureComponent {
           </Col>
         </Row>
         <Row>
-          <FieldArray
-            name='priceHistory'
-            component={PriceHistoryCreateField}
-          />
+          <FieldArray name='priceHistory' component={PriceHistoryCreateField} />
         </Row>
       </form>
     )

@@ -4,12 +4,14 @@ import * as Api from './api'
 import * as Type from './actionTypes'
 
 import { ADD_COMPANY_ENTITY, DELETE_ENTITY } from '../entity/actionTypes'
-import { call, fork, put, takeLatest } from 'redux-saga/effects'
+import { call, put, takeLatest } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
+import { reset } from 'redux-form/immutable'
+import { Message } from 'antd'
 
 import { COMPANY_STATE_KEY } from '@clientSettings/schema'
 // Use for redux-form/immutable
-import type { fromJS as Immut } from 'immutable'
+// import type { fromJS as Immut } from 'immutable'
 import Machine from '@clientUtils/machine'
 import { REQUEST_ERROR } from '../error/actionTypes'
 import { fromJS } from 'immutable'
@@ -52,6 +54,8 @@ function * screenEffect(scope, action, data, pagination = {}) {
         type: Type.CREATE_SUCCESS,
         payload: data.get('result')
       })
+      Message.success('公司创建成功。', 2)
+      yield put(reset('companyCreateForm'))
       break
     case 'fetch':
       yield put({
@@ -86,6 +90,7 @@ function * screenEffect(scope, action, data, pagination = {}) {
         type: DELETE_ENTITY,
         payload: { stateKey: COMPANY_STATE_KEY, id: data.get('id') }
       })
+      Message.success('公司删除成功。', 2)
       break
     default:
       yield put({
@@ -134,6 +139,7 @@ const failureEffect = machine.getEffect('failure')
 
 function * createCompanyFlow(action) {
   yield createEffect('form')
+  yield call(delay, 100)
   try {
     const company = yield call(Api.createCompany, action.payload)
     if (company) {
@@ -147,6 +153,7 @@ function * createCompanyFlow(action) {
 
 function * fetchAllCompaniesFlow() {
   yield fetchAllEffect('list')
+  yield call(delay, 100)
   try {
     const company = yield call(Api.getAllCompanies)
     if (company) {
@@ -160,6 +167,7 @@ function * fetchAllCompaniesFlow() {
 
 function * fetchCompaniesFlow(action) {
   yield fetchEffect('list')
+  yield call(delay, 100)
   try {
     const result = yield call(Api.getCompaniesWithPg, action.payload)
     if (result) {
@@ -176,6 +184,7 @@ function * fetchCompaniesFlow(action) {
 function * deleteCompanyByIdFlow(action) {
   const { payload } = action
   yield deleteEffect('list')
+  yield call(delay, 100)
   try {
     const companyId = yield call(Api.deleteCompanyById, payload)
     if (companyId) {

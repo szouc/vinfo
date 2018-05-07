@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Table, Button } from 'antd'
+import { Table, Button, Popconfirm } from 'antd'
 
 const CompanyTable = ({ companies, pagination, deleteCompanyById }) => {
   const deleteCompany = id => () => deleteCompanyById(id)
@@ -20,13 +20,12 @@ const CompanyTable = ({ companies, pagination, deleteCompanyById }) => {
       key: 'action',
       render: (text, record) => (
         <span>
-          <Button
-            size='small'
-            type='danger'
-            onClick={deleteCompany(record._id)}
-          >
-            删除
-          </Button>
+          <span className='ant-divider' />
+          <Popconfirm title='确认删除？' onConfirm={deleteCompany(record._id)}>
+            <Button type='danger' size='small'>
+              删除
+            </Button>
+          </Popconfirm>
         </span>
       )
     }

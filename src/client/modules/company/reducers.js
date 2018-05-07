@@ -7,27 +7,6 @@ import { fromJS } from 'immutable'
 import { combineReducers } from 'redux-immutable'
 import { paginationReducerFor } from '@clientModulesShared/paginationReducer'
 
-// const companyEntity = (
-//   state: Immut = immutable.Map({}),
-//   action: { type: string, payload: any }
-// ) => {
-//   const { type, payload } = action
-//   switch (type) {
-//     case Type.FETCH_ALL_SUCCESS:
-//       return state.merge(payload.getIn(['entities', 'companies']))
-//     case Type.FETCH_LIST_SUCCESS:
-//       return state.merge(payload.getIn(['entities', 'companies']))
-//     case Type.CREATE_SUCCESS:
-//       return state.merge(payload.getIn(['entities', 'companies']))
-//     case Type.DELETE_SUCCESS:
-//       return state.delete(payload.get('companyId'))
-//     case Type.UPDATE_SUCCESS:
-//       return state.merge(payload.getIn(['entities', 'companies']))
-//     default:
-//       return state
-//   }
-// }
-
 const InitialState = fromJS({
   formLoading: false,
   listLoading: false,

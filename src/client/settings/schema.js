@@ -17,26 +17,19 @@ export const userSchema = new schema.Entity(
 
 export const fuelSchema = new schema.Entity(
   FUEL_STATE_KEY,
-  {
-    applicant: userSchema
-  },
+  {},
   { idAttribute: '_id' }
 )
 
 export const maintainSchema = new schema.Entity(
   MAINTAIN_STATE_KEY,
-  {
-    applicant: userSchema
-  },
+  {},
   { idAttribute: '_id' }
 )
 
 export const vehicleSchema = new schema.Entity(
   VEHICLE_STATE_KEY,
   {
-    captain: userSchema,
-    principal: userSchema,
-    secondary: userSchema,
     fuels: [fuelSchema],
     maintenance: [maintainSchema]
   },
@@ -65,20 +58,7 @@ export const productSchema = new schema.Entity(
 
 export const transportSchema = new schema.Entity(
   TRANSPORT_STATE_KEY,
-  {
-    assigner: userSchema,
-    vehicle: vehicleSchema,
-    principal: userSchema,
-    secondary: userSchema,
-    from: {
-      company: companySchema
-    },
-    to: {
-      company: companySchema
-    },
-    product: productSchema,
-    accountant: userSchema
-  },
+  {},
   { idAttribute: '_id' }
 )
 

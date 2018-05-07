@@ -40,11 +40,9 @@ const entityReducer = (
     case Type.ADD_FUEL_ENTITY:
       return state
         .mergeIn([FUEL_STATE_KEY], payload.get(FUEL_STATE_KEY))
-        .mergeIn([USER_STATE_KEY], payload.get(USER_STATE_KEY))
     case Type.ADD_MAINTAIN_ENTITY:
       return state
         .mergeIn([MAINTAIN_STATE_KEY], payload.get(MAINTAIN_STATE_KEY))
-        .mergeIn([USER_STATE_KEY], payload.get(USER_STATE_KEY))
     case Type.ADD_PRICE_HISTORY_ENTITY:
       return state.mergeIn(
         [PRICE_HISTORY_STATE_KEY],
@@ -60,16 +58,11 @@ const entityReducer = (
     case Type.ADD_VEHICLE_ENTITY:
       return state
         .mergeIn([VEHICLE_STATE_KEY], payload.get(VEHICLE_STATE_KEY))
-        .mergeIn([USER_STATE_KEY], payload.get(USER_STATE_KEY))
         .mergeIn([FUEL_STATE_KEY], payload.get(FUEL_STATE_KEY))
         .mergeIn([MAINTAIN_STATE_KEY], payload.get(MAINTAIN_STATE_KEY))
     case Type.ADD_TRANSPORT_ENTITY:
       return state
         .mergeIn([TRANSPORT_STATE_KEY], payload.get(TRANSPORT_STATE_KEY))
-        .mergeIn([VEHICLE_STATE_KEY], payload.get(VEHICLE_STATE_KEY))
-        .mergeIn([USER_STATE_KEY], payload.get(USER_STATE_KEY))
-        .mergeIn([COMPANY_STATE_KEY], payload.get(COMPANY_STATE_KEY))
-        .mergeIn([PRODUCT_STATE_KEY], payload.get(PRODUCT_STATE_KEY))
     case Type.DELETE_ENTITY:
       return state.deleteIn([payload.stateKey, payload.id])
     default:

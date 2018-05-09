@@ -17,8 +17,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getUsers: (pageNumber, pageSize, fromDate, toDate) => {
-      dispatch(fetchUserListRequest({ pageNumber, pageSize, fromDate, toDate }))
+    getUsers: (page, size, from, to, role) => {
+      dispatch(fetchUserListRequest({ page, size, from, to, role }))
     },
     deleteUserByUsername: username => () => {
       dispatch(deleteUserRequest(username))

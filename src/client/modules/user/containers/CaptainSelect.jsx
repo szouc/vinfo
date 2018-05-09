@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import UserSelect from '../components/UserSelect'
-import { fetchUserAllRequest } from '../actions'
+import { fetchCaptainRequest } from '../actions'
 
 import { captainArraySelector } from '../selectors'
 import immutPropsToJS from '@clientUtils/immutPropsToJS'
@@ -13,8 +13,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllUsers: () => {
-      dispatch(fetchUserAllRequest())
+    getUsers: (page, size, from, to, role = 'captain') => {
+      dispatch(fetchCaptainRequest({ page, size, from, to, role }))
     }
   }
 }

@@ -33,6 +33,8 @@ const InitialState = fromJS({
   listLoading: false,
   formUpdateLoading: false,
   current: undefined,
+  driverIds: [],
+  captainIds: [],
   all: []
 })
 
@@ -49,6 +51,10 @@ const userStatus = (
       return state.set('current', payload).set('all', pushToAll)
     case Type.FETCH_LIST_SUCCESS:
       return state.set('all', payload)
+    case Type.FETCH_DRIVER_SUCCESS:
+      return state.set('driverIds', payload)
+    case Type.FETCH_CAPTAIN_SUCCESS:
+      return state.set('captainIds', payload)
     case Type.FETCH_ALL_SUCCESS:
       return state.set('all', payload)
     case Type.UPDATE_SUCCESS:

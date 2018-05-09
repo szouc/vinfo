@@ -5,6 +5,8 @@ import createImmutableSelector from '@clientUtils/createImmutableSelector'
 const userEntity = state => state.getIn(['entities', 'users'])
 const userCurrent = state => state.getIn(['user', 'status', 'current'])
 const userIds = state => state.getIn(['user', 'status', 'all'])
+const driverIds = state => state.getIn(['user', 'status', 'driverIds'])
+const captainIds = state => state.getIn(['user', 'status', 'captainIds'])
 
 const userSelector = createImmutableSelector(
   [userEntity, userCurrent],
@@ -19,13 +21,17 @@ const userArraySelector = createImmutableSelector(
 )
 
 const driverArraySelector = createImmutableSelector(
-  [userArraySelector],
-  users => users.filter((user, i) => user.get('role') === 'driver')
+  [userEntity, driverIds],
+  (user, ids) => {
+    return ids.map(item => user.get(item))
+  }
 )
 
 const captainArraySelector = createImmutableSelector(
-  [userArraySelector],
-  users => users.filter((user, i) => user.get('role') === 'captain')
+  [userEntity, captainIds],
+  (user, ids) => {
+    return ids.map(item => user.get(item))
+  }
 )
 
 export {

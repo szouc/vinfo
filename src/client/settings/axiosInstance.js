@@ -1,5 +1,5 @@
 import axios from 'axios'
-import qs from 'querystring'
+import qs from 'qs'
 import { WEB_ADDR } from './config'
 
 const axiosInstance = axios.create({

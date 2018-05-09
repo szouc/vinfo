@@ -169,7 +169,7 @@ function * createProductFlow(action) {
       yield successEffect('form', 'create', product)
     }
   } catch (error) {
-    yield failureEffect('from', error)
+    yield failureEffect('form', error)
     machine.operation('retry')
   }
 }
@@ -259,13 +259,6 @@ function * updateProductByIdFlow(action) {
 }
 
 export default function * rootSagas(): any {
-  // yield fork(createProductFlow)
-  // yield fork(fetchAllProductsFlow)
-  // yield fork(fetchProductsFlow)
-  // yield fork(createPriceHistoryFlow)
-  // yield fork(deleteProductByIdFlow)
-  // yield fork(deletePriceHistoryByIdFlow)
-  // yield fork(updateProductByIdFlow)
   yield takeLatest(Type.CREATE_REQUEST, createProductFlow)
   yield takeLatest(Type.FETCH_ALL_REQUEST, fetchAllProductsFlow)
   yield takeLatest(Type.FETCH_LIST_REQUEST, fetchProductsFlow)

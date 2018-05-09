@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import UserSelect from '../components/UserSelect'
-import { fetchUserAllRequest } from '../actions'
+import { fetchDriverRequest } from '../actions'
 
 import { driverArraySelector } from '../selectors'
 import immutPropsToJS from '@clientUtils/immutPropsToJS'
@@ -13,8 +13,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllUsers: () => {
-      dispatch(fetchUserAllRequest())
+    getUsers: (page, size, from, to, role = 'driver') => {
+      dispatch(fetchDriverRequest({ page, size, from, to, role }))
     }
   }
 }

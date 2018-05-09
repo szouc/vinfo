@@ -18,11 +18,11 @@ const getAllUsers = () => {
   return axios(config)
 }
 
-const getUsersWithPg = (page, size, fromDate, toDate) => {
+const getUsersWithPg = payload => {
   const config = {
     url: URL.USER_ROOT,
     method: 'get',
-    params: { page, size, from: fromDate, to: toDate }
+    params: payload
   }
   return axios(config)
 }

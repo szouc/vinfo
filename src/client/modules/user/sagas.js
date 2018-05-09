@@ -227,10 +227,80 @@ function * updateUserByUsernameFlow() {
   }
 }
 
+/**
+ * UserSelect SAGA
+ */
+
+function * fetchDriversFlow() {
+  while (true) {
+    const action: { type: String, payload?: Immut } = yield take(
+      Type.FETCH_DRIVER_REQUEST
+    )
+    try {
+      const result = yield call(Api.getUsersWithPg, action.payload)
+      if (result) {
+        const user = result.get('user')
+        const pagination = result.get('pagination')
+        yield put({
+          type: ADD_USER_ENTITY,
+          payload: user.get('entities')
+        })
+        yield put({
+          type: Type.FETCH_DRIVER_SUCCESS,
+          payload: user.get('result')
+        })
+        yield put({
+          type: Type.SET_PAGINATION,
+          payload: pagination
+        })
+      }
+    } catch (error) {
+      yield put({
+        type: REQUEST_ERROR,
+        payload: fromJS({ errorScope: 'UserSelect', message: error.message })
+      })
+    }
+  }
+}
+
+function * fetchCaptainsFlow() {
+  while (true) {
+    const action: { type: String, payload?: Immut } = yield take(
+      Type.FETCH_CAPTAIN_REQUEST
+    )
+    try {
+      const result = yield call(Api.getUsersWithPg, action.payload)
+      if (result) {
+        const user = result.get('user')
+        const pagination = result.get('pagination')
+        yield put({
+          type: ADD_USER_ENTITY,
+          payload: user.get('entities')
+        })
+        yield put({
+          type: Type.FETCH_CAPTAIN_SUCCESS,
+          payload: user.get('result')
+        })
+        yield put({
+          type: Type.SET_PAGINATION,
+          payload: pagination
+        })
+      }
+    } catch (error) {
+      yield put({
+        type: REQUEST_ERROR,
+        payload: fromJS({ errorScope: 'UserSelect', message: error.message })
+      })
+    }
+  }
+}
+
 export default function * rootSagas(): any {
   yield fork(createUserFlow)
   yield fork(fetchAllUsersFlow)
   yield fork(fetchUsersFlow)
   yield fork(deleteUserByUsernameFlow)
   yield fork(updateUserByUsernameFlow)
+  yield fork(fetchDriversFlow)
+  yield fork(fetchCaptainsFlow)
 }

@@ -14,7 +14,7 @@ class UserSelect extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.getAllUsers()
+    this.props.getUsers(1, 20)
   }
 
   render() {

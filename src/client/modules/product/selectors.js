@@ -9,6 +9,7 @@ const productIds = state => state.getIn(['product', 'status', 'all'])
 const priceHistoryEntity = (state, props) =>
   state.getIn(['entities', 'price_histories'])
 const priceHistoryIds = (state, props) => fromJS(props.product.priceHistory)
+const selectIds = state => state.getIn(['product', 'status', 'selectIds'])
 
 const productSelector = createImmutableSelector(
   [productEntity, productCurrent],
@@ -17,6 +18,13 @@ const productSelector = createImmutableSelector(
 
 const productArraySelector = createImmutableSelector(
   [productEntity, productIds],
+  (product, ids) => {
+    return ids.map(item => product.get(item))
+  }
+)
+
+const productSelectSelector = createImmutableSelector(
+  [productEntity, selectIds],
   (product, ids) => {
     return ids.map(item => product.get(item))
   }
@@ -31,4 +39,9 @@ const makePHSelector = () => {
   )
 }
 
-export { productSelector, productArraySelector, makePHSelector }
+export {
+  productSelector,
+  productArraySelector,
+  productSelectSelector,
+  makePHSelector
+}

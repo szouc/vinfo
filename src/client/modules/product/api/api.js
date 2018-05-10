@@ -32,17 +32,12 @@ async function getAllProducts(): ?Immut {
 }
 
 async function getProductsWithPg(payload: {
-  pageNumber: Number,
-  pageSize: Number,
-  fromDate: String,
-  toDate: String
+  page: Number,
+  size: Number,
+  from?: String,
+  to?: String
 }): ?Immut {
-  const response = await Request.getProductsWithPg(
-    payload.pageNumber,
-    payload.pageSize,
-    payload.fromDate,
-    payload.toDate
-  )
+  const response = await Request.getProductsWithPg(payload)
   if (response.data.ok) {
     const { result, pagination } = response.data
     const products = productArrayNormalize(result)

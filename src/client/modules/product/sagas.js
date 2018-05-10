@@ -258,6 +258,50 @@ function * updateProductByIdFlow(action) {
   }
 }
 
+/**
+ * productSelect Saga
+ * this saga doesn't include in product main screen logic.
+ * @param {any} action redux action
+ */
+function * fetchProductSelectFlow(action) {
+  yield put({
+    type: Type.SET_LOADING,
+    payload: { scope: 'select', loading: true }
+  })
+  try {
+    const result = yield call(Api.getProductsWithPg, action.payload)
+    if (result) {
+      const product = result.get('product')
+      const pagination = result.get('pagination')
+      yield put({
+        type: ADD_PRODUCT_ENTITY,
+        payload: product.get('entities')
+      })
+      yield put({
+        type: Type.FETCH_SELECT_SUCCESS,
+        payload: product.get('result')
+      })
+      yield put({
+        type: Type.SET_PAGINATION,
+        payload: pagination
+      })
+      yield put({
+        type: Type.SET_LOADING,
+        payload: { scope: 'select', loading: false }
+      })
+    }
+  } catch (error) {
+    yield put({
+      type: REQUEST_ERROR,
+      payload: fromJS({ errorScope: 'ProductSelect', message: error.message })
+    })
+    yield put({
+      type: Type.SET_LOADING,
+      payload: { scope: 'select', loading: false }
+    })
+  }
+}
+
 export default function * rootSagas(): any {
   yield takeLatest(Type.CREATE_REQUEST, createProductFlow)
   yield takeLatest(Type.FETCH_ALL_REQUEST, fetchAllProductsFlow)
@@ -269,4 +313,5 @@ export default function * rootSagas(): any {
     deletePriceHistoryByIdFlow
   )
   yield takeLatest(Type.UPDATE_REQUEST, updateProductByIdFlow)
+  yield takeLatest(Type.FETCH_SELECT_REQUEST, fetchProductSelectFlow)
 }

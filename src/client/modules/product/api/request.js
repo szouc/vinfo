@@ -19,11 +19,11 @@ const getAllProducts = () => {
   return axios(config)
 }
 
-const getProductsWithPg = (page, size, fromDate, toDate) => {
+const getProductsWithPg = payload => {
   const config = {
     url: URL.PRODUCT_ROOT,
     method: 'get',
-    params: { page, size, from: fromDate, to: toDate }
+    params: payload
   }
   return axios(config)
 }

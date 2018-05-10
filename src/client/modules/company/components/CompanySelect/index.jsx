@@ -14,7 +14,7 @@ class CompanySelect extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.getAllCompanies()
+    this.props.getCompanies(1, 20)
   }
 
   render() {

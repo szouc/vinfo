@@ -37,3 +37,5 @@ export const DELETE_PRICE_HISTORY_REQUEST = addProductPrefix(
 export const DELETE_PRICE_HISTORY_SUCCESS = addProductPrefix(
   'DELETE_PRICE_HISTORY_SUCCESS'
 )
+export const FETCH_SELECT_REQUEST = addProductPrefix('FETCH_SELECT_REQUEST')
+export const FETCH_SELECT_SUCCESS = addProductPrefix('FETCH_SELECT_SUCCESS')

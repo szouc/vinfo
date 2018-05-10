@@ -196,6 +196,51 @@ function * deleteCompanyByIdFlow(action) {
   }
 }
 
+/**
+ * companySelect Saga
+ * this saga doesn't include in company main screen logic.
+ * @param {any} action redux action
+ */
+function * companySelectFetchFlow(action) {
+  yield put({
+    type: Type.SET_LOADING,
+    payload: { scope: 'select', loading: true }
+  })
+  yield call(delay, 100)
+  try {
+    const result = yield call(Api.getCompaniesWithPg, action.payload)
+    if (result) {
+      const company = result.get('company')
+      const pagination = result.get('pagination')
+      yield put({
+        type: ADD_COMPANY_ENTITY,
+        payload: company.get('entities')
+      })
+      yield put({
+        type: Type.FETCH_SELECT_SUCCESS,
+        payload: company.get('result')
+      })
+      yield put({
+        type: Type.SET_PAGINATION,
+        payload: pagination
+      })
+      yield put({
+        type: Type.SET_LOADING,
+        payload: { scope: 'select', loading: false }
+      })
+    }
+  } catch (error) {
+    yield put({
+      type: REQUEST_ERROR,
+      payload: fromJS({ errorScope: 'CompanySelect', message: error.message })
+    })
+    yield put({
+      type: Type.SET_LOADING,
+      payload: { scope: 'select', loading: false }
+    })
+  }
+}
+
 export default function * rootSagas(): any {
   // yield fork(createCompanyFlow)
   // yield fork(fetchAllCompaniesFlow)
@@ -205,4 +250,5 @@ export default function * rootSagas(): any {
   yield takeLatest(Type.FETCH_ALL_REQUEST, fetchAllCompaniesFlow)
   yield takeLatest(Type.FETCH_LIST_REQUEST, fetchCompaniesFlow)
   yield takeLatest(Type.DELETE_REQUEST, deleteCompanyByIdFlow)
+  yield takeLatest(Type.FETCH_SELECT_REQUEST, companySelectFetchFlow)
 }

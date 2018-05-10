@@ -21,10 +21,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getProducts: (pageNumber, pageSize, fromDate, toDate) => {
-      dispatch(
-        fetchProductListRequest({ pageNumber, pageSize, fromDate, toDate })
-      )
+    getProducts: (page, size, from, to) => {
+      dispatch(fetchProductListRequest({ page, size, from, to }))
     },
     deleteProductById: id => () => {
       dispatch(deleteProductRequest(id))

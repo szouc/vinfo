@@ -32,17 +32,12 @@ async function getAllCompanies(): ?Immut {
 }
 
 async function getCompaniesWithPg(payload: {
-  pageNumber: Number,
-  pageSize: Number,
-  fromDate: String,
-  toDate: String
+  page: Number,
+  size: Number,
+  from?: String,
+  to?: String
 }): ?Immut {
-  const response = await Request.getCompaniesWithPg(
-    payload.pageNumber,
-    payload.pageSize,
-    payload.formDate,
-    payload.toDate
-  )
+  const response = await Request.getCompaniesWithPg(payload)
   if (response.data.ok) {
     const { result, pagination } = response.data
     const companies = companyArrayNormalize(result)

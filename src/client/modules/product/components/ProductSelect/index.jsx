@@ -14,7 +14,7 @@ class ProductSelect extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.getAllProducts()
+    this.props.getProducts(1, 200)
   }
 
   render() {

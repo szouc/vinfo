@@ -10,7 +10,9 @@ import { paginationReducerFor } from '@clientModulesShared/paginationReducer'
 const InitialState = fromJS({
   formLoading: false,
   listLoading: false,
+  selectLoading: false,
   current: undefined,
+  selectIds: [],
   all: []
 })
 
@@ -26,6 +28,8 @@ const companyStatus = (
       return state.set('all', payload)
     case Type.FETCH_LIST_SUCCESS:
       return state.set('all', payload)
+    case Type.FETCH_SELECT_SUCCESS:
+      return state.set('selectIds', payload)
     case Type.CREATE_SUCCESS:
       const pushToAll = state.get('all').unshift(payload)
       return state.set('current', payload).set('all', pushToAll)

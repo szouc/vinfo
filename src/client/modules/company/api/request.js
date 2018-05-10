@@ -18,11 +18,11 @@ const getAllCompanies = () => {
   return axios(config)
 }
 
-const getCompaniesWithPg = (page, size, fromDate, toDate) => {
+const getCompaniesWithPg = payload => {
   const config = {
     url: URL.COMPANY_ROOT,
     method: 'get',
-    params: { page, size, from: fromDate, to: toDate }
+    params: payload
   }
   return axios(config)
 }

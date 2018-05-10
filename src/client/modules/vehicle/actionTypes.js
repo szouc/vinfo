@@ -13,8 +13,6 @@ export const FETCH_LIST_REQUEST = addVehiclePrefix('FETCH_LIST_REQUEST')
 export const FETCH_LIST_SUCCESS = addVehiclePrefix('FETCH_LIST_SUCCESS')
 export const FETCH_ALL_REQUEST = addVehiclePrefix('FETCH_ALL_REQUEST')
 export const FETCH_ALL_SUCCESS = addVehiclePrefix('FETCH_ALL_SUCCESS')
-export const FETCH_REQUEST = addVehiclePrefix('FETCH_REQUEST')
-export const FETCH_SUCCESS = addVehiclePrefix('FETCH_SUCCESS')
 export const UPDATE_REQUEST = addVehiclePrefix('UPDATE_REQUEST')
 export const UPDATE_SUCCESS = addVehiclePrefix('UPDATE_SUCCESS')
 export const CREATE_REQUEST = addVehiclePrefix('CREATE_REQUEST')
@@ -37,3 +35,5 @@ export const DELETE_MAINTAIN_REQUEST = addVehiclePrefix(
 export const DELETE_MAINTAIN_SUCCESS = addVehiclePrefix(
   'DELETE_MAINTAIN_SUCCESS'
 )
+export const FETCH_SELECT_REQUEST = addVehiclePrefix('FETCH_SELECT_REQUEST')
+export const FETCH_SELECT_SUCCESS = addVehiclePrefix('FETCH_SELECT_SUCCESS')

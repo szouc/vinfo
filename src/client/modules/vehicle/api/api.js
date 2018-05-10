@@ -34,17 +34,12 @@ async function getAllVehicles(): ?Immut {
 }
 
 async function getVehiclesWithPg(payload: {
-  pageNumber: Number,
-  pageSize: Number,
-  fromDate: String,
-  toDate: String
+  page: Number,
+  size: Number,
+  from?: String,
+  to?: String
 }): ?Immut {
-  const response = await Request.getVehiclesWithPg(
-    payload.pageNumber,
-    payload.pageSize,
-    payload.fromDate,
-    payload.toDate
-  )
+  const response = await Request.getVehiclesWithPg(payload)
   if (response.data.ok) {
     const { result, pagination } = response.data
     const vehicles = vehicleArrayNormalize(result)

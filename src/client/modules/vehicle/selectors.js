@@ -8,6 +8,7 @@ import { fromJS } from 'immutable'
 const vehicleEntity = state => state.getIn(['entities', 'vehicles'])
 const vehicleCurrent = state => state.getIn(['vehicle', 'status', 'current'])
 const vehicleIds = state => state.getIn(['vehicle', 'status', 'all'])
+const selectIds = state => state.getIn(['vehicle', 'status', 'selectIds'])
 const vehicleInitialValues = ownProps => fromJS(ownProps.vehicle)
 const currentUser = state => state.getIn(['auth', 'user', 'username'])
 const selectedAssigner = state => {
@@ -24,6 +25,11 @@ const vehicleSelector = createImmutableSelector(
 
 const vehicleArraySelector = createImmutableSelector(
   [vehicleEntity, vehicleIds],
+  (vehicles, ids) => ids.map(item => vehicles.get(item))
+)
+
+const vehicleSelectSelector = createImmutableSelector(
+  [vehicleEntity, selectIds],
   (vehicles, ids) => ids.map(item => vehicles.get(item))
 )
 
@@ -67,6 +73,7 @@ const availableVehicleByCaptainSelector = createImmutableSelector(
 export {
   vehicleSelector,
   vehicleArraySelector,
+  vehicleSelectSelector,
   vehicleArrayByUserSelector,
   availableVehicleSelector,
   availableVehicleByCaptainSelector,

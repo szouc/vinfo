@@ -17,10 +17,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getVehicles: (pageNumber, pageSize, fromDate, toDate) => {
-      dispatch(
-        fetchVehicleListRequest({ pageNumber, pageSize, fromDate, toDate })
-      )
+    getVehicles: (page, size, from, to) => {
+      dispatch(fetchVehicleListRequest({ page, size, from, to }))
     },
     deleteVehicleById: id => () => {
       dispatch(deleteVehicleRequest(id))

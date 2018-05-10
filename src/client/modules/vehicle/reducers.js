@@ -78,7 +78,9 @@ const InitialState = fromJS({
   formFuelLoading: false,
   formMaintainLoading: false,
   formUpdateLoading: false,
+  selectLoading: false,
   current: undefined,
+  selectIds: [],
   all: []
 })
 
@@ -97,6 +99,8 @@ const vehicleStatus = (
       return state.set('all', payload)
     case Type.FETCH_LIST_SUCCESS:
       return state.set('all', payload)
+    case Type.FETCH_SELECT_SUCCESS:
+      return state.set('selectIds', payload)
     case Type.UPDATE_SUCCESS:
       return state.set('current', payload)
     case Type.DELETE_SUCCESS:

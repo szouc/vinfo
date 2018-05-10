@@ -1,9 +1,7 @@
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-
 import VehicleCreateForm from '../components/VehicleCreateForm'
 import { createVehicleRequest } from '../actions'
-
 import immutPropsToJS from '@clientUtils/immutPropsToJS'
 import { withNoDelayLoading } from '@clientUtils/withLoading'
 

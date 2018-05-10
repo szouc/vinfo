@@ -18,11 +18,11 @@ const getAllVehicles = () => {
   return axios(config)
 }
 
-const getVehiclesWithPg = (page, size, fromDate, toDate) => {
+const getVehiclesWithPg = payload => {
   const config = {
     url: URL.VEHICLE_ROOT,
     method: 'get',
-    params: { page, size, from: fromDate, to: toDate }
+    params: payload
   }
   return axios(config)
 }

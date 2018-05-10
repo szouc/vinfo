@@ -304,6 +304,50 @@ function * createVehicleMaintainFlow() {
 //   }
 // }
 
+function * fetchVehicleSelectFlow() {
+  while (true) {
+    const action: { type: String, payload?: Immut } = yield take(
+      Type.FETCH_SELECT_REQUEST
+    )
+    yield put({
+      type: Type.SET_LOADING,
+      payload: { scope: 'select', loading: true }
+    })
+    try {
+      const result = yield call(Api.getVehiclesWithPg, action.payload)
+      if (result) {
+        const vehicle = result.get('vehicle')
+        const pagination = result.get('pagination')
+        yield put({
+          type: ADD_VEHICLE_ENTITY,
+          payload: vehicle.get('entities')
+        })
+        yield put({
+          type: Type.FETCH_SELECT_SUCCESS,
+          payload: vehicle.get('result')
+        })
+        yield put({
+          type: Type.SET_PAGINATION,
+          payload: pagination
+        })
+        yield put({
+          type: Type.SET_LOADING,
+          payload: { scope: 'select', loading: false }
+        })
+      }
+    } catch (error) {
+      yield put({
+        type: REQUEST_ERROR,
+        payload: fromJS({ errorScope: 'VehicleSelect', message: error.message })
+      })
+      yield put({
+        type: Type.SET_LOADING,
+        payload: { scope: 'select', loading: false }
+      })
+    }
+  }
+}
+
 export default function * rootSagas(): any {
   yield fork(createVehicleFlow)
   yield fork(fetchAllVehiclesFlow)
@@ -313,4 +357,5 @@ export default function * rootSagas(): any {
   yield fork(createVehicleFuelFlow)
   yield fork(createVehicleMaintainFlow)
   // yield fork(deletePriceHistoryByIdFlow)
+  yield fork(fetchVehicleSelectFlow)
 }

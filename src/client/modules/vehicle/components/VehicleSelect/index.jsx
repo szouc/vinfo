@@ -13,7 +13,7 @@ class VehicleSelect extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.getAllVehicles()
+    this.props.getVehicles()
   }
 
   render() {

@@ -1,4 +1,5 @@
 import React from 'react'
+import { isImmutable, fromJS } from 'immutable'
 import { reduxForm, Field } from 'redux-form/es/immutable'
 import { Row, Button } from 'antd'
 import { Input, DatePicker } from '@clientModulesShared/forms'
@@ -25,11 +26,15 @@ class VehicleUpdateForm extends React.PureComponent {
   }
 
   getUserFromSelect = value => {
-    return this.props.users[value]
+    return fromJS(this.props.users[value])
   }
 
   setUserToSelect = value => {
-    return value ? value.username : ''
+    return isImmutable(value)
+      ? value.get('username')
+      : value
+        ? value.username || value
+        : ''
   }
 
   render() {

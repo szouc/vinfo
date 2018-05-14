@@ -1,5 +1,4 @@
 import React from 'react'
-import { fromJS } from 'immutable'
 import { reduxForm, Field } from 'redux-form/es/immutable'
 import { Row, Button } from 'antd'
 import { Input, DatePicker } from '@clientModulesShared/forms'
@@ -23,20 +22,37 @@ const validate = values => {
 class VehicleCreateForm extends React.PureComponent {
   constructor(props) {
     super(props)
+    this.state = {}
   }
 
-  getUserFromSelect = value => {
-    return fromJS(this.props.users[value])
+  selectedCaptainName = value => {
+    return this.setState({
+      captainName: `${this.props.users[value].fullname}(${
+        this.props.users[value].username
+      })`
+    })
   }
 
-  setUserToSelect = value => {
-    return value ? value.get('username') : ''
+  selectedPrincipalName = value => {
+    return this.setState({
+      principalName: `${this.props.users[value].fullname}(${
+        this.props.users[value].username
+      })`
+    })
+  }
+
+  selectedSecondaryName = value => {
+    return this.setState({
+      secondaryName: `${this.props.users[value].fullname}(${
+        this.props.users[value].username
+      })`
+    })
   }
 
   render() {
     const { handleSubmit, pristine, reset, submitting } = this.props
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(this.props.onSubmit(this.state))}>
         <Field name='plate' component={Input} placeholder='车牌号' autoFocus />
         <Field name='engine' component={Input} placeholder='发动机号' />
         <Field name='model' component={Input} placeholder='车型' />
@@ -49,24 +65,21 @@ class VehicleCreateForm extends React.PureComponent {
         <Field
           name='captain'
           component={CaptainSelectFormItem}
-          format={this.setUserToSelect}
-          parse={this.getUserFromSelect}
+          onSelect={this.selectedCaptainName}
           placeholder='所属队长'
           showSearch
         />
         <Field
           name='principal'
           component={DriverSelectFormItem}
-          format={this.setUserToSelect}
-          parse={this.getUserFromSelect}
+          onSelect={this.selectedPrincipalName}
           placeholder='第一司机'
           showSearch
         />
         <Field
           name='secondary'
           component={DriverSelectFormItem}
-          format={this.setUserToSelect}
-          parse={this.getUserFromSelect}
+          onSelect={this.selectedSecondaryName}
           placeholder='第二司机'
           showSearch
         />

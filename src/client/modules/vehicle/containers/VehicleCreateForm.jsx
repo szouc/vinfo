@@ -14,30 +14,32 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSubmit: values => {
-      const captain = values.get('captain')
-      const principal = values.get('principal')
-      const secondary = values.get('secondary')
-      const createValues = values.withMutations(mutation =>
-        mutation
-          .update('captain', item => item && item.get('username'))
-          .update('principal', item => item && item.get('username'))
-          .update('secondary', item => item && item.get('username'))
-          .set(
-            'captainName',
-            captain && `${captain.get('fullname')}(${captain.get('username')})`
-          )
-          .set(
-            'principalName',
-            principal &&
-              `${principal.get('fullname')}(${principal.get('username')})`
-          )
-          .set(
-            'secondaryName',
-            secondary &&
-              `${secondary.get('fullname')}(${secondary.get('username')})`
-          )
-      )
+    onSubmit: state => values => {
+      // const captain = values.get('captain')
+      // const principal = values.get('principal')
+      // const secondary = values.get('secondary')
+      // const createValues = values.withMutations(mutation =>
+      //   mutation
+      //     .update('captain', item => item && item.get('username'))
+      //     .update('principal', item => item && item.get('username'))
+      //     .update('secondary', item => item && item.get('username'))
+      //     .set(
+      //       'captainName',
+      //       captain && `${captain.get('fullname')}(${captain.get('username')})`
+      //     )
+      //     .set(
+      //       'principalName',
+      //       principal &&
+      //         `${principal.get('fullname')}(${principal.get('username')})`
+      //     )
+      //     .set(
+      //       'secondaryName',
+      //       secondary &&
+      //         `${secondary.get('fullname')}(${secondary.get('username')})`
+      //     )
+      // )
+      // dispatch(createVehicleRequest(createValues))
+      const createValues = values.merge(state)
       dispatch(createVehicleRequest(createValues))
     }
   }

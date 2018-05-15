@@ -25,25 +25,9 @@ class VehicleCreateForm extends React.PureComponent {
     this.state = {}
   }
 
-  selectedCaptainName = value => {
+  selectedName = nameKey => value => {
     return this.setState({
-      captainName: `${this.props.users[value].fullname}(${
-        this.props.users[value].username
-      })`
-    })
-  }
-
-  selectedPrincipalName = value => {
-    return this.setState({
-      principalName: `${this.props.users[value].fullname}(${
-        this.props.users[value].username
-      })`
-    })
-  }
-
-  selectedSecondaryName = value => {
-    return this.setState({
-      secondaryName: `${this.props.users[value].fullname}(${
+      [nameKey]: `${this.props.users[value].fullname}(${
         this.props.users[value].username
       })`
     })
@@ -65,21 +49,21 @@ class VehicleCreateForm extends React.PureComponent {
         <Field
           name='captain'
           component={CaptainSelectFormItem}
-          onSelect={this.selectedCaptainName}
+          onSelect={this.selectedName('captainName')}
           placeholder='所属队长'
           showSearch
         />
         <Field
           name='principal'
           component={DriverSelectFormItem}
-          onSelect={this.selectedPrincipalName}
+          onSelect={this.selectedName('principalName')}
           placeholder='第一司机'
           showSearch
         />
         <Field
           name='secondary'
           component={DriverSelectFormItem}
-          onSelect={this.selectedSecondaryName}
+          onSelect={this.selectedName('secondaryName')}
           placeholder='第二司机'
           showSearch
         />

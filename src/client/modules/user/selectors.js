@@ -1,12 +1,15 @@
 // @flow
 
 import createImmutableSelector from '@clientUtils/createImmutableSelector'
+import { fromJS } from 'immutable'
+import moment from 'moment'
 
 const userEntity = state => state.getIn(['entities', 'users'])
 const userCurrent = state => state.getIn(['user', 'status', 'current'])
 const userIds = state => state.getIn(['user', 'status', 'all'])
 const driverIds = state => state.getIn(['user', 'status', 'driverIds'])
 const captainIds = state => state.getIn(['user', 'status', 'captainIds'])
+const userInitialValues = ownProps => fromJS(ownProps.user)
 
 const userSelector = createImmutableSelector(
   [userEntity, userCurrent],
@@ -34,9 +37,15 @@ const captainArraySelector = createImmutableSelector(
   }
 )
 
+const makeUserInitialValuesSelector = () =>
+  createImmutableSelector([userInitialValues], user => {
+    return user.updateIn(['detail', 'certExpired'], date => date && moment(date))
+  })
+
 export {
   userSelector,
   userArraySelector,
   driverArraySelector,
-  captainArraySelector
+  captainArraySelector,
+  makeUserInitialValuesSelector
 }

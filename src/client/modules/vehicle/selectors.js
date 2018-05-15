@@ -56,7 +56,7 @@ const vehicleArrayByUserSelector = createImmutableSelector(
 )
 
 const availableVehicleSelector = createImmutableSelector(
-  [vehicleArraySelector],
+  [vehicleSelectSelector],
   vehicles => vehicles.filter((vehicle, i) => !vehicle.get('assigned'))
 )
 
@@ -64,8 +64,9 @@ const availableVehicleByCaptainSelector = createImmutableSelector(
   [availableVehicleSelector, selectedAssigner],
   (vehicles, assigner) =>
     vehicles.filter((vehicle, i) => {
+      console.log(assigner)
       return assigner
-        ? vehicle.getIn(['captain', 'username']) === assigner
+        ? vehicle.get('captain') === assigner
         : true
     })
 )

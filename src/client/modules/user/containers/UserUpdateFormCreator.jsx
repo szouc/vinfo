@@ -2,23 +2,20 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { updateUserRequest } from '../actions'
 import { fromJS } from 'immutable'
-import moment from 'moment'
-import { evolve } from 'ramda'
 
 import UserUpdateFormCreator from '../components/UserUpdateFormCreator'
 import immutPropsToJS from '@clientUtils/immutPropsToJS'
 import { withNoDelayLoading } from '@clientUtils/withLoading'
+import { makeUserInitialValuesSelector } from '../selectors'
 
-const mapStateToProps = (state, ownProps) => {
-  const loading = state.getIn(['user', 'status', 'formUpdateLoading'])
-  const transformDate = {
-    detail: {
-      certExpired: moment
-    }
+const makeMapStateToProps = () => {
+  const userInitialValuesSelector = makeUserInitialValuesSelector()
+  const mapStateToProps = (state, ownProps) => {
+    const loading = state.getIn(['user', 'status', 'formUpdateLoading'])
+    const initialValues = userInitialValuesSelector(ownProps)
+    return { loading, initialValues }
   }
-  const initialValues = evolve(transformDate, ownProps.user)
-
-  return { loading, initialValues }
+  return mapStateToProps
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -33,7 +30,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 export default username =>
   compose(
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(makeMapStateToProps, mapDispatchToProps),
     immutPropsToJS,
     withNoDelayLoading
   )(UserUpdateFormCreator(username))

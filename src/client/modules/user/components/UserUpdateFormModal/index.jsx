@@ -9,6 +9,7 @@ export default class UserUpdateFormModal extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = { visible: false }
+    this.UserUpdateForm = UserUpdateFormCreator(props.user.username)
   }
 
   showModal = () => {
@@ -25,17 +26,18 @@ export default class UserUpdateFormModal extends React.PureComponent {
 
   render() {
     const { user } = this.props
-    const UserUpdateForm = UserUpdateFormCreator(user.username)
     return (
       <span>
-        <Button type='primary' size='small' onClick={this.showModal}>更新</Button>
+        <Button type='primary' size='small' onClick={this.showModal}>
+          更新
+        </Button>
         <Modal
           wrapClassName='vertical-center-modal'
           visible={this.state.visible}
           onCancel={this.handleCancel}
           footer={null}
         >
-          <UserUpdateForm user={user} />
+          {this.state.visible ? <this.UserUpdateForm user={user} /> : null}
         </Modal>
       </span>
     )

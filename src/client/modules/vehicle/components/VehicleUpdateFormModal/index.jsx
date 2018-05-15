@@ -8,6 +8,7 @@ export default class UserUpdateFormModal extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = { visible: false }
+    this.VehicleUpdateForm = VehicleUpdateFormCreator(props.vehicle._id)
   }
 
   showModal = () => {
@@ -24,7 +25,6 @@ export default class UserUpdateFormModal extends React.PureComponent {
 
   render() {
     const { vehicle } = this.props
-    const VehicleUpdateForm = VehicleUpdateFormCreator(vehicle._id)
     return (
       <span>
         <Button type='primary' size='small' onClick={this.showModal}>更新</Button>
@@ -34,7 +34,7 @@ export default class UserUpdateFormModal extends React.PureComponent {
           onCancel={this.handleCancel}
           footer={null}
         >
-          {this.state.visible ? <VehicleUpdateForm vehicle={vehicle} /> : null}
+          {this.state.visible ? <this.VehicleUpdateForm vehicle={vehicle} /> : null}
         </Modal>
       </span>
     )

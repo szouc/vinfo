@@ -1,4 +1,5 @@
 import Immutable, { fromJS } from 'immutable'
+import moment from 'moment'
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect'
 
 let state,
@@ -98,3 +99,5 @@ console.log(
   data1.getIn(['theme', 'light']) === newData1.getIn(['theme', 'light'])
 )
 console.log(data1.get('another') === newData1.get('another'))
+
+console.log(data1.updateIn(['light', 'cert'], date => date && moment(date)))

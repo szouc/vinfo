@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 import VehicleSelect from '../components/VehicleSelect'
 import { fetchSelectRequest } from '../actions'
 
-import { vehicleArraySelector } from '../selectors'
+import { vehicleSelectSelector } from '../selectors'
 import immutPropsToJS from '@clientUtils/immutPropsToJS'
 
 const mapStateToProps = state => {
-  const vehicles = vehicleArraySelector(state)
+  const vehicles = vehicleSelectSelector(state)
   return { vehicles }
 }
 

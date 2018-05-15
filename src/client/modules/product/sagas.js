@@ -104,6 +104,7 @@ function * screenEffect(scope, action, data, pagination = {}) {
         payload: data.get('entities')
       })
       Message.success('历史价格创建成功。', 2)
+      yield put(reset(`priceHistoryCreateForm_${data.get('result')}`))
       break
     case 'deletePH':
       yield put({

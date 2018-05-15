@@ -58,20 +58,7 @@ export const productSchema = new schema.Entity(
 
 export const transportSchema = new schema.Entity(
   TRANSPORT_STATE_KEY,
-  {
-    assigner: userSchema,
-    vehicle: vehicleSchema,
-    principal: userSchema,
-    secondary: userSchema,
-    from: {
-      company: companySchema
-    },
-    to: {
-      company: companySchema
-    },
-    product: productSchema,
-    accountant: userSchema
-  },
+  {},
   { idAttribute: '_id' }
 )
 

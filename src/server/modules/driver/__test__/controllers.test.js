@@ -55,16 +55,12 @@ describe('Driver Base Operations', () => {
       vehicle: v1._id,
       plate: v1.plate,
       engine: v1.engine,
-      from: {
-        company: cm0._id,
-        name: cm0.name,
-        addr: cm0.addr
-      },
-      to: {
-        company: cm1._id,
-        name: cm1.name,
-        addr: cm1.addr
-      },
+      fromCompany: cm0._id,
+      fromName: cm0.name,
+      fromAddr: cm0.addr,
+      toCompany: cm1._id,
+      toName: cm1.name,
+      toAddr: cm1.addr,
       product: p0._id,
       productName: p0.name,
       productSpecs: p0.specs
@@ -76,16 +72,12 @@ describe('Driver Base Operations', () => {
       vehicle: v0._id,
       plate: v0.plate,
       engine: v0.engine,
-      from: {
-        company: cm0._id,
-        name: cm0.name,
-        addr: cm0.addr
-      },
-      to: {
-        company: cm1._id,
-        name: cm1.name,
-        addr: cm1.addr
-      },
+      fromCompany: cm0._id,
+      fromName: cm0.name,
+      fromAddr: cm0.addr,
+      toCompany: cm1._id,
+      toName: cm1.name,
+      toAddr: cm1.addr,
       product: p0._id,
       productName: p0.name,
       productSpecs: p0.specs

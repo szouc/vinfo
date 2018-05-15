@@ -8,6 +8,10 @@ import ProductUpdateFormCreator from '../../containers/ProductUpdateFormCreator'
 class PriceHistoryListTable extends React.PureComponent {
   constructor(props) {
     super(props)
+    this.ProductUpdateFormById = ProductUpdateFormCreator(props.product._id)
+    this.PriceHistoryCreateFormById = PriceHistoryCreateFormCreator(
+      props.product._id
+    )
   }
 
   render() {
@@ -48,21 +52,16 @@ class PriceHistoryListTable extends React.PureComponent {
       }
     ]
 
-    const ProductUpdateFormById = ProductUpdateFormCreator(product._id)
-    const PriceHistoryCreateFormById = PriceHistoryCreateFormCreator(
-      product._id
-    )
-
     return (
       <div>
-        <ProductUpdateFormById product={product} />
+        <this.ProductUpdateFormById product={product} />
         <Table
           columns={columns}
           dataSource={data}
           rowKey={record => record._id}
           pagination={false}
         />
-        <PriceHistoryCreateFormById product={product} />
+        <this.PriceHistoryCreateFormById product={product} />
       </div>
     )
   }

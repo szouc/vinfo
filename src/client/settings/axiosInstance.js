@@ -30,8 +30,8 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 400:
-          // error.response.message = '请求错误'
-          error.response.message = error.response.data.error
+          error.response.message = '请求错误'
+          // error.response.message = error.response.data.error
           break
         case 401:
           error.response.message = '用户名或密码错误，请重新登录'

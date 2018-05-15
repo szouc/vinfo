@@ -1,9 +1,4 @@
 import createImmutableSelector from '@clientUtils/createImmutableSelector'
-import {
-  transportDenormalize,
-  transportArrayDenormalize
-} from '@clientSettings/schema'
-import { fromJS } from 'immutable'
 
 const allEntities = state => state.get('entities')
 // const transportEntity = state => state.getIn(['entities', 'transports'])
@@ -13,16 +8,12 @@ const transportIds = state => state.getIn(['transport', 'status', 'all'])
 
 const transportSelector = createImmutableSelector(
   [allEntities, transportCurrent],
-  (entities, current) => {
-    return current ? transportDenormalize(current, entities) : fromJS({})
-  }
+  (entities, current) => entities.get(current)
 )
 
 const transportArraySelector = createImmutableSelector(
   [allEntities, transportIds],
-  (entities, ids) => {
-    return ids ? transportArrayDenormalize(ids, entities) : fromJS([])
-  }
+  (entities, ids) => ids.map(item => entities.get(item))
 )
 
 export { transportSelector, transportArraySelector }

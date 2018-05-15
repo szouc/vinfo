@@ -12,6 +12,8 @@ import { fromJS } from 'immutable'
 import Machine from '@clientUtils/machine'
 import { REQUEST_ERROR } from '../error/actionTypes'
 import { TRANSPORT_STATE_KEY } from '@clientSettings/schema'
+import { Message } from 'antd'
+import { reset } from 'redux-form/immutable'
 
 const transportState = {
   currentState: 'screen',
@@ -44,6 +46,8 @@ function * screenEffect(scope, action, data, pagination = {}) {
         type: Type.CREATE_SUCCESS,
         payload: data.get('result')
       })
+      Message.success('运输创建成功。', 2)
+      yield put(reset('transportCreateForm'))
       break
     case 'fetch':
       yield put({

@@ -19,8 +19,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSubmit: values => {
-      dispatch(createTransportRequest(values))
+    onSubmit: state => values => {
+      const createValues = values.merge(state)
+      dispatch(createTransportRequest(createValues))
     }
   }
 }

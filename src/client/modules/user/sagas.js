@@ -12,6 +12,8 @@ import Machine from '@clientUtils/machine'
 import { REQUEST_ERROR } from '../error/actionTypes'
 import { USER_STATE_KEY } from '@clientSettings/schema'
 import { fromJS } from 'immutable'
+import { Message } from 'antd'
+import { reset } from 'redux-form/immutable'
 
 const userState = {
   currentState: 'screen',
@@ -44,6 +46,8 @@ function * screenEffect(scope, action, data, pagination = {}) {
         type: Type.CREATE_SUCCESS,
         payload: data.get('result')
       })
+      Message.success('人员创建成功。', 2)
+      yield put(reset('userCreateForm'))
       break
     case 'fetch':
       yield put({
@@ -78,6 +82,7 @@ function * screenEffect(scope, action, data, pagination = {}) {
         type: DELETE_ENTITY,
         payload: { stateKey: USER_STATE_KEY, username: data.get('username') }
       })
+      Message.success('人员删除成功。', 2)
       break
     case 'update':
       yield put({
@@ -88,6 +93,7 @@ function * screenEffect(scope, action, data, pagination = {}) {
         type: Type.UPDATE_SUCCESS,
         payload: data.get('result')
       })
+      Message.success('人员更新成功。', 2)
       break
     default:
       yield put({

@@ -11,6 +11,8 @@ import type { fromJS as Immut } from 'immutable'
 import Machine from '@clientUtils/machine'
 import { REQUEST_ERROR } from '../error/actionTypes'
 import { fromJS } from 'immutable'
+import { Message } from 'antd'
+import { reset } from 'redux-form/immutable'
 
 // Use for redux-form/immutable
 
@@ -47,6 +49,8 @@ function * screenEffect(scope, action, data, pagination = {}) {
         type: Type.CREATE_SUCCESS,
         payload: data.get('result')
       })
+      Message.success('车辆创建成功。', 2)
+      yield put(reset('vehicleCreateForm'))
       break
     case 'fetch':
       yield put({
@@ -81,6 +85,7 @@ function * screenEffect(scope, action, data, pagination = {}) {
         type: DELETE_ENTITY,
         payload: { stateKey: VEHICLE_STATE_KEY, id: data.get('id') }
       })
+      Message.success('车辆删除成功。', 2)
       break
     case 'update':
       yield put({
@@ -91,6 +96,7 @@ function * screenEffect(scope, action, data, pagination = {}) {
         type: Type.UPDATE_SUCCESS,
         payload: data.get('result')
       })
+      Message.success('车辆更新成功。', 2)
       break
     case 'createFuel':
       yield put({

@@ -52,7 +52,7 @@ const userLogin = (req, res, next) => {
         if (err) {
           return next(err)
         }
-        res.status(200).send('user logged in')
+        res.status(200).send({ username: user.username, fullname: user.fullname })
       })
     }
   })(req, res, next)

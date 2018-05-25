@@ -178,6 +178,12 @@ const clientConfig = {
                 'flow'
               ],
               plugins: [
+                [
+                  'ramda',
+                  {
+                    useES: true
+                  }
+                ],
                 // https://babeljs.io/docs/plugins
                 ['syntax-dynamic-import'],
                 // ['transform-runtime'],
@@ -339,8 +345,7 @@ const clientConfig = {
       children: true,
       async: 'common-in-lazy',
       // minChunks: module => /node_modules/.test(module.resource)
-      minChunks: ({ resource }) =>
-        resource && resource.includes('node_modules')
+      minChunks: ({ resource }) => resource && resource.includes('node_modules')
     }),
 
     // Common Chunk from the lazy modules

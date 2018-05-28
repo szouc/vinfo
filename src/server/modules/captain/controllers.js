@@ -91,13 +91,15 @@ const getCaptainVehicles = (req, res) => {
 
 const createTransport = (req, res) => {
   const transport = req.body
-  const vehicleId = transport.vehicle._id
+  const vehicleId = transport.vehicle
   const getVehicleById$ = VehicleService.getVehicleById(vehicleId)
   getVehicleById$
     .do(vehicle => {
       if (vehicle && !vehicle.assigned) {
         transport.principal = vehicle.principal
+        transport.principalName = vehicle.principalName
         transport.secondary = vehicle.secondary
+        transport.secondaryName = vehicle.secondaryName
       }
     })
     .switchMap(vehicle => {
@@ -148,11 +150,13 @@ const getCaptainTransports = (req, res) => {
   let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
   let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
   let username = req.params.username
+  let captainStatus = req.query.captainStatus
   const getCaptainTransports$ = TransportService.getTransportsWithPg(
     page,
     size,
     {
       captain: username,
+      captainStatus,
       fromDate,
       toDate
     }

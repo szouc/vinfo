@@ -124,9 +124,9 @@ const deleteTransportById = id =>
 
 const checkTransportById = (username, transportId, updateStatus) => {
   let query = {
-    'assigner.username': username,
+    'assigner': username,
     _id: transportId,
-    captainStatus: { $in: [ASSIGN, ACCEPT, SUBMIT] }
+    captainStatus: { $in: [SUBMIT] }
   }
   let update = {
     $set: { captainStatus: updateStatus }
@@ -136,7 +136,7 @@ const checkTransportById = (username, transportId, updateStatus) => {
 
 const checkAccountById = (username, transportId, updateStatus) => {
   let query = {
-    'accountant.username': username,
+    'accountant': username,
     _id: transportId,
     accountantStatus: { $in: [SUBMIT] }
   }

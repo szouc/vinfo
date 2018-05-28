@@ -9,6 +9,7 @@ module.exports = {
     '<rootDir>/src/server/modules/product',
     '<rootDir>/src/server/modules/vehicle',
     '<rootDir>/src/server/modules/transport',
-    '<rootDir>/src/server/modules/driver'
+    '<rootDir>/src/server/modules/driver',
+    '<rootDir>/src/server/modules/captain'
   ]
 }

@@ -134,6 +134,22 @@ describe('Captain Base Operations', () => {
     expect(res.statusCode).toBe(200)
   })
 
+  test('Should fetch companies', async () => {
+    expect.assertions(1)
+    const res = await agent.get(
+      Api.CAPTAIN_COMPANY.replace(/:username/, c0.username)
+    )
+    expect(res.statusCode).toBe(200)
+  })
+
+  test('Should fetch products', async () => {
+    expect.assertions(1)
+    const res = await agent.get(
+      Api.CAPTAIN_PRODUCT.replace(/:username/, c0.username)
+    )
+    expect(res.statusCode).toBe(200)
+  })
+
   test('Should not fetch a captain by username', async () => {
     expect.assertions(1)
     const res = await agent.get(
@@ -207,7 +223,7 @@ describe('Captain Base Operations', () => {
   })
 
   test('Should not update a transport status', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const mapObj = {
       ':username': c0.username,
       ':childId': t0._id
@@ -215,6 +231,7 @@ describe('Captain Base Operations', () => {
     const res = await agent
       .put(replaceAll(Api.CAPTAIN_TRANSPORT_ID, mapObj))
       .send({ status: 'pass' })
-    expect(res.statusCode).toBe(400)
+    expect(res.statusCode).toBe(200)
+    expect(res.body.ok).not.toBeTruthy()
   })
 })

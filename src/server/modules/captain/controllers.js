@@ -2,6 +2,8 @@ import { Observable } from 'rxjs'
 import * as UserService from '../user/services'
 import * as VehicleService from '../vehicle/services'
 import * as TransportService from '../transport/services'
+import * as CompanyService from '../company/services'
+import * as ProductService from '../product/services'
 import { CAPTAIN_STATUS } from '../transport/constants'
 
 const PAGE_NUMBER = 1 // default number of page
@@ -87,6 +89,34 @@ const getCaptainVehicles = (req, res) => {
     toDate
   })
   getCaptainVehicles$.subscribe(createObserver(res, '没有找到相关车辆信息。'))
+}
+
+const getCaptainCompanies = (req, res) => {
+  let fromDate = req.query.from
+  let toDate = req.query.to
+  let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
+  let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
+  let username = req.params.username
+  const getCompanies$ = CompanyService.getCompaniesWithPg(page, size, {
+    captain: username,
+    fromDate,
+    toDate
+  })
+  getCompanies$.subscribe(createObserver(res, '没有找到相关公司。'))
+}
+
+const getCaptainProducts = (req, res) => {
+  let fromDate = req.query.from
+  let toDate = req.query.to
+  let page = req.query.page ? parseInt(req.query.page) : PAGE_NUMBER
+  let size = req.query.size ? parseInt(req.query.size) : PAGE_SIZE
+  let username = req.params.username
+  const getProducts$ = ProductService.getProductsWithPg(page, size, {
+    captain: username,
+    fromDate,
+    toDate
+  })
+  getProducts$.subscribe(createObserver(res, '没有找到相关产品。'))
 }
 
 const createTransport = (req, res) => {
@@ -336,6 +366,8 @@ export {
   // getAllVehicles,
   // deleteVehicleById,
   // updateVehicleById,
+  getCaptainCompanies,
+  getCaptainProducts,
   checkTransportById,
   createTransport,
   getCaptainTransports,

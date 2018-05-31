@@ -24,6 +24,16 @@ captainRouter
   .get(Controller.getCaptainVehicles)
 
 captainRouter
+  .route(Route.CAPTAIN_COMPANY)
+  .all(isOwner, permitCaptain)
+  .get(Controller.getCaptainCompanies)
+
+captainRouter
+  .route(Route.CAPTAIN_PRODUCT)
+  .all(isOwner, permitCaptain)
+  .get(Controller.getCaptainProducts)
+
+captainRouter
   .route(Route.CAPTAIN_FUEL_ID)
   .all(isOwner, permitCaptain)
   .put(Controller.checkFuelById)

@@ -21,6 +21,14 @@ export const CAPTAIN_VEHICLE = createApiPath(
   Route.CAPTAIN_ROOT,
   Route.CAPTAIN_VEHICLE
 )
+export const CAPTAIN_COMPANY = createApiPath(
+  Route.CAPTAIN_ROOT,
+  Route.CAPTAIN_COMPANY
+)
+export const CAPTAIN_PRODUCT = createApiPath(
+  Route.CAPTAIN_ROOT,
+  Route.CAPTAIN_PRODUCT
+)
 export const CAPTAIN_MAINTAIN = createApiPath(
   Route.CAPTAIN_ROOT,
   Route.CAPTAIN_MAINTAIN

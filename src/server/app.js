@@ -28,18 +28,15 @@ const debug = debugCreator('app')
 const app = express()
 const RedisStore = Redis(session)
 
-if (!isProd) {
-  app.use(
-    cors({
-      origin: [
-        'http://localhost:7000',
-        'http://localhost:8000',
-        'http://localhost:8081'
-      ],
-      credentials: true
-    })
-  )
-}
+app.use(
+  cors({
+    origin: [
+      'http://localhost',
+      'http://localhost:7000'
+    ],
+    credentials: true
+  })
+)
 
 app.use(compression())
 

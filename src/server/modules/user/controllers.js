@@ -4,13 +4,14 @@ import multer from 'multer'
 
 import { ROLES } from './constants'
 import * as Service from './services'
+import { STATIC_PATH } from '../../../shared/config'
 
 const PAGE_NUMBER = 1 // default number of page
 const PAGE_SIZE = 20 // default size of page
 
 const uploadImageUrl = path => (req, res) => {
   const file = req.file
-  const imageUrl = `/static/uploads/${path}/${file.filename}`
+  const imageUrl = `${STATIC_PATH}/uploads/${path}/${file.filename}`
   res.status(200).json(imageUrl)
 }
 

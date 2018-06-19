@@ -28,15 +28,14 @@ const debug = debugCreator('app')
 const app = express()
 const RedisStore = Redis(session)
 
-app.use(
-  cors({
-    origin: [
-      'http://localhost',
-      'http://localhost:7000'
-    ],
-    credentials: true
-  })
-)
+if (!isProd) {
+  app.use(
+    cors({
+      origin: '*',
+      credentials: true
+    })
+  )
+}
 
 app.use(compression())
 
@@ -72,7 +71,11 @@ app.use(STATIC_PATH, express.static(path.resolve(__dirname, '../../dist')))
 app.use(STATIC_PATH, express.static(path.resolve(__dirname, '../../public')))
 
 // Log request to console
-app.use(logger('dev'))
+if (!isProd) {
+  app.use(logger('dev'))
+} else {
+  app.use(logger('tiny'))
+}
 
 app.get('/', (req, res) => {
   if (isProd) {

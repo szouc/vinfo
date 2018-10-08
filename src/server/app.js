@@ -31,11 +31,7 @@ const RedisStore = Redis(session)
 if (!isProd) {
   app.use(
     cors({
-      origin: [
-        'http://localhost:7000',
-        'http://localhost:8000',
-        'http://localhost:8081'
-      ],
+      origin: '*',
       credentials: true
     })
   )
@@ -75,7 +71,11 @@ app.use(STATIC_PATH, express.static(path.resolve(__dirname, '../../dist')))
 app.use(STATIC_PATH, express.static(path.resolve(__dirname, '../../public')))
 
 // Log request to console
-app.use(logger('dev'))
+if (!isProd) {
+  app.use(logger('dev'))
+} else {
+  app.use(logger('tiny'))
+}
 
 app.get('/', (req, res) => {
   if (isProd) {

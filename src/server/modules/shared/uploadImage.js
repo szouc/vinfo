@@ -1,4 +1,5 @@
 import multer from 'multer'
+import { STATIC_PATH } from '../../../shared/config'
 
 // configuring Multer to use files directory for storing files
 // this is important because later we'll need to access file path
@@ -13,7 +14,7 @@ const storageCreator = path => ({
 
 export const getImageUrl = path => (req, res) => {
   const file = req.file
-  const imageUrl = `/static/uploads/${path}/${file.filename}`
+  const imageUrl = `${STATIC_PATH}/uploads/${path}/${file.filename}`
   res.status(200).json(imageUrl)
 }
 

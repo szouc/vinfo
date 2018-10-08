@@ -34,7 +34,9 @@ const logger = createLogger({
   }
 })
 
-const middleware = [sagaMiddleware, browserRouterMiddleware, logger]
+const middleware = isProd
+  ? [sagaMiddleware, browserRouterMiddleware]
+  : [sagaMiddleware, browserRouterMiddleware, logger]
 
 // with Redux Debug tools
 const devtool = isProd

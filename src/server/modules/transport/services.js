@@ -5,7 +5,7 @@ import * as Page from '../../utils/pagination'
 import { ASSIGN, ACCEPT, SUBMIT } from './constants'
 
 const PROJECTION =
-  'num assigner assignerName vehicle plate engine principal principalName secondary secondaryName fromCompany fromName fromAddr fromWeight fromDate toCompany toName toAddr toWeight toDate product productName productSpecs captainStatus captainInfo price accountantStatus accountant accountantName accountantInfo active createdAt'
+  'num assigner assignerName vehicle plate engine principal principalName secondary secondaryName fromCompany fromName fromAddr fromWeight fromDate toCompany toName toAddr toWeight toDate product productName productSpecs shippingPic captainStatus captainInfo price accountantStatus accountant accountantName accountantInfo active createdAt'
 
 const createTransport = transport =>
   Observable.fromPromise(Transport.create(transport))
@@ -104,7 +104,7 @@ const updateTransportStatus = (transportId, updateStatus) => {
 const updateTransportByDriver = (username, transportId, update) => {
   let query = {
     _id: transportId,
-    'principal': username
+    principal: username
   }
   return updateTransportByQuery(query, update)
 }
@@ -112,7 +112,7 @@ const updateTransportByDriver = (username, transportId, update) => {
 const updateStatusByDriver = (username, transportId, updateStatus) => {
   let query = {
     _id: transportId,
-    'principal': username,
+    principal: username,
     captainStatus: { $in: [ASSIGN, ACCEPT] }
   }
   let update = { $set: { captainStatus: updateStatus } }
@@ -124,7 +124,7 @@ const deleteTransportById = id =>
 
 const checkTransportById = (username, transportId, updateStatus) => {
   let query = {
-    'assigner': username,
+    assigner: username,
     _id: transportId,
     captainStatus: { $in: [SUBMIT] }
   }
@@ -136,7 +136,7 @@ const checkTransportById = (username, transportId, updateStatus) => {
 
 const checkAccountById = (username, transportId, updateStatus) => {
   let query = {
-    'accountant': username,
+    accountant: username,
     _id: transportId,
     accountantStatus: { $in: [SUBMIT] }
   }

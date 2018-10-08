@@ -2,9 +2,19 @@ import { Observable } from 'rxjs'
 import * as TransportService from './services'
 import * as VehicleService from '../vehicle/services'
 import { ASSIGN } from './constants.js'
+import { uploadImage, getImageUrl } from '../shared/uploadImage'
 
 const PAGE_NUMBER = 1 // default number of page
 const PAGE_SIZE = 20 // default size of page
+
+const SHIPPING_UPLOAD_FIELD = 'shipping'
+const SHIPPING_UPLOAD_PATH = 'shipping'
+
+const uploadShippingPic = uploadImage(
+  SHIPPING_UPLOAD_FIELD,
+  SHIPPING_UPLOAD_PATH
+)
+const getShippingPicUrl = getImageUrl(SHIPPING_UPLOAD_PATH)
 
 const createObserver = (res, errHint) => ({
   next: data => {
@@ -202,5 +212,7 @@ export {
   updateTransportById,
   deleteTransportById,
   updateTransportStatusById,
-  getTransportById
+  getTransportById,
+  uploadShippingPic,
+  getShippingPicUrl
 }

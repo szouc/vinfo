@@ -31,4 +31,12 @@ transportRouter
   .route(Route.TRANSPORT_STATUS)
   .put(permitManager, Controller.updateTransportStatusById)
 
+transportRouter
+  .route(Route.TRANSPORT_SHIPPING_PICTURE_UPLOAD)
+  .post(
+    permitManager,
+    Controller.uploadShippingPic,
+    Controller.getShippingPicUrl
+  )
+
 export default transportRouter

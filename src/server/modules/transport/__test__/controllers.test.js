@@ -188,4 +188,12 @@ describe('Transport Base Operations', () => {
     expect(res.body.result[1]).toBeFalsy()
     // expect(res.body.result).toBe(200)
   })
+
+  test('Should get the image url', async () => {
+    expect.assertions(1)
+    const res = await agent
+      .post(Api.TRANSPORT_SHIPPING_PICTURE_UPLOAD)
+      .attach('shipping', data.images[0].license, 'shipping.png')
+    expect(res.statusCode).toBe(200)
+  })
 })

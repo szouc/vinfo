@@ -1,45 +1,26 @@
 // @ flow
 
-import multer from 'multer'
-
 import { ROLES } from './constants'
 import * as Service from './services'
+import { uploadImage, getImageUrl } from '../shared/uploadImage'
 
 const PAGE_NUMBER = 1 // default number of page
 const PAGE_SIZE = 20 // default size of page
 
-const uploadImageUrl = path => (req, res) => {
-  const file = req.file
-  const imageUrl = `/static/uploads/${path}/${file.filename}`
-  res.status(200).json(imageUrl)
-}
-
-// configuring Multer to use files directory for storing files
-// this is important because later we'll need to access file path
-const storageCreator = path => ({
-  storage: multer.diskStorage({
-    destination: `./dist/uploads/${path}`,
-    filename(req, file, cb) {
-      cb(null, `${Date.now()}-${file.originalname}`)
-    }
-  })
-})
-
+const LICENSE_UPLOAD_FIELD = 'detail.license'
 const LICENSE_UPLOAD_PATH = 'license'
+const ID_FRONT_UPLOAD_FIELD = 'detail.idFront'
 const ID_FRONT_UPLOAD_PATH = 'id_front'
+const ID_BACK_UPLOAD_FIELD = 'detail.idBack'
 const ID_BACK_UPLOAD_PATH = 'id_back'
-const uploadLicense = multer(storageCreator(LICENSE_UPLOAD_PATH)).single(
-  'detail.license'
-)
-const uploadIdFront = multer(storageCreator(ID_FRONT_UPLOAD_PATH)).single(
-  'detail.idFront'
-)
-const uploadIdBack = multer(storageCreator(ID_BACK_UPLOAD_PATH)).single(
-  'detail.idBack'
-)
-const getLicenseUrl = uploadImageUrl(LICENSE_UPLOAD_PATH)
-const getIdFrontUrl = uploadImageUrl(ID_FRONT_UPLOAD_PATH)
-const getIdBackUrl = uploadImageUrl(ID_BACK_UPLOAD_PATH)
+
+const uploadLicense = uploadImage(LICENSE_UPLOAD_FIELD, LICENSE_UPLOAD_PATH)
+const uploadIdFront = uploadImage(ID_FRONT_UPLOAD_FIELD, ID_FRONT_UPLOAD_PATH)
+const uploadIdBack = uploadImage(ID_BACK_UPLOAD_FIELD, ID_BACK_UPLOAD_PATH)
+
+const getLicenseUrl = getImageUrl(LICENSE_UPLOAD_PATH)
+const getIdFrontUrl = getImageUrl(ID_FRONT_UPLOAD_PATH)
+const getIdBackUrl = getImageUrl(ID_BACK_UPLOAD_PATH)
 
 const createObserver = (res, errHint) => ({
   next: data => {

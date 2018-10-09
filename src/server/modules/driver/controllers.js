@@ -3,9 +3,19 @@ import * as TransportService from '../transport/services'
 import * as UserService from '../user/services'
 import * as VehicleService from '../vehicle/services'
 import { CAPTAIN_STATUS } from '../transport/constants'
+import { uploadImage, getImageUrl } from '../shared/uploadImage'
 
 const PAGE_NUMBER = 1 // default number of page
 const PAGE_SIZE = 20 // default size of page
+
+const SHIPPING_UPLOAD_FIELD = 'shipping'
+const SHIPPING_UPLOAD_PATH = 'shipping'
+
+const uploadShippingPic = uploadImage(
+  SHIPPING_UPLOAD_FIELD,
+  SHIPPING_UPLOAD_PATH
+)
+const getShippingPicUrl = getImageUrl(SHIPPING_UPLOAD_PATH)
 
 const createObserver = (res, errHint) => ({
   next: data => {
@@ -275,5 +285,7 @@ export {
   changePasswordByUsername,
   getDriverVehicles,
   // getVehiclesBySecondary,
-  getDriverByUsername
+  getDriverByUsername,
+  uploadShippingPic,
+  getShippingPicUrl
 }

@@ -14,3 +14,5 @@ export const DRIVER_TRANSPORT = '/:username/transport'
 export const DRIVER_TRANSPORT_ID = '/:username/transport/:childId'
 // meantime change vehicle status, so take the route from 'DRIVER_TRANSPORT_ID'
 export const DRIVER_TRANSPORT_ID_STATUS = '/:username/transport/:childId/status'
+export const DRIVER_TRANSPORT_UPLOAD_PIC =
+  '/:username/transport/:childId/upload/shipping'

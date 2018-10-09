@@ -31,7 +31,7 @@ const RedisStore = Redis(session)
 if (!isProd) {
   app.use(
     cors({
-      origin: '*',
+      origin: ['http://localhost:7000'],
       credentials: true
     })
   )

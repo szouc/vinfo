@@ -40,3 +40,7 @@ export const DRIVER_TRANSPORT_ID_STATUS = createApiPath(
   Route.DRIVER_ROOT,
   Route.DRIVER_TRANSPORT_ID_STATUS
 )
+export const DRIVER_TRANSPORT_UPLOAD_PIC = createApiPath(
+  Route.DRIVER_ROOT,
+  Route.DRIVER_TRANSPORT_UPLOAD_PIC
+)

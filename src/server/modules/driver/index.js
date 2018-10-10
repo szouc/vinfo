@@ -62,4 +62,12 @@ driverRouter
   .all(isOwner)
   .put(Controller.updateTransportStatus)
 
+driverRouter
+  .route(Route.DRIVER_TRANSPORT_UPLOAD_PIC)
+  .all(isOwner)
+  .post(
+    Controller.uploadShippingPic,
+    Controller.getShippingPicUrl
+  )
+
 export default driverRouter

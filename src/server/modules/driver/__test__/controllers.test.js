@@ -254,4 +254,16 @@ describe('Driver Base Operations', () => {
       })
     expect(res.statusCode).toBe(200)
   })
+
+  test('Should get the image url', async () => {
+    expect.assertions(1)
+    const mapObj = {
+      ':username': d0.username,
+      ':childId': t0._id
+    }
+    const res = await agent
+      .post(replaceAll(Api.DRIVER_TRANSPORT_UPLOAD_PIC, mapObj))
+      .attach('shipping', data.images[0].license, 'driver.png')
+    expect(res.statusCode).toBe(200)
+  })
 })

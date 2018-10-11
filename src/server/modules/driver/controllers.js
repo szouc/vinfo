@@ -8,7 +8,7 @@ import { uploadImage, getImageUrl } from '../shared/uploadImage'
 const PAGE_NUMBER = 1 // default number of page
 const PAGE_SIZE = 20 // default size of page
 
-const SHIPPING_UPLOAD_FIELD = 'shipping'
+const SHIPPING_UPLOAD_FIELD = 'shippingPic'
 const SHIPPING_UPLOAD_PATH = 'shipping'
 
 const uploadShippingPic = uploadImage(

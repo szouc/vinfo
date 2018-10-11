@@ -28,7 +28,7 @@ const transportFields = {
   product: { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
   productName: { type: String, required: true },
   productSpecs: { type: String, required: true },
-  shippingPic: { type: String },
+  shippingPic: { type: String, default: '' },
   captainStatus: {
     type: String,
     enum: CAPTAIN_STATUS,

@@ -84,10 +84,12 @@ const getTransportsWithPg = (
 const getTransportById = id =>
   Observable.fromPromise(Transport.findById(id, PROJECTION))
 
-const updateTransportByQuery = (query, update) =>
-  Observable.fromPromise(
+const updateTransportByQuery = (query, update) => {
+  console.log(update)
+  return Observable.fromPromise(
     Transport.findOneAndUpdate(query, update, { new: true }).select(PROJECTION)
   )
+}
 
 const updateTransportById = (id, update) =>
   updateTransportByQuery({ _id: id }, update)

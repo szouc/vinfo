@@ -1,33 +1,33 @@
 {
   "common-in-lazy": {
-    "js": "http://localhost:7000/js/common-in-lazy.chunk.js"
+    "js": "/js/common-in-lazy.7e0a2082ec3b726bde59.chunk.js"
   },
   "many-used": {
-    "js": "http://localhost:7000/js/many-used.chunk.js"
+    "js": "/js/many-used.fcb93d8ea8d16be9e979.chunk.js"
   },
   "TransportComponent": {
-    "js": "http://localhost:7000/js/TransportComponent.chunk.js"
+    "js": "/js/TransportComponent.ff3e5c64b9adfd34d670.chunk.js"
   },
   "VehicleComponent": {
-    "js": "http://localhost:7000/js/VehicleComponent.chunk.js"
+    "js": "/js/VehicleComponent.654f13be63abea198b11.chunk.js"
   },
   "UserComponent": {
-    "js": "http://localhost:7000/js/UserComponent.chunk.js"
+    "js": "/js/UserComponent.f36497bbfc73e53f5e9b.chunk.js"
   },
   "ProductComponent": {
-    "js": "http://localhost:7000/js/ProductComponent.chunk.js"
+    "js": "/js/ProductComponent.6cf382f83671fee41f84.chunk.js"
   },
   "CompanyComponent": {
-    "js": "http://localhost:7000/js/CompanyComponent.chunk.js"
+    "js": "/js/CompanyComponent.b1cecc7fa1f8ab2b5950.chunk.js"
   },
   "vendor": {
-    "js": "http://localhost:7000/js/vendor.js"
+    "js": "/js/vendor.a940637a35c20f649f3e.js"
   },
   "bundle": {
-    "js": "http://localhost:7000/js/bundle.js",
-    "css": "http://localhost:7000/css/bundle.css"
+    "js": "/js/bundle.4f1a11af27513f60b581.js",
+    "css": "/css/bundle.06ea367c16bab86d3d128f9244b82893.css"
   },
   "manifest": {
-    "js": "http://localhost:7000/js/manifest.js"
+    "js": "/js/manifest.550ae46124fb5c13ad54.js"
   }
 }

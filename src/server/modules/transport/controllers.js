@@ -3,6 +3,7 @@ import * as TransportService from './services'
 import * as VehicleService from '../vehicle/services'
 import { ASSIGN } from './constants.js'
 import { uploadImage, getImageUrl } from '../shared/uploadImage'
+import { generateWorkbook } from '../../utils/generateWorkbook'
 
 const PAGE_NUMBER = 1 // default number of page
 const PAGE_SIZE = 20 // default size of page
@@ -205,6 +206,26 @@ const updateTransportStatusById = (req, res) => {
 //   }
 // }
 
+const downloadExcel = (req, res) => {
+  const columns = [
+    { header: '运输号', key: 'num', width: 25 },
+    { header: '队长', key: 'assignerName', width: 32 },
+    { header: '车辆', key: 'vehicle', width: 21 },
+    { header: '第一司机', key: 'principalName', width: 32 },
+    { header: '第二司机', key: 'secondaryName', width: 32 }
+  ]
+
+  const getAllTransports$ = TransportService.getAllTransports()
+  getAllTransports$.subscribe({
+    next: async data => {
+      const workbook = generateWorkbook('transport', columns, data)
+      res.attachment('report.xlsx')
+      await workbook.xlsx.write(res)
+      return res.end()
+    }
+  })
+}
+
 export {
   createTransport,
   getTransportsWithPg,
@@ -214,5 +235,6 @@ export {
   updateTransportStatusById,
   getTransportById,
   uploadShippingPic,
-  getShippingPicUrl
+  getShippingPicUrl,
+  downloadExcel
 }

@@ -5,7 +5,7 @@ import * as Page from '../../utils/pagination'
 import { ASSIGN, ACCEPT, SUBMIT } from './constants'
 
 const PROJECTION =
-  'num assigner assignerName vehicle plate engine principal principalName secondary secondaryName fromCompany fromName fromAddr fromWeight fromDate toCompany toName toAddr toWeight toDate product productName productSpecs shippingPic captainStatus captainInfo price accountantStatus accountant accountantName accountantInfo active createdAt'
+  'num assigner assignerName vehicle plate engine principal principalName secondary secondaryName fromCompany fromName fromAddr fromWeight fromDate toCompany toName toAddr toWeight toDate product productName productSpecs shippingPic captainStatus captainInfo price accountantStatus accountant accountantName accountantInfo active createdAt updatedAt'
 
 const createTransport = transport =>
   Observable.fromPromise(Transport.create(transport))

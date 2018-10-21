@@ -208,17 +208,53 @@ const updateTransportStatusById = (req, res) => {
 
 const downloadExcel = (req, res) => {
   const columns = [
-    { header: '运输号', key: 'num', width: 25 },
-    { header: '队长', key: 'assignerName', width: 32 },
-    { header: '车辆', key: 'vehicle', width: 21 },
-    { header: '第一司机', key: 'principalName', width: 32 },
-    { header: '第二司机', key: 'secondaryName', width: 32 }
+    { header: '运输号', key: 'num', width: 10 },
+    { header: '发单队长', key: 'assignerName', width: 20 },
+    { header: '车辆', key: 'plate', width: 20 },
+    { header: '发动机号', key: 'engine', width: 30 },
+    { header: '第一司机', key: 'principalName', width: 20 },
+    { header: '第二司机', key: 'secondaryName', width: 20 },
+    { header: '产品名称', key: 'productName', width: 20 },
+    { header: '产品规格', key: 'productSpecs', width: 20 },
+    { header: '出发公司', key: 'fromName', width: 40 },
+    { header: '出发地址', key: 'fromAddr', width: 40 },
+    { header: '出发重量', key: 'fromWeight', width: 20 },
+    {
+      header: '出发时间',
+      key: 'fromDate',
+      width: 20,
+      style: { numFmt: 'yyyy/mm/dd HH:MM' }
+    },
+    { header: '到达公司', key: 'toName', width: 40 },
+    { header: '到达地址', key: 'toAddr', width: 40 },
+    { header: '到达重量', key: 'toWeight', width: 20 },
+    {
+      header: '到达时间',
+      key: 'toDate',
+      width: 20,
+      style: { numFmt: 'yyyy/mm/dd HH:MM' }
+    },
+    { header: '当前状态', key: 'captainStatus', width: 20 },
+    { header: '价格', key: 'price', width: 20 },
+    { header: '运单有效', key: 'active', width: 20 },
+    {
+      header: '创建时间',
+      key: 'createdAt',
+      width: 20,
+      style: { numFmt: 'yyyy/mm/dd HH:MM' }
+    },
+    {
+      header: '更新时间',
+      key: 'updatedAt',
+      width: 20,
+      style: { numFmt: 'yyyy/mm/dd HH:MM' }
+    }
   ]
 
   const getAllTransports$ = TransportService.getAllTransports()
   getAllTransports$.subscribe({
-    next: async data => {
-      const workbook = generateWorkbook('transport', columns, data)
+    next: async rows => {
+      const workbook = generateWorkbook('运输', columns, rows)
       res.attachment('report.xlsx')
       await workbook.xlsx.write(res)
       return res.end()
